@@ -79,7 +79,7 @@ As a team we agree to work together having:
 ---
 
 ##### Links:
-* [Taiga](https://taiga.cs.cf.ac.uk/project/c1567964-team-1/)
+* [Taiga](https://taiga.cs.cf.ac.uk/project/c1632962-drinks-ordering-app/)
 * [Gitlab](https://gitlab.cs.cf.ac.uk/c1673342/drinks-app)
 
 ##### References:
