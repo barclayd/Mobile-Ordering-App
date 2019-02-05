@@ -4,10 +4,21 @@ const graphqlHttp = require('express-graphql');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+const graphQLSchema = require('./graphql/schema');
+const graphQlResolvers = require('./graphql/resolvers');
+
 // middleware
 
 express.json();
-app.use('/', (req, res, next) => {
+
+app.use('/graphql', graphqlHttp({
+    schema: graphQLSchema,
+    rootValue: graphQlResolvers,
+    graphiql: true
+}));
+
+
+app.use('/hello-world', (req, res, next) => {
     res.status(200).json({
         hello: 'Hello World'
     })

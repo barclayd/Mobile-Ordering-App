@@ -6,13 +6,17 @@ module.exports = buildSchema(`
             _id: ID!
             email: String!
             password: String
-            createdEvents: [Event!]
         }
         
         type AuthData {
             userId: ID!
             token: String!
             tokenExpiration: Int!
+        }
+        
+        input UserInput {
+            email: String!
+            password: String!
         }
         
         type RootQuery {
