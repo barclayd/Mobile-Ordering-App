@@ -16,6 +16,29 @@ module.exports = {
             throw err;
         }
     },
+    createUser: async (args) => {
+        try {
+            const user = await User.findOne({
+                email: args.userInput.email
+            });
+            if(user) {
+                throw new Error('Email already in use');
+            }
+            const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
+            const createdUser = new User({
+                email: args.userInput.email,
+                password: hashedPassword
+            });
+            const result = await createdUser.save();
+            return {
+                ...result._doc,
+                _id: result.id,
+                password: null
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
     login: async ({email, password}) => {
         // does user exist
         const user = await User.findOne({
