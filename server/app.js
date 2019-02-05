@@ -7,9 +7,24 @@ require('dotenv').config();
 const graphQLSchema = require('./graphql/schema');
 const graphQlResolvers = require('./graphql/resolvers');
 
+const checkAuth = require('./middleware/check-auth');
+
+
 // middleware
 
 express.json();
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
+app.use(checkAuth);
 
 app.use('/graphql', graphqlHttp({
     schema: graphQLSchema,
