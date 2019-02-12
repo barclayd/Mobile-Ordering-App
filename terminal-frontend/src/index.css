@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+a {
+  color: #61dafb;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: bold;
+}
+
+h1 { font-size: 32px; }
+h2 { font-size: 30px; }
+h3 { font-size: 21px; }
+h4 { font-size: 19px; }
+
+button {
+  background: #4B3451;
+  width: 117px;
+  height: 36px;
+
+  
+  box-sizing: border-box;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  outline:none; /* Remove chrome highlight focus */
+
+  font-family: 'Trebuchet MS Bold', 'Trebuchet MS Regular', 'Trebuchet MS';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 18px;
+  color: #FFFFFF;
+
+  cursor: pointer;
+}
+button:hover {
+  border-color: #222222;
+  background: #694972;
+}
+
+button.large {
+  width: 182px;
+  height: 42px;
+}
+
+button.selected {
+  background: #9966FF;
+}
+button.selected:hover {
+  background: #b089ff;
+}
+
+.faIcon {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
