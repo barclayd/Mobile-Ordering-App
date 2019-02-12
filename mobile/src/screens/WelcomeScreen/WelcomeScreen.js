@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, TextInput, StyleSheet, Dimensions, ImageBackground,} from 'react-native';
+import {View, TextInput, Text, StyleSheet, Dimensions, ImageBackground,} from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
-import barImage from '../../assests/barConfetti.jpg';
+import barImage from '../../assets/barConfetti.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
 
