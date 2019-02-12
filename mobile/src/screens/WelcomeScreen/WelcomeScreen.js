@@ -1,24 +1,32 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, Button, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, TextInput, Button, StyleSheet, Dimensions, TouchableOpacity, ImageBackground,} from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
+import barImage from '../../assests/barConfetti.jpg';
 
 class WelcomeScreen extends Component {
 
     render() {
 
         return (
-                <LinearGradient colors={['#43C6AC', '#191654']} style={styles.linearGradient}>
+            <ImageBackground style={styles.backgroundImg} source={barImage}>
+                <LinearGradient colors={['transparent', '#F07719']} style={styles.linearGradient}>
                     <View style={styles.mainContainer}>
                     <View style={styles.codeContainer}>
-                            <TextInput placeholder='Enter a barcode' style={styles.input}/>
+                            <TextInput placeholder='Enter a bar code' style={styles.input}/>
                     </View>
                     </View>
                 </LinearGradient>
+            </ImageBackground>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    backgroundImg: {
+        flex: 1,
+        width: null,
+        height: null,
+      },
     linearGradient: {
         paddingTop: (Dimensions.get("window").height) / 2,
         paddingBottom:  (Dimensions.get("window").height / 2) - 30,
