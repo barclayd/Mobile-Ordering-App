@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, Button, StyleSheet, Dimensions} from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
+import * as colours from '../../styles/colourScheme';
 
 class AuthScreen extends Component {
 
@@ -8,7 +9,7 @@ class AuthScreen extends Component {
 
         return (
             <View>
-                <LinearGradient colors={['#43C6AC', '#191654']} style={styles.linearGradient}>
+                <LinearGradient colors={[colours.lightGreen, colours.purpleBlue]} style={styles.linearGradient}>
                     <Button color='#fff' style={styles.buttonText} title='Login' onPress={this.loginHandler} />
                 </LinearGradient>
             </View>
