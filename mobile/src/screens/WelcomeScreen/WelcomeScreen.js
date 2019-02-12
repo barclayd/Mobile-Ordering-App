@@ -1,35 +1,79 @@
 import React, {Component} from 'react';
 import {View, TextInput, Text, StyleSheet, Dimensions, ImageBackground,} from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
+import validate from '../../utility/validation';
 import barImage from '../../assets/barConfetti.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
 
 class WelcomeScreen extends Component {
 
+    state = {
+        controls: {
+            barCode: {
+                value: '',
+                valid: false,
+                validationRules: {
+                    minLength: 4
+                }
+            }
+        }
+    };
+
+    onSubmitCodeHandler = () => {
+        if (this.state.controls.barCode.valid) {
+            alert('Bar Code successfully added');
+        }
+    };
+
+    inputUpdateHandler = (key, value) => {
+
+        this.setState(prevState => {
+           return {
+               controls: {
+                   ...prevState.controls,
+                   [key]: {
+                       ...prevState.controls[key],
+                       value: value,
+                       valid: validate(value, prevState.controls[key].validationRules)
+                   }
+               }
+           }
+        });
+    };
+
     render() {
 
         return (
              <ImageBackground style={styles.backgroundImg} source={barImage}>
-                <LinearGradient colors={['transparent', '#F07719']} style={styles.linearGradient}>
-                
+                <LinearGradient colors={['transparent', colours.orange]} style={styles.linearGradient}>
+
                 <View style={styles.overlayDark} />
-                
+
                 <View style={styles.rowContainer}>
-                    <Text style={styles.welcome}>Drin</Text><Text style={styles.king}>King</Text>
+                    <Text style={styles.welcome}>Drink</Text><Text style={styles.king}>King</Text>
                 </View>
 
                 <View style={styles.rowContainer}>
-                    <Text style={styles.h2}>Simplifiying your bar experience</Text>
+                    <Text style={styles.h2}>Simplifying your bar experience</Text>
                 </View>
-                
+
                 <View style={styles.rowContainer}>
-                    <TextInput placeholder='Enter a bar code...' style={styles.input} placeholderTextColor={'#E9E0D6'}/>
-                    <View style={styles.btn}>
-                    <Icon name="check" size={30} color="#E9E0D6"/>
+                    <TextInput
+                        placeholder='Enter a bar code...'
+                        value={this.state.controls.barCode.value}
+                        style={[styles.input, {borderColor: this.state.controls.barCode.valid ? colours.green : colours.white}]}
+                        placeholderTextColor={colours.white}
+                        maxLength={4}
+                        autoCorrect={false}
+                        selectionColor={colours.orange}
+                        onChangeText={(val) => this.inputUpdateHandler('barCode', val)}/>
+                    <View style={[styles.btn, {borderColor: this.state.controls.barCode.valid ? colours.green : colours.white}]} >
+                    <TouchableOpacity onPress={() => this.onSubmitCodeHandler()}>
+                            <Icon name="check" size={30} color={this.state.controls.barCode.valid ? colours.green : colours.white}/>
+                    </TouchableOpacity>
                     </View>
                 </View>
-                {/* </View> */}
                 </LinearGradient>
             </ImageBackground>
         );
@@ -39,12 +83,12 @@ class WelcomeScreen extends Component {
 const styles = StyleSheet.create({
     welcome: {
         fontSize: 71,
-        color: "#E9E0D6",
+        color: colours.white,
         top: 124
       },
       king: {
         fontSize: 71,
-        color: "#F07719",
+        color: colours.orange,
         top: 124
       },
         rowContainer: {
@@ -52,7 +96,7 @@ const styles = StyleSheet.create({
           justifyContent: 'center',
       },
       h2:{
-        color: '#989490',
+        color: colours.midGrey,
         top: 140,
     },
     backgroundImg: {
@@ -61,9 +105,6 @@ const styles = StyleSheet.create({
         height: null,
       },
     linearGradient: {
-        // paddingTop: (Dimensions.get("window").height) / 2,
-        // paddingBottom:  (Dimensions.get("window").height / 2) - 30,
-        // borderRadius: 5,
         flex: 1,
         bottom: 0,
         left: 0,
@@ -77,7 +118,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0
-    },    
+    },
     button: {
         fontSize: 36,
         fontFamily: 'Helvetica Neue',
@@ -91,12 +132,7 @@ const styles = StyleSheet.create({
     },
     codeContainer: {
         flexDirection: 'row',
-        //   justifyContent: 'center',
-        // justifyContent: 'space-evenly',
         alignItems: 'center',
-        // width: '100%',
-        // height: '100%',
-        // flexDirection: 'row'
     },
     logoContainer: {
         justifyContent: 'space-evenly',
@@ -108,13 +144,10 @@ const styles = StyleSheet.create({
         width: (Dimensions.get("window").width) / 2,
         height: (Dimensions.get("window").height) / 11,
         borderWidth: 1,
-        // borderRadius: 50,
-        borderColor: '#E9E0D6',
-        color: '#E9E0D6',
+        // borderColor: colours.cream,
+        color: colours.cream,
         fontSize: 16,
         top: 255,
-        // margin: 10,
-        // padding: 10,
         alignSelf: 'flex-start',
         fontWeight: 'bold',
         textAlign: 'center'
@@ -124,13 +157,11 @@ const styles = StyleSheet.create({
         height: (Dimensions.get("window").height) / 11,
         borderWidth: 1,
         marginLeft: 10,
-        borderColor: '#E9E0D6',
-        color: '#E9E0D6',
-        // textAlign: 'center',
+        borderColor: colours.cream,
+        color: colours.cream,
         top: 255,
         alignItems: 'center',
         justifyContent: 'center'
-        // top: 275
     },
     loginButton: {
         padding: 10,
