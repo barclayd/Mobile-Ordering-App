@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {View, TextInput, Text, StyleSheet, Dimensions, ImageBackground,} from 'react-native';
+import {Navigation} from "react-native-navigation";
+import {View, TextInput, Text, StyleSheet, Dimensions, ImageBackground, TouchableOpacity, Platform} from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 import validate from '../../utility/validation';
 import barImage from '../../assets/barConfetti.jpg';
+import IonicIcon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
 
@@ -22,7 +24,62 @@ class WelcomeScreen extends Component {
 
     onSubmitCodeHandler = () => {
         if (this.state.controls.barCode.valid) {
-            alert('Bar Code successfully added');
+            Promise.all([
+                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
+                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
+            ])
+                .then(sources => {
+                    Navigation.setDefaultOptions({
+                        sideMenu: {
+                            left: {
+                                enabled: true,
+                                visible: true
+                            },
+                            right: {
+                                visible: true,
+                                enabled: true
+                            }
+                        },
+                        statusBar: {
+                            hideWithTopBar: false,
+                        },
+                        topBar: {
+                            leftButtons: [
+                                {
+                                    id: 'menuButton',
+                                    icon: sources[0],
+                                    color: colours.white
+                                }
+                            ],
+                            barStyle: 'black',
+                            rightButtons: [
+                                {
+                                    id: 'profileButton',
+                                    icon: sources[1],
+                                    color: colours.white
+                                }
+                            ]
+                        }
+                    });
+                    Navigation.setStackRoot(this.props.componentId, {
+                        component: {
+                            name: 'drinks-app.ViewDrinksScreen',
+                            options: {
+                                animations: {
+                                    setStackRoot: {
+                                        enabled: true
+                                    }
+                                },
+                                topBar: {
+                                    visible: true,
+                                    title: {
+                                        text: 'The Taff'
+                                    }
+                                }
+                            }
+                        }
+                    })
+                });
         }
     };
 

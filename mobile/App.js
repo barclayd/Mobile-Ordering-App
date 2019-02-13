@@ -1,6 +1,5 @@
 import {Navigation} from 'react-native-navigation';
 import {Provider} from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
 import configureStore from './src/store/configureStore';
 import AuthScreen from "./src/screens/Auth/Auth";
 import ViewDrinks from './src/screens/ViewDrinks/ViewDrinks';
@@ -10,7 +9,6 @@ import WelcomeScreen from './src/screens/WelcomeScreen/WelcomeScreen';
 
 const store = configureStore();
 
-
 // register screens
 Navigation.registerComponentWithRedux("drinks-app.AuthScreen", () => AuthScreen, Provider, store);
 Navigation.registerComponentWithRedux("drinks-app.WelcomeScreen", () => WelcomeScreen, Provider, store);
@@ -19,40 +17,61 @@ Navigation.registerComponentWithRedux("drinks-app.SideDrawer", () => SideDrawer,
 Navigation.registerComponentWithRedux("drinks-app.Settings", () => Settings, Provider, store);
 
 
-    Navigation.events().registerAppLaunchedListener(() => {
-      Navigation.setRoot({
-        root: {
-          sideMenu: {
-            left: {
-              component: {
-                name: 'drinks-app.SideDrawer',
-                id: 'SideDrawer'
-              },
+Navigation.events().registerAppLaunchedListener(() => {
+
+  Navigation.setDefaultOptions({
+    topBar: {
+      visible: false
+    },
+    statusBar: {
+      style: "light"
+    },
+    sideMenu: {
+      left: {
+        visible: false,
+        enabled: false
+      },
+      right: {
+        visible: false,
+        enabled: false
+      }
+    }
+  });
+
+  Navigation.setRoot({
+    root: {
+      sideMenu: {
+        left: {
+          component: {
+            name: 'drinks-app.SideDrawer',
+            id: 'SideDrawer'
+          },
+        },
+        center: {
+          stack: {
+            options: {
+              topBar: {
+                visible: false
+              }
             },
-            center: {
-              stack: {
-                options: {
-                  topBar: {
-                    visible: false
-                  }
-                },
-                id: 'WelcomeScreen',
-                children: [
-                  {
-                    component: {
-                      name: 'drinks-app.WelcomeScreen',
+            id: 'WelcomeScreen',
+            children: [
+              {
+                component: {
+                  name: 'drinks-app.WelcomeScreen',
                 },
               },
             ],
           },
         },
-            right: {
-              component: {
-                name: 'drinks-app.Settings',
-                id: 'Settings',
-              },
-            },
+        right: {
+          component: {
+            name: 'drinks-app.Settings',
+            id: 'Settings',
+          },
+        },
       },
     }
-  })
+  });
 });
+

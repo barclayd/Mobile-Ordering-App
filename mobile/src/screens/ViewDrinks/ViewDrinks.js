@@ -10,6 +10,6 @@ class ViewDrinks extends Component {
             </View>
         )
     }
-};
+}
 
 export default ViewDrinks;
