@@ -39,10 +39,11 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>FontAwesome.ttf</string>
+		<string>Ionicons.ttf</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
