@@ -1,14 +1,22 @@
 import React, {Component} from 'react';
 import {Navigation} from "react-native-navigation";
-import {View, TextInput, Text, StyleSheet, Dimensions, ImageBackground, TouchableOpacity, Platform} from 'react-native';
-import LinearGradient from "react-native-linear-gradient";
+import {View, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity, Platform} from 'react-native';
+import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
+import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import validate from '../../utility/validation';
-import barImage from '../../assets/barConfetti.jpg';
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
 
 class WelcomeScreen extends Component {
+
+    componentDidMount() {
+        Navigation.mergeOptions(this.props.componentId, {
+            topBar: {
+                visible: false
+            }
+        });
+    }
 
     state = {
         controls: {
@@ -99,14 +107,34 @@ class WelcomeScreen extends Component {
         });
     };
 
+    onLoginButtonHandler = (authType) => {
+        Navigation.setDefaultOptions({
+            topBar: {
+                visible: true,
+                barStyle: 'black'
+            }
+        });
+        Navigation.push(this.props.componentId, {
+           component: {
+               name: 'drinks-app.AuthScreen',
+               passProps: {
+                   authState: authType
+               },
+               options: {
+                   topBar: {
+                       title: {
+                           text: authType,
+                       }
+                   }
+               }
+           }
+        });
+    };
+
     render() {
 
         return (
-             <ImageBackground style={styles.backgroundImg} source={barImage}>
-                <LinearGradient colors={['transparent', colours.orange]} style={styles.linearGradient}>
-
-                <View style={styles.overlayDark} />
-
+            <WelcomeBackground>
                 <View style={styles.rowContainer}>
                     <Text style={styles.welcome}>Drink</Text><Text style={styles.king}>King</Text>
                 </View>
@@ -131,8 +159,11 @@ class WelcomeScreen extends Component {
                     </TouchableOpacity>
                     </View>
                 </View>
-                </LinearGradient>
-            </ImageBackground>
+                <View style={styles.loginButtonContainer}>
+                        <ButtonWithBackground color={colours.lightBlue} textColor={colours.cream}  onPress={() => this.onLoginButtonHandler('Login')}>Login</ButtonWithBackground>
+                        <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('Sign Up')}>Sign Up</ButtonWithBackground>
+                </View>
+            </WelcomeBackground>
         );
     }
 }
@@ -141,40 +172,20 @@ const styles = StyleSheet.create({
     welcome: {
         fontSize: 71,
         color: colours.white,
-        top: 124
+        top: Dimensions.get('window').height / 6
       },
       king: {
         fontSize: 71,
         color: colours.orange,
-        top: 124
+        top: Dimensions.get('window').height / 6
       },
         rowContainer: {
           flexDirection: 'row',
           justifyContent: 'center',
       },
       h2:{
-        color: colours.midGrey,
-        top: 140,
-    },
-    backgroundImg: {
-        flex: 1,
-        width: null,
-        height: null,
-      },
-    linearGradient: {
-        flex: 1,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        top: 0
-    },
-    overlayDark: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: "rgba(0,0,0,.6)",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        top: 0
+        color: colours.cream,
+        top: (Dimensions.get('window').height / 5)
     },
     button: {
         fontSize: 36,
@@ -201,10 +212,9 @@ const styles = StyleSheet.create({
         width: (Dimensions.get("window").width) / 2,
         height: (Dimensions.get("window").height) / 11,
         borderWidth: 1,
-        // borderColor: colours.cream,
         color: colours.cream,
         fontSize: 16,
-        top: 255,
+        top: (Dimensions.get('window').height / 6) * 2,
         alignSelf: 'flex-start',
         fontWeight: 'bold',
         textAlign: 'center'
@@ -216,15 +226,14 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         borderColor: colours.cream,
         color: colours.cream,
-        top: 255,
+        top: (Dimensions.get('window').height / 6) * 2,
         alignItems: 'center',
         justifyContent: 'center'
     },
-    loginButton: {
-        padding: 10,
-        margin: 5,
-        opacity: .7,
-        borderRadius: 10
+    loginButtonContainer: {
+        top: ((Dimensions.get('window').height / 6) * 3),
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
     }
 });
 
