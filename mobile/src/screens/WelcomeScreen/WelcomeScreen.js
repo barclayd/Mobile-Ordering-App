@@ -94,7 +94,7 @@ class WelcomeScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.loginButtonContainer}>
-                        <ButtonWithBackground color={colours.lightBlue} textColor={colours.cream}  onPress={() => this.onLoginButtonHandler('Login')}>Login</ButtonWithBackground>
+                        <ButtonWithBackground color={colours.transparent} textColor={colours.cream}  onPress={() => this.onLoginButtonHandler('Login')}>Login</ButtonWithBackground>
                         <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('Sign Up')}>Sign Up</ButtonWithBackground>
                 </View>
             </WelcomeBackground>
