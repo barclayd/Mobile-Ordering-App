@@ -8,6 +8,7 @@ import Settings from './src/screens/Settings/Settings';
 import WelcomeScreen from './src/screens/WelcomeScreen/WelcomeScreen';
 import {setWelcomePageRoot, setDefaultSettings} from './src/utility/navigation';
 import * as screens from './src/utility/screens';
+import ViewMenus from './src/screens/Menus/Menus';
 
 const store = configureStore();
 
@@ -17,7 +18,7 @@ Navigation.registerComponentWithRedux(screens.WelcomeScreen, () => WelcomeScreen
 Navigation.registerComponentWithRedux(screens.ViewDrinksScreen, () => ViewDrinks, Provider, store);
 Navigation.registerComponentWithRedux(screens.SideDrawer, () => SideDrawer, Provider, store);
 Navigation.registerComponentWithRedux(screens.Settings, () => Settings, Provider, store);
-
+Navigation.registerComponentWithRedux(screens.ViewMenus, () => ViewMenus, Provider, store);
 
 Navigation.events().registerAppLaunchedListener(() => {
   setDefaultSettings();
