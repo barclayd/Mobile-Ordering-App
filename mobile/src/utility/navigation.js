@@ -117,59 +117,38 @@ const setMainApp = (componentId) => {
     });
 };
 
-const setViewDrinks = (componentId) => {
-    Navigation.setStackRoot(componentId, {
+const setViewDrinks = (componentId, menuName) => {
+    Navigation.push(componentId, {
         component: {
             name: screens.ViewDrinksScreen,
+            passProps: {
+                authState: menuName
+            },
             options: {
-                animations: {
-                    setStackRoot: {
-                        enabled: true
-                    }
-                },
                 topBar: {
                     visible: true,
                     title: {
-                        text: 'The Taff'
+                        text: menuName,
                     }
                 }
             }
         }
-    });
+    })
 };
 
-const setViewDrinksSettings = (image1, image2) => {
+const setViewDrinksSettings = (image2) => {
     Navigation.setDefaultOptions({
-        sideMenu: {
-            left: {
-                enabled: false,
-                visible: false
-            },
-            right: {
-                visible: false,
-                enabled: false
-            }
-        },
-        statusBar: {
-            hideWithTopBar: false,
-        },
         topBar: {
-            leftButtons: [
-                {
-                    id: 'menuButton',
-                    icon: image1,
-                    color: colours.white
-                }
-            ],
+            visible: true,
             barStyle: 'black',
             rightButtons: [
-                {
-                    id: 'profileButton',
-                    icon: image2,
-                    color: colours.white
-                }
-            ]
-        }
+            {
+                id: 'profileButton',
+                icon: image2,
+                color: colours.white
+            }
+        ]
+    }
     });
 };
 
@@ -202,5 +181,5 @@ const setLoginScreen = (componentId, authType) => {
 
 
 export {
-    setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks
+    setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, 
 }
