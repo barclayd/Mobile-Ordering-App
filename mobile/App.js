@@ -6,6 +6,7 @@ import ViewDrinks from './src/screens/ViewDrinks/ViewDrinks';
 import SideDrawer from './src/screens/SideDraw/SideDraw';
 import Settings from './src/screens/Settings/Settings';
 import WelcomeScreen from './src/screens/WelcomeScreen/WelcomeScreen';
+import ViewMenus from './src/screens/Menus/Menus';
 
 const store = configureStore();
 
@@ -15,6 +16,7 @@ Navigation.registerComponentWithRedux("drinks-app.WelcomeScreen", () => WelcomeS
 Navigation.registerComponentWithRedux("drinks-app.ViewDrinksScreen", () => ViewDrinks, Provider, store);
 Navigation.registerComponentWithRedux("drinks-app.SideDrawer", () => SideDrawer, Provider, store);
 Navigation.registerComponentWithRedux("drinks-app.Settings", () => Settings, Provider, store);
+Navigation.registerComponentWithRedux("drinks-app.ViewMenus", () => ViewMenus, Provider, store);
 
 
 Navigation.events().registerAppLaunchedListener(() => {

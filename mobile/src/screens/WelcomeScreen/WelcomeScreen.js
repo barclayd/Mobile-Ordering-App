@@ -63,7 +63,7 @@ class WelcomeScreen extends Component {
                     });
                     Navigation.setStackRoot(this.props.componentId, {
                         component: {
-                            name: 'drinks-app.ViewDrinksScreen',
+                            name: 'drinks-app.ViewMenus',
                             options: {
                                 animations: {
                                     setStackRoot: {

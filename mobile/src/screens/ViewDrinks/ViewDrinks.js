@@ -1,7 +1,16 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity
+} from "react-native";
 import * as colours from "../../styles/colourScheme";
 import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
+import barImage from "../../assets/barConfetti.jpg";
 
 const theme = {
   Button: {
@@ -13,57 +22,45 @@ const theme = {
 class ViewDrinks extends Component {
   state = {
     search: "",
-
-    categories: ["Beers", "Spirits", "House Specials"]
+    categories: ["Fosters", "Fosters","Fosters","Fosters","Fosters"]
   };
 
-  updateSearch = search => {
-    // code to search through mongo DB
-    this.setState({ search });
-  };
+  openOverlay = () => {
+    //
+  }
 
   render() {
-    const { search } = this.state;
 
     return (
-      <View style={styles.background}>
-        <Text style={styles.title}>Drinks Menu</Text>
-        <ThemeProvider theme={theme}>
-          <SearchBar
-            onChangeText={this.updateSearch}
-            value={search}
-            round={true}
-            inputStyle={{ backgroundColor: "transparent" }}
-            containerStyle={{ backgroundColor: "transparent" }}
-            placeholder={"Search"}
-            title="Hey!"
-          />
-
-          <Text>{this.state.search}</Text>
-
-          <Card title="CARD WITH DIVIDER">
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <View style={styles.background}>
+          <ThemeProvider theme={theme}>
             {this.state.categories.map((u, i) => {
               return (
-                <View key={i} style={styles.user}>
-                  {/* <Image
-                    style={styles.image}
-                    resizeMode="cover"
-                    source={{ uri: u.avatar }}
-                  /> */}
-                  <Text style={styles.name}>{u}</Text>
-                </View>
+                <TouchableOpacity onPress={() => this.openOverlay()}>
+                <Card title={u}>
+                  <View key={i} style={styles.user}>
+                    <Image
+                      style={styles.image}
+                      resizeMode="cover"
+                      source={{ barImage }}
+                    />
+                    {/* <Text style={styles.name}>{u}</Text> */}
+                  </View>
+                </Card>
+                </TouchableOpacity>
               );
             })}
-          </Card>
-        </ThemeProvider>
-      </View>
+          </ThemeProvider>
+        </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: colours.cream,
+    backgroundColor: 'white',
     flex: 1,
     bottom: 0,
     left: 0,
@@ -72,8 +69,10 @@ const styles = StyleSheet.create({
   },
   title: {
     paddingTop: 10,
-    paddingLeft: 10,
+    paddingLeft: Dimensions.get("window").width / 14,
     fontSize: 32
+  },
+  contentContainer: {
   }
 });
 
