@@ -4,6 +4,7 @@ import {View, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity, Platfor
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import validate from '../../utility/validation';
+import {setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen} from '../../utility/navigation';
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
@@ -37,56 +38,8 @@ class WelcomeScreen extends Component {
                 IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
             ])
                 .then(sources => {
-                    Navigation.setDefaultOptions({
-                        sideMenu: {
-                            left: {
-                                enabled: true,
-                                visible: true
-                            },
-                            right: {
-                                visible: true,
-                                enabled: true
-                            }
-                        },
-                        statusBar: {
-                            hideWithTopBar: false,
-                        },
-                        topBar: {
-                            leftButtons: [
-                                {
-                                    id: 'menuButton',
-                                    icon: sources[0],
-                                    color: colours.white
-                                }
-                            ],
-                            barStyle: 'black',
-                            rightButtons: [
-                                {
-                                    id: 'profileButton',
-                                    icon: sources[1],
-                                    color: colours.white
-                                }
-                            ]
-                        }
-                    });
-                    Navigation.setStackRoot(this.props.componentId, {
-                        component: {
-                            name: 'drinks-app.ViewDrinksScreen',
-                            options: {
-                                animations: {
-                                    setStackRoot: {
-                                        enabled: true
-                                    }
-                                },
-                                topBar: {
-                                    visible: true,
-                                    title: {
-                                        text: 'The Taff'
-                                    }
-                                }
-                            }
-                        }
-                    })
+                    setMainAppSettings(sources[0], sources[1]);
+                    setMainApp(this.props.componentId);
                 });
         }
     };
@@ -108,33 +61,14 @@ class WelcomeScreen extends Component {
     };
 
     onLoginButtonHandler = (authType) => {
-        Navigation.setDefaultOptions({
-            topBar: {
-                visible: true,
-                barStyle: 'black'
-            }
-        });
-        Navigation.push(this.props.componentId, {
-           component: {
-               name: 'drinks-app.AuthScreen',
-               passProps: {
-                   authState: authType
-               },
-               options: {
-                   topBar: {
-                       title: {
-                           text: authType,
-                       }
-                   }
-               }
-           }
-        });
+        setLoginSettings();
+        setLoginScreen(this.props.componentId, authType);
     };
 
     render() {
 
         return (
-            <WelcomeBackground>
+            <WelcomeBackground colour1={colours.orange} >
                 <View style={styles.rowContainer}>
                     <Text style={styles.welcome}>Drink</Text><Text style={styles.king}>King</Text>
                 </View>
