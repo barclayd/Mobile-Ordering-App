@@ -52,6 +52,22 @@ class AuthScreen extends Component {
                     equalTo: 'password'
                 },
                 touched: false
+            },
+            firstName: {
+                value: '',
+                valid: false,
+                validationRules: {
+                    minLength: 2
+                },
+                touched: false
+            },
+            surname: {
+                value: '',
+                valid: false,
+                validationRules: {
+                    minLength: 2
+                },
+                touched: false
             }
         }
     };
@@ -97,7 +113,6 @@ class AuthScreen extends Component {
                 }
             }
         });
-        console.log(this.state);
     };
 
     render() {
@@ -111,21 +126,50 @@ class AuthScreen extends Component {
         });
 
         let confirmPasswordControl = null;
+        let firstNameControl = null;
+        let surnameControl = null;
         if (this.state.authMode === 'signup') {
-           confirmPasswordControl = (
-               <TextInput
-                   style={[styles.input, !this.state.controls.confirmPassword.valid && this.state.controls.confirmPassword.touched ? styles.invalidPasswordLength : null]}
-                   placeholder='Confirm Password'
-                   placeholderTextColor={colours.white}
-                   autoComplete='password'
-                   autoCorrect={false}
-                   secureTextEntry={true}
-                   selectionColor={colours.orange}
-                   textContentType='password'
-                   autoCapitalize='none'
-                   onChangeText={(val) => this.updateInputHandler('confirmPassword', val)}
-               />
-           )
+            firstNameControl = (
+             <TextInput
+                 style={[styles.inputName, !this.state.controls.firstName.valid && this.state.controls.firstName.touched ? styles.invalid : null]}
+                 placeholder='First Name'
+                 placeholderTextColor={colours.white}
+                 autoComplete='name'
+                 selectionColor={colours.orange}
+                 textContentType='givenName'
+                 autoCapitalize='words'
+                 value={this.state.controls.firstName.value}
+                 onChangeText={(val) => this.updateInputHandler('firstName', val)}
+             />
+         );
+            surnameControl = (
+                <TextInput
+                    style={[styles.inputName, !this.state.controls.surname.valid && this.state.controls.surname.touched ? styles.invalid : null]}
+                    placeholder='Surname'
+                    placeholderTextColor={colours.white}
+                    autoComplete='name'
+                    selectionColor={colours.orange}
+                    textContentType='familyName'
+                    autoCapitalize='words'
+                    value={this.state.controls.surname.value}
+                    onChangeText={(val) => this.updateInputHandler('surname', val)}
+                />
+            );
+            confirmPasswordControl = (
+                <TextInput
+                    style={[styles.input, !this.state.controls.confirmPassword.valid && this.state.controls.confirmPassword.touched ? styles.invalidPasswordLength : null]}
+                    placeholder='Confirm Password'
+                    placeholderTextColor={colours.white}
+                    autoComplete='password'
+                    autoCorrect={false}
+                    secureTextEntry={true}
+                    selectionColor={colours.orange}
+                    textContentType='password'
+                    autoCapitalize='none'
+                    value={this.state.controls.confirmPassword.value}
+                    onChangeText={(val) => this.updateInputHandler('confirmPassword', val)}
+                />
+            );
         }
 
         return (
@@ -133,6 +177,10 @@ class AuthScreen extends Component {
             <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
             <WelcomeBackground colour1={colours.midBlue} image={img}>
                 <View styles={styles.container}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
+                    {firstNameControl}
+                    {surnameControl}
+                    </View>
                     <TextInput
                         style={[styles.input, !this.state.controls.email.valid && this.state.controls.email.touched ? styles.invalid : null]}
                         placeholder='Email'
@@ -155,6 +203,7 @@ class AuthScreen extends Component {
                         selectionColor={colours.orange}
                         textContentType='password'
                         autoCapitalize='none'
+                        value={this.state.controls.password.value}
                         onChangeText={(val) => this.updateInputHandler('password', val)}/>
                     {confirmPasswordControl}
                 </View>
@@ -205,6 +254,10 @@ const styles = StyleSheet.create({
     inputContainer: {
         flex: 1,
     },
+    rowContainer: {
+      flexDirection: 'row',
+        flex: 1
+    },
     loginBtn: {
         top: (Dimensions.get('window').height / 6),
         width: '50%',
@@ -225,7 +278,24 @@ const styles = StyleSheet.create({
     },
     invalidPasswordLength: {
         borderColor: colours.warningRed,
-    }
+    },
+    inputName: {
+        width: '40%',
+        height: '130%',
+        marginLeft: 5,
+        marginRight: 5,
+        marginBottom: 0,
+        padding: 10,
+        borderWidth: 2,
+        borderColor: colours.cream,
+        borderRadius: 25,
+        color: colours.cream,
+        fontSize: 16,
+        fontStyle: 'italic',
+        top: (Dimensions.get('window').height / 8),
+        alignSelf: 'center',
+        textAlign: 'center'
+    },
 });
 
 export default AuthScreen;
