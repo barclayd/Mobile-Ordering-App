@@ -127,6 +127,8 @@ const setLoginSettings = () => {
 };
 
 const setLoginScreen = (componentId, authType) => {
+    let authText;
+    authText = authType === 'login' ? 'Login' : 'Sign Up';
     Navigation.push(componentId, {
         component: {
             name: screens.AuthScreen,
@@ -136,7 +138,7 @@ const setLoginScreen = (componentId, authType) => {
             options: {
                 topBar: {
                     title: {
-                        text: authType,
+                        text: authText,
                     }
                 }
             }

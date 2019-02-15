@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {Navigation} from "react-native-navigation";
-import {View, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity, Platform} from 'react-native';
+import {View, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity, Platform, KeyboardAvoidingView} from 'react-native';
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import validate from '../../utility/validation';
 import {setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen} from '../../utility/navigation';
 import IonicIcon from 'react-native-vector-icons/Ionicons';
+import {DismissKeyboard} from '../../components/Utilities/DismissKeyboard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
 
@@ -68,6 +69,10 @@ class WelcomeScreen extends Component {
     render() {
 
         return (
+            <DismissKeyboard>
+                <KeyboardAvoidingView
+                    behavior="padding"
+                    style={styles.inputContainer}>
             <WelcomeBackground colour1={colours.orange} >
                 <View style={styles.rowContainer}>
                     <Text style={styles.welcome}>Drink</Text><Text style={styles.king}>King</Text>
@@ -94,10 +99,12 @@ class WelcomeScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.loginButtonContainer}>
-                        <ButtonWithBackground color={colours.lightBlue} textColor={colours.cream}  onPress={() => this.onLoginButtonHandler('Login')}>Login</ButtonWithBackground>
-                        <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('Sign Up')}>Sign Up</ButtonWithBackground>
+                        <ButtonWithBackground color={colours.lightBlue} textColor={colours.cream}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
+                        <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
                 </View>
             </WelcomeBackground>
+                </KeyboardAvoidingView>
+            </DismissKeyboard>
         );
     }
 }
@@ -113,9 +120,12 @@ const styles = StyleSheet.create({
         color: colours.orange,
         top: Dimensions.get('window').height / 6
       },
-        rowContainer: {
-          flexDirection: 'row',
-          justifyContent: 'center',
+    inputContainer: {
+        flex: 1,
+    },
+    rowContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
       },
       h2:{
         color: colours.cream,
