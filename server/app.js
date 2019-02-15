@@ -9,7 +9,6 @@ const graphQlResolvers = require('./graphql/resolvers');
 
 const checkAuth = require('./middleware/check-auth');
 
-
 // middleware
 
 express.json();
