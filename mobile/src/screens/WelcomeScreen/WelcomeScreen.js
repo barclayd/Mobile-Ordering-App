@@ -70,7 +70,7 @@ class WelcomeScreen extends Component {
         return (
             <WelcomeBackground colour1={colours.orange} >
                 <View style={styles.rowContainer}>
-                    <Text style={styles.welcome}>Drink</Text><Text style={styles.king}>King</Text>
+                    <Text style={styles.welcome}>Drin</Text><Text style={styles.king}>King</Text>
                 </View>
 
                 <View style={styles.rowContainer}>
