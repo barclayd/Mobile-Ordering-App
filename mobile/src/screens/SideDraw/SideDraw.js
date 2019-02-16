@@ -1,14 +1,27 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import * as colours from '../../styles/colourScheme';
+import {setDefaultSettings, setWelcomePageRoot} from "../../utility/navigation";
 
 class SideDrawer extends Component {
+
+    logoutHandler = () => {
+        setDefaultSettings();
+        setWelcomePageRoot();
+    };
+
     render() {
         return (
             <View style={[styles.container, {
-                width: Dimensions.get("window").width * 0.8
+                width: Dimensions.get("window").width * 0.95
             }]}>
-                <Text style={styles.text}> Welcome to Side Drawer </Text>
+                <TouchableOpacity onPress={() => this.logoutHandler()}>
+                    <View style={styles.drawItem}>
+                        <Icon size={30} color='#fff' name={Platform.OS === 'android' ? "md-log-out" : "ios-log-out"} style={styles.drawItemIcon} />
+                        <Text style={styles.text}>Sign Out</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
 
         );
@@ -17,16 +30,28 @@ class SideDrawer extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 22,
+        paddingTop: 30,
         backgroundColor: colours.midnightBlack,
-        color: colours.white,
+        color: colours.cream,
         flex: 1
     },
+    drawItem: {
+        color: "#fff",
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        padding: 20,
+        marginTop: 20
+    },
     text: {
-        color: colours.white,
-        marginTop: (Dimensions.get("window").height / 2) - 20,
-        marginLeft: (Dimensions.get("window").width / 5) - 20
+        color: colours.cream,
+        fontSize: 24,
+        width: '80%',
+    },
+    drawItemIcon: {
+        marginRight: 30
     }
+
 });
 
 export default SideDrawer;
