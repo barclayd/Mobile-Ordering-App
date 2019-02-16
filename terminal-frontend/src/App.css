@@ -3,7 +3,7 @@
 } */
 
 html {
-  background: #282c34;
+  background: #211624;
 }
 
 .App {
@@ -64,7 +64,7 @@ button.orderButton {
   border: none;
   background: #583D5F;
   border-radius: 20px;
-  width: 242px;
+  width: 220px;
   height: auto;
   margin: 7px;
   padding: 11px 9px;
