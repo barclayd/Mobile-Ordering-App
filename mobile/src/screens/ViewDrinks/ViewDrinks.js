@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import * as colours from "../../styles/colourScheme";
 import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
-import barImage from "../../assets/barConfetti.jpg";
-var ScrollableTabView = require("react-native-scrollable-tab-view");
-import TabScreen1 from './TabScreens/TabScreen1';
-import TabScreen2 from './TabScreens/TabScreen2';
+import ScrollableTabView, {
+  DefaultTabBar
+} from "react-native-scrollable-tab-view";
+import TabScreen1 from "./TabScreens/TabScreen1";
+import TabScreen2 from "./TabScreens/TabScreen2";
+import TabScreen3 from "./TabScreens/TabScreen3";
 
 const theme = {
   Button: {
@@ -59,44 +61,20 @@ class ViewDrinks extends Component {
     ]
   };
 
-  openOverlay = () => {
-    //
-  };
-
   render() {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.background}>
           <ThemeProvider theme={theme}>
-            <View style={styles.slidingTabs}>
-              <ScrollableTabView>
-                <TabScreen1 tabLabel="Spirits" />
-                <TabScreen2 tabLabel="Beers" />
-              </ScrollableTabView>
-            </View>
-            {this.state.categories.map((u, i) => {
-              return (
-                <TouchableOpacity onPress={() => this.openOverlay()}>
-                  <Card>
-                    <View key={i} style={styles.user}>
-                      <Image
-                        style={styles.image}
-                        resizeMode="cover"
-                        source={{ barImage }}
-                      />
-                      <View style={styles.rowContainer}>
-                        <View style={styles.leftContainer}>
-                          <Text style={styles.name}>{u.name}</Text>
-                        </View>
-                        <Text style={styles.price}>{u.price}</Text>
-                      </View>
-
-                      <Text style={styles.description}>{u.description}</Text>
-                    </View>
-                  </Card>
-                </TouchableOpacity>
-              );
-            })}
+            <ScrollableTabView
+              style={{ marginTop: 20 }}
+              initialPage={0}
+              renderTabBar={() => <DefaultTabBar />}
+            >
+              <TabScreen2 tabLabel="Beers" />
+              <TabScreen1 tabLabel="Spirits" />
+              <TabScreen3 tabLabel="Wines" />
+            </ScrollableTabView>
           </ThemeProvider>
         </View>
       </ScrollView>
@@ -120,34 +98,11 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0
   },
-  leftContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    paddingBottom: "1%"
-    // backgroundColor: 'green'
-  },
-  price: {
-    fontWeight: "600",
-    fontSize: 16
-  },
-  name: {
-    fontWeight: "600",
-    fontSize: 16
-  },
-  description: {
-    fontWeight: "400"
-  },
-  rowContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
   title: {
     paddingTop: 10,
     paddingLeft: Dimensions.get("window").width / 14,
     fontSize: 32
-  },
-  contentContainer: {}
+  }
 });
 
 export default ViewDrinks;

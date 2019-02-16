@@ -5,7 +5,7 @@ class TabScreen1 extends Component {
   render() {
     return (
       <View>
-        <Text> textInComponent </Text>
+        <Text> Spirits Page </Text>
       </View>
     )
   }
