@@ -92,13 +92,13 @@ class App extends Component {
       let order = this.state.orders[orderIndex];
       switch (order.orderState) {
         case OrderState.AWAITING_COLLECTION:
-          awaitingOrders.push(order.id);
+          awaitingOrders.push(orderIndex);
           break;
         case OrderState.IN_PROGRESS:
-          inProgressOrders.push(order.id);
+          inProgressOrders.push(orderIndex);
           break;
         default:
-          pendingOrders.push(order.id);
+          pendingOrders.push(orderIndex);
       }
     }
     
@@ -154,10 +154,11 @@ class App extends Component {
           <h1>AWAITING COLLECTION ({ this.state.awaitingOrders.length }):</h1>
           <div className="ordersContainer">
             {
-              this.state.orders.map((orderData) => {
+              this.state.awaitingOrders.map((orderIndex) => {
+                const orderData = this.state.orders[orderIndex];
                 return (
                   <div key={orderData.id} className="orderContainer">
-                    <h2>#{orderData.id} - {TimeAgo().format(orderData.orderDate)}</h2>
+                    <h2>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h2>
                     <div className="orderButtonsContainer">
                       <button className="orderButton">
                         <span className="icon notReady"></span>
@@ -165,7 +166,7 @@ class App extends Component {
                         <br />
                         <span className="subtitle">Mark as un-ready</span>
                       </button>
-                      <button className="orderButton">
+                      <button onClick={this.showBillingPopup} className="orderButton">
                         <span className="icon notReady"></span>
                         <span className="title">More</span>
                         <br />
@@ -179,44 +180,33 @@ class App extends Component {
           </div>
 
           <h1>YOUR IN-PROGRESS ({this.state.inProgressOrders.length}):</h1>
-         
-            <div className="orderContainer">
-              <h2>#ALVR - 11:36pm</h2>
-              <div className="orderButtonsContainer">
-                <button className="orderButton">
-                  <span className="icon notReady"></span>
-                  <span className="title">Not ready</span>
-                  <br />
-                  <span className="subtitle">Mark as un-ready</span>
-                </button>
-                <button onClick={this.showBillingPopup} className="orderButton">
-                  <span className="icon notReady"></span>
-                  <span className="title">More</span>
-                  <br />
-                  <span className="subtitle">Billing &amp; more</span>
-                </button>
-              </div>
-            </div>
-            <div className="orderContainer">
-              <h2>#KHVD - 11:39pm</h2>
-              <div className="orderButtonsContainer">
-                <button className="orderButton">
-                  <span className="icon notReady"></span>
-                  <span className="title">Not ready</span>
-                  <br />
-                  <span className="subtitle">Mark as un-ready</span>
-                </button>
-                <button className="orderButton">
-                  <span className="icon notReady"></span>
-                  <span className="title">More</span>
-                  <br />
-                  <span className="subtitle">Billing &amp; more</span>
-                </button>
-              </div>
-            </div>
+          <div className="ordersContainer">
+            {
+                this.state.inProgressOrders.map((orderIndex) => {
+                  const orderData = this.state.orders[orderIndex];
+                  return (
+                    <div key={orderData.id} className="orderContainer">
+                      <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
+                      <div className="orderButtonsContainer">
+                        <button className="orderButton">
+                          <span className="icon notReady"></span>
+                          <span className="title">Ready</span>
+                          <br />
+                          <span className="subtitle">Mark as ready</span>
+                        </button>
+                        <button onClick={this.showBillingPopup} className="orderButton">
+                          <span className="icon notReady"></span>
+                          <span className="title">More</span>
+                          <br />
+                          <span className="subtitle">Billing &amp; more</span>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })
+              }
           </div>
 
-          <h3>#BXCQ - 11:41pm</h3>
           <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
 
           { this.renderBillingPopup() }
