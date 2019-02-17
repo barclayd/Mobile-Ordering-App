@@ -1,4 +1,3 @@
-const mocha = require('mocha');
 const assert = require('assert');
 const drink = require('../models/drink');
 
