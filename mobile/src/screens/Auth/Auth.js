@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {Navigation} from "react-native-navigation";
 import {connect} from 'react-redux';
-import IonicIcon from 'react-native-vector-icons/Ionicons';
-import {View, Text, TextInput, StyleSheet, Dimensions, KeyboardAvoidingView, Platform} from 'react-native';
+import {View, Text, TextInput, StyleSheet, Dimensions, KeyboardAvoidingView} from 'react-native';
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import * as colours from "../../styles/colourScheme";
 import ButtonWithBackground from "../../components/UI/Buttons/ButtonWithBackground";
@@ -10,26 +9,12 @@ import img from '../../assets/nightclub.jpg';
 import {DismissKeyboard} from '../../components/Utilities/DismissKeyboard';
 import validate from "../../utility/validation";
 import * as actions from '../../store/actions/index';
-import {setMainApp, setMainAppSettings} from "../../utility/navigation";
 
 class AuthScreen extends Component {
 
     constructor(props) {
         super(props);
         Dimensions.addEventListener("change", this.updateStyles);
-    }
-
-    componentDidMount() {
-        if(this.props.isAuthenticated) {
-            Promise.all([
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
-            ])
-                .then(sources => {
-                    setMainAppSettings(sources[0], sources[1]);
-                    setMainApp(this.props.componentId);
-                });
-        }
     }
 
     componentWillUnmount() {
@@ -136,17 +121,6 @@ class AuthScreen extends Component {
         const email = this.state.controls.email.value;
         const password = this.state.controls.password.value;
         await this.props.onAuth(email, password, this.props.componentId);
-        console.log(this.props.isAuthenticated);
-        if(this.props.isAuthenticated) {
-            Promise.all([
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
-            ])
-                .then(sources => {
-                    setMainAppSettings(sources[0], sources[1]);
-                    setMainApp(this.props.componentId);
-                });
-        }
     };
 
     render() {
