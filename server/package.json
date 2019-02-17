@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "express-graphql": "^0.7.1",
     "graphql": "^14.1.1",
     "jsonwebtoken": "^8.4.0",
+    "mocha": "^5.2.0",
     "mongoose": "^5.4.9",
     "react-native-linear-gradient": "^2.5.3"
   },

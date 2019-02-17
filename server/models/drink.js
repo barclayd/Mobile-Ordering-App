@@ -21,4 +21,5 @@ const drinkSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('drink', drinkSchema);
+const drink = mongoose.model('drink', drinkSchema);
+module.exports = drink;
