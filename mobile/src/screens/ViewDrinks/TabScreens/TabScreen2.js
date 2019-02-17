@@ -1,13 +1,21 @@
-import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native'
-import { ThemeProvider, Card} from "react-native-elements";
+import React, { Component } from "react";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  Image
+} from "react-native";
+import { ThemeProvider, Card } from "react-native-elements";
 import * as colours from "../../../styles/colourScheme";
 import barImage from "../../../assets/barConfetti.jpg";
+import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/OverlayComponent";
 
 export default class TabScreen2 extends Component {
-
   state = {
-    categories: [
+    isVisible: false,
+    menus: [
       {
         name: "Fosters - 18+",
         price: "£2.09",
@@ -39,36 +47,52 @@ export default class TabScreen2 extends Component {
         description: "201 kcal. 5.0%. 2.8 Units"
       }
     ]
+  };
 
-  }
+  openOverlay = () => {
+    this.setState({
+      isVisible: true
+    });
+  };
+
+  onBackdropPress = () => {
+    this.setState({
+      isVisible: false
+    });
+  };
+
   render() {
     return (
       <View>
-        {this.state.categories.map((u, i) => {
-              return (
-                <TouchableOpacity onPress={() => this.openOverlay()}>
-                  <Card>
-                    <View key={i} style={styles.user}>
-                      <Image
-                        style={styles.image}
-                        resizeMode="cover"
-                        source={{ barImage }}
-                      />
-                      <View style={styles.rowContainer}>
-                        <View style={styles.leftContainer}>
-                          <Text style={styles.name}>{u.name}</Text>
-                        </View>
-                        <Text style={styles.price}>{u.price}</Text>
-                      </View>
-
-                      <Text style={styles.description}>{u.description}</Text>
+        {this.state.menus.map((u, i) => {
+          return (
+            <TouchableOpacity onPress={() => this.openOverlay()}>
+              <Card>
+                <View key={i} style={styles.user}>
+                  <Image
+                    style={styles.image}
+                    resizeMode="cover"
+                    source={{ barImage }}
+                  />
+                  <View style={styles.rowContainer}>
+                    <View style={styles.leftContainer}>
+                      <Text style={styles.name}>{u.name}</Text>
                     </View>
-                  </Card>
-                </TouchableOpacity>
-              );
-            })}
+                    <Text style={styles.price}>{u.price}</Text>
+                  </View>
+
+                  <Text style={styles.description}>{u.description}</Text>
+                </View>
+              </Card>
+            </TouchableOpacity>
+          );
+        })}
+        <OverlayComponent
+          isVisible={this.state.isVisible}
+          onBackdropPress={this.onBackdropPress}
+        />
       </View>
-    )
+    );
   }
 }
 
