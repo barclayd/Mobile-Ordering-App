@@ -1,4 +1,5 @@
 import {put} from 'redux-saga/effects';
+import {AsyncStorage} from 'react-native';
 import axios from '../../axios-instance';
 import {Alert} from 'react-native';
 import * as actions from '../actions/index';
@@ -46,6 +47,7 @@ export function* authUserSaga(action) {
                         userId
                         token
                         tokenExpiration
+                        name
                     }
                 }
             `,
@@ -57,7 +59,12 @@ export function* authUserSaga(action) {
 
                     const res = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
                     if (res.status === 200 && res.status !== 201) {
-                        yield put(actions.authSuccess(res.data.data.login.token, res.data.data.login.userId, res.data.data.login.tokenExpiration));
+                        yield put(actions.authSuccess(res.data.data.login.token, res.data.data.login.userId, res.data.data.login.tokenExpiration, res.data.data.login.name));
+                        yield AsyncStorage.setItem("token", res.data.data.login.token);
+                        yield AsyncStorage.setItem("userId", res.data.data.login.userId);
+                        yield AsyncStorage.setItem("tokenExpiration", res.data.data.login.tokenExpiration);
+                        yield AsyncStorage.setItem("name", res.data.data.login.name);
+
                         Promise.all([
                             IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
                             IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
@@ -90,6 +97,7 @@ export function* authUserSaga(action) {
                         userId
                         token
                         tokenExpiration
+                        name
                     }
                 }
             `,
@@ -101,7 +109,7 @@ export function* authUserSaga(action) {
 
             const response = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
             if (response.status === 200 && response.status !== 201) {
-                yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration));
+                yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
                 Promise.all([
                     IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
                     IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
@@ -123,4 +131,31 @@ export function* authUserSaga(action) {
 
 export function* logoutSaga(action) {
     yield put(actions.logoutSucceed());
+}
+
+export function* authCheckStateSaga(action) {
+    const token = yield AsyncStorage.getItem("token");
+    if (!token) {
+        yield put(actions.logout());
+    } else {
+        const expirationDate = yield new Date(
+            AsyncStorage.getItem("tokenExpiration")
+        );
+        if (expirationDate <= new Date()) {
+            yield put(actions.logout());
+        } else {
+            const userId = yield AsyncStorage.getItem("userId");
+            yield put(actions.authSuccess(token, userId));
+            yield put(
+                actions.checkAuthTimeout(
+                    (expirationDate.getTime() - new Date().getTime()) / 1000
+                )
+            );
+        }
+    }
+}
+
+export function* checkAuthTimeoutSaga(action) {
+    yield delay(action.expirationTime * 1000);
+    yield put(actions.logout());
 }

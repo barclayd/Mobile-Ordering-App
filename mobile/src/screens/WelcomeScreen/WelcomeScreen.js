@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {Navigation} from "react-native-navigation";
 import {View, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity, Platform, KeyboardAvoidingView} from 'react-native';
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
@@ -9,6 +10,7 @@ import IonicIcon from 'react-native-vector-icons/Ionicons';
 import {DismissKeyboard} from '../../components/Utilities/DismissKeyboard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
+import * as actions from '../../store/actions/index';
 
 class WelcomeScreen extends Component {
 
@@ -18,6 +20,7 @@ class WelcomeScreen extends Component {
                 visible: false
             }
         });
+        this.props.onTryAutoSignIn();
     }
 
     state = {
@@ -181,5 +184,10 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapDispatchToProps = dispatch => {
+    return {
+        onTryAutoSignIn: () => dispatch(actions.authCheckState())
+    };
+};
 
-export default WelcomeScreen;
+export default connect(null, mapDispatchToProps)(WelcomeScreen);

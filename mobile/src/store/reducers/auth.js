@@ -6,7 +6,7 @@ const initialState = {
     userId: null,
     error: null,
     loading: false,
-    email: null,
+    name: null,
     role: ''
 };
 
@@ -22,6 +22,7 @@ const authSuccess = (state, action) => {
         token: action.token,
         userId: action.userId,
         tokenExpiration: action.tokenExpiration,
+        name: action.name,
         error: null,
         loading: false
     });
