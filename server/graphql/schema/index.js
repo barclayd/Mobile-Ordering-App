@@ -6,17 +6,21 @@ module.exports = buildSchema(`
             _id: ID!
             email: String!
             password: String
+            name: String!
         }
         
         type AuthData {
             userId: ID!
             token: String!
             tokenExpiration: Int!
+            name: String!
         }
         
         input UserInput {
             email: String!
             password: String!
+            name: String!
+            role: String!
         }
         
         type RootQuery {
