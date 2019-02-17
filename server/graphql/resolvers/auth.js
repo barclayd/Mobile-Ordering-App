@@ -21,7 +21,7 @@ module.exports = {
             const user = await User.findOne({
                 email: args.userInput.email
             });
-            if(user) {
+            if (user) {
                 throw new Error('Email already in use');
             }
             const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
