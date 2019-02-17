@@ -1,4 +1,4 @@
-import {createStore, combineReducers, compose} from 'redux';
+import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import authReducer from './reducers/auth';
 
 const rootReducer = combineReducers({
@@ -10,8 +10,8 @@ if(__DEV__) {
     composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 }
 
-const configureStore = () => {
-    return createStore(rootReducer, composeEnhancers());
+const configureStore = (sagaMiddleware) => {
+    return createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMiddleware)));
 };
 
 export default configureStore;

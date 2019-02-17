@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Navigation} from "react-native-navigation";
+import {connect} from 'react-redux';
 import {View, Text, TextInput, StyleSheet, Dimensions, KeyboardAvoidingView} from 'react-native';
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import * as colours from "../../styles/colourScheme";
@@ -7,6 +8,7 @@ import ButtonWithBackground from "../../components/UI/Buttons/ButtonWithBackgrou
 import img from '../../assets/nightclub.jpg';
 import {DismissKeyboard} from '../../components/Utilities/DismissKeyboard';
 import validate from "../../utility/validation";
+import * as actions from '../../store/actions/index';
 
 class AuthScreen extends Component {
 
@@ -41,7 +43,7 @@ class AuthScreen extends Component {
                 value: '',
                 valid: false,
                 validationRules: {
-                    minLength: 6
+                    minLength: 4
                 },
                 touched: false
             },
@@ -113,6 +115,12 @@ class AuthScreen extends Component {
                 }
             }
         });
+    };
+
+    loginHandler = () => {
+        const email = this.state.controls.email.value;
+        const password = this.state.controls.password.value;
+        this.props.onAuth(email, password);
     };
 
     render() {
@@ -220,7 +228,8 @@ class AuthScreen extends Component {
                     <ButtonWithBackground
                         color={colours.lightBlue}
                         disabled={!this.state.controls.password.valid || !this.state.controls.confirmPassword.valid && this.state.authMode === 'signup' || !this.state.controls.email.valid}
-                        textColor={colours.cream}>
+                        textColor={colours.cream}
+                        onPress={this.loginHandler}>
                         {this.state.authMode === 'login' ? 'Login' : 'Sign Up'}
                     </ButtonWithBackground>
                 </View>
@@ -298,4 +307,10 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AuthScreen;
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (email, password) => dispatch(actions.auth(email, password))
+    }
+};
+
+export default connect(null, mapDispatchToProps)(AuthScreen);
