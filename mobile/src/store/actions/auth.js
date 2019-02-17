@@ -49,11 +49,12 @@ export const checkAuthRole = role => {
 };
 
 
-export const auth = (email, password) => {
+export const auth = (email, password, componentId) => {
     return {
         type: actionTypes.AUTH_USER,
         email: email,
         password: password,
+        componentId: componentId
     };
 };
 

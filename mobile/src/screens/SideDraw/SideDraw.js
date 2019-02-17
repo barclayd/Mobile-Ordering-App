@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as colours from '../../styles/colourScheme';
 import {setDefaultSettings, setWelcomePageRoot} from "../../utility/navigation";
+import * as actions from '../../store/actions/index';
 
 class SideDrawer extends Component {
 
     logoutHandler = () => {
+        this.props.onLogout();
         setDefaultSettings();
         setWelcomePageRoot();
     };
@@ -54,4 +57,10 @@ const styles = StyleSheet.create({
 
 });
 
-export default SideDrawer;
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogout: () => dispatch(actions.logout())
+    }
+};
+
+export default connect(null, mapDispatchToProps)(SideDrawer);
