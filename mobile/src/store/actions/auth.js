@@ -6,12 +6,13 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (token, userId, tokenExpiration) => {
+export const authSuccess = (token, userId, tokenExpiration, name) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         token: token,
         userId: userId,
-        tokenExpiration: tokenExpiration
+        tokenExpiration: tokenExpiration,
+        name: name
     };
 };
 
@@ -70,5 +71,11 @@ export const setAuthRedirectPath = path => {
 export const authCheckState = () => {
     return {
         type: actionTypes.AUTH_CHECK_STATE
+    };
+};
+
+export const authStoreToken = () => {
+    return {
+
     };
 };
