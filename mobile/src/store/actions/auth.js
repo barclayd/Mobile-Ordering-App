@@ -6,12 +6,12 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (token, userId, email) => {
+export const authSuccess = (token, userId, tokenExpiration) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         token: token,
         userId: userId,
-        email: email
+        tokenExpiration: tokenExpiration
     };
 };
 
@@ -49,14 +49,11 @@ export const checkAuthRole = role => {
 };
 
 
-export const auth = (email, password, isSignup, id, name) => {
+export const auth = (email, password) => {
     return {
         type: actionTypes.AUTH_USER,
         email: email,
         password: password,
-        isSignup: isSignup,
-        id: id,
-        name: name
     };
 };
 
