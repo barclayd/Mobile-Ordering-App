@@ -120,7 +120,9 @@ class AuthScreen extends Component {
     loginHandler = async () => {
         const email = this.state.controls.email.value;
         const password = this.state.controls.password.value;
-        await this.props.onAuth(email, password, this.props.componentId);
+        const name = this.state.controls.firstName.value + ' ' + this.state.controls.surname.value;
+        const authMode = this.state.authMode === 'signup';
+        await this.props.onAuth(email, password, name, this.props.componentId, authMode);
     };
 
     render() {
@@ -315,7 +317,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, componentId) => dispatch(actions.auth(email, password, componentId))
+        onAuth: (email, password, name, componentId, isSignUp) => dispatch(actions.auth(email, password, name, componentId, isSignUp))
     }
 };
 
