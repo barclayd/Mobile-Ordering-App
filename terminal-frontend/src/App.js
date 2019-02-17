@@ -214,8 +214,10 @@ class App extends Component {
               <span
                 style={{
                   fontSize: "14px ",
-                  fontWeight: "20px",
-                  marginLeft: "5px"
+                  fontWeight: "normal",
+                  marginLeft: "5px",
+                  position: "relative",
+                  bottom: "10px"
                 }}
               >
                 Refund Customer
@@ -245,8 +247,10 @@ class App extends Component {
               <span
                 style={{
                   fontSize: "14px ",
-                  fontWeight: "20px",
-                  marginLeft: "5px"
+                  fontWeight: "normal",
+                  marginLeft: "5px",
+                  position: "relative",
+                  bottom: "10px"
                 }}
               >
                 Make unavailable
@@ -277,8 +281,11 @@ class App extends Component {
               <span
                 style={{
                   fontSize: "14px ",
-                  fontWeight: "20px",
-                  marginLeft: "5px"
+                  fontWeight: "normal",
+                  marginLeft: "5px",
+                  position: "relative",
+                  bottom: "10px"
+                  
                 }}
               >
                 Delete Item
