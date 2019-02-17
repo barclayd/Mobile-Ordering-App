@@ -13,6 +13,8 @@ import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
 import ScrollableTabView, {
   DefaultTabBar
 } from "react-native-scrollable-tab-view";
+
+
 import TabScreen1 from "./TabScreens/TabScreen1";
 import TabScreen2 from "./TabScreens/TabScreen2";
 import TabScreen3 from "./TabScreens/TabScreen3";
@@ -27,38 +29,6 @@ const theme = {
 class ViewDrinks extends Component {
   state = {
     search: "",
-    categories: [
-      {
-        name: "Fosters - 18+",
-        price: "£2.09",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "Hop House 13 Larger - 18+",
-        price: "£3.49",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "Carling - 18+",
-        price: "£2.19",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "Bud Light+",
-        price: "£4.09",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "San Miguel",
-        price: "£4.09",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "Kronenburg",
-        price: "£4.09",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      }
-    ]
   };
 
   render() {

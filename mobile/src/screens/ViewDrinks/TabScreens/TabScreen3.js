@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
-class componentName extends Component {
+class TabScreen3 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,4 +17,4 @@ class componentName extends Component {
   }
 }
 
-export default componentName;
+export default TabScreen3;
