@@ -4,7 +4,11 @@ import { faRetweet } from "@fortawesome/free-solid-svg-icons";
 import TimeAgo from "react-timeago";
 import "./App.css";
 import PopupWindow from "./components/popup-window/popup-window";
-
+import Button from "./components/Button/Button";
+import Button1 from "./components/Button/Button1";
+import Capture from "../src/components/Pics/Capture.PNG";
+import Pound from "../src/components/Pics/Pound.jpg";
+import Minus from "../src/components/Pics/Minus.jpg";
 const OrderState = {
   AWAITING_COLLECTION: 0,
   IN_PROGRESS: 1,
@@ -139,7 +143,7 @@ class App extends Component {
                     padding: "5px"
                   }}
                 >
-                  £2.50
+                  $23
                 </span>
               </li>
               <li>
@@ -152,7 +156,7 @@ class App extends Component {
                   }}
                 >
                   {" "}
-                  £2.50
+                  $22
                 </span>
               </li>
               <li style={{ marginTop: "-28px" }}>
@@ -174,7 +178,7 @@ class App extends Component {
                   }}
                 >
                   {" "}
-                  £12.50{" "}
+                  $45{" "}
                 </span>
                 <br />
                 <span
@@ -185,6 +189,101 @@ class App extends Component {
                 />
               </li>
             </ul>
+            {/* <Button /> */}
+            <button
+              style={{
+                width: "200px",
+                height: "70px",
+                borderRadius: "20px 20px 20px 20px",
+                display: "inline-block",
+                margin: "50px"
+              }}
+            >
+              Refund
+              <br />
+              <img
+                src={Pound}
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "200px",
+                  marginLeft: "-5px",
+                  marginTop: "-20px"
+                }}
+              />
+              <span
+                style={{
+                  fontSize: "14px ",
+                  fontWeight: "20px",
+                  marginLeft: "5px"
+                }}
+              >
+                Refund Customer
+              </span>
+            </button>
+            <button
+              style={{
+                width: "200px",
+                height: "70px",
+                borderRadius: "20px 20px 20px 20px",
+                display: "inline-block",
+                margin: "50px"
+              }}
+            >
+              Out Of Stock
+              <br />
+              <img
+                src={Capture}
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "200px",
+                  marginLeft: "-30px",
+                  marginTop: "-20px"
+                }}
+              />
+              <span
+                style={{
+                  fontSize: "14px ",
+                  fontWeight: "20px",
+                  marginLeft: "5px"
+                }}
+              >
+                Make unavailable
+              </span>
+            </button>
+
+            <button
+              style={{
+                width: "200px",
+                height: "70px",
+                borderRadius: "20px 20px 20px 20px",
+                display: "inline-block",
+                margin: "50px"
+              }}
+            >
+              Delete
+              <br />
+              <img
+                src={Minus}
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "200px",
+                  marginLeft: "-30px",
+                  marginTop: "-20px"
+                }}
+              />
+              <span
+                style={{
+                  fontSize: "14px ",
+                  fontWeight: "20px",
+                  marginLeft: "5px"
+                }}
+              >
+                Delete Item
+              </span>
+            </button>
           </div>
         </PopupWindow>
       );
