@@ -1,6 +1,6 @@
 import {put} from 'redux-saga/effects';
 import axios from '../../axios-instance';
-import {Navigation} from "react-native-navigation";
+import {Alert} from 'react-native';
 import * as actions from '../actions/index';
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import {Platform} from "react-native";
@@ -38,9 +38,11 @@ export function* authUserSaga(action) {
                 });
         } else {
             yield put(actions.authFail());
+            Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again')
         }
     } catch (err) {
-       console.log(err);
+        console.log(err);
+        Alert.alert('Unsuccessful login 🔒', 'Authentication failed. Please try again')
     }
 }
 
