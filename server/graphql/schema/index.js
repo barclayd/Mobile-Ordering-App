@@ -9,6 +9,16 @@ module.exports = buildSchema(`
             name: String!
         }
         
+     type Bar {
+            _id: ID!
+            name: String!
+            barCode: String!
+            type: String!
+            description: String!
+            latitude: Float!
+            longitude: Float!
+        }
+        
         type AuthData {
             userId: ID!
             token: String!
@@ -23,12 +33,22 @@ module.exports = buildSchema(`
             role: String!
         }
         
+        input BarInput {
+            name: String!
+            type: String!
+            description: String!
+            latitude: Float!
+            longitude: Float!
+        }
+        
         type RootQuery {
            login(email: String!, password: String!): AuthData!
+           findBar(barCode: String!): Bar!
         }
         
         type RootMutation {
             createUser(userInput: UserInput): User
+            createBar(barInput: BarInput): Bar
         }
         
         schema {
