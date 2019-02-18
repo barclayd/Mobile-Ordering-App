@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Navigation} from "react-native-navigation";
-import {View, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity, Platform, KeyboardAvoidingView} from 'react-native';
+import {View, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import validate from '../../utility/validation';
@@ -10,6 +10,8 @@ import {DismissKeyboard} from '../../components/Utilities/DismissKeyboard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
 import * as actions from '../../store/actions/index';
+
+let submittedCode;
 
 class WelcomeScreen extends Component {
 
@@ -38,6 +40,7 @@ class WelcomeScreen extends Component {
         if(this.state.controls.barCode.valid) {
             console.log('valid was called');
             this.props.findBar(this.state.controls.barCode.value, this.props.componentId);
+            submittedCode = this.state.controls.barCode.value;
         }
     };
 
@@ -83,17 +86,23 @@ class WelcomeScreen extends Component {
                     <TextInput
                         placeholder='Enter a bar code...'
                         value={this.state.controls.barCode.value}
-                        style={[styles.input, {borderColor: this.state.controls.barCode.valid ? colours.green : colours.white}]}
+                        style={[styles.input, {borderColor: this.props.barError ? colours.warningRed : this.state.controls.barCode.valid ? colours.green : colours.white}]}
                         placeholderTextColor={colours.white}
                         maxLength={4}
                         autoCorrect={false}
                         selectionColor={colours.orange}
                         onChangeText={(val) => this.inputUpdateHandler('barCode', val)}/>
-                    <View style={[styles.btn, {borderColor: this.state.controls.barCode.valid ? colours.green : colours.white}]} >
+                    <View style={[styles.btn, {borderColor: this.props.barError ? colours.warningRed : this.state.controls.barCode.valid ? colours.green : colours.white}]} >
                     <TouchableOpacity onPress={() => this.onSubmitCodeHandler()}>
-                            <Icon name="check" size={30} color={this.state.controls.barCode.valid ? colours.green : colours.white}/>
+                        {this.props.barError ? <Icon name="warning" size={30} color={colours.warningRed}/> : this.props.barLoading ?
+                            <Icon name="spinner" size={30} color={colours.grey}/> :
+                            <Icon name="check" size={30} color={this.state.controls.barCode.valid ? colours.green : colours.white} />
+                        }
                     </TouchableOpacity>
                     </View>
+                </View>
+                <View style={styles.rowContainer}>
+                    {this.props.barError ? <Text style={styles.h3}>Bar code <Text style={{color: colours.warningRed}}>{submittedCode}</Text> could not be found. Please try again</Text> : null}
                 </View>
                 <View style={styles.loginButtonContainer}>
                         <ButtonWithBackground color={colours.lightBlue} textColor={colours.cream}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
@@ -127,6 +136,10 @@ const styles = StyleSheet.create({
       h2:{
         color: colours.cream,
         top: (Dimensions.get('window').height / 5)
+    },
+    h3:{
+        color: colours.midGrey,
+        top: ((Dimensions.get('window').height / 5.5) * 2)
     },
     button: {
         fontSize: 36,
@@ -178,6 +191,13 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = state => {
+    return {
+        barLoading: state.bar.loading,
+        barError: state.bar.error
+    }
+};
+
 const mapDispatchToProps = dispatch => {
     return {
         onTryAutoSignIn: () => dispatch(actions.authCheckState()),
@@ -185,4 +205,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(WelcomeScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(WelcomeScreen);
