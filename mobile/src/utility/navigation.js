@@ -96,7 +96,7 @@ const setMainAppSettings = (image1, image2) => {
     });
 };
 
-const setMainApp = (componentId) => {
+const setMainApp = (componentId, barName) => {
     Navigation.setStackRoot(componentId, {
         component: {
             name: screens.ViewMenus,
@@ -109,7 +109,7 @@ const setMainApp = (componentId) => {
                 topBar: {
                     visible: true,
                     title: {
-                        text: 'The Taff'
+                        text: barName ? barName : 'The Taff'
                     }
                 }
             }
