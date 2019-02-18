@@ -11,6 +11,11 @@
 
 ## System Architecture
 
+#### Server
+
+![screenshot 2019-02-18 at 23 06 38](https://user-images.githubusercontent.com/39765499/52980451-0fa2ff80-33d2-11e9-81dd-b7cdc65f9188.png)
+
+
 ## Tech/framework used
 
 <b>Built with</b>
