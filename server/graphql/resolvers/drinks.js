@@ -1,4 +1,5 @@
 const Drink = require('../../models/drink');
+const {transformDrink} = require('./merge');
 
 module.exports = {
     drinks: async () => {
@@ -32,21 +33,15 @@ module.exports = {
         }
     },
     findDrinks: async ({type}) => {
-        // does bar exist with given bar code
-        const category = await Drink.find({
-            type: type
-        });
-        // no bar found with given bar code
-        if (!category) {
-            throw new Error(`Drinks dont exist with type ${category}`);
+        try {
+            const foundDrinks = await Drink.find({type: type});
+            return foundDrinks.map(foundDrink => {
+                return transformDrink(foundDrink)
+            });
+        } catch (err) {
+            console.log(err);
+            throw err;
         }
-        return {
-            _id: category.id,
-            name: category.name,
-            type: category.type,
-            nutitionInfo: category.nutritionInfo,
-            price: category.price
-        };
     }
 };
 

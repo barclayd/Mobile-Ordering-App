@@ -53,13 +53,14 @@ module.exports = buildSchema(`
             name: String!
             type: String!
             nutritionInfo: String!
-            price: String!
+            price: Float!
         }
         
         type RootQuery {
            login(email: String!, password: String!): AuthData!
            findBar(barCode: String!): Bar!
-           findDrinks(type: String!): Drink!
+           findDrinks(type: String!): [Drink!]!
+           drinks: [Drink!]!
         }
         
         type RootMutation {
