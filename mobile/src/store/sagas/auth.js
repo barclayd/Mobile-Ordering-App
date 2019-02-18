@@ -9,9 +9,9 @@ import {setMainApp, setMainAppSettings} from "../../utility/navigation";
 
 export function* logoutSaga(action) {
     // call function makes generators more testable
-    yield call([AsyncStorage.removeItem("tokenExpiration")]);
-    yield call([AsyncStorage.removeItem("token")]);
-    yield call([AsyncStorage.removeItem("userId")]);
+    yield AsyncStorage.removeItem("tokenExpiration");
+    yield AsyncStorage.removeItem("token");
+    yield AsyncStorage.removeItem("userId");
     yield put(actions.logoutSucceed());
 }
 
