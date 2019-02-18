@@ -226,7 +226,7 @@ class AuthScreen extends Component {
                             </Text>
                         </View>
                 </View>
-                <View style={styles.loginBtn}>
+                <View style={this.state.authMode === 'login' ? styles.loginBtn : styles.signUpButton}>
                     <ButtonWithBackground
                         color={colours.lightBlue}
                         disabled={!this.state.controls.password.valid || !this.state.controls.confirmPassword.valid && this.state.authMode === 'signup' || !this.state.controls.email.valid}
@@ -271,6 +271,11 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         top: (Dimensions.get('window').height / 6),
+        width: '50%',
+        alignSelf: 'center'
+    },
+    signUpButton: {
+        top: (Dimensions.get('window').height / 6) / 1.5,
         width: '50%',
         alignSelf: 'center'
     },
