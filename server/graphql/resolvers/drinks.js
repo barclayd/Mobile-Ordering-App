@@ -19,7 +19,7 @@ module.exports = {
         try {
             const createdDrink = new Drink({
                 name: args.drinkInput.name,
-                type: args.drinkInput.type,
+                category: args.drinkInput.category,
                 nutritionInfo: args.drinkInput.nutritionInfo,
                 price: args.drinkInput.price
             });
@@ -32,9 +32,9 @@ module.exports = {
             throw err;
         }
     },
-    findDrinks: async ({type}) => {
+    findDrinks: async ({category}) => {
         try {
-            const foundDrinks = await Drink.find({type: type});
+            const foundDrinks = await Drink.find({category: category});
             return foundDrinks.map(foundDrink => {
                 return transformDrink(foundDrink)
             });

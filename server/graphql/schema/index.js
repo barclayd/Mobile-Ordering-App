@@ -12,7 +12,7 @@ module.exports = buildSchema(`
     type Drink {
             _id: ID!
             name: String!
-            type: String!
+            category: String!
             nutritionInfo: String!
             price: String!
     }
@@ -51,15 +51,15 @@ module.exports = buildSchema(`
 
         input DrinkInput {
             name: String!
-            type: String!
+            category: String!
             nutritionInfo: String!
-            price: Float!
+            price: String!
         }
         
         type RootQuery {
            login(email: String!, password: String!): AuthData!
            findBar(barCode: String!): Bar!
-           findDrinks(type: String!): [Drink!]!
+           findDrinks(category: String!): [Drink!]!
            drinks: [Drink!]!
         }
         
