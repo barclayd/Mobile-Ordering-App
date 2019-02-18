@@ -105,8 +105,8 @@ class WelcomeScreen extends Component {
                     {this.props.barError ? <Text style={styles.h3}>Bar code <Text style={{color: colours.warningRed}}>{submittedCode}</Text> could not be found. Please try again</Text> : null}
                 </View>
                 <View style={styles.loginButtonContainer}>
-                        <ButtonWithBackground color={colours.transparent} textColor={colours.cream}  onPress={() => this.onLoginButtonHandler('Login')}>Login</ButtonWithBackground>
-                        <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('Sign Up')}>Sign Up</ButtonWithBackground>
+                        <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
+                        <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
                 </View>
             </WelcomeBackground>
                 </KeyboardAvoidingView>
