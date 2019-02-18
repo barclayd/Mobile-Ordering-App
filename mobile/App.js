@@ -8,9 +8,16 @@ import Settings from './src/screens/Settings/Settings';
 import WelcomeScreen from './src/screens/WelcomeScreen/WelcomeScreen';
 import {setWelcomePageRoot, setDefaultSettings} from './src/utility/navigation';
 import * as screens from './src/utility/screens';
+import createSagaMiddleware from 'redux-saga';
+import {watchAuth, watchBar} from './src/store/sagas/index';
 import ViewMenus from './src/screens/Menus/Menus';
 
-const store = configureStore();
+const sagaMiddleware = createSagaMiddleware();
+
+const store = configureStore(sagaMiddleware);
+
+sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchBar);
 
 // register screens
 Navigation.registerComponentWithRedux(screens.AuthScreen, () => AuthScreen, Provider, store);

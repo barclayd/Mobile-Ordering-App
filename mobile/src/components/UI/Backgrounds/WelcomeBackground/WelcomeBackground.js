@@ -4,7 +4,7 @@ import LinearGradient from "react-native-linear-gradient";
 import barImage from '../../../../assets/barConfetti.jpg';
 
 const welcomeBackground = props => (
-    <ImageBackground style={styles.backgroundImg} source={barImage}>
+    <ImageBackground style={styles.backgroundImg} source={props.image ? props.image : barImage}>
         <LinearGradient colors={['transparent', props.colour1]} style={styles.linearGradient}>
             <View style={styles.overlayDark} />
             {props.children}

@@ -21,14 +21,15 @@ module.exports = {
             const user = await User.findOne({
                 email: args.userInput.email
             });
-            if(user) {
+            if (user) {
                 throw new Error('Email already in use');
             }
             const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
             const createdUser = new User({
                 email: args.userInput.email,
                 password: hashedPassword,
-                role: 'Customer'
+                role: args.userInput.role,
+                name: args.userInput.name
             });
             const result = await createdUser.save();
             return {
@@ -57,14 +58,16 @@ module.exports = {
         }
         const token = jwt.sign({
             userId: user.id,
-            email: user.email
+            email: user.email,
+            role: user.role
         }, process.env.PRIVATE_KEY, {
             expiresIn: '1h'
         });
         return {
             userId: user.id,
             token: token,
-            tokenExpiration: 1
+            tokenExpiration: 1,
+            name: user.name
         };
     }
 };
