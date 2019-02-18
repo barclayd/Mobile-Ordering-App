@@ -8,6 +8,14 @@ module.exports = buildSchema(`
             password: String
             name: String!
         }
+
+    type Drink {
+            _id: ID!
+            name: String!
+            type: String!
+            nutritionInfo: String!
+            price: String!
+    }
         
      type Bar {
             _id: ID!
@@ -40,15 +48,24 @@ module.exports = buildSchema(`
             latitude: Float!
             longitude: Float!
         }
+
+        input DrinkInput {
+            name: String!
+            type: String!
+            nutritionInfo: String!
+            price: String!
+        }
         
         type RootQuery {
            login(email: String!, password: String!): AuthData!
            findBar(barCode: String!): Bar!
+           findDrinks(type: String!): Drink!
         }
         
         type RootMutation {
             createUser(userInput: UserInput): User
             createBar(barInput: BarInput): Bar
+            createDrink(drinkInput: DrinkInput): Drink
         }
         
         schema {
