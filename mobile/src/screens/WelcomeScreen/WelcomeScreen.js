@@ -72,7 +72,7 @@ class WelcomeScreen extends Component {
                     style={styles.inputContainer}>
             <WelcomeBackground colour1={colours.orange} >
                 <View style={styles.rowContainer}>
-                    <Text style={styles.welcome}>Drink</Text><Text style={styles.king}>King</Text>
+                    <Text style={styles.welcome}>Drin</Text><Text style={styles.king}>King</Text>
                 </View>
 
                 <View style={styles.rowContainer}>
@@ -96,8 +96,8 @@ class WelcomeScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.loginButtonContainer}>
-                        <ButtonWithBackground color={colours.lightBlue} textColor={colours.cream}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
-                        <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
+                        <ButtonWithBackground color={colours.transparent} textColor={colours.cream}  onPress={() => this.onLoginButtonHandler('Login')}>Login</ButtonWithBackground>
+                        <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('Sign Up')}>Sign Up</ButtonWithBackground>
                 </View>
             </WelcomeBackground>
                 </KeyboardAvoidingView>
