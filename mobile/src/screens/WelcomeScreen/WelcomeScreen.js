@@ -5,8 +5,7 @@ import {View, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity, Platfor
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import validate from '../../utility/validation';
-import {setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen} from '../../utility/navigation';
-import IonicIcon from 'react-native-vector-icons/Ionicons';
+import {setLoginSettings, setLoginScreen} from '../../utility/navigation';
 import {DismissKeyboard} from '../../components/Utilities/DismissKeyboard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
@@ -36,15 +35,9 @@ class WelcomeScreen extends Component {
     };
 
     onSubmitCodeHandler = () => {
-        if (this.state.controls.barCode.valid) {
-            Promise.all([
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
-            ])
-                .then(sources => {
-                    setMainAppSettings(sources[0], sources[1]);
-                    setMainApp(this.props.componentId);
-                });
+        if(this.state.controls.barCode.valid) {
+            console.log('valid was called');
+            this.props.findBar(this.state.controls.barCode.value, this.props.componentId);
         }
     };
 
@@ -62,6 +55,7 @@ class WelcomeScreen extends Component {
                }
            }
         });
+
     };
 
     onLoginButtonHandler = (authType) => {
@@ -186,7 +180,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onTryAutoSignIn: () => dispatch(actions.authCheckState())
+        onTryAutoSignIn: () => dispatch(actions.authCheckState()),
+        findBar: (barCode, componentId) => dispatch(actions.findBar(barCode, componentId))
     };
 };
 

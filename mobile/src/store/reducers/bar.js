@@ -6,7 +6,7 @@ const initialState = {
     error: null,
     name: null,
     description: null,
-    latitiude: null,
+    latitude: null,
     longitude: null,
     type: null,
     barCode: null,
@@ -26,15 +26,27 @@ const findBarSuccess = (state, action) => {
         description: action.description,
         barCode: action.barCode,
         latitude: action.latitude,
-        longitude: longitude,
+        longitude: action.longitude,
         loading: false,
         error: false
     });
 };
 
-const findBarFails = (state, action) => {
+const findBarFail = (state, action) => {
     return updateObject(state, {
-        error: true,
+        error: action.error,
         loading: false
     });
 };
+
+const reducer = (state = initialState, action) => {
+    switch (action.type) {
+        case actionTypes.FIND_BAR_START: return findBarStart(state, action);
+        case actionTypes.FIND_BAR_SUCCESS: return findBarSuccess(state, action);
+        case actionTypes.FIND_BAR_FAIL: return findBarFail(state, action);
+        default: return state;
+    }
+};
+
+export default reducer;
+
