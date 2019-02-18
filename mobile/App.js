@@ -10,6 +10,7 @@ import {setWelcomePageRoot, setDefaultSettings} from './src/utility/navigation';
 import * as screens from './src/utility/screens';
 import createSagaMiddleware from 'redux-saga';
 import {watchAuth, watchBar} from './src/store/sagas/index';
+import ViewMenus from './src/screens/Menus/Menus';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -24,7 +25,7 @@ Navigation.registerComponentWithRedux(screens.WelcomeScreen, () => WelcomeScreen
 Navigation.registerComponentWithRedux(screens.ViewDrinksScreen, () => ViewDrinks, Provider, store);
 Navigation.registerComponentWithRedux(screens.SideDrawer, () => SideDrawer, Provider, store);
 Navigation.registerComponentWithRedux(screens.Settings, () => Settings, Provider, store);
-
+Navigation.registerComponentWithRedux(screens.ViewMenus, () => ViewMenus, Provider, store);
 
 Navigation.events().registerAppLaunchedListener(() => {
   setDefaultSettings();
