@@ -1,4 +1,4 @@
-import {put} from 'redux-saga/effects';
+import {put, call} from 'redux-saga/effects';
 import {AsyncStorage} from 'react-native';
 import axios from '../../axios-instance';
 import {Alert} from 'react-native';
@@ -6,6 +6,14 @@ import * as actions from '../actions/index';
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import {Platform} from "react-native";
 import {setMainApp, setMainAppSettings} from "../../utility/navigation";
+
+export function* logoutSaga(action) {
+    // call function makes generators more testable
+    yield call([AsyncStorage.removeItem("tokenExpiration")]);
+    yield call([AsyncStorage.removeItem("token")]);
+    yield call([AsyncStorage.removeItem("userId")]);
+    yield put(actions.logoutSucceed());
+}
 
 export function* authUserSaga(action) {
     yield put(actions.authStart());
@@ -57,7 +65,7 @@ export function* authUserSaga(action) {
                         }
                     };
 
-                    const res = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
+                    const res = yield axios.post('/', JSON.stringify(requestBody));
                     if (res.status === 200 && res.status !== 201) {
                         yield put(actions.authSuccess(res.data.data.login.token, res.data.data.login.userId, res.data.data.login.tokenExpiration, res.data.data.login.name));
                         yield AsyncStorage.setItem("token", res.data.data.login.token);
@@ -107,7 +115,7 @@ export function* authUserSaga(action) {
                 }
             };
 
-            const response = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
+            const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.status === 200 && response.status !== 201) {
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
                 Promise.all([
@@ -127,10 +135,6 @@ export function* authUserSaga(action) {
             Alert.alert('Unsuccessful login 🔒', 'Authentication failed. Please try again')
         }
     }
-}
-
-export function* logoutSaga(action) {
-    yield put(actions.logoutSucceed());
 }
 
 export function* authCheckStateSaga(action) {
