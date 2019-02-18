@@ -16,7 +16,13 @@ module.exports = {
     },
     createBar: async (args) => {
         try {
-            const barCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+            let barCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+            const bar = await Bar.findOne({
+                barCode: barCode
+            });
+            if (!bar) {
+                barCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+            }
             const createdBar = new Bar({
                 name: args.barInput.name,
                 barCode: barCode,
