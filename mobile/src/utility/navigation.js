@@ -99,7 +99,7 @@ const setMainAppSettings = (image1, image2) => {
 const setMainApp = (componentId, barName) => {
     Navigation.setStackRoot(componentId, {
         component: {
-            name: screens.ViewDrinksScreen,
+            name: screens.ViewMenus,
             options: {
                 animations: {
                     setStackRoot: {
@@ -114,6 +114,41 @@ const setMainApp = (componentId, barName) => {
                 }
             }
         }
+    });
+};
+
+const setViewDrinks = (componentId, menuName) => {
+    Navigation.push(componentId, {
+        component: {
+            name: screens.ViewDrinksScreen,
+            passProps: {
+                authState: menuName
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: menuName,
+                    }
+                }
+            }
+        }
+    })
+};
+
+const setViewDrinksSettings = (image2) => {
+    Navigation.setDefaultOptions({
+        topBar: {
+            visible: true,
+            barStyle: 'black',
+            rightButtons: [
+            {
+                id: 'profileButton',
+                icon: image2,
+                color: colours.white
+            }
+        ]
+    }
     });
 };
 
@@ -148,5 +183,5 @@ const setLoginScreen = (componentId, authType) => {
 
 
 export {
-    setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen
+    setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, 
 }
