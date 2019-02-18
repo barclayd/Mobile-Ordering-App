@@ -1,8 +1,10 @@
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import authReducer from './reducers/auth';
+import barReducer from './reducers/bar';
 
 const rootReducer = combineReducers({
-    auth: authReducer
+    auth: authReducer,
+    bar: barReducer
 });
 
 let composeEnhancers = compose;

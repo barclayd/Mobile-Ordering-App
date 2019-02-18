@@ -4,5 +4,5 @@ export {
 
 
 export {
-    findBarStart, findBarSuccess, findBarFail
+    findBarStart, findBarSuccess, findBarFail, removeBar, removeBarFail, findBar, removeBarStart, removeBarSuccess
 } from './bar'
