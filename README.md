@@ -13,7 +13,7 @@
 
 #### Server
 
-![screenshot 2019-02-18 at 23 06 38](https://user-images.githubusercontent.com/39765499/52980451-0fa2ff80-33d2-11e9-81dd-b7cdc65f9188.png)
+<img width="1149" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/52980628-fb133700-33d2-11e9-9c0d-763ddb896399.png">
 
 
 ## Tech/framework used
