@@ -38,7 +38,7 @@ export function* findBarSaga(action) {
                 ])
                     .then(sources => {
                         setMainAppSettings(sources[0], sources[1]);
-                        setMainApp(action.componentId);
+                        setMainApp(action.componentId, response.data.data.findBar.name);
                     });
             }
     } catch (err) {
