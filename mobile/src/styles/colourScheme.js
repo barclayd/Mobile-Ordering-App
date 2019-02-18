@@ -13,4 +13,5 @@ export const midGrey = '#989490';
 export const green = '#4BB543';
 export const midBlue = '#00416A';
 export const veryLightGrey = '#E4E5E6';
-export const transparent = "transparent";
+export const warningRed='#B33A3A';
+export const transparent="transparent";

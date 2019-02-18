@@ -12,7 +12,12 @@ const userSchema = mongoose.Schema({
         required: true
     },
     role: {
-        type: String
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
     }
 });
 
