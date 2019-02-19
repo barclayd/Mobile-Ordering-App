@@ -8,13 +8,13 @@ import {
   ScrollView,
   TouchableOpacity
 } from "react-native";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import * as colours from "../../styles/colourScheme";
 import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
 import ScrollableTabView, {
   DefaultTabBar
 } from "react-native-scrollable-tab-view";
-import * as actions from '../../store/actions/index'
+import * as actions from "../../store/actions/index";
 
 import TabScreen1 from "./TabScreens/TabScreen1";
 import TabScreen2 from "./TabScreens/TabScreen2";
@@ -30,11 +30,26 @@ const theme = {
 class ViewDrinks extends Component {
   state = {
     search: "",
+    drinks: []
   };
 
   componentDidMount() {
+    console.log('ViewDrinksPageLoads');
     this.props.findDrinks("beers", this.props.componentId);
   }
+
+
+  componentWillReceiveProps(nextProps) {
+    console.log("props",nextProps)
+  }
+
+  // async loadData(){
+  //   let drinksList = await 
+  //   console.log('kjskjs',drinksList);
+  //   this.setState({drinks: drinksList})
+  //   console.log('state',this.state.drinks);
+  // }
+
   render() {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -79,16 +94,24 @@ const styles = StyleSheet.create({
   }
 });
 
-// const mapStateToProps = state => {
-//   return {
-//       barLoading: state.bar.loading,
-//       barError: state.bar.error
-//   }
-// };
+const mapStateToProps = state => {
+  return {
+      error: state.drink.error,
+      loading: state.drink.loading,
+      name: state.drink.name,
+      category: state.drink.category,
+      nutrition: state.drink.nutrition,
+      price: state.drink.price
+  }
+};
 
 const mapDispatchToProps = dispatch => {
   return {
-      findDrinks: (category, componentId) => dispatch(actions.findDrinks(category, componentId))
+    findDrinks: (category, componentId) =>
+      dispatch(actions.findDrinks(category, componentId))
   };
 };
-export default connect(null, mapDispatchToProps)(ViewDrinks);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ViewDrinks);

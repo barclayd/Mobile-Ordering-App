@@ -20,7 +20,7 @@ class OverlayComponent extends Component {
   };
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <View>
         <Overlay

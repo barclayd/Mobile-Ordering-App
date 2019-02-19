@@ -33,6 +33,7 @@ export function* findDrinksSaga(action){
                 ])
                     .then(sources => {
                         console.log("found drinks successfully")
+                        console.log(response)
                         // setViewDrinksSettings(source[2]);
                         // setViewDrinks(action.componentId, response.data.data.findDrinks.name);
                     });
