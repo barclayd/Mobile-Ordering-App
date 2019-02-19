@@ -46,7 +46,8 @@ export default class TabScreen2 extends Component {
         price: "£4.09",
         description: "201 kcal. 5.0%. 2.8 Units"
       }
-    ]
+    ],
+    // drinks: []
   };
 
   openOverlay = () => {
