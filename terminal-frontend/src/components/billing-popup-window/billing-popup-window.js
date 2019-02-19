@@ -18,7 +18,7 @@ export default class BillingPopupWindow extends React.Component {
                         </span>
                     )}
                     showCloseButton={true}
-                    closeFunc={this.props.closeFunc}
+                    showFunc={this.props.showFunc}
             >
                 <h1>DRINKS:</h1>
                 <div className="indentedContent">
@@ -37,5 +37,5 @@ export default class BillingPopupWindow extends React.Component {
 
 BillingPopupWindow.propTypes = {
     order: PropTypes.object,
-    closeFunc: PropTypes.func
+    showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
 }

@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRetweet, faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 import TimeAgo from './components/time-ago-clean/time-ago-clean'
-import './App.css';
 import BillingPopupWindow from './components/billing-popup-window/billing-popup-window';
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
 import NotesIcon from "./notes.svg"
+import './App.css'
 
 const OrderState = {
   AWAITING_COLLECTION: 0, 
@@ -16,7 +16,7 @@ const OrderState = {
 
 const itemsPerOrderListColumn = 4;
 
-class App extends Component {
+export default class App extends Component {
   constructor () {
     super();
 
@@ -133,9 +133,7 @@ class App extends Component {
       selectedStaffMember: 1,
       awaitingOrders: [],
       inProgressOrders: [],
-      pendingOrders: [],
-      billingPopupVisible: false,
-      notesPopupVisible: false
+      pendingOrders: []
     }
 
     let awaitingOrders=[], inProgressOrders=[], pendingOrders=[];
@@ -158,31 +156,6 @@ class App extends Component {
     this.state.pendingOrders = pendingOrders;
   }
 
-  showBillingPopup = () => {
-    this.setState({billingPopupVisible: true})
-  }
-  closeBillingPopup = () => {
-    this.setState({billingPopupVisible: false})
-  }
-  renderBillingPopup = () => {
-    if (this.state.billingPopupVisible)
-      return (
-        <BillingPopupWindow order={this.state.orders[1]} closeFunc={this.closeBillingPopup} />
-      )
-  }
-
-  showNotesPopup = () => {
-    this.setState({notesPopupVisible: true})
-  }
-  closeNotesPopup = () => {
-    this.setState({notesPopupVisible: false})
-  }
-  renderNotesPopup = () => {
-    if (this.state.notesPopupVisible)
-      return (
-        <NotesPopupWindow order={this.state.orders[3]} closeFunc={this.closeNotesPopup} />
-      )
-  }
 
   renderListItems = (items) => {
     return items.map((itemData) => {
@@ -227,7 +200,7 @@ class App extends Component {
       }
 
       return (
-        <div onClick={this.showNotesPopup} className="customerNotesContainer">
+        <div onClick={this.state.showNotes} className="customerNotesContainer">
           <img className="notesIcon" src={NotesIcon} alt="Notes icon"/>
           <h2 className="header">Customer notes:</h2>
           <div className="notes">{notes}</div>
@@ -235,7 +208,7 @@ class App extends Component {
       )
     }
   }
-
+  
   render() {
     return (
       <div className="App">
@@ -269,7 +242,7 @@ class App extends Component {
                         <br />
                         <span className="subtitle">Mark as un-ready</span>
                       </button>
-                      <button onClick={this.showBillingPopup} className="orderButton">
+                      <button onClick={this.state.showBilling} className="orderButton">
                         <span className="icon"></span>
                         <span className="title">More</span>
                         <br />
@@ -309,7 +282,7 @@ class App extends Component {
                           <br />
                           <span className="subtitle">Return to pending</span>
                         </button>
-                        <button onClick={this.showBillingPopup} className="orderButton">
+                        <button onClick={this.state.showBilling} className="orderButton">
                           <span className="icon"></span>
                           <span className="title">More</span>
                           <br />
@@ -323,7 +296,7 @@ class App extends Component {
           </div>
           
           <div className="pendingOrderButtons">
-            <button onClick={this.showBillingPopup} className="pendingOrderButton">
+            <button onClick={this.state.showBilling} className="pendingOrderButton">
               <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
               <span className="title">Take next order</span>
               <br />
@@ -334,7 +307,7 @@ class App extends Component {
               </span>
             </button>
 
-            <button onClick={this.showBillingPopup} className="pendingOrderButton">
+            <button onClick={this.state.showBilling} className="pendingOrderButton">
               <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
               <span className="title">View upcoming</span>
               <br />
@@ -346,13 +319,11 @@ class App extends Component {
 
           <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
 
-          { this.renderBillingPopup() }
-          { this.renderNotesPopup() }
+          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} order={this.state.orders[1]} />
+          <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orders[3]} />
 
         </header>
       </div>
     );
   }
 }
-
-export default App;
