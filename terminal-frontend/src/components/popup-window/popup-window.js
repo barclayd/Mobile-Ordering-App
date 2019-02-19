@@ -3,6 +3,18 @@ import PropTypes from 'prop-types'
 import './style.css'
 
 export default class PopupWindow extends React.Component {
+  keyPressed = (event) => {
+    // Listen for escape key to close popup
+    if (event.keyCode === 27)
+      this.props.closeFunc();
+  }
+  componentDidMount () {
+    document.addEventListener("keydown", this.keyPressed, false);
+  }
+  componentWillUnmount () {
+    document.removeEventListener("keydown", this.keyPressed, false);
+  }
+
   getClassName = () => {
     if (this.props.className) {
       return 'popup ' + this.props.className;
@@ -50,6 +62,6 @@ PopupWindow.propTypes = {
   showCloseButton: PropTypes.bool,
   closeFunc: PropTypes.func,
   title: PropTypes.string,
-  subtitle: PropTypes.string,
+  subtitle: PropTypes.object, // JSX object
   children: PropTypes.node
 }
