@@ -6,3 +6,7 @@ export {
 export {
     findBarStart, findBarSuccess, findBarFail, removeBar, removeBarFail, findBar, removeBarStart, removeBarSuccess
 } from './bar'
+
+export {
+    findDrinksStart, findDrinks, findDrinksSuccess, findDrinksFails
+} from './drinks'
