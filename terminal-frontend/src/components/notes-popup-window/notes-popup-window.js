@@ -19,7 +19,7 @@ export default class NotesPopupWindow extends React.Component {
                         </span>
                     )}
                     showCloseButton={true}
-                    closeFunc={this.props.closeFunc}
+                    showFunc={this.props.showFunc}
             >
                 <p className="notesPara">{this.props.order.notes}</p>
             </PopupWindow>
@@ -29,5 +29,5 @@ export default class NotesPopupWindow extends React.Component {
 
 NotesPopupWindow.propTypes = {
     order: PropTypes.object,
-    closeFunc: PropTypes.func
+    showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
 }
