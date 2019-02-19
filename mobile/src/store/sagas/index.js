@@ -1,6 +1,7 @@
 import {takeEvery, takeLatest, all} from 'redux-saga/effects';
 import {authUserSaga, logoutSaga, authCheckStateSaga, checkAuthTimeoutSaga} from "./auth";
 import {findBarSaga} from './bar';
+import {findDrinksSaga} from './drinks';
 import * as actionTypes from '../actions/actionTypes';
 
 
@@ -16,4 +17,8 @@ export function* watchAuth() {
 
 export function* watchBar() {
     yield takeLatest(actionTypes.FIND_BAR, findBarSaga);
+}
+
+export function* watchDrinks() {
+    yield takeLatest(actionTypes.FIND_DRINKS, findDrinksSaga)
 }

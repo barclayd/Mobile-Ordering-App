@@ -1,13 +1,11 @@
 import {put} from 'redux-saga/effects';
-import {AsyncStorage, Platform} from 'react-native';
+import {Platform} from 'react-native';
 import IonicIcon from "react-native-vector-icons/Ionicons";
-import { setViewDrinksSettings, setViewDrinks } from "../../utility/navigation";
 import axios from '../../axios-instance';
 import * as actions from '../actions/index';
 
-export function* findDrinksSaga(actions){
-    console.log("------------------")
-    yield put(actions.findDrinksStart());
+export function* findDrinksSaga(action){
+    yield put(actions.findBarStart());
     try {
         const requestBody = {
             query: `
@@ -29,9 +27,9 @@ export function* findDrinksSaga(actions){
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            yield put(actions.findDrinksSuccess(response.data.data.findDrinks.name, response.data.data.finddrinks.category, response.data.data.findDrinks.category, response.data.data.findDrinks.nutritionInfo, response.data.data.findDrinks.price));
+            yield put(actions.findDrinksSuccess(response.data.data.findDrinks.name, response.data.data.findDrinks.category, response.data.data.findDrinks.category, response.data.data.findDrinks.nutritionInfo, response.data.data.findDrinks.price));
                 Promise.all([
-                    Icon.getImageSource((Platform.OS === 'android' ? "md-person" : "shopping-basket"), 20)
+                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "shopping-basket"), 20)
                 ])
                     .then(sources => {
                         console.log("found drinks successfully")
