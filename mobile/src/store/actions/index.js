@@ -8,5 +8,5 @@ export {
 } from './bar'
 
 export {
-    findDrinksStart, findDrinks, findDrinksSuccess, findDrinksFails
+    findDrinksStart, findDrinks, findDrinksSuccess, findDrinksFail
 } from './drinks'
