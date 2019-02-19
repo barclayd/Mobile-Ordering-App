@@ -1,0 +1,46 @@
+import {put} from 'redux-saga/effects';
+import {AsyncStorage, Platform} from 'react-native';
+import IonicIcon from "react-native-vector-icons/Ionicons";
+import { setViewDrinksSettings, setViewDrinks } from "../../utility/navigation";
+import axios from '../../axios-instance';
+import * as actions from '../actions/index';
+
+export function* findDrinksSaga(actions){
+    console.log("------------------")
+    yield put(actions.findDrinksStart());
+    try {
+        const requestBody = {
+            query: `
+            query findDrinks($category: String!) {
+                findDrinks(category: $category){
+                    name
+                    category
+                    nutritionInfo
+                    price
+                }
+            }
+            `,
+            variables: {
+                category: action.category
+            }
+        };
+        const response = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
+        if (response.data.errors) {
+            throw Error(response.data.errors[0].message);
+        }
+        if (response.status === 200 && response.status !== 201) {
+            yield put(actions.findDrinksSuccess(response.data.data.findDrinks.name, response.data.data.finddrinks.category, response.data.data.findDrinks.category, response.data.data.findDrinks.nutritionInfo, response.data.data.findDrinks.price));
+                Promise.all([
+                    Icon.getImageSource((Platform.OS === 'android' ? "md-person" : "shopping-basket"), 20)
+                ])
+                    .then(sources => {
+                        console.log("found drinks successfully")
+                        // setViewDrinksSettings(source[2]);
+                        // setViewDrinks(action.componentId, response.data.data.findDrinks.name);
+                    });
+                }
+        } catch (err) {
+                    console.log(err);
+                    yield put(actions.findDrinksFail(err));
+                }
+            }

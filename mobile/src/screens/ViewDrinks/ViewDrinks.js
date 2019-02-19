@@ -8,12 +8,13 @@ import {
   ScrollView,
   TouchableOpacity
 } from "react-native";
+import {connect} from 'react-redux';
 import * as colours from "../../styles/colourScheme";
 import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
 import ScrollableTabView, {
   DefaultTabBar
 } from "react-native-scrollable-tab-view";
-
+import * as actions from '../../store/actions/index'
 
 import TabScreen1 from "./TabScreens/TabScreen1";
 import TabScreen2 from "./TabScreens/TabScreen2";
@@ -31,6 +32,9 @@ class ViewDrinks extends Component {
     search: "",
   };
 
+  componentDidMount() {
+    this.props.findDrinks("beers", this.props.componentId);
+  }
   render() {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -75,4 +79,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ViewDrinks;
+// const mapStateToProps = state => {
+//   return {
+//       barLoading: state.bar.loading,
+//       barError: state.bar.error
+//   }
+// };
+
+const mapDispatchToProps = dispatch => {
+  return {
+      findDrinks: (category, componentId) => dispatch(actions.findDrinks(category, componentId))
+  };
+};
+export default connect(null, mapDispatchToProps)(ViewDrinks);
