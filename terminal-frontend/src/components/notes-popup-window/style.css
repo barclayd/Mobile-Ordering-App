@@ -1,0 +1,11 @@
+.notesPara {
+  color: #eee;
+  font-size: 36px;
+  padding: 15px 50px;
+  font-family: Arial, Helvetica, sans-serif; /* Give it a notey-feel */
+  font-weight: normal;
+}
+
+.orderID {
+  text-transform: uppercase;
+}

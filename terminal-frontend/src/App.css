@@ -15,15 +15,29 @@ html {
   padding: 12px 35px;
 }
 
+
+
 /* Heading stylings: */
-h1, h2, h3 { text-transform: uppercase; }
+h1, h2 { text-transform: uppercase; }
 h1 { color: #868686; margin: 45px 0 8px; }
 h2 { margin: 22px 0 23px 0px; color: white; }
-h3 { color: #999999; }
+h3 {
+  color: #999999;
+  position: absolute;
+  top: 9px;
+  right: 17px;
+  margin: 0;
+  font-size: 20px;
+}
 h4 {
   color: #868686;
   text-align: center;
+  font-size: 20px;
+  margin-top: 9px;
 }
+
+
+
 
 /* Space account quick-switch buttons */
 #accountsHotbar button {
@@ -38,6 +52,10 @@ h4 {
   padding: inherit; /* Keep account switch button inside page padding */
 }
 
+
+
+
+
 .ordersContainer {
   padding-left: 18px;
 }
@@ -49,16 +67,21 @@ h4 {
   position: relative;
   padding-left: 12px;
 }
-
 .orderContainer:not(:last-child) {
   margin-bottom: 7px;
+}
+.orderContainer.in-progress {
+  min-height: 150px;
 }
 
 .orderButtonsContainer {
   position: absolute;
-  top: 0;
+  bottom: 0;
   right: 0;
 }
+
+
+
 
 button.orderButton {
   border: none;
@@ -72,7 +95,7 @@ button.orderButton {
 button.orderButton .icon {
   width: 40px;
   height: 40px;
-  background: red;
+  background: #868686;
   display: block;
   border-radius: 300px;
   float: left;
@@ -80,6 +103,39 @@ button.orderButton .icon {
   width: 47px;
   height: 47px;
   margin-top: -3px;
+}
+button.orderButton .icon::after {
+  content: "•••";
+  font-family: sans-serif;
+  font-size: 26px;
+  position: relative;
+  top: 9px;
+  letter-spacing: 2px;
+  left: 1px;
+  color: rgba(30,30,30, 0.8);
+}
+button.orderButton .icon.ready { background: #008600; }
+button.orderButton .icon.ready::after {
+  content: "✓";
+  letter-spacing: normal;
+  left: auto;
+  top: auto;
+  font-size: 33px;
+}
+button.orderButton .icon.notReady { background: #862D2D; }
+button.orderButton .icon.notReady::after {
+  content: "✘";
+  letter-spacing: normal;
+  left: auto;
+  top: 4px;
+}
+button.orderButton .icon.notInProgress { background: #862D2D; }
+button.orderButton .icon.notInProgress::after {
+  content: "~";
+  letter-spacing: normal;
+  left: auto;
+  top: 2px;
+  font-size: 40px;
 }
 
 button.orderButton .title, button.orderButton .subtitle {
@@ -93,4 +149,117 @@ button.orderButton .subtitle {
   font-size: 15px;
   font-weight: normal;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Same as body */
+}
+
+
+
+.orderList {
+  list-style-type: none;
+  margin-top: 0;
+  padding: 0;
+  margin-bottom: 80px; /* ensures orderButtonsContainer never overlaps orderList items */
+}
+.orderList > li {
+  font-size: 28px;
+  color: #eee;
+}
+.orderList > li > .quantity {
+  width: 68px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.orderList.multiColumn {
+  margin-right: 50px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+
+
+
+.pendingOrderButtons {
+  text-align: center;
+  margin-top: 36px;
+}
+
+.pendingOrderButton:not(:last-child) { margin-right: 85px; }
+.pendingOrderButton {
+  width: 280px;
+  height: 240px;
+  vertical-align: top;
+  padding: 24px;
+  text-align: center;
+  background: #694972;
+}
+.pendingOrderButton:hover { background: #73517c; }
+
+.pendingOrderButton .title { font-size: 26px; }
+.pendingOrderButton .subtitle {
+  color: #BCBCBC;
+  font-weight: normal;
+  font-size: 17px;
+}
+
+.pendingOrderButton .icon {
+  width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+  border: 4px solid #333;
+  display: block;
+  border-radius: 300px;
+
+  /* center */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 13px;
+
+  width: 100px;
+  height: 100px;
+  line-height: 94px; /* vertically center text */
+
+  color: #232323;
+}
+
+.pendingOrderButton .icon.next {
+  font-size: 60px;
+  background: #008659;
+}
+
+.pendingOrderButton .icon.history {
+  font-size: 54px;
+  background: #FFCC66;
+}
+
+
+.customerNotesContainer:hover {
+  background: #694972;
+}
+.customerNotesContainer {
+  position: absolute;
+  bottom: 80px;
+  right: 46px;
+  width: 411px;
+  height: 90px;
+  padding: 0 10px;
+
+  border-radius: 10px;
+  transition-duration: 150ms;
+  cursor: pointer;
+}
+.customerNotesContainer .header {
+  color: #fff;
+  text-transform: uppercase;
+  margin: 0;
+  font-size: 28px;
+}
+.customerNotesContainer .notes {
+  color: #AEAEAE;
+  font-size: 19px;
+  padding-left: 101px;
+}
+.customerNotesContainer .notesIcon {
+  float: left;
+  height: 100%;
+  margin-right: 23px;
 }

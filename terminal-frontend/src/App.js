@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRetweet } from '@fortawesome/free-solid-svg-icons'
-import TimeAgo from 'react-timeago'
+import { faRetweet, faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons'
+import { faClock } from '@fortawesome/free-regular-svg-icons'
+import TimeAgo from './components/time-ago-clean/time-ago-clean'
 import './App.css';
-import PopupWindow from './components/popup-window/popup-window'
+import BillingPopupWindow from './components/billing-popup-window/billing-popup-window';
+import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
+import NotesIcon from "./notes.svg"
 
 const OrderState = {
   AWAITING_COLLECTION: 0, 
   IN_PROGRESS: 1, 
   PENDING: 2
 };
+
+const itemsPerOrderListColumn = 4;
 
 class App extends Component {
   constructor () {
@@ -35,7 +40,52 @@ class App extends Component {
           id: "XHBS",
           orderDate: new Date(),
           customerID: 93,
-          orderItems: [],
+          orderItems: [
+            {
+              id: 1,
+              name: "VK Orange",
+              quantity: 1,
+            },
+            {
+              id: 19,
+              name: "VK Green",
+              quantity: 2,
+            }
+          ],
+          orderState: OrderState.IN_PROGRESS
+        },
+        {
+          id: "ZBNU",
+          orderDate: new Date(),
+          customerID: 93,
+          orderItems: [
+            {
+              id: 672,
+              name: "VK Red",
+              quantity: 1,
+            },
+            {
+              id: 122,
+              name: "Jager bomb",
+              quantity: 5,
+            },
+            {
+              id: 484,
+              name: "Mojito",
+              quantity: 1,
+            },
+            {
+              id: 1023,
+              name: "Bottled water",
+              quantity: 2,
+            },
+            {
+              id: 67,
+              name: "Jumba juice cocktail",
+              quantity: 1,
+            }
+          ],
+          notes: "pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!",
           orderState: OrderState.IN_PROGRESS
         },
         {
@@ -84,7 +134,8 @@ class App extends Component {
       awaitingOrders: [],
       inProgressOrders: [],
       pendingOrders: [],
-      billingPopupVisible: false
+      billingPopupVisible: false,
+      notesPopupVisible: false
     }
 
     let awaitingOrders=[], inProgressOrders=[], pendingOrders=[];
@@ -113,22 +164,74 @@ class App extends Component {
   closeBillingPopup = () => {
     this.setState({billingPopupVisible: false})
   }
-
   renderBillingPopup = () => {
-    if (this.state.billingPopupVisible) {
+    if (this.state.billingPopupVisible)
       return (
-        <PopupWindow className="billingOptions" title="#KHVD PICKUP:" subtitle="Ordered at 11:39pm, 21 minutes ago" showCloseButton={true} closeFunc={this.closeBillingPopup}>
-          <h1>DRINKS:</h1>
-          <div className="indentedContent">
-            <ul className="orderList">
-              <li><span className="quantity">4x</span>VK Orange</li>
-              <li><span className="quantity">1x</span>VK Green</li>
-            </ul>
+        <BillingPopupWindow order={this.state.orders[1]} closeFunc={this.closeBillingPopup} />
+      )
+  }
 
-            <h2>Customer notes:</h2>
-            <p className="indentedPara">pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!</p>
-          </div>
-        </PopupWindow>
+  showNotesPopup = () => {
+    this.setState({notesPopupVisible: true})
+  }
+  closeNotesPopup = () => {
+    this.setState({notesPopupVisible: false})
+  }
+  renderNotesPopup = () => {
+    if (this.state.notesPopupVisible)
+      return (
+        <NotesPopupWindow order={this.state.orders[3]} closeFunc={this.closeNotesPopup} />
+      )
+  }
+
+  renderListItems = (items) => {
+    return items.map((itemData) => {
+      return (
+        <li key={itemData.id}><span className="quantity">{itemData.quantity}x</span>{itemData.name}</li>
+      );
+    })
+  }
+
+  renderMultiColumItemList = (items) => {
+    if (items.length > itemsPerOrderListColumn) {
+      const columnCount = Math.floor(items.length / itemsPerOrderListColumn) + 1; // Calculate how many columns are needed
+      let columns = []; // Array of arrays of rows
+
+      // Build columns array
+      for (let i=0; i < columnCount; i++) {
+        let startIndex = i*itemsPerOrderListColumn
+        columns.push(items.slice(startIndex, startIndex + itemsPerOrderListColumn));
+      }
+
+      // Loop through columns, creating each a UL and spawning LI inside
+      let i = -1; // Counter used for key
+      return columns.map((columnData) => {
+        i++;
+        return(
+          <ul key={i} className="orderList multiColumn">
+            { this.renderListItems(columnData) }
+          </ul>
+        )
+      });
+
+    } else {
+      return <ul className="orderList">{ this.renderListItems(items) }</ul>
+    }
+  }
+
+  renderCustomerNotes = (notes) => {
+    if (notes) {
+      // Crop down long notes to prevent overflowing
+      if (notes.length > 50) {
+        notes = notes.substr(0, 50) + "...";
+      }
+
+      return (
+        <div onClick={this.showNotesPopup} className="customerNotesContainer">
+          <img className="notesIcon" src={NotesIcon} alt="Notes icon"/>
+          <h2 className="header">Customer notes:</h2>
+          <div className="notes">{notes}</div>
+        </div>
       )
     }
   }
@@ -167,7 +270,7 @@ class App extends Component {
                         <span className="subtitle">Mark as un-ready</span>
                       </button>
                       <button onClick={this.showBillingPopup} className="orderButton">
-                        <span className="icon notReady"></span>
+                        <span className="icon"></span>
                         <span className="title">More</span>
                         <br />
                         <span className="subtitle">Billing &amp; more</span>
@@ -185,17 +288,29 @@ class App extends Component {
                 this.state.inProgressOrders.map((orderIndex) => {
                   const orderData = this.state.orders[orderIndex];
                   return (
-                    <div key={orderData.id} className="orderContainer">
+                    <div key={orderData.id} className="orderContainer in-progress">
+
+                      { this.renderMultiColumItemList(orderData.orderItems) }
+
                       <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
+
+                      { this.renderCustomerNotes(orderData.notes) }
+
                       <div className="orderButtonsContainer">
                         <button className="orderButton">
-                          <span className="icon notReady"></span>
+                          <span className="icon ready"></span>
                           <span className="title">Ready</span>
                           <br />
                           <span className="subtitle">Mark as ready</span>
                         </button>
+                        <button className="orderButton">
+                          <span className="icon notInProgress"></span>
+                          <span className="title">Not in progress</span>
+                          <br />
+                          <span className="subtitle">Return to pending</span>
+                        </button>
                         <button onClick={this.showBillingPopup} className="orderButton">
-                          <span className="icon notReady"></span>
+                          <span className="icon"></span>
                           <span className="title">More</span>
                           <br />
                           <span className="subtitle">Billing &amp; more</span>
@@ -206,10 +321,33 @@ class App extends Component {
                 })
               }
           </div>
+          
+          <div className="pendingOrderButtons">
+            <button onClick={this.showBillingPopup} className="pendingOrderButton">
+              <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
+              <span className="title">Take next order</span>
+              <br />
+              <span className="subtitle">
+                Adds next order to your ({
+                  this.state.staffMembers.find(x => x.id === this.state.selectedStaffMember).firstName
+                }) in-progress feed
+              </span>
+            </button>
+
+            <button onClick={this.showBillingPopup} className="pendingOrderButton">
+              <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
+              <span className="title">View upcoming</span>
+              <br />
+              <span className="subtitle">
+                Display a feed of pending orders
+              </span>
+            </button>
+          </div>
 
           <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
 
           { this.renderBillingPopup() }
+          { this.renderNotesPopup() }
 
         </header>
       </div>
