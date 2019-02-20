@@ -27,19 +27,27 @@ export function* findDrinksSaga(action){
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            yield put(actions.findDrinksSuccess(response.data.data.findDrinks.name, response.data.data.findDrinks.category, response.data.data.findDrinks.category, response.data.data.findDrinks.nutritionInfo, response.data.data.findDrinks.price));
-                Promise.all([
-                    // IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "shopping-basket"), 20)
-                ])
-                    .then(sources => {
-                        console.log("found drinks successfully")
-                        console.log("response",response)
-                        return response
-                        // console.log(response)
-                        // return response
-                        // setViewDrinksSettings(source[2]);
-                        // setViewDrinks(action.componentId, response.data.data.findDrinks.name);
-                    });
+                console.log('response', response)
+                // Promise.all([
+                //     // IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "shopping-basket"), 20)
+                // ])
+                //     .then(sources => {
+                //         console.log("found drinks successfully")
+                //         console.log("response",response)
+                //         return response
+                //         // console.log(response)
+                //         // return response
+                //         // setViewDrinksSettings(source[2]);
+                //         // setViewDrinks(action.componentId, response.data.data.findDrinks.name);
+                //     });
+                    const fetchedData = [];
+                    for (let key in response.data.data) {
+                        fetchedData.push({
+                            ...response.data.data[key],
+                            id: key
+                        });
+                    }
+                    yield put(actions.findDrinksSuccess(fetchData));
                 }
         } catch (err) {
                     console.log(err);

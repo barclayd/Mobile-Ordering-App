@@ -33,10 +33,12 @@ class ViewDrinks extends Component {
     drinks: []
   };
 
- 
-
   componentDidMount() {
     this.props.findDrinks("beers", this.props.componentId);
+  }
+
+  componentWillReceiveProps(nextProps){
+    console.log('nextProps', nextProps)
   }
 
   // async loadData(){
@@ -48,15 +50,13 @@ class ViewDrinks extends Component {
 
   render() {
 
-    const { error, loading, drinks } = this.props;
-
-        const ListProps = {
-          loading,
-          error,
-          drinks
-        };
-
-    console.log('list.props',ListProps)
+    // const { error, loading, drinks } = this.props;
+    //     const ListProps = {
+    //       loading,
+    //       error,
+    //       drinks
+    //     };
+    // console.log('list.props',ListProps)
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -105,10 +105,8 @@ const mapStateToProps = state => {
   return {
       error: state.drink.error,
       loading: state.drink.loading,
-      name: state.drink.name,
-      category: state.drink.category,
-      nutrition: state.drink.nutrition,
-      price: state.drink.price
+      data: state.drink.data,
+      saved: state.drink.saved
   }
 };
 

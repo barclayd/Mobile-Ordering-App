@@ -14,13 +14,10 @@ export const findDrinksStart = () => {
     };
 };
 
-export const findDrinksSuccess = (name, category, nutritionInfo, price) => {
+export const findDrinksSuccess = (data) => {
     return {
-        type: actionTypes.FIND_DRINKS_SUCCESS,
-        name: name,
-        category: category,
-        nutritionInfo: nutritionInfo,
-        price, price
+        type: actionTypes.FIND_DRINKS_START,
+        data: data
     };
 };
 

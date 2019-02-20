@@ -26,12 +26,10 @@ const findDrinksStart = (state, action) => {
 
 const findDrinksSuccess = (state, action) => {
     return updateObject(state, {
-        name: action.name,
-        category: action.category,
-        nutritionInfo: action.nutritionInfo,
-        price: action.price,
+        data: action.data,
         loading: false,
-        error: false
+        error: false,
+        saved: true
     });
 };
 
