@@ -33,14 +33,10 @@ class ViewDrinks extends Component {
     drinks: []
   };
 
+ 
+
   componentDidMount() {
-    console.log('ViewDrinksPageLoads');
     this.props.findDrinks("beers", this.props.componentId);
-  }
-
-
-  componentWillReceiveProps(nextProps) {
-    console.log("props",nextProps)
   }
 
   // async loadData(){
@@ -51,6 +47,17 @@ class ViewDrinks extends Component {
   // }
 
   render() {
+
+    const { error, loading, drinks } = this.props;
+
+        const ListProps = {
+          loading,
+          error,
+          drinks
+        };
+
+    console.log('list.props',ListProps)
+
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.background}>
@@ -60,7 +67,7 @@ class ViewDrinks extends Component {
               initialPage={0}
               renderTabBar={() => <DefaultTabBar />}
             >
-              <TabScreen2 tabLabel="Beers" />
+              <TabScreen2 tabLabel="Beers"/>
               <TabScreen1 tabLabel="Spirits" />
               <TabScreen3 tabLabel="Wines" />
             </ScrollableTabView>
