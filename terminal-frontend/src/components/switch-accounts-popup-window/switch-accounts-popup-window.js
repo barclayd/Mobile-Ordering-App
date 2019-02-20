@@ -1,3 +1,4 @@
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
@@ -17,7 +18,11 @@ export default class SwitchAccountsPopupWindow extends React.Component {
                     {
                         this.props.staffMembers.map((staffMember) => {
                             return (
-                                    <button className="staffMemberButton">{staffMember.firstName}</button>
+                                <button key={staffMember.id} className="staffMemberButton">
+                                    {staffMember.firstName}
+                                    <br/>
+                                    {staffMember.surname}
+                                </button>
                             )
                         })
                     }
