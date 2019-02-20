@@ -29,11 +29,14 @@ export function* findDrinksSaga(action){
         if (response.status === 200 && response.status !== 201) {
             yield put(actions.findDrinksSuccess(response.data.data.findDrinks.name, response.data.data.findDrinks.category, response.data.data.findDrinks.category, response.data.data.findDrinks.nutritionInfo, response.data.data.findDrinks.price));
                 Promise.all([
-                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "shopping-basket"), 20)
+                    // IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "shopping-basket"), 20)
                 ])
                     .then(sources => {
                         console.log("found drinks successfully")
-                        console.log(response)
+                        console.log("response",response)
+                        return response
+                        // console.log(response)
+                        // return response
                         // setViewDrinksSettings(source[2]);
                         // setViewDrinks(action.componentId, response.data.data.findDrinks.name);
                     });
