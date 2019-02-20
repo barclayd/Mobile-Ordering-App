@@ -5,6 +5,7 @@ import { faClock } from '@fortawesome/free-regular-svg-icons'
 import TimeAgo from './components/time-ago-clean/time-ago-clean'
 import BillingPopupWindow from './components/billing-popup-window/billing-popup-window';
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
+import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
 import NotesIcon from "./notes.svg"
 import './App.css'
 
@@ -127,6 +128,34 @@ export default class App extends Component {
         {
           id: 3,
           firstName: "James"
+        },
+        {
+          id: 4,
+          firstName: "Joe"
+        },
+        {
+          id: 5,
+          firstName: "Taylor"
+        },
+        {
+          id: 6,
+          firstName: "Austin"
+        },
+        {
+          id: 7,
+          firstName: "Oscar"
+        },
+        {
+          id: 8,
+          firstName: "Fenton"
+        },
+        {
+          id: 9,
+          firstName: "Ronnie"
+        },
+        {
+          id: 10,
+          firstName: "Begbie"
         }
       ],
 
@@ -224,7 +253,7 @@ export default class App extends Component {
           </div>
 
           <div id="accountSwitcherContainer">
-            <button className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
+            <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
           </div>
 
           <h1>AWAITING COLLECTION ({ this.state.awaitingOrders.length }):</h1>
@@ -321,6 +350,9 @@ export default class App extends Component {
 
           <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} order={this.state.orders[1]} />
           <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orders[3]} />
+          <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
+         
+          
 
         </header>
       </div>
