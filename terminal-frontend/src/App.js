@@ -115,47 +115,58 @@ export default class App extends Component {
       staffMembers: [
         {
           id: 0,
-          firstName: "Ben"
+          firstName: "Ben",
+          surname: "Davies"
         },
         {
           id: 1,
-          firstName: "Jess"
+          firstName: "Jess",
+          surname: "Chessell"
         },
         {
           id: 2,
-          firstName: "Markus"
+          firstName: "Markus",
+          surname: "Jones"
         },
         {
           id: 3,
-          firstName: "James"
+          firstName: "James",
+          surname: "Smith"
         },
         {
           id: 4,
-          firstName: "Joe"
+          firstName: "Joe",
+          surname: "Bourton"
         },
         {
           id: 5,
-          firstName: "Taylor"
+          firstName: "Taylor",
+          surname: "Stephens"
         },
         {
           id: 6,
-          firstName: "Austin"
+          firstName: "Austin",
+          surname: "Wheeler"
         },
         {
           id: 7,
-          firstName: "Oscar"
+          firstName: "Oscar",
+          surname: "Isaac"
         },
         {
           id: 8,
-          firstName: "Fenton"
+          firstName: "Fenton",
+          surname: "Reed"
         },
         {
           id: 9,
-          firstName: "Ronnie"
+          firstName: "Ronnie",
+          surname: "Pickering"
         },
         {
           id: 10,
-          firstName: "Begbie"
+          firstName: "Franco",
+          surname: "Begbie"
         }
       ],
 

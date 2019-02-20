@@ -7,9 +7,12 @@
 }
 
 .staffMemberButton {
-  height: 40px;
-  width: 100px;
-  margin: 5px 15px;
+  height: 80px;
+  width: 150px;
+  margin: 10px 15px;
+  font-size: 25px;
+  font-weight: normal;
+
 }
 
 .staffMembersButtonContainer {

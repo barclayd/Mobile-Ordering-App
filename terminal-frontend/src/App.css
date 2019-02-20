@@ -103,6 +103,8 @@ button.orderButton .icon {
   width: 47px;
   height: 47px;
   margin-top: -3px;
+  
+  color: rgba(30,30,30, 0.8);
 }
 button.orderButton .icon::after {
   content: "•••";
@@ -136,6 +138,31 @@ button.orderButton .icon.notInProgress::after {
   left: auto;
   top: 2px;
   font-size: 40px;
+}
+button.orderButton .icon.refund { background: #4286f4; }
+button.orderButton .icon.refund::after {
+  content: "£";
+  letter-spacing: normal;
+  left: auto;
+  top: 6px;
+  font-size: 32px;
+}
+button.orderButton .icon.outOfStock {
+  background: #ff9d1c;
+  letter-spacing: normal;
+  left: auto;
+  line-height: 48px;
+  font-size: 27px;
+}
+button.orderButton .icon.outOfStock::after { content: ""; }
+
+button.orderButton .icon.delete { background: #FF0000; }
+button.orderButton .icon.delete::after {
+  content: "-";
+  letter-spacing: normal;
+  left: -2px;
+  line-height: 24px;
+  font-size: 52px;
 }
 
 button.orderButton .title, button.orderButton .subtitle {
