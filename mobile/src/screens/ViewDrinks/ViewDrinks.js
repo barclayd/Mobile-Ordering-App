@@ -30,48 +30,47 @@ const theme = {
 class ViewDrinks extends Component {
   state = {
     search: "",
-    drinks: []
+    drinks: [],
+    drinksApi: false
   };
 
   componentDidMount() {
     this.props.findDrinks("beers", this.props.componentId);
   }
 
-  componentWillReceiveProps(nextProps){
-    console.log('nextProps', nextProps)
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.loading) {
+      console.log("nextProps", nextProps.data);
+      this.setState({
+        drinks: nextProps.data,
+        drinksApi: true
+      });
+    }
   }
 
-  // async loadData(){
-  //   let drinksList = await 
-  //   console.log('kjskjs',drinksList);
-  //   this.setState({drinks: drinksList})
-  //   console.log('state',this.state.drinks);
-  // }
+  componentDidUpdate() {
+    console.log("state", this.state);
+  }
 
   render() {
-
-    // const { error, loading, drinks } = this.props;
-    //     const ListProps = {
-    //       loading,
-    //       error,
-    //       drinks
-    //     };
-    // console.log('list.props',ListProps)
-
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.background}>
-          <ThemeProvider theme={theme}>
-            <ScrollableTabView
-              style={{ marginTop: 20 }}
-              initialPage={0}
-              renderTabBar={() => <DefaultTabBar />}
-            >
-              <TabScreen2 tabLabel="Beers"/>
-              <TabScreen1 tabLabel="Spirits" />
-              <TabScreen3 tabLabel="Wines" />
-            </ScrollableTabView>
-          </ThemeProvider>
+          <ScrollableTabView
+            style={{ marginTop: 20 }}
+            initialPage={0}
+            renderTabBar={() => <DefaultTabBar />}
+          >
+            {/* {this.state.drinks.categories.map((u, i) => { */}
+              {/* return ( */}
+                <TabScreen2
+                  key={1}
+                  tabLabel="beers"
+                  drinks={this.state.drinks}
+                />
+              {/* );
+            })} */}
+          </ScrollableTabView>
         </View>
       </ScrollView>
     );
@@ -103,11 +102,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-      error: state.drink.error,
-      loading: state.drink.loading,
-      data: state.drink.data,
-      saved: state.drink.saved
-  }
+    error: state.drink.error,
+    loading: state.drink.loading,
+    data: state.drink.data,
+    saved: state.drink.saved
+  };
 };
 
 const mapDispatchToProps = dispatch => {
