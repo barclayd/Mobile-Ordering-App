@@ -47,8 +47,20 @@ export default class TabScreen2 extends Component {
         description: "201 kcal. 5.0%. 2.8 Units"
       }
     ],
-    // drinks: []
+    drinks: []
   };
+
+  componentWillReceiveProps(nextProps) {
+    console.log("blahhshs")
+    if(!nextProps.loading) {
+      this.setState({
+        drinks: nextProps.drinks
+        })
+    }
+  }
+  componentDidUpdate(){
+    console.log("tab Screen 2 updated print State ::",this.state)
+  }
 
   openOverlay = () => {
     this.setState({
@@ -61,11 +73,11 @@ export default class TabScreen2 extends Component {
       isVisible: false
     });
   };
-
+//
   render() {
     return (
       <View>
-        {this.state.menus.map((u, i) => {
+        {this.state.drinks.map((u, i) => {
           return (
             <TouchableOpacity onPress={() => this.openOverlay()}>
               <Card>
@@ -79,10 +91,10 @@ export default class TabScreen2 extends Component {
                     <View style={styles.leftContainer}>
                       <Text style={styles.name}>{u.name}</Text>
                     </View>
-                    <Text style={styles.price}>{u.price}</Text>
+                    <Text style={styles.price}>£{u.price}</Text>
                   </View>
 
-                  <Text style={styles.description}>{u.description}</Text>
+                  <Text style={styles.description}>{u.nutritionInfo}</Text>
                 </View>
               </Card>
             </TouchableOpacity>

@@ -5,7 +5,7 @@ import axios from '../../axios-instance';
 import * as actions from '../actions/index';
 
 export function* findDrinksSaga(action){
-    yield put(actions.findBarStart());
+    yield put(actions.findDrinksStart());
     try {
         const requestBody = {
             query: `
@@ -27,26 +27,15 @@ export function* findDrinksSaga(action){
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-                console.log('response', response)
-                // Promise.all([
-                //     // IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "shopping-basket"), 20)
-                // ])
-                //     .then(sources => {
-                //         console.log("found drinks successfully")
-                //         console.log("response",response)
-                //         return response
-                //         // console.log(response)
-                //         // return response
-                //         // setViewDrinksSettings(source[2]);
-                //         // setViewDrinks(action.componentId, response.data.data.findDrinks.name);
-                //     });
-                    const fetchedData = [];
-                    for (let key in response.data.data) {
-                        fetchedData.push({
-                            ...response.data.data[key],
+
+                    const fetchData = [];
+                    for (let key in response.data.data.findDrinks) {
+                        fetchData.push({
+                            ...response.data.data.findDrinks[key],
                             id: key
                         });
                     }
+                    console.log("Drinks Found Successfully");
                     yield put(actions.findDrinksSuccess(fetchData));
                 }
         } catch (err) {
