@@ -80,6 +80,8 @@ h4 {
   margin-right: auto;
   position: fixed;
   width: 600px;
+
+  z-index: 999;
 }
 
 .notificationBanner {
