@@ -6,25 +6,34 @@ import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 
 export default class BillingPopupWindow extends React.Component {
+    buildTitle = (order) => {
+        if (order) return "#" + order.id + " pickup"; else return ""
+    }
+
+    // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
+    buildSubtitle = (order) => {
+        if (order) return (
+            <span>
+                Ordered <TimeAgo date={order.orderDate}/>, at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")}
+            </span>
+        ); else return {}
+    }
+
     render () {
         return (
             <PopupWindow
                     className="billingOptions"
-                    title={"#" + this.props.order.id + " pickup"}
-                    subtitle={(
-                        // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
-                        <span>
-                            Ordered <TimeAgo date={this.props.order.orderDate}/>, at {DateTime.fromJSDate(this.props.order.orderDate).toFormat("h:mma")}
-                        </span>
-                    )}
+                    title={this.buildTitle(this.props.order)}
+                    subtitle={this.buildSubtitle(this.props.order)}
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
+                    dismissedHandler={this.props.dismissedHandler}
             >
                 <h1>DRINKS:</h1>
                 <div className="indentedContent">
                     <ul className="orderList">
-                    <li><span className="quantity">4x</span>VK Orange</li>
-                    <li><span className="quantity">1x</span>VK Green</li>
+                        <li><span className="quantity">4x</span>VK Orange</li>
+                        <li><span className="quantity">1x</span>VK Green</li>
                     </ul>
 
                     <h2>Customer notes:</h2>
@@ -37,5 +46,6 @@ export default class BillingPopupWindow extends React.Component {
 
 BillingPopupWindow.propTypes = {
     order: PropTypes.object,
-    showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
+    showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
+    dismissedHandler: PropTypes.func.isRequired, // Function ran when billing popup is closed without action
 }
