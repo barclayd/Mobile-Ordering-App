@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRetweet, faLongArrowAltUp, faCamera } from '@fortawesome/free-solid-svg-icons'
+import { faRetweet, faLongArrowAltUp, faCamera, faBeer, faExclamation, faInfo, faTrophy, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 import TimeAgo from './components/time-ago-clean/time-ago-clean'
 import BillingPopupWindow from './components/billing-popup-window/billing-popup-window'
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window'
+import ManualPickupPopupWindow from './components/manual-pickup-popup-window/manual-pickup-popup-window'
 import NotesIcon from "./notes.svg"
 import './App.css'
 import QrReader from "react-qr-reader"
@@ -15,11 +16,15 @@ const OrderState = {
   PENDING: 2
 };
 
-const itemsPerOrderListColumn = 4;
+// Settings:
+const itemsPerOrderListColumn = 4; // How many order items show per column
+const notificationDuration = 7000; // How long notifications stay on-screen (miliseconds)
+const qrDelay = 300; // How fast to scan for QR codes (more info: https://www.npmjs.com/package/react-qr-reader)
+const validScanCooldown = 3000; // Delay before accepting more QR codes after a valid scan (blocks notification scan)
 
 export default class App extends Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
 
     this.state = {
       orders: [
@@ -131,12 +136,50 @@ export default class App extends Component {
         }
       ],
 
+      // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
+      notifications: [
+        {
+          id: -1,
+          class: "error",
+          title: "Scan error",
+          description: "Customer QR has been tampered with!",
+          date: new Date(),
+          isDismissed: false
+        },
+        {
+          id: -2,
+          class: "success",
+          title: "Order completed",
+          description: "You finished order #AHIF",
+          date: new Date(),
+          isDismissed: false
+        },
+        {
+          id: -3,
+          class: "info",
+          title: "New order",
+          description: "You now have 1 pending order",
+          date: new Date(),
+          isDismissed: false
+        },
+        {
+          id: -4,
+          class: "warning",
+          title: "Collection not ready",
+          description: "Customer's order is not ready for collection",
+          date: new Date(),
+          isDismissed: false
+        }
+      ],
+
+      lastNotificationID: 0,
+
       selectedStaffMember: 1,
       awaitingOrders: [],
       inProgressOrders: [],
       pendingOrders: [],
 
-      qrDelay: 300,
+      lastValidScan: 0,
       qrResult: "No result",
     }
 
@@ -160,6 +203,33 @@ export default class App extends Component {
     this.state.pendingOrders = pendingOrders;
   }
 
+  addNotification = (iconClassName, title, description) => {
+    // Increment notification key/id
+    this.setState((prevState) => {
+      return { lastNotificationID: prevState.lastNotificationID + 1 }
+    }, () => {
+      // Build notification object
+      const newNotification = {
+        id: this.state.lastNotificationID,
+        title: title,
+        class: iconClassName,
+        description: description,
+        date: new Date(),
+        isDismissed: false,
+      }
+
+      // Add notification to notifications state
+      this.setState((prevState) => {
+        return {
+          notifications: [...prevState.notifications, newNotification]
+        }
+      }, () => {
+        // Re-render notifications
+        this.loadNotificationsJSX()
+      })
+    })
+  }
+
   handleScan = (data) => {
     if (data) {
       this.setState({
@@ -168,7 +238,12 @@ export default class App extends Component {
 
       try {
         let qrJSON = JSON.parse(data); // Attempt to parse QR data to see if it contains valid JSON
-        if (qrJSON.orderID) { this.pickupOrder(qrJSON.orderID, qrJSON.customerID) } // Check the JSON contains an order ID, then run the pickup function
+        if (qrJSON.orderID && new Date() - this.state.lastValidScan > validScanCooldown) { // Check the JSON contains an order ID, then run the pickup function
+          this.pickupOrder(qrJSON.orderID, qrJSON.customerID)
+          this.setState({
+            lastValidScan: new Date()
+          });
+        }
 
       } catch (error) {
         console.error(error);
@@ -181,22 +256,36 @@ export default class App extends Component {
 
   // Handler to re-enable order scanning for the same order when knowingly dismissed by bartender
   billingPopupDismissed = () => {
-    this.setState({lastOrderScanned: null})
+    this.setState({orderWindowOpen: null})
   }
 
+  // Strict func that takes order ID and corrisponding customer ID from QR to prevent order code theft
   pickupOrder = (orderID, customerID) => {
     let order = this.state.orders.find(order => order.id === orderID && order.customerID === customerID) // Find order sharing the same ID and customer ID
 
     // Check order is found and was not already just scanned (stop popup spam)
-    if (order && this.state.lastOrderScanned !== order.id) {
+    if (order && !this.state.orderWindowOpen) {
       if (order.orderState === OrderState.AWAITING_COLLECTION) {
-        this.setState({orderForPopup: order})
-        this.state.showBilling() // Show billing popup
+        this.setState({orderForPopup: order}, this.state.showBilling) // Show billing popup
       } else {
-        alert("ORDER NOT READY FOR PICKUP")
+        this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
       }
 
-      this.setState({lastOrderScanned: orderID});
+      this.setState({orderWindowOpen: true});
+    } else if (!order) {
+      this.addNotification("error", "Scan error", "Customer QR has been tampered with!")
+    }
+  }
+
+  // Relaxed version of pickup order, used for bartenders to manaully input just an order ID (not corrisponding customer ID)
+  pickupOrderInsecure = (orderID) => {
+    let order = this.state.orders.find(order => order.id === orderID) // Find order by ID
+    if (order) {
+      if (order.orderState === OrderState.AWAITING_COLLECTION) {
+        this.setState({orderForPopup: order}, this.state.showBilling) // Show billing popup
+      } else {
+        this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
+      }
     }
   }
 
@@ -251,6 +340,55 @@ export default class App extends Component {
       )
     }
   }
+
+  getNotificationIconJSX(notificationClass) {
+    switch (notificationClass) {
+      case "info":
+        return <FontAwesomeIcon icon={faInfo} />
+      case "success":
+        return <FontAwesomeIcon icon={faTrophy} />
+      case "warning":
+        return <FontAwesomeIcon icon={faExclamationTriangle} />
+      default: // "error"
+        return <FontAwesomeIcon icon={faExclamation} />
+    }
+  }
+
+  // Function to load feed of active un-dismissed notifications as JSX into state for rendering
+  loadNotificationsJSX = () => {
+    const notificationsJSX = (
+      <div className="notificationsContainer">
+        {
+        this.state.notifications.map((notificationData) => {
+          // Check the notification hasn't expired or been dismissed:
+          if ((new Date() - notificationData.date) > notificationDuration || notificationData.isDismissed) return null;
+
+          return (
+            <div key={notificationData.id} className="notificationBanner">
+              <span className={"icon " + notificationData.class}>{ this.getNotificationIconJSX(notificationData.class) }</span>
+              <div className="textContainer">
+                <span className="title">{notificationData.title}</span>
+                <br />
+                <span className="description">{notificationData.description}</span>
+              </div>
+              <div className="closeButton" onClick={()=> {
+                notificationData.isDismissed = true;
+                this.loadNotificationsJSX()
+              }}>🗙</div>
+            </div>
+          )
+        })
+      }
+      </div>
+    )
+
+    this.setState({notificationsJSX: notificationsJSX})
+  }
+
+  componentDidMount() {
+    this.loadNotificationsJSX()
+    setInterval(this.loadNotificationsJSX, notificationDuration + 1)
+  }
   
   render() {
     return (
@@ -268,14 +406,17 @@ export default class App extends Component {
 
           <div id="buttonsToolbar">
             <button className="large" onClick={() => {
-              this.setState({hidePreview: !this.state.hidePreview})
-              if (this.state.hidePreview) {
-                document.getElementsByClassName("qrReader")[0].style.display = "none";
-              } else {
-                document.getElementsByClassName("qrReader")[0].style.display = "block"
-              }
+              this.setState({showPreview: !this.state.showPreview}, () => {
+                if (this.state.showPreview) {
+                  document.getElementsByClassName("qrReader")[0].style.display = "block"
+                } else {
+                  document.getElementsByClassName("qrReader")[0].style.display = "none";
+                }
+              })
             }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
-            
+
+            <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
+
             <button className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
           </div>
 
@@ -374,11 +515,14 @@ export default class App extends Component {
 
           <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} dismissedHandler={this.billingPopupDismissed} order={this.state.orderForPopup} />
           <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orders[3]} />
+          <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
+          
+          { this.state.notificationsJSX }
 
           {
             this.state.disableScanner ? null :
               <QrReader
-                qrDelay={this.state.qrDelay}
+                delay={qrDelay}
                 onError={this.handleError}
                 onScan={this.handleScan}
                 className="qrReader"

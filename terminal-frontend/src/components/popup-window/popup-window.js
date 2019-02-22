@@ -22,7 +22,7 @@ export default class PopupWindow extends React.Component {
     }
     this.HidePopup()
   }
-
+  
   keyPressed = (event) => {
     // Listen for escape key to close popup
     if (event.keyCode === 27)
@@ -34,6 +34,11 @@ export default class PopupWindow extends React.Component {
   }
   componentWillUnmount () {
     document.removeEventListener("keydown", this.keyPressed, false);
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.closePopup !== prevProps.closePopup) {
+      this.HidePopup()
+    }
   }
 
   getClassName = () => {
@@ -87,5 +92,6 @@ PopupWindow.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.object.isRequired, // JSX object
   children: PropTypes.node.isRequired,
-  dismissedHandler: PropTypes.func
+  dismissedHandler: PropTypes.func,
+  closePopup: PropTypes.bool // If set to true the window will close
 }
