@@ -13,8 +13,17 @@ module.exports = buildSchema(`
             _id: ID!
             name: String!
             category: String!
+            ingredients: [Ingredient!]!
             nutritionInfo: String!
             price: String!
+    }
+    
+    type Ingredient {
+            _id: ID!
+            name: String!
+            amount: String!
+            allergy: String
+            containsAlcohol: Boolean!
     }
         
      type Bar {
@@ -52,8 +61,16 @@ module.exports = buildSchema(`
         input DrinkInput {
             name: String!
             category: String!
+            ingredients: [Ingredient!]!
             nutritionInfo: String!
             price: String!
+        }
+        
+        input IngredientInput {
+            name: String!
+            amount: String!
+            allergy: String
+            containsAlcohol: Boolean!
         }
         
         type RootQuery {
@@ -61,12 +78,14 @@ module.exports = buildSchema(`
            findBar(barCode: String!): Bar!
            findDrinks(category: String!): [Drink!]!
            drinks: [Drink!]!
+           findIngredients(name: String!): [Ingredient!]!
         }
         
         type RootMutation {
             createUser(userInput: UserInput): User
             createBar(barInput: BarInput): Bar
             createDrink(drinkInput: DrinkInput): Drink
+            createIngredient(ingredientInput: IngredientInput): Ingredient
         }
         
         schema {
