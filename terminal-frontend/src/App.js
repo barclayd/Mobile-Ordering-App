@@ -266,12 +266,11 @@ export default class App extends Component {
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
       if (order.orderState === OrderState.AWAITING_COLLECTION) {
-        this.setState({orderForPopup: order}, this.state.showBilling) // Show billing popup
+        this.setState({orderForPopup: order, orderWindowOpen: true}, this.state.showBilling) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
       }
 
-      this.setState({orderWindowOpen: true});
     } else if (!order) {
       this.addNotification("error", "Scan error", "Customer QR has been tampered with!")
     }
