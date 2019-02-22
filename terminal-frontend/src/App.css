@@ -45,13 +45,22 @@ h4 {
 }
 
 /* Div to keep account switch button pinned to page top-right */
-#accountSwitcherContainer {
+#buttonsToolbar {
   position: absolute;
   top: 0;
   right: 0;
   padding: inherit; /* Keep account switch button inside page padding */
 }
+#buttonsToolbar button:not(:last-child) {
+  margin-right: 10px;
+}
 
+
+
+
+.qrReader {
+  display: none
+}
 
 
 

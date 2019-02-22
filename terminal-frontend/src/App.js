@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRetweet, faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons'
+import { faRetweet, faLongArrowAltUp, faCamera } from '@fortawesome/free-solid-svg-icons'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 import TimeAgo from './components/time-ago-clean/time-ago-clean'
-import BillingPopupWindow from './components/billing-popup-window/billing-popup-window';
-import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
+import BillingPopupWindow from './components/billing-popup-window/billing-popup-window'
+import NotesPopupWindow from './components/notes-popup-window/notes-popup-window'
 import NotesIcon from "./notes.svg"
 import './App.css'
+import QrReader from "react-qr-reader"
 
 const OrderState = {
   AWAITING_COLLECTION: 0, 
@@ -133,7 +134,10 @@ export default class App extends Component {
       selectedStaffMember: 1,
       awaitingOrders: [],
       inProgressOrders: [],
-      pendingOrders: []
+      pendingOrders: [],
+
+      qrDelay: 300,
+      qrResult: "No result",
     }
 
     let awaitingOrders=[], inProgressOrders=[], pendingOrders=[];
@@ -156,6 +160,45 @@ export default class App extends Component {
     this.state.pendingOrders = pendingOrders;
   }
 
+  handleScan = (data) => {
+    if (data) {
+      this.setState({
+        qrResult: data
+      });
+
+      try {
+        let qrJSON = JSON.parse(data); // Attempt to parse QR data to see if it contains valid JSON
+        if (qrJSON.orderID) { this.pickupOrder(qrJSON.orderID, qrJSON.customerID) } // Check the JSON contains an order ID, then run the pickup function
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+  handleError = (err) => {
+    console.error(err);
+  }
+
+  // Handler to re-enable order scanning for the same order when knowingly dismissed by bartender
+  billingPopupDismissed = () => {
+    this.setState({lastOrderScanned: null})
+  }
+
+  pickupOrder = (orderID, customerID) => {
+    let order = this.state.orders.find(order => order.id === orderID && order.customerID === customerID) // Find order sharing the same ID and customer ID
+
+    // Check order is found and was not already just scanned (stop popup spam)
+    if (order && this.state.lastOrderScanned !== order.id) {
+      if (order.orderState === OrderState.AWAITING_COLLECTION) {
+        this.setState({orderForPopup: order})
+        this.state.showBilling() // Show billing popup
+      } else {
+        alert("ORDER NOT READY FOR PICKUP")
+      }
+
+      this.setState({lastOrderScanned: orderID});
+    }
+  }
 
   renderListItems = (items) => {
     return items.map((itemData) => {
@@ -223,11 +266,21 @@ export default class App extends Component {
           }
           </div>
 
-          <div id="accountSwitcherContainer">
+          <div id="buttonsToolbar">
+            <button className="large" onClick={() => {
+              this.setState({hidePreview: !this.state.hidePreview})
+              if (this.state.hidePreview) {
+                document.getElementsByClassName("qrReader")[0].style.display = "none";
+              } else {
+                document.getElementsByClassName("qrReader")[0].style.display = "block"
+              }
+            }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
+            
             <button className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
           </div>
 
           <h1>AWAITING COLLECTION ({ this.state.awaitingOrders.length }):</h1>
+          
           <div className="ordersContainer">
             {
               this.state.awaitingOrders.map((orderIndex) => {
@@ -319,9 +372,19 @@ export default class App extends Component {
 
           <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
 
-          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} order={this.state.orders[1]} />
+          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} dismissedHandler={this.billingPopupDismissed} order={this.state.orderForPopup} />
           <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orders[3]} />
 
+          {
+            this.state.disableScanner ? null :
+              <QrReader
+                qrDelay={this.state.qrDelay}
+                onError={this.handleError}
+                onScan={this.handleScan}
+                className="qrReader"
+              />
+          }
+          <p>{this.state.qrResult}</p>
         </header>
       </div>
     );

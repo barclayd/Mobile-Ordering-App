@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 
 export default class BillingPopupWindow extends React.Component {
     render () {
+        if (!this.props.order) return null;
         return (
             <PopupWindow
                     className="billingOptions"
@@ -19,6 +20,7 @@ export default class BillingPopupWindow extends React.Component {
                     )}
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
+                    dismissedHandler={this.props.dismissedHandler}
             >
                 <h1>DRINKS:</h1>
                 <div className="indentedContent">
@@ -36,6 +38,7 @@ export default class BillingPopupWindow extends React.Component {
 }
 
 BillingPopupWindow.propTypes = {
-    order: PropTypes.object,
-    showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
+    order: PropTypes.object.isRequired,
+    showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
+    dismissedHandler: PropTypes.func.isRequired, // Function ran when billing popup is closed without action
 }
