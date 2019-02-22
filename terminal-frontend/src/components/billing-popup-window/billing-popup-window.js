@@ -38,7 +38,7 @@ export default class BillingPopupWindow extends React.Component {
 }
 
 BillingPopupWindow.propTypes = {
-    order: PropTypes.object.isRequired,
+    order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
     dismissedHandler: PropTypes.func.isRequired, // Function ran when billing popup is closed without action
 }
