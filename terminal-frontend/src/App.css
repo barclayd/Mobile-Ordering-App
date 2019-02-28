@@ -43,7 +43,7 @@ h4 {
   /* Only show buttons that can fit onscreen: */
   overflow: hidden;
   max-height: 36px;
-  margin-right: 200px;
+  margin-right: 570px;
 }
 #accountsHotbar button {
   margin-right: 15px; /* Space account quick-switch buttons */
