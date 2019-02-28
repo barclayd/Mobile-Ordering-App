@@ -10,7 +10,7 @@ import { faArchive } from '@fortawesome/free-solid-svg-icons';
 
 export default class BillingPopupWindow extends React.Component {
     buildTitle = (order) => {
-        if (order) return "#" + order.id + " pickup"; else return ""
+        if (order) return "#" + order.id + " options"; else return "";
     }
 
     // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
@@ -19,7 +19,7 @@ export default class BillingPopupWindow extends React.Component {
             <span>
                 Ordered <TimeAgo date={order.orderDate}/>, at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")}
             </span>
-        ); else return {}
+        ); else return (<span></span>);
     }
 
     render () {
@@ -73,7 +73,7 @@ export default class BillingPopupWindow extends React.Component {
                         <span className="icon delete"></span>
                         <span className="title">Delete</span>
                         <br />
-                        <span className="subtitle">Cancel & charge</span>
+                        <span className="subtitle">Cancel &amp; charge</span>
                     </button>
                 </div>
             </PopupWindow>
@@ -84,5 +84,4 @@ export default class BillingPopupWindow extends React.Component {
 BillingPopupWindow.propTypes = {
     order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
-    dismissedHandler: PropTypes.func.isRequired, // Function ran when billing popup is closed without action
 }

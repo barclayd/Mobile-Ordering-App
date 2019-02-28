@@ -10,6 +10,7 @@ import ManualPickupPopupWindow from './components/manual-pickup-popup-window/man
 import NotesIcon from "./notes.svg"
 import './App.css'
 import QrReader from "react-qr-reader"
+import PickupPopupWindow from './components/pickup-popup-window/pickup-popup-window';
 
 const OrderState = {
   AWAITING_COLLECTION: 0, 
@@ -295,7 +296,7 @@ export default class App extends Component {
   }
 
   // Handler to re-enable order scanning for the same order when knowingly dismissed by bartender
-  billingPopupDismissed = () => {
+  pickupPopupDismissed = () => {
     this.setState({orderWindowOpen: null})
   }
 
@@ -306,7 +307,7 @@ export default class App extends Component {
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
       if (order.orderState === OrderState.AWAITING_COLLECTION) {
-        this.setState({orderForPopup: order, orderWindowOpen: true}, this.state.showBilling) // Show billing popup
+        this.setState({orderForPopup: order, orderWindowOpen: true}, this.state.showPickup) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
       }
@@ -321,7 +322,7 @@ export default class App extends Component {
     let order = this.state.orders.find(order => order.id === orderID) // Find order by ID
     if (order) {
       if (order.orderState === OrderState.AWAITING_COLLECTION) {
-        this.setState({orderForPopup: order}, this.state.showBilling) // Show billing popup
+        this.setState({orderForPopup: order}, this.state.showPickup) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
       }
@@ -529,7 +530,7 @@ export default class App extends Component {
           </div>
           
           <div className="pendingOrderButtons">
-            <button onClick={this.state.showBilling} className="pendingOrderButton">
+            <button className="pendingOrderButton">
               <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
               <span className="title">Take next order</span>
               <br />
@@ -540,7 +541,7 @@ export default class App extends Component {
               </span>
             </button>
 
-            <button onClick={this.state.showBilling} className="pendingOrderButton">
+            <button className="pendingOrderButton">
               <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
               <span className="title">View upcoming</span>
               <br />
@@ -552,10 +553,11 @@ export default class App extends Component {
 
           <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
 
-          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} dismissedHandler={this.billingPopupDismissed} order={this.state.orderForPopup} />
+          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} order={this.state.orders[1]} />
           <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orders[3]} />
           <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
           <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
+          <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
           
           { this.state.notificationsJSX }
 
