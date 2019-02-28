@@ -1,0 +1,21 @@
+.notesPara {
+  color: #eee;
+  font-size: 36px;
+  padding: 15px 50px;
+  font-family: Arial, Helvetica, sans-serif; /* Give it a notey-feel */
+  font-weight: normal;
+}
+
+.staffMemberButton {
+  height: 80px;
+  width: 150px;
+  margin: 10px 15px;
+  font-size: 25px;
+  font-weight: normal;
+
+}
+
+.staffMembersButtonContainer {
+  padding: 0 30px;
+  text-align: center;
+}

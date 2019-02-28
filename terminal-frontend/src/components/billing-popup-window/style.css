@@ -1,3 +1,36 @@
 .popup-children-container > div > .orderList > li {
   font-size: 32px;
 }
+
+.popup.billingOptions > div > div > .popup-children-container > .indentedContent > .orderList > li:last-child {
+  border-bottom: 3px dashed grey;
+  display: inline-block;
+}
+
+.orderList > li > .item {
+  width: 500px;
+  display: inline-block;
+}
+
+.orderList > li > .price {
+  border-left: 3px dashed grey;
+  padding: 5px
+}
+
+.billingTotal {
+  margin-left: 490px;
+}
+
+.billingTotal .totalText {
+  padding-right: 14px;
+  color: grey;
+  border-right: 3px dashed grey;
+}
+
+.billingTotal .totalAmount {
+  margin-left: 5px;
+}
+
+div.popup.billingOptions > div > div > div.popup-children-container > div.indentedContent > .orderList {
+  margin-bottom: 0;
+}
