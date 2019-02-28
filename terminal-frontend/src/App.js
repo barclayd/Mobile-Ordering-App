@@ -5,6 +5,7 @@ import { faClock } from '@fortawesome/free-regular-svg-icons'
 import TimeAgo from './components/time-ago-clean/time-ago-clean'
 import BillingPopupWindow from './components/billing-popup-window/billing-popup-window'
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window'
+import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window'
 import ManualPickupPopupWindow from './components/manual-pickup-popup-window/manual-pickup-popup-window'
 import NotesIcon from "./notes.svg"
 import './App.css'
@@ -120,19 +121,58 @@ export default class App extends Component {
       staffMembers: [
         {
           id: 0,
-          firstName: "Ben"
+          firstName: "Ben",
+          surname: "Davies"
         },
         {
           id: 1,
-          firstName: "Jess"
+          firstName: "Jess",
+          surname: "Chessell"
         },
         {
           id: 2,
-          firstName: "Markus"
+          firstName: "Markus",
+          surname: "Jones"
         },
         {
           id: 3,
-          firstName: "James"
+          firstName: "James",
+          surname: "Smith"
+        },
+        {
+          id: 4,
+          firstName: "Joe",
+          surname: "Bourton"
+        },
+        {
+          id: 5,
+          firstName: "Taylor",
+          surname: "Stephens"
+        },
+        {
+          id: 6,
+          firstName: "Austin",
+          surname: "Wheeler"
+        },
+        {
+          id: 7,
+          firstName: "Oscar",
+          surname: "Isaac"
+        },
+        {
+          id: 8,
+          firstName: "Fenton",
+          surname: "Reed"
+        },
+        {
+          id: 9,
+          firstName: "Ronnie",
+          surname: "Pickering"
+        },
+        {
+          id: 10,
+          firstName: "Franco",
+          surname: "Begbie"
         }
       ],
 
@@ -416,7 +456,7 @@ export default class App extends Component {
 
             <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
 
-            <button className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
+            <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
           </div>
 
           <h1>AWAITING COLLECTION ({ this.state.awaitingOrders.length }):</h1>
@@ -514,6 +554,7 @@ export default class App extends Component {
 
           <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} dismissedHandler={this.billingPopupDismissed} order={this.state.orderForPopup} />
           <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orders[3]} />
+          <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
           <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
           
           { this.state.notificationsJSX }

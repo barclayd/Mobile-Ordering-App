@@ -92,3 +92,16 @@
   margin-top: 2px;
   color: #aaa;
 }
+
+
+
+.popupButtonsContainer .orderButton:not(:last-child) {
+  margin-right: 30px;
+}
+.popupButtonsContainer {
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 20px;
+}
