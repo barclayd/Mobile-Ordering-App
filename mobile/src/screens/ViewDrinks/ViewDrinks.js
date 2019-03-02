@@ -50,15 +50,13 @@ class ViewDrinks extends Component {
 
   render() {
 
-    const { error, loading, drinks } = this.props;
-
-        const ListProps = {
-          loading,
-          error,
-          drinks
-        };
-
-    console.log('list.props',ListProps)
+    // const { error, loading, drinks } = this.props;
+    //     const ListProps = {
+    //       loading,
+    //       error,
+    //       drinks
+    //     };
+    // console.log('list.props',ListProps)
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -105,11 +103,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-      error: state.drink.error,
-      loading: state.drink.loading,
-      data: state.drink.data,
-      saved: state.drink.saved
-  }
+    error: state.drink.error,
+    loading: state.drink.loading,
+    data: state.drink.data,
+    saved: state.drink.saved
+  };
 };
 
 const mapDispatchToProps = dispatch => {
