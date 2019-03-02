@@ -13,7 +13,6 @@ module.exports = buildSchema(`
             _id: ID!
             name: String!
             category: String!
-            ingredients: [Ingredient!]!
             nutritionInfo: String!
             price: String!
     }
@@ -61,7 +60,6 @@ module.exports = buildSchema(`
         input DrinkInput {
             name: String!
             category: String!
-            ingredients: [Ingredient!]!
             nutritionInfo: String!
             price: String!
         }

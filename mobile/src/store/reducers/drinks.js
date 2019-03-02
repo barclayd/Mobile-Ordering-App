@@ -27,7 +27,7 @@ const findDrinksStart = (state, action) => {
 
 const findDrinksSuccess = (state, action) => {
     return updateObject(state, {
-        data: action.data,
+        drinks: action.data,
         loading: false,
         error: false,
         saved: true
