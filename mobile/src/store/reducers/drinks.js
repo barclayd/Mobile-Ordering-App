@@ -7,7 +7,8 @@ const initialState = {
     name: null,
     category: null,
     nutrition: null,
-    price: null
+    price: null,
+    drinks: []
 };
 
 const findDrinks = (state, action) => {
@@ -15,7 +16,7 @@ const findDrinks = (state, action) => {
         error: null,
         loading: true
     });
-}
+};
 
 const findDrinksStart = (state, action) => {
     return updateObject(state, {

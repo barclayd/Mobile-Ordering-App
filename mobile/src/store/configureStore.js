@@ -1,7 +1,7 @@
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import authReducer from './reducers/auth';
 import barReducer from './reducers/bar';
-import drinkReducer from './reducers/drinks'
+import drinkReducer from './reducers/drinks';
 
 const rootReducer = combineReducers({
     auth: authReducer,

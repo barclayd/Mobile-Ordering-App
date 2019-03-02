@@ -42,7 +42,7 @@ class ViewDrinks extends Component {
   }
 
   // async loadData(){
-  //   let drinksList = await 
+  //   let drinksList = await
   //   console.log('kjskjs',drinksList);
   //   this.setState({drinks: drinksList})
   //   console.log('state',this.state.drinks);
@@ -50,13 +50,15 @@ class ViewDrinks extends Component {
 
   render() {
 
-    // const { error, loading, drinks } = this.props;
-    //     const ListProps = {
-    //       loading,
-    //       error,
-    //       drinks
-    //     };
-    // console.log('list.props',ListProps)
+    const { error, loading, drinks } = this.props;
+
+        const ListProps = {
+          loading,
+          error,
+          drinks
+        };
+
+    console.log('list.props',ListProps)
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -67,7 +69,7 @@ class ViewDrinks extends Component {
               initialPage={0}
               renderTabBar={() => <DefaultTabBar />}
             >
-              <TabScreen2 tabLabel="Beers"/>
+              <TabScreen2 tabLabel="Beers" />
               <TabScreen1 tabLabel="Spirits" />
               <TabScreen3 tabLabel="Wines" />
             </ScrollableTabView>
