@@ -16,7 +16,7 @@ export const findDrinksStart = () => {
 
 export const findDrinksSuccess = (data) => {
     return {
-        type: actionTypes.FIND_DRINKS_START,
+        type: actionTypes.FIND_DRINKS_SUCCESS,
         data: data
     };
 };

@@ -1,16 +1,22 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const drinkSchema = mongoose.Schema({
     name: {
-        type: String,
-        required: true
+        type: 'String',
+        required: true,
+        unique: true
     },
+    ingredients: [{
+        type: Schema.ObjectId, ref: 'ingredient'
+    }],
+
     category: {
-        type: String,
+        type: 'String',
         required: true
     },
     nutritionInfo: {
-        type: String,
+        type: 'String',
         required: true
     },
     price: {
@@ -19,4 +25,5 @@ const drinkSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Drink', drinkSchema);
+const drink = mongoose.model('drink', drinkSchema);
+module.exports = drink;
