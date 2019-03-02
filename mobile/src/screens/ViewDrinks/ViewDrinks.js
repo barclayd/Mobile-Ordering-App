@@ -1,16 +1,12 @@
 import React, { Component } from "react";
 import {
   View,
-  Text,
   StyleSheet,
-  Image,
   Dimensions,
   ScrollView,
-  TouchableOpacity
 } from "react-native";
 import { connect } from "react-redux";
-import * as colours from "../../styles/colourScheme";
-import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
+import {ThemeProvider} from "react-native-elements";
 import ScrollableTabView, {
   DefaultTabBar
 } from "react-native-scrollable-tab-view";
@@ -41,22 +37,7 @@ class ViewDrinks extends Component {
     console.log('nextProps', nextProps)
   }
 
-  // async loadData(){
-  //   let drinksList = await
-  //   console.log('kjskjs',drinksList);
-  //   this.setState({drinks: drinksList})
-  //   console.log('state',this.state.drinks);
-  // }
-
   render() {
-
-    // const { error, loading, drinks } = this.props;
-    //     const ListProps = {
-    //       loading,
-    //       error,
-    //       drinks
-    //     };
-    // console.log('list.props',ListProps)
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -116,7 +97,4 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.findDrinks(category, componentId))
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewDrinks);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewDrinks);
