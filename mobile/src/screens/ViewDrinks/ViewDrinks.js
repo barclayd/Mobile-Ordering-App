@@ -15,10 +15,7 @@ import ScrollableTabView, {
   DefaultTabBar
 } from "react-native-scrollable-tab-view";
 import * as actions from "../../store/actions/index";
-
-import TabScreen1 from "./TabScreens/TabScreen1";
 import TabScreen2 from "./TabScreens/TabScreen2";
-import TabScreen3 from "./TabScreens/TabScreen3";
 
 const theme = {
   Button: {
@@ -67,6 +64,7 @@ class ViewDrinks extends Component {
                 key={categories}
                 tabLabel="React"
                 drinks={this.state.drinks}
+                category={categories}
               />
             </ScrollView>
           ))}
