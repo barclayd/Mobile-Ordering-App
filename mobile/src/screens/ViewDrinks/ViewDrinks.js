@@ -8,17 +8,13 @@ import {
   ScrollView,
   TouchableOpacity
 } from "react-native";
-import { connect } from "react-redux";
+
 import * as colours from "../../styles/colourScheme";
 import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
 import ScrollableTabView, {
   DefaultTabBar
 } from "react-native-scrollable-tab-view";
-import * as actions from "../../store/actions/index";
-
-import TabScreen1 from "./TabScreens/TabScreen1";
 import TabScreen2 from "./TabScreens/TabScreen2";
-import TabScreen3 from "./TabScreens/TabScreen3";
 
 const theme = {
   Button: {
@@ -31,27 +27,25 @@ class ViewDrinks extends Component {
   state = {
     search: "",
     drinks: [],
-    categories: ["Draft Beers", "Cocktails", "Soft Drinks"],
+    categories: ["beers", "Cocktails", "Soft Drinks"],
     drinksApi: false
   };
 
-  componentDidMount() {
-    this.props.findDrinks("beers", this.props.componentId);
-  }
+  
 
-  componentWillReceiveProps(nextProps) {
-    console.log("props received in view drinks as :", nextProps);
-    if (!nextProps.loading) {
-      this.setState({
-        drinks: nextProps.data,
-        drinksApi: true
-      });
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   console.log("props received in view drinks as :", nextProps);
+  //   if (!nextProps.loading) {
+  //     this.setState({
+  //       drinks: nextProps.data,
+  //       drinksApi: true
+  //     });
+  //   }
+  // }
 
-  componentDidUpdate() {
-    console.log("state view drinks", this.state);
-  }
+  // componentDidUpdate() {
+  //   console.log("state view drinks", this.state);
+  // }
 
   render() {
     return (
@@ -66,7 +60,7 @@ class ViewDrinks extends Component {
               <TabScreen2
                 key={categories}
                 tabLabel="React"
-                drinks={this.state.drinks}
+                category={categories}
               />
             </ScrollView>
           ))}
@@ -99,21 +93,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = state => {
-  return {
-    error: state.drink.error,
-    loading: state.drink.loading,
-    data: state.drink.drinks,
-    saved: state.drink.saved
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    findDrinks: (category, componentId) =>
-      dispatch(actions.findDrinks(category, componentId))
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewDrinks);
+export default ViewDrinks
