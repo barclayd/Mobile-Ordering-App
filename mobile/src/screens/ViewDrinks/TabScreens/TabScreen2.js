@@ -51,16 +51,16 @@ export default class TabScreen2 extends Component {
     drinks: []
   };
 
-  componentWillReceiveProps(nextProps) {
-    console.log("blahhshs")
-    if(!nextProps.loading) {
-      this.setState({
-        drinks: nextProps.drinks
-        })
-    }
-  }
-  componentDidUpdate(){
-    console.log("tab Screen 2 updated print State ::",this.state)
+  // componentWillReceiveProps(nextProps) {
+  //   console.log("blahhshs")
+  //   if(!nextProps.loading) {
+  //     this.setState({
+  //       drinks: nextProps.drinks
+  //       })
+  //   }
+  // }
+  componentDidUpdate() {
+    console.log("tab Screen 2 updated print State ::", this.state);
   }
 
   openOverlay = () => {
@@ -69,75 +69,81 @@ export default class TabScreen2 extends Component {
     });
   };
 
+  onBackdropPress = () => {
+    this.setState({
+      isVisible: false
+    });
+  };
+
   render() {
     return (
       <View>
-        {this.state.drinks.map((u, i) => {
+        {this.props.drinks.map((u, i) => {
           return (
             <TouchableOpacity onPress={() => this.openOverlay()}>
               <Card>
-                    <View style={styles.leftContainer}>
-                      <Text style={styles.name}>{u.name}</Text>
-                    </View>
-                    <Text style={styles.price}>£{u.price}</Text>
-                  <Text style={styles.description}>{u.nutritionInfo}</Text>
+                <View style={styles.rowContainer}>
+                  <View style={styles.leftContainer}>
+                    <Text style={styles.name}>{u.name}</Text>
+                  </View>
+                  <Text style={styles.price}>£{u.price}</Text>
+                </View>
+                <Text style={styles.description}>{u.nutritionInfo}</Text>
               </Card>
             </TouchableOpacity>
-            );
-          })}
-          <OverlayComponent
-            isVisible={this.state.isVisible}
-            onBackdropPress={this.onBackdropPress}
-          />
-        </View>
-      );
-    }
+          );
+        })}
+        <OverlayComponent
+          isVisible={this.state.isVisible}
+          onBackdropPress={this.onBackdropPress}
+        />
+      </View>
+    );
   }
-  
-  const styles = StyleSheet.create({
-    slidingTabs: {
-      flex: 1,
-      top: 0,
-      width: Dimensions.get("window").width,
-      height: Dimensions.get("window").height / 16,
-      backgroundColor: "black"
-    },
-    background: {
-      backgroundColor: "white",
-      flex: 1,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      top: 0
-    },
-    leftContainer: {
-      flex: 1,
-      flexDirection: "row",
-      justifyContent: "flex-start",
-      paddingBottom: "1%"
-      // backgroundColor: 'green'
-    },
-    price: {
-      fontWeight: "600",
-      fontSize: 16
-    },
-    name: {
-      fontWeight: "600",
-      fontSize: 16
-    },
-    description: {
-      fontWeight: "400"
-    },
-    rowContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between"
-    },
-    title: {
-      paddingTop: 10,
-      paddingLeft: Dimensions.get("window").width / 14,
-      fontSize: 32
-    },
-    contentContainer: {}
-  });
-  
-    
+}
+
+const styles = StyleSheet.create({
+  slidingTabs: {
+    flex: 1,
+    top: 0,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height / 16,
+    backgroundColor: "black"
+  },
+  background: {
+    backgroundColor: "white",
+    flex: 1,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    top: 0
+  },
+  leftContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    paddingBottom: "1%"
+    // backgroundColor: 'green'
+  },
+  price: {
+    fontWeight: "600",
+    fontSize: 16
+  },
+  name: {
+    fontWeight: "600",
+    fontSize: 16
+  },
+  description: {
+    fontWeight: "400"
+  },
+  rowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  title: {
+    paddingTop: 10,
+    paddingLeft: Dimensions.get("window").width / 14,
+    fontSize: 32
+  },
+  contentContainer: {}
+});

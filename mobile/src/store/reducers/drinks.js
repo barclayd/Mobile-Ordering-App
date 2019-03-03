@@ -4,10 +4,6 @@ import {updateObject} from "../utility";
 const initialState = {
     loading: null,
     error: null,
-    name: null,
-    category: null,
-    nutrition: null,
-    price: null,
     drinks: []
 };
 
