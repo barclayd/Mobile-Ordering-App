@@ -29,5 +29,5 @@ export default class NotesPopupWindow extends React.Component {
 
 NotesPopupWindow.propTypes = {
     order: PropTypes.object,
-    showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
+    showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
 }
