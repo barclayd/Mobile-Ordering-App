@@ -31,6 +31,7 @@ class ViewDrinks extends Component {
   state = {
     search: "",
     drinks: [],
+    categories: ["Draft Beers", "Cocktails", "Soft Drinks"],
     drinksApi: false
   };
 
@@ -38,9 +39,9 @@ class ViewDrinks extends Component {
     this.props.findDrinks("beers", this.props.componentId);
   }
 
-  omponentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
+    console.log("props received in view drinks as :", nextProps);
     if (!nextProps.loading) {
-      console.log("nextProps", nextProps.data);
       this.setState({
         drinks: nextProps.data,
         drinksApi: true
@@ -49,24 +50,28 @@ class ViewDrinks extends Component {
   }
 
   componentDidUpdate() {
-    console.log("state view drinks comp", this.state);
+    console.log("state view drinks", this.state);
   }
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={styles.background}>
-          <ScrollableTabView
-            style={{ marginTop: 20 }}
-            initialPage={0}
-            renderTabBar={() => <DefaultTabBar />}
-          >
-           
-            <TabScreen2 key={1} tabLabel="beers" drinks={this.state.drinks} />
-            
-          </ScrollableTabView>
-        </View>
-      </ScrollView>
+      <View style={styles.background}>
+        <ScrollableTabView
+          style={{ marginTop: 20 }}
+          initialPage={0}
+          renderTabBar={() => <DefaultTabBar />}
+        >
+          {this.state.categories.map(categories => (
+            <ScrollView>
+              <TabScreen2
+                key={categories}
+                tabLabel="React"
+                drinks={this.state.drinks}
+              />
+            </ScrollView>
+          ))}
+        </ScrollableTabView>
+      </View>
     );
   }
 }
@@ -98,7 +103,7 @@ const mapStateToProps = state => {
   return {
     error: state.drink.error,
     loading: state.drink.loading,
-    data: state.drink.data,
+    data: state.drink.drinks,
     saved: state.drink.saved
   };
 };
