@@ -78,9 +78,10 @@ export default class TabScreen2 extends Component {
   render() {
     return (
       <View>
+        <Text>{this.props.category}</Text>
         {this.props.drinks.map((u, i) => {
           return (
-            <TouchableOpacity onPress={() => this.openOverlay()}>
+            <TouchableOpacity key={i} onPress={() => this.openOverlay()}>
               <Card>
                 <View style={styles.rowContainer}>
                   <View style={styles.leftContainer}>
