@@ -31,5 +31,5 @@ export default class TimeAgoClean extends React.Component {
 }
 
 TimeAgoClean.propTypes = {
-    date: PropTypes.instanceOf(Date)
+    date: PropTypes.instanceOf(Date).isRequired
 }

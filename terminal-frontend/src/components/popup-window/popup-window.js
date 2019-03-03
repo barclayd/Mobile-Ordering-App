@@ -16,18 +16,29 @@ export default class PopupWindow extends React.Component {
   HidePopup = () => {
     this.setState({visible: false})
   }
-
+  DismissPopup = () => {
+    if (this.props.dismissedHandler) {
+      this.props.dismissedHandler() // Tell parent that the window was forcefully dismissed (not directly hidden with HidePopup i.e. after marking an order complete)
+    }
+    this.HidePopup()
+  }
+  
   keyPressed = (event) => {
     // Listen for escape key to close popup
     if (event.keyCode === 27)
-      this.HidePopup();
+      this.DismissPopup();
   }
   componentDidMount () {
-    this.props.showFunc(this.ShowPopup); // Run func from prop binding ShowPopup from this instance to allow parent to call ShowPopup()
+    this.props.showFunc(this.ShowPopup); // Run func from prop binding this.ShowPopup from this instance to allow parent to call ShowPopup() from state
     document.addEventListener("keydown", this.keyPressed, false);
   }
   componentWillUnmount () {
     document.removeEventListener("keydown", this.keyPressed, false);
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.closePopup !== prevProps.closePopup) {
+      this.HidePopup()
+    }
   }
 
   getClassName = () => {
@@ -41,7 +52,7 @@ export default class PopupWindow extends React.Component {
   renderCloseButton = (shouldShow) => {
     if (shouldShow) {
         return (
-            <div className="popup-close-button" onClick={this.HidePopup} >🗙</div>
+            <div className="popup-close-button" onClick={this.DismissPopup} >🗙</div>
         )
     }
   }
@@ -49,7 +60,7 @@ export default class PopupWindow extends React.Component {
   overlayClick = (event) => {
     // Check that the click event has not been triggered on a child element
     if (event.target === event.currentTarget) {
-      this.HidePopup()
+      this.DismissPopup()
     }
   }
 
@@ -75,10 +86,12 @@ export default class PopupWindow extends React.Component {
 }
 
 PopupWindow.propTypes = {
-  className: PropTypes.string,
-  showCloseButton: PropTypes.bool,
-  showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
-  title: PropTypes.string,
-  subtitle: PropTypes.object, // JSX object
-  children: PropTypes.node
+  className: PropTypes.string.isRequired,
+  showCloseButton: PropTypes.bool.isRequired,
+  showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.object.isRequired, // JSX object
+  children: PropTypes.node.isRequired,
+  dismissedHandler: PropTypes.func,
+  closePopup: PropTypes.bool // If set to true the window will close
 }

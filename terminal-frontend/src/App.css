@@ -39,18 +39,137 @@ h4 {
 
 
 
-/* Space account quick-switch buttons */
+#accountsHotbar {
+  /* Only show buttons that can fit onscreen: */
+  overflow: hidden;
+  max-height: 36px;
+  margin-right: 570px;
+}
 #accountsHotbar button {
-  margin-right: 15px;
+  margin-right: 15px; /* Space account quick-switch buttons */
 }
 
 /* Div to keep account switch button pinned to page top-right */
-#accountSwitcherContainer {
+#buttonsToolbar {
   position: absolute;
   top: 0;
   right: 0;
   padding: inherit; /* Keep account switch button inside page padding */
 }
+#buttonsToolbar button:not(:last-child) {
+  margin-right: 10px;
+}
+
+
+
+
+.qrReader {
+  display: none
+}
+
+
+
+.notificationsContainer {
+  /* Center at screen top */
+  position: fixed;
+  top: 40px;
+  
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: fixed;
+  width: 600px;
+
+  z-index: 999;
+}
+
+.notificationBanner {
+  display: block;
+  width: 100%;
+  height: 100px;
+  border-radius: 30px;
+  background: rgba(255,255,255, 0.75);
+
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+
+  overflow: hidden;
+  position: relative; /* Allow close button to position absolute relative to banner */
+}
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  color: #797979;
+  cursor: pointer;
+  font-size: 23px;
+  text-align: center;
+
+  /* Set hitbox dimensions and X positioning */
+  width: 76px;
+  height: 48px;
+  padding: 2px 0px;
+  /* background: #0f0; used to test hitbox */
+}
+.notificationBanner:not(:last-child) {
+  margin-bottom: 12px;
+}
+.notificationBanner .textContainer {
+  display: inline-block;
+  margin-left: 68px;
+}
+.notificationBanner .title {
+  color: #000;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 26px;
+  margin-top: 20px;
+}
+.notificationBanner .description {
+  color: #333;
+  font-size: 17px;
+  font-weight: normal;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Same as body */
+  margin-top: 1px;
+}
+.notificationBanner .title, .notificationBanner .description {
+  float: left;
+  margin-left: 7px;
+}
+.notificationBanner .icon {
+  background: #911;
+  display: block;
+  float: left;
+
+  width: 80px;
+  height: 100%;
+  opacity: 0.8;
+
+  content: "!";
+  font-family: sans-serif;
+  font-size: 52px;
+  
+  line-height: 98px; /* center text vertically */
+  text-align: center; /* center text horizontally */
+}
+.notificationBanner .icon::before {
+  content: "";
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 50px solid #911;
+  position: absolute;
+  left: 80px;
+}
+.notificationBanner .icon.success { background: #191 }
+.notificationBanner .icon.success::before { border-left-color: #191 }
+.notificationBanner .icon.info { background: #119 }
+.notificationBanner .icon.info::before { border-left-color: #119 }
+.notificationBanner .icon.warning { background: #ff4800 }
+.notificationBanner .icon.warning::before { border-left-color: #ff4800 }
 
 
 
@@ -93,8 +212,6 @@ button.orderButton {
   padding: 11px 9px;
 }
 button.orderButton .icon {
-  width: 40px;
-  height: 40px;
   background: #868686;
   display: block;
   border-radius: 300px;
@@ -103,6 +220,8 @@ button.orderButton .icon {
   width: 47px;
   height: 47px;
   margin-top: -3px;
+  
+  color: rgba(30,30,30, 0.8);
 }
 button.orderButton .icon::after {
   content: "•••";
@@ -136,6 +255,31 @@ button.orderButton .icon.notInProgress::after {
   left: auto;
   top: 2px;
   font-size: 40px;
+}
+button.orderButton .icon.refund { background: #4286f4; }
+button.orderButton .icon.refund::after {
+  content: "£";
+  letter-spacing: normal;
+  left: auto;
+  top: 6px;
+  font-size: 32px;
+}
+button.orderButton .icon.outOfStock {
+  background: #ff9d1c;
+  letter-spacing: normal;
+  left: auto;
+  line-height: 48px;
+  font-size: 27px;
+}
+button.orderButton .icon.outOfStock::after { content: ""; }
+
+button.orderButton .icon.delete { background: #FF0000; }
+button.orderButton .icon.delete::after {
+  content: "-";
+  letter-spacing: normal;
+  left: -2px;
+  line-height: 24px;
+  font-size: 52px;
 }
 
 button.orderButton .title, button.orderButton .subtitle {
@@ -202,8 +346,6 @@ button.orderButton .subtitle {
 }
 
 .pendingOrderButton .icon {
-  width: 40px;
-  height: 40px;
   box-sizing: border-box;
   border: 4px solid #333;
   display: block;
