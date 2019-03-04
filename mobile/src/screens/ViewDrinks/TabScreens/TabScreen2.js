@@ -16,6 +16,19 @@ class TabScreen2 extends Component {
     isVisible: false,
   };
 
+  openOverlay = () => {
+    this.setState({
+      isVisible: true
+    });
+  };
+
+  onBackdropPress = () => {
+    this.setState({
+      isVisible: false
+    });
+  }
+
+
   render() {
     console.log(this.props);
     return (
