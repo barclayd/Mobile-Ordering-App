@@ -11,43 +11,9 @@ import * as actions from "../../../store/actions/index";
 import {Card} from "react-native-elements";
 import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/OverlayComponent";
 
-let categoryName = 'Beers';
-
 class TabScreen2 extends Component {
   state = {
     isVisible: false,
-    menus: [
-      {
-        name: "Fosters - 18+",
-        price: "£2.09",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "Hop House 13 Larger - 18+",
-        price: "£3.49",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "Carling - 18+",
-        price: "£2.19",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "Bud Light+",
-        price: "£4.09",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "San Miguel",
-        price: "£4.09",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      },
-      {
-        name: "Kronenburg",
-        price: "£4.09",
-        description: "201 kcal. 5.0%. 2.8 Units"
-      }
-    ],
     drinks: []
   };
 
