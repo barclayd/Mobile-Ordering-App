@@ -107,7 +107,14 @@ h5 {
 
   overflow: hidden;
   position: relative; /* Allow close button to position absolute relative to banner */
+
+  animation: slidein 0.8s ease-out;
 }
+@keyframes slidein {
+  from { margin-top: -100%; }
+  to   { margin-top: 0%; }
+}
+
 .closeButton {
   position: absolute;
   top: 0;
