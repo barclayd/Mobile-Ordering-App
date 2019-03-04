@@ -7,12 +7,14 @@ import {
   Dimensions,
   Image
 } from "react-native";
+import { connect } from "react-redux";
+import * as actions from "../../../store/actions/index";
 import { ThemeProvider, Card } from "react-native-elements";
 import * as colours from "../../../styles/colourScheme";
 import barImage from "../../../assets/barConfetti.jpg";
 import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/OverlayComponent";
 
-export default class TabScreen2 extends Component {
+class TabScreen2 extends Component {
   state = {
     isVisible: false,
     menus: [
@@ -50,6 +52,21 @@ export default class TabScreen2 extends Component {
     drinks: []
   };
 
+  componentDidMount() {
+    this.props.findDrinks(this.props.category, this.props.componentId);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("props received in TabScreen2 as :", nextProps);
+    if (!nextProps.loading) {
+
+      this.setState({
+        drinks: nextProps.data,
+        drinksApi: true
+      })
+    }
+  }
+
   componentDidUpdate() {
     console.log("tab Screen 2 updated print State ::", this.state);
   }
@@ -70,7 +87,7 @@ export default class TabScreen2 extends Component {
     return (
       <View>
         <Text>{this.props.category}</Text>
-        {this.props.drinks.map((u, i) => {
+        {this.state.drinks.map((u, i) => {
           return (
             <TouchableOpacity key={i} onPress={() => this.openOverlay()}>
               <Card>
@@ -139,3 +156,23 @@ const styles = StyleSheet.create({
   },
   contentContainer: {}
 });
+
+
+const mapStateToProps = state => {
+  return {
+    error: state.drink.error,
+    loading: state.drink.loading,
+    data: state.drink.drinks,
+    saved: state.drink.saved
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    findDrinks: (category, componentId) =>
+      dispatch(actions.findDrinks(category, componentId))
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TabScreen2);
