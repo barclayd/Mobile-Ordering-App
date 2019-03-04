@@ -274,7 +274,7 @@ export default class App extends Component {
       })
     })
   }
-  
+
   getStaffMemberFullName = (staffID) => {
     let staffMember = this.state.staffMembers.find(x => x.id === staffID)
     return staffMember.firstName + " " + staffMember.surname;
@@ -335,6 +335,8 @@ export default class App extends Component {
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
       }
+    } else {
+      this.addNotification("error", "Order not found", "No order with code " + orderID + " exists!")
     }
   }
 
@@ -423,7 +425,7 @@ export default class App extends Component {
               <div className="closeButton" onClick={()=> {
                 notificationData.isDismissed = true;
                 this.loadNotificationsJSX()
-              }}>🗙</div>
+              }}>??</div>
             </div>
           )
         })
