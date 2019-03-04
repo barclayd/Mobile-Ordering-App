@@ -47,18 +47,9 @@ export default class TabScreen2 extends Component {
         description: "201 kcal. 5.0%. 2.8 Units"
       }
     ],
-    // drinks: []
     drinks: []
   };
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log("blahhshs")
-  //   if(!nextProps.loading) {
-  //     this.setState({
-  //       drinks: nextProps.drinks
-  //       })
-  //   }
-  // }
   componentDidUpdate() {
     console.log("tab Screen 2 updated print State ::", this.state);
   }
