@@ -96,7 +96,7 @@
 
 
 .popupButtonsContainer .orderButton:not(:last-child) {
-  margin-right: 30px;
+  margin-right: 8px;
 }
 .popupButtonsContainer {
   text-align: center;

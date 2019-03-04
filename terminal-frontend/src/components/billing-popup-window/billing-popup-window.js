@@ -1,11 +1,11 @@
-import React from 'react'
+﻿import React from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
 import PopupWindow from '../popup-window/popup-window'
 import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArchive } from '@fortawesome/free-solid-svg-icons';
+import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 
 export default class BillingPopupWindow extends React.Component {
@@ -70,7 +70,7 @@ export default class BillingPopupWindow extends React.Component {
                         <span className="subtitle">Mark unavailable</span>
                     </button>
                     <button className="orderButton">
-                        <span className="icon delete"></span>
+                        <span className="icon delete"><FontAwesomeIcon icon={faTrashAlt} /></span>
                         <span className="title">Delete</span>
                         <br />
                         <span className="subtitle">Cancel &amp; charge</span>
