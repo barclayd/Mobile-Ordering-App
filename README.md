@@ -1,5 +1,5 @@
 ## Drinks App
-###### 29th January 2019
+###### 4th March 2019
 
 
 ## Motivation
@@ -13,8 +13,7 @@
 
 #### Server
 
-<img width="1149" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/52980628-fb133700-33d2-11e9-9c0d-763ddb896399.png">
-
+<img width="1261" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
 
 ## Tech/framework used
 
