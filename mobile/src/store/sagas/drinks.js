@@ -3,7 +3,6 @@ import axios from '../../axios-instance';
 import * as actions from '../actions/index';
 
 export function* findDrinksSaga(action){
-    yield put(actions.findBarStart());
     yield put(actions.findDrinksStart());
     try {
         let requestBody;
@@ -63,10 +62,10 @@ export function* findDrinksSaga(action){
                 yield put(actions.findDrinksSuccess(fetchData));
             }
         }
-} catch (err) {
-            console.log(err);
-            yield put(actions.findDrinksFail(err));
-        }
+        } catch (err) {
+                    console.log(err);
+                    yield put(actions.findDrinksFail(err));
+    }
 }
 
 export function* findDrinkCategoriesSaga(action) {

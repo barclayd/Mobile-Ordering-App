@@ -26,11 +26,11 @@ class TabScreen2 extends Component {
     this.setState({
       isVisible: false
     });
-  }
+  };
 
 
   render() {
-    console.log(this.props);
+    console.log(this.props.category);
     return (
       <View>
         {this.props.drinks.length > 0 ? this.props.drinks.map((u, i) => {
