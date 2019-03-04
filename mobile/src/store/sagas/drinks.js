@@ -26,8 +26,8 @@ export function* findDrinksSaga(action){
         } else {
             requestBody = {
                 query: `
-            query findDrinks {
-                findDrinks {
+            query drinks {
+                drinks {
                     name
                     category
                     nutritionInfo
@@ -43,14 +43,25 @@ export function* findDrinksSaga(action){
         }
         if (response.status === 200 && response.status !== 201) {
             const fetchData = [];
-            for (let key in response.data.data.findDrinks) {
-                fetchData.push({
-                    ...response.data.data.findDrinks[key],
-                    id: key
-                });
+            if(action.category) {
+                for (let key in response.data.data.findDrinks) {
+                    fetchData.push({
+                        ...response.data.data.findDrinks[key],
+                        id: key
+                    });
+                }
+                console.log("Drinks Found Successfully");
+                yield put(actions.findDrinksSuccess(fetchData));
+            } else {
+                for (let key in response.data.data.drinks) {
+                    fetchData.push({
+                        ...response.data.data.drinks[key],
+                        id: key
+                    });
+                }
+                console.log("Drinks Found Successfully");
+                yield put(actions.findDrinksSuccess(fetchData));
             }
-            console.log("Drinks Found Successfully");
-            yield put(actions.findDrinksSuccess(fetchData));
         }
 } catch (err) {
             console.log(err);

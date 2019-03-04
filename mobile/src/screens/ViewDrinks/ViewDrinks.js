@@ -3,7 +3,7 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import { connect } from "react-redux";
 import ScrollableTabView, {
@@ -25,28 +25,31 @@ class ViewDrinks extends Component {
   componentDidMount() {
     // get categories dynamically
     this.props.onFetchDrinkCategories();
-  }
+    this.props.findAllDrinks();
+  };
 
   componentWillReceiveProps(nextProps) {
     console.log(nextProps);
     if (!nextProps.loading) {
+      // sort drinks into categories
       this.setState({
-        categories: nextProps.drinkCategories,
-      });
-    }
-  }
+          categories: nextProps.drinkCategories,
+          drinks: nextProps.drinks
+          });
+        }
+    };
 
   getDrinksByCategory = (id) => {
     const categoryName = this.state.categories[id];
     console.log(categoryName);
-    this.props.findDrinks(categoryName, this.props.componentId);
+    return this.state.drinks.filter(drink => drink.category === categoryName);
   };
 
   render() {
     console.log(this.state.categories);
     return (
         <View style={styles.background}>
-          <ScrollableTabView
+          {this.state.categories.length > 0 ? <ScrollableTabView
               style={{ marginTop: 20 }}
               initialPage={0}
               renderTabBar={() => <DefaultTabBar />}
@@ -57,11 +60,10 @@ class ViewDrinks extends Component {
                     key={category}
                     category={category}
                     drinks={this.getDrinksByCategory(index)}
-                    data={this.props.drinks}
                 />
               </ScrollView>
             }): null}
-          </ScrollableTabView>
+          </ScrollableTabView> : null }
         </View>
     )
   }

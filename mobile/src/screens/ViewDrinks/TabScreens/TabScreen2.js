@@ -14,14 +14,13 @@ import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/Overlay
 class TabScreen2 extends Component {
   state = {
     isVisible: false,
-    drinks: []
   };
 
   render() {
     console.log(this.props);
     return (
       <View>
-        {this.props.data.length > 0 ? this.props.data.map((u, i) => {
+        {this.props.drinks.length > 0 ? this.props.drinks.map((u, i) => {
           return (
             <TouchableOpacity key={i} onPress={() => this.openOverlay()}>
               <Card>
