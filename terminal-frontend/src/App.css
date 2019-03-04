@@ -20,7 +20,7 @@ html {
 /* Heading stylings: */
 h1, h2 { text-transform: uppercase; }
 h1 { color: #868686; margin: 45px 0 8px; }
-h2 { margin: 17px 0 29px 0px; color: white; }
+h2 { margin: 13px 0 32px 0px; color: white; }
 h3 {
   color: #999999;
   position: absolute;
@@ -42,7 +42,7 @@ h5 {
   color: #8b9799;
 
   position: absolute;
-      bottom: 14px;
+  bottom: 15px;
   left: 19px;
 }
 
