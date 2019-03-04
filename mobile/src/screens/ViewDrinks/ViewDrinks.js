@@ -30,9 +30,6 @@ class ViewDrinks extends Component {
   componentWillReceiveProps(nextProps) {
     console.log(nextProps);
     if (!nextProps.loading) {
-      for (let cat in nextProps.drinkCategories) {
-        this.props.findDrinks(nextProps.drinkCategories[cat]);
-      }
       this.setState({
         categories: nextProps.drinkCategories,
       });
@@ -43,7 +40,6 @@ class ViewDrinks extends Component {
     const categoryName = this.state.categories[id];
     console.log(categoryName);
     this.props.findDrinks(categoryName, this.props.componentId);
-    console.log(this.props.drinks);
   };
 
   render() {
@@ -105,7 +101,8 @@ const mapDispatchToProps = dispatch => {
   return {
     onFetchDrinkCategories: () => dispatch(actions.findDrinkCategories()),
     findDrinks: (category, componentId) =>
-        dispatch(actions.findDrinks(category, componentId))
+        dispatch(actions.findDrinks(category, componentId)),
+    findAllDrinks: (componentId) => dispatch(actions.findDrinks(null, componentId))
   };
 };
 

@@ -26,8 +26,8 @@ export function* findDrinksSaga(action){
         } else {
             requestBody = {
                 query: `
-            query findDrinks($category: String!) {
-                findDrinks(category: $category){
+            query findDrinks {
+                findDrinks {
                     name
                     category
                     nutritionInfo
@@ -35,9 +35,6 @@ export function* findDrinksSaga(action){
                 }
             }
             `,
-                variables: {
-                    category: action.category
-                }
             }
         }
         const response = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
