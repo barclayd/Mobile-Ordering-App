@@ -6,6 +6,7 @@
 .popup.billingOptions > div > div > .popup-children-container > .indentedContent > .orderList > li:last-child {
   border-bottom: 3px dashed grey;
   display: inline-block;
+  padding-bottom: 4px;
 }
 
 .orderList > li > .item {
