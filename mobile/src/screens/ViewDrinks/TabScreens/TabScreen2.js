@@ -21,7 +21,7 @@ class TabScreen2 extends Component {
     console.log(this.props);
     return (
       <View>
-        {this.props.data.map((u, i) => {
+        {this.props.data.length > 0 ? this.props.data.map((u, i) => {
           return (
             <TouchableOpacity key={i} onPress={() => this.openOverlay()}>
               <Card>
@@ -35,7 +35,7 @@ class TabScreen2 extends Component {
               </Card>
             </TouchableOpacity>
           );
-        })}
+        }):null}
         <OverlayComponent
           isVisible={this.state.isVisible}
           onBackdropPress={this.onBackdropPress}

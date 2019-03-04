@@ -18,7 +18,7 @@ class ViewDrinks extends Component {
   state = {
     search: "",
     drinks: [],
-    categories: ['Beers'],
+    categories: [],
     drinksApi: false
   };
 
