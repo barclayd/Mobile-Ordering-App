@@ -1,0 +1,25 @@
+input[type=text] {
+    width: 306px;
+    padding: 12px 24px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    font-size: 35px;
+    text-align: center;
+    font-family: Consolas, 'Lucida Console', 'DejaVu Sans Mono', monospace;
+}
+
+.manualEnterContainer {
+    text-align: center;
+    margin-top: auto;
+    vertical-align: middle;
+}
+
+.manualEnterContainer button {
+    width: 230px;
+    height: 42px;
+    margin-top: 6px;
+}

@@ -30,13 +30,17 @@ export default class ManualPickupPopupWindow extends React.Component {
                     showFunc={this.props.showFunc}
                     closePopup={this.state.closePopup}
             >
-                <input stlye="text-transform: uppercase" onChange={this.handleChange}/>
-                <button onClick={() => {
+                <form className="manualEnterContainer" onSubmit={(e) => {
                     this.setState({closePopup: true}, () => {
                         this.setState({closePopup: null})
                         this.props.pickupOrderFunc(this.state.orderID)
                     })
-                }}>Submit</button>
+                    e.preventDefault();
+                }}>
+                    <input autoFocus={true} type="text" placeholder="enter code..." stlye="text-transform: uppercase" onChange={this.handleChange}/>
+                    <br />
+                    <button type="submit">Show collection screen</button>
+                </form>
             </PopupWindow>
         )
     }
