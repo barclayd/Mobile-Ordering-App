@@ -47,10 +47,9 @@ export default class ViewDrinks extends Component {
           renderTabBar={() => <DefaultTabBar />}
         >
           {this.state.categories.map(categories => (
-            <ScrollView>
+            <ScrollView tabLabel={categories}>
               <TabScreen2
                 key={categories}
-                tabLabel="React"
                 category={categories}
               />
             </ScrollView>

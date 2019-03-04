@@ -86,7 +86,6 @@ class TabScreen2 extends Component {
   render() {
     return (
       <View>
-        <Text>{this.props.category}</Text>
         {this.state.drinks.map((u, i) => {
           return (
             <TouchableOpacity key={i} onPress={() => this.openOverlay()}>
