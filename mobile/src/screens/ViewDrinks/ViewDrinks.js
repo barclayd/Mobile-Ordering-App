@@ -1,16 +1,11 @@
 import React, { Component } from "react";
 import {
   View,
-  Text,
   StyleSheet,
-  Image,
   Dimensions,
   ScrollView,
-  TouchableOpacity
 } from "react-native";
 import { connect } from "react-redux";
-import * as colours from "../../styles/colourScheme";
-import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
 import ScrollableTabView, {
   DefaultTabBar
 } from "react-native-scrollable-tab-view";
@@ -18,61 +13,61 @@ import * as actions from "../../store/actions/index";
 
 import TabScreen2 from "./TabScreens/TabScreen2";
 
-
-const theme = {
-  Button: {
-    raised: true
-  },
-  SearchBar: {}
-};
-
 class ViewDrinks extends Component {
+
   state = {
     search: "",
     drinks: [],
-    categories: ["beers", "Spirits", "Soft Drinks"],
+    categories: ['Beers'],
     drinksApi: false
   };
 
   componentDidMount() {
-    this.props.findDrinks("beers", this.props.componentId);
-  }
-
-  componentDidUpdate() {
-    console.log("state view drinks", this.state);
+    // get categories dynamically
+    this.props.onFetchDrinkCategories();
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("props received in TabScreen2 as :", nextProps);
+    console.log(nextProps);
     if (!nextProps.loading) {
+      for (let cat in nextProps.drinkCategories) {
+        this.props.findDrinks(nextProps.drinkCategories[cat]);
+      }
       this.setState({
-        drinks: nextProps.data,
-        drinksApi: true
-      })
+        categories: nextProps.drinkCategories,
+      });
     }
   }
 
+  getDrinksByCategory = (id) => {
+    const categoryName = this.state.categories[id];
+    console.log(categoryName);
+    this.props.findDrinks(categoryName, this.props.componentId);
+    console.log(this.props.drinks);
+  };
+
   render() {
+    console.log(this.state.categories);
     return (
-      <View style={styles.background}>
-        <ScrollableTabView
-          style={{ marginTop: 20 }}
-          initialPage={0}
-          renderTabBar={() => <DefaultTabBar />}
-        >
-          {this.state.categories.map(categories => (
-            <ScrollView tabLabel={categories}>
-              <TabScreen2
-                onRef={ref => (this.TabScreen2 = ref)}
-                key={categories}
-                category={categories}
-                drinks={this.state.drinks}
-              />
-            </ScrollView>
-          ))}
-        </ScrollableTabView>
-      </View>
-    );
+        <View style={styles.background}>
+          <ScrollableTabView
+              style={{ marginTop: 20 }}
+              initialPage={0}
+              renderTabBar={() => <DefaultTabBar />}
+          >
+            {this.state.categories.length > 0 ? this.state.categories.map((category, index)  => {
+              return <ScrollView tabLabel={category}>
+                <TabScreen2
+                    key={category}
+                    category={category}
+                    drinks={this.getDrinksByCategory(index)}
+                    data={this.props.drinks}
+                />
+              </ScrollView>
+            }): null}
+          </ScrollableTabView>
+        </View>
+    )
   }
 }
 
@@ -101,21 +96,18 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    error: state.drink.error,
-    loading: state.drink.loading,
-    data: state.drink.drinks,
-    saved: state.drink.saved
+    drinkCategories: state.drink.categories,
+    drinks: state.drink.drinks
   };
 };
+
 const mapDispatchToProps = dispatch => {
   return {
+    onFetchDrinkCategories: () => dispatch(actions.findDrinkCategories()),
     findDrinks: (category, componentId) =>
-      dispatch(actions.findDrinks(category, componentId))
+        dispatch(actions.findDrinks(category, componentId))
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewDrinks);
 
+export default connect(mapStateToProps, mapDispatchToProps)(ViewDrinks);
 

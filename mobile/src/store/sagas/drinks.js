@@ -1,6 +1,4 @@
 import {put} from 'redux-saga/effects';
-import {Platform} from 'react-native';
-import IonicIcon from "react-native-vector-icons/Ionicons";
 import axios from '../../axios-instance';
 import * as actions from '../actions/index';
 
@@ -8,8 +6,10 @@ export function* findDrinksSaga(action){
     yield put(actions.findBarStart());
     yield put(actions.findDrinksStart());
     try {
-        const requestBody = {
-            query: `
+        let requestBody;
+        if (action.category) {
+            requestBody = {
+                query: `
             query findDrinks($category: String!) {
                 findDrinks(category: $category){
                     name
@@ -19,10 +19,27 @@ export function* findDrinksSaga(action){
                 }
             }
             `,
-            variables: {
-                category: action.category
+                variables: {
+                    category: action.category
+                }
             }
-        };
+        } else {
+            requestBody = {
+                query: `
+            query findDrinks($category: String!) {
+                findDrinks(category: $category){
+                    name
+                    category
+                    nutritionInfo
+                    price
+                }
+            }
+            `,
+                variables: {
+                    category: action.category
+                }
+            }
+        }
         const response = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
         if (response.data.errors) {
             throw Error(response.data.errors[0].message);
@@ -42,5 +59,37 @@ export function* findDrinksSaga(action){
             console.log(err);
             yield put(actions.findDrinksFail(err));
         }
+}
+
+export function* findDrinkCategoriesSaga(action) {
+    yield put(actions.findDrinkCategoriesStart());
+    try {
+        const requestBody = {
+            query: `
+            query findDrinkCategories {
+                findDrinkCategories {
+                    category
+                }
+            }
+            `
+        };
+        const response = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
+        if (response.data.errors) {
+            throw Error(response.data.errors[0].message);
+        }
+        if (response.status === 200 && response.status !== 201) {
+            const fetchData = [];
+            for (let key in response.data.data.findDrinkCategories) {
+                fetchData.push(
+                    response.data.data.findDrinkCategories[key].category,
+                );
+            }
+            console.log("Drink Categories Found Successfully");
+            yield put(actions.findDrinkCategoriesSuccess(fetchData));
+        }
+    } catch (err) {
+        console.log(err);
+        yield put(actions.findDrinkCategoriesFail(err));
     }
-    
+}
+
