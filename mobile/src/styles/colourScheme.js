@@ -7,6 +7,7 @@ export const pink = '#EA61E1';
 export const lightBlue = '#6892bf';
 export const midnightBlack = '#000d1a';
 export const white = '#E9E0D6';
+export const pureWhite = '#ffffff';
 export const lightGreen = '#43C6AC';
 export const purpleBlue = '#191654';
 export const midGrey = '#989490';

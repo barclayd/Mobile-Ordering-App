@@ -10,32 +10,81 @@ class Checkout extends Component {
 
     componentWillMount() {
         this.animation = new Animated.ValueXY({x:0, y: screenHeight - 180});
+        this.panResponder = PanResponder.create({
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderGrant: (event, gestureState) => {
+                this.animation.extractOffset();
+            },
+            onPanResponderMove: (event, gestureState) => {
+                this.animation.setValue({x: 0, y: gestureState.dy})
+            },
+            onPanResponderRelease: (event, gestureState) => {
+                if(gestureState.dy < 0) {
+                    Animated.spring(this.animation.y, {
+                        toValue: -screenHeight + 90,
+                        tension: 1
+                    }).start();
+                } else if (gestureState.dy > 0) {
+                    Animated.spring(this.animation.y, {
+                        toValue: screenHeight - 90,
+                        tension: 1
+                    }).start();
+                }
+            }
+        })
     }
 
     render() {
         const animatedHeight = {
             transform: this.animation.getTranslateTransform()
         };
+
+       const animatedImageHeight = this.animation.y.interpolate({
+            inputRange: [0, screenHeight-90],
+            outputRange: [200, 32],
+            extrapolate: 'clamp'
+        });
+
+        const animatedTextOpacity = this.animation.y.interpolate({
+            inputRange: [0, screenHeight-500, screenHeight-90],
+            outputRange: [0, 0, 1],
+            extrapolate: 'clamp'
+        });
+
+        const animatedImageMarginLeft = this.animation.y.interpolate({
+            inputRange: [0, screenHeight-90],
+            outputRange: [screenWidth/2 - 100, 10],
+            extrapolate: 'clamp'
+        });
+
+        const animatedHeaderHeight = this.animation.y.interpolate({
+            inputRange: [0, screenHeight-100],
+            outputRange: [screenHeight/2, 100],
+            extrapolate: 'clamp'
+        });
+
+
         return (
             <Animated.View style={styles.animatedView}>
                 <Animated.View
                     style={[animatedHeight, styles.bar]}>
                     <Animated.View
-                        style={styles.basketBarContent}>
+                        {...this.panResponder.panHandlers}
+                        style={[{height: animatedHeaderHeight}, styles.basketBarContent]}>
                         <View
                             style={styles.basketBarContentHolder}>
                             <Animated.View
-                                style={styles.basketBarContentImgHolder}>
+                                style={[{height: animatedImageHeight, width: animatedImageHeight, marginLeft: animatedImageMarginLeft}, styles.basketBarContentImgHolder]}>
                                 <Image style={styles.basketBarContentImg} source={require('../../assets/Logo.png')}/>
                             </Animated.View>
-                            <Animated.Text style={styles.basketBarContentText}>
+                            <Animated.Text style={[{opacity: animatedTextOpacity}, styles.basketBarContentText]}>
                                 4 items
                             </Animated.Text>
-                            <Animated.Text style={styles.basketBarContentText}>
+                            <Animated.Text style={[{opacity: animatedTextOpacity}, styles.basketBarContentText]}>
                                 Total price: £19.85
                             </Animated.Text>
                         </View>
-                        <Animated.View style={styles.basketBarContentIcon}>
+                        <Animated.View style={[{opacity: animatedTextOpacity}, styles.basketBarContentIcon]}>
                                 <Icon name="shopping-cart" size={30} color={colours.midnightBlack} />
                             </Animated.View>
                     </Animated.View>
@@ -51,14 +100,14 @@ const styles = StyleSheet.create({
     },
     animatedView: {
         flex: 1,
-        backgroundColor: colours.white
+        backgroundColor: colours.pureWhite
     },
     bar: {
         position: 'absolute',
         left: 0,
         right: 0,
         zIndex: 10,
-        backgroundColor: colours.white,
+        backgroundColor: colours.pureWhite,
         height: screenHeight
     },
     basketBarContent: {
@@ -67,7 +116,7 @@ const styles = StyleSheet.create({
         borderColor: colours.midGrey,
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10
+        marginBottom: 20
     },
     basketBarContentHolder: {
         flex: 4,
@@ -75,9 +124,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     basketBarContentImgHolder: {
-        height: 32,
-        width: 32,
-        marginLeft: 15,
     },
     basketBarContentImg: {
         flex: 1,
@@ -85,12 +131,10 @@ const styles = StyleSheet.create({
         height: null
     },
     basketBarContentText: {
-        opacity: 1,
         fontSize: 18,
         paddingLeft: 10
     },
     basketBarContentIcon: {
-        opacity: 1,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-around'
