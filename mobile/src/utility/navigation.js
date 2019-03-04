@@ -136,6 +136,41 @@ const setViewDrinks = (componentId, menuName) => {
     })
 };
 
+const setViewBasket = (componentId, basketName) => {
+    Navigation.push(componentId, {
+        component: {
+            name: screens.ViewBasket,
+            passProps: {
+                authState: basketName
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: basketName,
+                    }
+                }
+            }
+        }
+    })
+};
+
+const setViewBasketSettings = (image2) => {
+    Navigation.setDefaultOptions({
+        topBar: {
+            visible: true,
+            barStyle: 'black',
+            rightButtons: [
+            {
+                id: 'profileButton',
+                icon: image2,
+                color: colours.white
+            }
+        ]
+    }
+    });
+};
+
 const setViewDrinksSettings = (image2) => {
     Navigation.setDefaultOptions({
         topBar: {
@@ -183,5 +218,5 @@ const setLoginScreen = (componentId, authType) => {
 
 
 export {
-    setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, 
+    setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, 
 }

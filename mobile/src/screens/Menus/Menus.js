@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { setViewDrinks, setViewDrinksSettings } from "../../utility/navigation";
 import * as colours from "../../styles/colourScheme";
+import * as fontWeight from "../../styles/fontStyles";
 import { Navigation } from "react-native-navigation";
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -102,7 +103,7 @@ class ViewMenus extends Component {
                     // resizeMode="cover"
                     source={beers}
                   />
-                  <Text style={styles.name}>{rowData}</Text>
+                  <Text style={styles.menuName}>{rowData}</Text>
               </Card>
             </TouchableOpacity>
           );
@@ -115,6 +116,11 @@ class ViewMenus extends Component {
 }
 
 const styles = StyleSheet.create({
+  menuName:{
+    textAlign: 'center',
+    fontWeight: fontWeight.bold,
+    fontSize: 32
+  },
   logoHeader: {
     height: Dimensions.get("window").height / 4,
     width: Dimensions.get("window").width,

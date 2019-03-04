@@ -3,17 +3,25 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ScrollView
+  ScrollView,
+  Platform
 } from "react-native";
 import { connect } from "react-redux";
 import ScrollableTabView, {
   DefaultTabBar
 } from "react-native-scrollable-tab-view";
+import { setViewBasket,setViewBasketSettings } from "../../utility/navigation";
+import IonicIcon from "react-native-vector-icons/Ionicons";
 import * as actions from "../../store/actions/index";
-
+import { Navigation } from "react-native-navigation";
 import TabScreen2 from "./TabScreens/TabScreen2";
 
 class ViewDrinks extends Component {
+
+  constructor(props) {
+    super(props);
+    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+  }
 
   state = {
     search: "",
@@ -22,6 +30,23 @@ class ViewDrinks extends Component {
     drinksApi: false
   };
 
+  navigationButtonPressed({ buttonId }) {
+    if (buttonId === "profileButton") {
+      Promise.all([
+        IonicIcon.getImageSource(
+          Platform.OS === "android" ? "md-menu" : "ios-menu",
+          30
+        ),
+        IonicIcon.getImageSource(
+          Platform.OS === "android" ? "md-person" : "ios-person",
+          30
+        )
+      ]).then(sources => {
+        setViewBasketSettings(sources[1]);
+        setViewBasket(this.props.componentId, "Basket");
+      });
+  }
+  }
   componentDidMount() {
     // get categories dynamically
     this.props.onFetchDrinkCategories();
