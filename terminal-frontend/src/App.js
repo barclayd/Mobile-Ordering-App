@@ -34,6 +34,7 @@ export default class App extends Component {
           id: "ALVR",
           orderDate: new Date(),
           customerID: 42,
+          staffMemberID: 4,
           orderItems: [],
           orderState: OrderState.AWAITING_COLLECTION
         },
@@ -41,6 +42,7 @@ export default class App extends Component {
           id: "KHVD",
           orderDate: new Date(),
           customerID: 13,
+          staffMemberID: 6,
           orderItems: [],
           orderState: OrderState.AWAITING_COLLECTION
         },
@@ -272,6 +274,11 @@ export default class App extends Component {
       })
     })
   }
+  
+  getStaffMemberFullName = (staffID) => {
+    let staffMember = this.state.staffMembers.find(x => x.id === staffID)
+    return staffMember.firstName + " " + staffMember.surname;
+  }
 
   handleScan = (data) => {
     if (data) {
@@ -463,7 +470,6 @@ export default class App extends Component {
           </div>
 
           <h1>AWAITING COLLECTION ({ this.state.awaitingOrders.length }):</h1>
-          
           <div className="ordersContainer">
             {
               this.state.awaitingOrders.map((orderIndex) => {
@@ -471,6 +477,7 @@ export default class App extends Component {
                 return (
                   <div key={orderData.id} className="orderContainer">
                     <h2>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h2>
+                    <h5>Made by { this.getStaffMemberFullName(orderData.staffMemberID) }</h5>
                     <div className="orderButtonsContainer">
                       <button className="orderButton">
                         <span className="icon notReady"></span>
