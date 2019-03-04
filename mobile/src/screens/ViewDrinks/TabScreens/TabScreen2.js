@@ -14,7 +14,7 @@ import * as colours from "../../../styles/colourScheme";
 import barImage from "../../../assets/barConfetti.jpg";
 import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/OverlayComponent";
 
-class TabScreen2 extends Component {
+export default class TabScreen2 extends Component {
   state = {
     isVisible: false,
     menus: [
@@ -49,23 +49,17 @@ class TabScreen2 extends Component {
         description: "201 kcal. 5.0%. 2.8 Units"
       }
     ],
-    drinks: []
+    drinks: [],
+    category: ""
   };
 
-  componentDidMount() {
-    this.props.findDrinks(this.props.category, this.props.componentId);
-  }
 
-  componentWillReceiveProps(nextProps) {
-    console.log("props received in TabScreen2 as :", nextProps);
-    if (!nextProps.loading) {
 
-      this.setState({
-        drinks: nextProps.data,
-        drinksApi: true
-      })
-    }
-  }
+  // getDrinks() {
+  //   console.log("this.props.category",this.props.category)
+  //   this.props.findDrinks(this.state.category, this.props.componentId);
+  // }
+  
 
   componentDidUpdate() {
     console.log("tab Screen 2 updated print State ::", this.state);
@@ -86,7 +80,8 @@ class TabScreen2 extends Component {
   render() {
     return (
       <View>
-        {this.state.drinks.map((u, i) => {
+        <Text>{this.props.category}</Text>
+        {this.props.drinks.map((u, i) => {
           return (
             <TouchableOpacity key={i} onPress={() => this.openOverlay()}>
               <Card>
@@ -155,23 +150,3 @@ const styles = StyleSheet.create({
   },
   contentContainer: {}
 });
-
-
-const mapStateToProps = state => {
-  return {
-    error: state.drink.error,
-    loading: state.drink.loading,
-    data: state.drink.drinks,
-    saved: state.drink.saved
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    findDrinks: (category, componentId) =>
-      dispatch(actions.findDrinks(category, componentId))
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TabScreen2);
