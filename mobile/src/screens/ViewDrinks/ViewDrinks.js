@@ -26,27 +26,13 @@ const theme = {
   SearchBar: {}
 };
 
-class ViewDrinks extends Component {
+export default class ViewDrinks extends Component {
   state = {
     search: "",
     drinks: [],
-    categories: ["Draft Beers", "Cocktails", "Soft Drinks"],
+    categories: ["beers", "Spirits"],
     drinksApi: false
   };
-
-  componentDidMount() {
-    this.props.findDrinks("beers", this.props.componentId);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log("props received in view drinks as :", nextProps);
-    if (!nextProps.loading) {
-      this.setState({
-        drinks: nextProps.data,
-        drinksApi: true
-      });
-    }
-  }
 
   componentDidUpdate() {
     console.log("state view drinks", this.state);
@@ -65,7 +51,6 @@ class ViewDrinks extends Component {
               <TabScreen2
                 key={categories}
                 tabLabel="React"
-                drinks={this.state.drinks}
                 category={categories}
               />
             </ScrollView>
@@ -99,21 +84,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = state => {
-  return {
-    error: state.drink.error,
-    loading: state.drink.loading,
-    data: state.drink.drinks,
-    saved: state.drink.saved
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    findDrinks: (category, componentId) =>
-      dispatch(actions.findDrinks(category, componentId))
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewDrinks);
+
