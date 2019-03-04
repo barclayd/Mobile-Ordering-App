@@ -109,6 +109,8 @@ h5 {
   position: relative; /* Allow close button to position absolute relative to banner */
 
   animation: slidein 0.8s ease-out;
+
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
 }
 @keyframes slidein {
   from { margin-top: -100%; }
