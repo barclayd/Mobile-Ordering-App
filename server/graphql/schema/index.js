@@ -8,7 +8,11 @@ module.exports = buildSchema(`
             password: String
             name: String!
         }
-
+        
+     type Category {
+        category: String!
+     }
+        
     type Drink {
             _id: ID!
             name: String!
@@ -77,6 +81,7 @@ module.exports = buildSchema(`
            findDrinks(category: String!): [Drink!]!
            drinks: [Drink!]!
            findIngredients(name: String!): [Ingredient!]!
+           findDrinkCategories: [Category!]!
         }
         
         type RootMutation {

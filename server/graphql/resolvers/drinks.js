@@ -44,6 +44,20 @@ module.exports = {
             console.log(err);
             throw err;
         }
+    },
+    findDrinkCategories: async () => {
+        try {
+            const foundCategories = await Drink.distinct('category');
+            console.log(foundCategories);
+            return foundCategories.map(category => {
+                return {
+                    category: category
+                }
+            });
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 };
 
