@@ -15,7 +15,9 @@ import ScrollableTabView, {
   DefaultTabBar
 } from "react-native-scrollable-tab-view";
 import * as actions from "../../store/actions/index";
+
 import TabScreen2 from "./TabScreens/TabScreen2";
+
 
 const theme = {
   Button: {
