@@ -48,6 +48,7 @@ export default class App extends Component {
           id: "XHBS",
           orderDate: new Date(),
           customerID: 93,
+          staffMemberID: 0,
           orderItems: [
             {
               id: 1,
@@ -66,6 +67,7 @@ export default class App extends Component {
           id: "ZBNU",
           orderDate: new Date(),
           customerID: 93,
+          staffMemberID: 1,
           orderItems: [
             {
               id: 672,
@@ -494,6 +496,10 @@ export default class App extends Component {
             {
                 this.state.inProgressOrders.map((orderIndex) => {
                   const orderData = this.state.orders[orderIndex];
+
+                  // Only show pending orders belonging to the current staff member
+                  if (orderData.staffMemberID !== this.state.selectedStaffMember) return null;
+
                   return (
                     <div key={orderData.id} className="orderContainer in-progress">
 
