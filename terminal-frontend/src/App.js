@@ -422,7 +422,7 @@ export default class App extends Component {
                 <br />
                 <span className="description">{notificationData.description}</span>
               </div>
-              <div className="closeButton" onClick={()=> {
+              <div className="closeButton noselect" onClick={()=> {
                 notificationData.isDismissed = true;
                 this.loadNotificationsJSX()
               }}>??</div>
