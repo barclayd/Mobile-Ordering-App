@@ -1,3 +1,50 @@
 .popup-children-container > div > .orderList > li {
   font-size: 32px;
+  margin-top: 3px;
+}
+
+.popup.billingOptions > div > div > .popup-children-container > .indentedContent > .orderList > li:last-child {
+  border-bottom: 3px dashed grey;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.orderList > li > .item {
+  width: 500px;
+  display: inline-block;
+}
+
+.orderList > li > .price {
+  border-left: 3px dashed grey;
+  padding-left: 5px;
+  position: relative;
+}
+.orderList > li:last-child > .price:before {
+  content: " ";
+
+  display: block;
+  width: 0;
+  height: 33px;
+  border-left: 3px dashed grey;
+
+  position: absolute;
+  top: 46px;
+  left: -3px;
+}
+
+.billingTotal {
+  margin-left: 490px;
+}
+
+.billingTotal .totalText {
+  padding-right: 14px;
+  color: grey;
+}
+
+.billingTotal .totalAmount {
+  margin-left: 9px;
+}
+
+div.popup.billingOptions > div > div > div.popup-children-container > div.indentedContent > .orderList {
+  margin-bottom: 0;
 }
