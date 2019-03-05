@@ -30,6 +30,8 @@
   flex-direction: column;
   position: relative;
   animation: fadein 0.3s ease-out;
+
+  overflow-y: auto /* Show vertical scrollbar when required */
 }
 @keyframes fadein {
   from { opacity: 0; }

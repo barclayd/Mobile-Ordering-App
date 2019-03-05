@@ -11,6 +11,8 @@ import NotesIcon from "./notes.svg"
 import './App.css'
 import QrReader from "react-qr-reader"
 import PickupPopupWindow from './components/pickup-popup-window/pickup-popup-window';
+import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
+import MultiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
 
 const OrderState = {
   AWAITING_COLLECTION: 0, 
@@ -19,7 +21,6 @@ const OrderState = {
 };
 
 // Settings:
-const itemsPerOrderListColumn = 4; // How many order items show per column
 const notificationDuration = 7000; // How long notifications stay on-screen (miliseconds)
 const qrDelay = 300; // How fast to scan for QR codes (more info: https://www.npmjs.com/package/react-qr-reader)
 const validScanCooldown = 3000; // Delay before accepting more QR codes after a valid scan (blocks notification scan)
@@ -104,21 +105,79 @@ export default class App extends Component {
           id: "ACBS",
           orderDate: new Date(),
           customerID: 93,
-          orderItems: [],
+          orderItems: [
+            {
+              id: 672,
+              name: "VK Red",
+              quantity: 1,
+            },
+            {
+              id: 122,
+              name: "Jager bomb",
+              quantity: 5,
+            },
+            {
+              id: 484,
+              name: "Mojito",
+              quantity: 1,
+            },
+            {
+              id: 1023,
+              name: "Bottled water",
+              quantity: 2,
+            },
+            {
+              id: 67,
+              name: "Jumba juice cocktail",
+              quantity: 1,
+            }
+          ],
           orderState: OrderState.PENDING
         },
         {
           id: "PPLC",
           orderDate: new Date(),
           customerID: 93,
-          orderItems: [],
+          orderItems: [
+            {
+              id: 672,
+              name: "VK Red",
+              quantity: 1,
+            },
+            {
+              id: 122,
+              name: "Jager bomb",
+              quantity: 5,
+            },
+            {
+              id: 484,
+              name: "Mojito",
+              quantity: 1,
+            },
+            {
+              id: 1023,
+              name: "Bottled water",
+              quantity: 2,
+            },
+            {
+              id: 67,
+              name: "Jumba juice cocktail",
+              quantity: 1,
+            }
+          ],
           orderState: OrderState.PENDING
         },
         {
           id: "AHBS",
           orderDate: new Date(),
           customerID: 93,
-          orderItems: [],
+          orderItems: [
+            {
+              id: 672,
+              name: "VK Red",
+              quantity: 1,
+            }
+          ],
           orderState: OrderState.PENDING
         }
       ],
@@ -220,31 +279,31 @@ export default class App extends Component {
       lastNotificationID: 0,
 
       selectedStaffMember: 1,
-      awaitingOrders: [],
-      inProgressOrders: [],
+      awaitingOrdersIndexes: [],
+      inProgressOrdersIndexes: [],
       pendingOrders: [],
 
       lastValidScan: 0,
       qrResult: "No result",
     }
 
-    let awaitingOrders=[], inProgressOrders=[], pendingOrders=[];
+    let awaitingOrdersIndexes=[], inProgressOrdersIndexes=[], pendingOrders=[];
     for (let orderIndex in this.state.orders) {
       let order = this.state.orders[orderIndex];
       switch (order.orderState) {
         case OrderState.AWAITING_COLLECTION:
-          awaitingOrders.push(orderIndex);
+          awaitingOrdersIndexes.push(orderIndex);
           break;
         case OrderState.IN_PROGRESS:
-          inProgressOrders.push(orderIndex);
+          inProgressOrdersIndexes.push(orderIndex);
           break;
         default:
-          pendingOrders.push(orderIndex);
+          pendingOrders.push(order);
       }
     }
     
-    this.state.awaitingOrders = awaitingOrders;
-    this.state.inProgressOrders = inProgressOrders;
+    this.state.awaitingOrdersIndexes = awaitingOrdersIndexes;
+    this.state.inProgressOrdersIndexes = inProgressOrdersIndexes;
     this.state.pendingOrders = pendingOrders;
   }
 
@@ -337,41 +396,6 @@ export default class App extends Component {
       }
     } else {
       this.addNotification("error", "Order not found", "No order with code " + orderID + " exists!")
-    }
-  }
-
-  renderListItems = (items) => {
-    return items.map((itemData) => {
-      return (
-        <li key={itemData.id}><span className="quantity">{itemData.quantity}x</span>{itemData.name}</li>
-      );
-    })
-  }
-
-  renderMultiColumItemList = (items) => {
-    if (items.length > itemsPerOrderListColumn) {
-      const columnCount = Math.floor(items.length / itemsPerOrderListColumn) + 1; // Calculate how many columns are needed
-      let columns = []; // Array of arrays of rows
-
-      // Build columns array
-      for (let i=0; i < columnCount; i++) {
-        let startIndex = i*itemsPerOrderListColumn
-        columns.push(items.slice(startIndex, startIndex + itemsPerOrderListColumn));
-      }
-
-      // Loop through columns, creating each a UL and spawning LI inside
-      let i = -1; // Counter used for key
-      return columns.map((columnData) => {
-        i++;
-        return(
-          <ul key={i} className="orderList multiColumn">
-            { this.renderListItems(columnData) }
-          </ul>
-        )
-      });
-
-    } else {
-      return <ul className="orderList">{ this.renderListItems(items) }</ul>
     }
   }
 
@@ -471,10 +495,10 @@ export default class App extends Component {
             <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
           </div>
 
-          <h1>AWAITING COLLECTION ({ this.state.awaitingOrders.length }):</h1>
+          <h1>AWAITING COLLECTION ({ this.state.awaitingOrdersIndexes.length }):</h1>
           <div className="ordersContainer">
             {
-              this.state.awaitingOrders.map((orderIndex) => {
+              this.state.awaitingOrdersIndexes.map((orderIndex) => {
                 const orderData = this.state.orders[orderIndex];
                 return (
                   <div key={orderData.id} className="orderContainer">
@@ -500,10 +524,10 @@ export default class App extends Component {
             }
           </div>
 
-          <h1>YOUR IN-PROGRESS ({this.state.inProgressOrders.length}):</h1>
+          <h1>YOUR IN-PROGRESS ({this.state.inProgressOrdersIndexes.length}):</h1>
           <div className="ordersContainer">
             {
-                this.state.inProgressOrders.map((orderIndex) => {
+                this.state.inProgressOrdersIndexes.map((orderIndex) => {
                   const orderData = this.state.orders[orderIndex];
 
                   // Only show pending orders belonging to the current staff member
@@ -512,7 +536,7 @@ export default class App extends Component {
                   return (
                     <div key={orderData.id} className="orderContainer in-progress">
 
-                      { this.renderMultiColumItemList(orderData.orderItems) }
+                      <MultiColumnItemList orderItems={orderData.orderItems} />
 
                       <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
 
@@ -556,7 +580,7 @@ export default class App extends Component {
               </span>
             </button>
 
-            <button className="pendingOrderButton">
+            <button onClick={this.state.showUpcoming} className="pendingOrderButton">
               <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
               <span className="title">View upcoming</span>
               <br />
@@ -573,6 +597,7 @@ export default class App extends Component {
           <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
           <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
           <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
+          <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
           
           { this.state.notificationsJSX }
 
