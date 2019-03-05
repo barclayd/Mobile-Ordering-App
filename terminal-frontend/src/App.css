@@ -20,7 +20,7 @@ html {
 /* Heading stylings: */
 h1, h2 { text-transform: uppercase; }
 h1 { color: #868686; margin: 45px 0 8px; }
-h2 { margin: 22px 0 23px 0px; color: white; }
+h2 { margin: 13px 0 32px 0px; color: white; }
 h3 {
   color: #999999;
   position: absolute;
@@ -35,7 +35,16 @@ h4 {
   font-size: 20px;
   margin-top: 9px;
 }
+h5 {
+    margin: 0;
+    
+    font-size: 14px;
+    color: #8b9799;
 
+    position: absolute;
+    bottom: 15px;
+    left: 19px;
+}
 
 
 
@@ -43,7 +52,7 @@ h4 {
   /* Only show buttons that can fit onscreen: */
   overflow: hidden;
   max-height: 36px;
-  margin-right: 200px;
+  margin-right: 570px;
 }
 #accountsHotbar button {
   margin-right: 15px; /* Space account quick-switch buttons */
@@ -98,7 +107,16 @@ h4 {
 
   overflow: hidden;
   position: relative; /* Allow close button to position absolute relative to banner */
+
+  animation: slidein 0.8s ease-out;
+
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
 }
+@keyframes slidein {
+  from { margin-top: -100%; }
+  to   { margin-top: 0%; }
+}
+
 .closeButton {
   position: absolute;
   top: 0;
@@ -206,10 +224,12 @@ button.orderButton {
   border: none;
   background: #583D5F;
   border-radius: 20px;
-  width: 220px;
+  width: 209px;
   height: auto;
   margin: 7px;
-  padding: 11px 9px;
+  padding: 11px 20px 11px 54px;
+  width: auto;
+  position: relative;
 }
 button.orderButton .icon {
   background: #868686;
@@ -220,6 +240,11 @@ button.orderButton .icon {
   width: 47px;
   height: 47px;
   margin-top: -3px;
+
+  position: absolute;
+  left: 7px;
+  
+  color: rgba(30,30,30, 0.9)
 }
 button.orderButton .icon::after {
   content: "•••";
@@ -248,12 +273,42 @@ button.orderButton .icon.notReady::after {
 }
 button.orderButton .icon.notInProgress { background: #862D2D; }
 button.orderButton .icon.notInProgress::after {
-  content: "~";
+  content: "✘";
   letter-spacing: normal;
   left: auto;
-  top: 2px;
-  font-size: 40px;
+  top: 4px;
 }
+button.orderButton .icon.refund { background: #4286f4; }
+button.orderButton .icon.refund::after {
+  content: "£";
+  letter-spacing: normal;
+  left: auto;
+  top: 6px;
+  font-size: 32px;
+}
+button.orderButton .icon.outOfStock {
+  background: #ff9d1c;
+  letter-spacing: normal;
+  line-height: 48px;
+  font-size: 27px;
+}
+button.orderButton .icon.outOfStock::after { content: "" }
+
+button.orderButton .icon.complete {
+  background: #2bc72b;
+  letter-spacing: normal;
+  line-height: 48px;
+  font-size: 27px;
+}
+button.orderButton .icon.complete::after { content: "" }
+
+button.orderButton .icon.delete {
+  background: #862D2D;
+  letter-spacing: normal;
+  line-height: 50px;
+  font-size: 27px;
+}
+button.orderButton .icon.delete::after { content: "" }
 
 button.orderButton .title, button.orderButton .subtitle {
   float: left;
@@ -313,7 +368,7 @@ button.orderButton .subtitle {
 
 .pendingOrderButton .title { font-size: 26px; }
 .pendingOrderButton .subtitle {
-  color: #BCBCBC;
+  color: #d4d4d4;
   font-weight: normal;
   font-size: 17px;
 }

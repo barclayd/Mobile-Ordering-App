@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
 import PopupWindow from '../popup-window/popup-window'
+import TicketMockup from "../../screenshot-mockup.png"
 
 export default class ManualPickupPopupWindow extends React.Component {
     constructor(props) {
@@ -30,13 +31,18 @@ export default class ManualPickupPopupWindow extends React.Component {
                     showFunc={this.props.showFunc}
                     closePopup={this.state.closePopup}
             >
-                <input stlye="text-transform: uppercase" onChange={this.handleChange}/>
-                <button onClick={() => {
+                <form className="manualEnterContainer" onSubmit={(e) => {
                     this.setState({closePopup: true}, () => {
                         this.setState({closePopup: null})
                         this.props.pickupOrderFunc(this.state.orderID)
                     })
-                }}>Submit</button>
+                    e.preventDefault();
+                }}>
+                    <input autoFocus={true} type="text" placeholder="enter code..." stlye="text-transform: uppercase" onChange={this.handleChange}/>
+                    <br />
+                    <button type="submit">Show collection screen</button>
+                    <img id="ticketPicture" alt="Ticket preview" src={TicketMockup}/>
+                </form>
             </PopupWindow>
         )
     }
