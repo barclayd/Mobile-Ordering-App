@@ -30,8 +30,6 @@
   flex-direction: column;
   position: relative;
   animation: fadein 0.3s ease-out;
-
-  overflow-y: auto /* Show vertical scrollbar when required */
 }
 @keyframes fadein {
   from { opacity: 0; }
@@ -75,6 +73,9 @@
 
 .popup-children-container {
   font-size: 28px;
+  overflow-y: auto; /* Show vertical scrollbar when required */
+  padding-right: 5px;
+  margin-bottom: 20px;
 }
 
 .popup-children-container > h1 {
