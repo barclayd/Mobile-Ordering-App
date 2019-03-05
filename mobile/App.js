@@ -12,6 +12,7 @@ import createSagaMiddleware from 'redux-saga';
 import {watchAuth, watchBar, watchDrinks} from './src/store/sagas/index';
 import ViewMenus from './src/screens/Menus/Menus';
 import ViewBasket from './src/screens/ViewBasket/ViewBasket';
+import ViewCheckout from './src/screens/Checkout/Checkout';
 const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore(sagaMiddleware);
@@ -27,7 +28,7 @@ Navigation.registerComponentWithRedux(screens.ViewDrinksScreen, () => ViewDrinks
 Navigation.registerComponentWithRedux(screens.SideDrawer, () => SideDrawer, Provider, store);
 Navigation.registerComponentWithRedux(screens.Settings, () => Settings, Provider, store);
 Navigation.registerComponentWithRedux(screens.ViewMenus, () => ViewMenus, Provider, store);
-Navigation.registerComponentWithRedux(screens.ViewBasket, () => ViewBasket, Provider, store);
+Navigation.registerComponentWithRedux(screens.ViewCheckout, () => ViewCheckout, Provider, store);
 
 Navigation.events().registerAppLaunchedListener(() => {
   setDefaultSettings();

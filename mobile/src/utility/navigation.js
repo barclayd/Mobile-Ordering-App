@@ -139,7 +139,7 @@ const setViewDrinks = (componentId, menuName) => {
 const setViewBasket = (componentId, basketName) => {
     Navigation.push(componentId, {
         component: {
-            name: screens.ViewBasket,
+            name: screens.ViewCheckout,
             passProps: {
                 authState: basketName
             },
@@ -218,5 +218,5 @@ const setLoginScreen = (componentId, authType) => {
 
 
 export {
-    setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, 
+    setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
 }
