@@ -21,7 +21,8 @@ const OrderState = {
 };
 
 // Settings:
-const notificationDuration = 7000; // How long notifications stay on-screen (miliseconds)
+const itemsPerOrderListColumn = 4; // How many order items show per column
+const notificationDuration = 8000; // How long notifications stay on-screen (miliseconds)
 const qrDelay = 300; // How fast to scan for QR codes (more info: https://www.npmjs.com/package/react-qr-reader)
 const validScanCooldown = 3000; // Delay before accepting more QR codes after a valid scan (blocks notification scan)
 
