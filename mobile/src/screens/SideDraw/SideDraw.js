@@ -19,6 +19,9 @@ class SideDrawer extends Component {
             <View style={[styles.container, {
                 width: Dimensions.get("window").width * 0.95
             }]}>
+            <View style={[styles.drawItem, styles.header]}>
+            <Text style={styles.text} >Account</Text>
+            </View>
                 <TouchableOpacity onPress={() => this.logoutHandler()}>
                     <View style={styles.drawItem}>
                         <Icon size={30} color='#fff' name={Platform.OS === 'android' ? "md-log-out" : "ios-log-out"} style={styles.drawItemIcon} />
@@ -32,6 +35,11 @@ class SideDrawer extends Component {
 }
 
 const styles = StyleSheet.create({
+    header: {
+        borderBottomWidth: 2,
+        borderBottomColor: colours.cream,
+
+    },
     container: {
         paddingTop: 30,
         backgroundColor: colours.midnightBlack,
@@ -44,7 +52,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         padding: 20,
-        marginTop: 20
+        marginTop: 20,
     },
     text: {
         color: colours.cream,

@@ -18,6 +18,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
 import beers from "../../assets/beers.jpg";
 import logo from "../../assets/taflogo.png";
+import LinearGradient from "react-native-linear-gradient";
 
 const theme = {
   Button: {
@@ -88,45 +89,62 @@ class ViewMenus extends Component {
     return (
       <View style={styles.background}>
         <View style={styles.logoHeader}>
-          <Image style={styles.logo} resizeMode={'contain'} source={logo} />
+          <Image style={styles.logo} resizeMode={"contain"} source={logo} />
         </View>
-        <FlatList
-        horizontal
-        ItemSeparatorComponent={() => <View style={{width: 5}}/>}
-        data={this.state.categories}
-        renderItem={({ item: rowData }) => {
-          return (
-            <TouchableOpacity key={rowData} onPress={() => this.navigateToViewDrinks()}>
-              <Card title={null} style={styles.card}>
-                  <Image
-                    style={styles.image}
-                    // resizeMode="cover"
-                    source={beers}
-                  />
-                  <Text style={styles.menuName}>{rowData}</Text>
-              </Card>
-            </TouchableOpacity>
-          );
-        }}
-        keyExtractor={(item, index) => index}
-      />
+        {/* <LinearGradient
+          colors={["black", colours.orange]}
+          style={styles.linearGradient}
+        > */}
+          <View style={styles.view}>
+            <FlatList
+              horizontal
+              ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+              data={this.state.categories}
+              renderItem={({ item: rowData }) => {
+                return (
+                  <TouchableOpacity
+                    key={rowData}
+                    onPress={() => this.navigateToViewDrinks()}
+                  >
+                    {/* <Card title={null} style={styles.card}> */}
+                      <Image
+                        style={styles.image}
+                        // resizeMode="cover"
+                        source={beers}
+                      />
+                      <Text style={styles.menuName}>{rowData}</Text>
+                    {/* </Card> */}
+                  </TouchableOpacity>
+                );
+              }}
+              keyExtractor={(item, index) => index}
+            />
+          </View>
+        {/* </LinearGradient> */}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  menuName:{
-    textAlign: 'center',
+  view: {
+    height: (Dimensions.get("window").height * 3) / 4,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 5
+  },
+  menuName: {
+    textAlign: "center",
     fontWeight: fontWeight.bold,
+    color: colours.midnightBlack,
     fontSize: 32
   },
   logoHeader: {
     height: Dimensions.get("window").height / 4,
     width: Dimensions.get("window").width,
     backgroundColor: "black",
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   background: {
     backgroundColor: "white",
@@ -142,18 +160,20 @@ const styles = StyleSheet.create({
     fontSize: 32
   },
   logo: {
-    height: Dimensions.get("window").height/4,
-    width: Dimensions.get("window").width/1.1,
-
+    height: Dimensions.get("window").height / 4,
+    width: Dimensions.get("window").width / 1.1
   },
-  image:{
+  image: {
     width: Dimensions.get("window").width / 1.5,
-    height: Dimensions.get("window").height / 4
+    height: Dimensions.get("window").height / 3,
+    marginTop: 20,
   },
   card: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    height: Dimensions.get("window").height / 2.5,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colours.cream
+  }
 });
 
 export default ViewMenus;
