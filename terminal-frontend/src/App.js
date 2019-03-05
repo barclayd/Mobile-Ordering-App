@@ -425,7 +425,7 @@ export default class App extends Component {
               <div className="closeButton noselect" onClick={()=> {
                 notificationData.isDismissed = true;
                 this.loadNotificationsJSX()
-              }}>??</div>
+              }}>&#x2716;</div>
             </div>
           )
         })
