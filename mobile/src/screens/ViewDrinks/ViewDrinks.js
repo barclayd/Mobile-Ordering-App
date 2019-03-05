@@ -42,7 +42,7 @@ class ViewDrinks extends Component {
         )
       ]).then(sources => {
         setViewBasketSettings(sources[1]);
-        setViewBasket(this.props.componentId, "Basket");
+        setViewBasket(this.props.componentId, "Checkout");
       });
     }
   }
@@ -50,7 +50,7 @@ class ViewDrinks extends Component {
     // get categories dynamically
     this.props.onFetchDrinkCategories();
     this.props.findAllDrinks();
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     console.log(nextProps);
@@ -63,7 +63,7 @@ class ViewDrinks extends Component {
     }
   }
 
-  getDrinksByCategory = id => {
+  getDrinksByCategory = (id) => {
     const categoryName = this.state.categories[id];
     console.log(categoryName);
     return this.state.drinks.filter(drink => drink.category === categoryName);
@@ -133,13 +133,10 @@ const mapDispatchToProps = dispatch => {
   return {
     onFetchDrinkCategories: () => dispatch(actions.findDrinkCategories()),
     findDrinks: (category, componentId) =>
-      dispatch(actions.findDrinks(category, componentId)),
-    findAllDrinks: componentId =>
-      dispatch(actions.findDrinks(null, componentId))
+        dispatch(actions.findDrinks(category, componentId)),
+    findAllDrinks: (componentId) => dispatch(actions.findDrinks(null, componentId))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewDrinks);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewDrinks);
+
