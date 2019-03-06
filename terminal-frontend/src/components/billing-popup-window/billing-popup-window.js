@@ -25,7 +25,7 @@ export default class BillingPopupWindow extends React.Component {
     render () {
         return (
             <PopupWindow
-                    className="billingOptions"
+                    className="billingOptionsPopup"
                     title={this.buildTitle(this.props.order)}
                     subtitle={this.buildSubtitle(this.props.order)}
                     showCloseButton={true}

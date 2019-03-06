@@ -1,9 +1,9 @@
-.popup-children-container > div > .orderList > li {
+.billingOptionsPopup > div > .orderList > li {
   font-size: 32px;
   margin-top: 3px;
 }
 
-.popup.billingOptions > div > div > .popup-children-container > .indentedContent > .orderList > li:last-child {
+.billingOptionsPopup > .indentedContent > .orderList > li:last-child {
   border-bottom: 3px dashed grey;
   display: inline-block;
   padding-bottom: 4px;
@@ -45,6 +45,6 @@
   margin-left: 9px;
 }
 
-div.popup.billingOptions > div > div > div.popup-children-container > div.indentedContent > .orderList {
+.billingOptionsPopup > div.indentedContent > .orderList {
   margin-bottom: 0;
 }
