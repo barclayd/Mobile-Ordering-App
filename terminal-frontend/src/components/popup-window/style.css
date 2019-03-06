@@ -75,7 +75,7 @@
   font-size: 28px;
   overflow-y: auto; /* Show vertical scrollbar when required */
   padding-right: 5px;
-  margin-bottom: 20px;
+  max-height: 550px;
 }
 
 .popup-children-container > h1 {
@@ -112,4 +112,32 @@
   position: absolute;
   left: 0;
   bottom: 20px;
+}
+
+
+
+
+.popup-scroll-area {
+  position: relative;
+}
+
+
+
+.scrollShadow {
+  content: "";
+  z-index: 1;
+  position: absolute;
+  left: -15px; /* webkit scrollbar width */
+  height: 25px;
+  width: 100%;
+}
+
+.topShadow {
+  top: 0;
+  background-image: linear-gradient(to bottom, #211624, #211624, rgba(0,0,0,0));
+}
+
+.bottomShadow {
+  bottom: 0;
+  background-image: linear-gradient(to top, #211624, #211624, rgba(0,0,0,0));
 }
