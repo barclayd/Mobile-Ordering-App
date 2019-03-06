@@ -8,7 +8,7 @@ export default class SwitchAccountsPopupWindow extends React.Component {
     render () {
         return (
             <PopupWindow
-                    className="switchAccounts"
+                    className="switchAccountsPopup"
                     title="Switch account:"
                     subtitle={<span>Select your username to add to the hotbar</span>}
                     showCloseButton={true}

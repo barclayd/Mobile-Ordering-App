@@ -1,0 +1,9 @@
+
+.upcomingOrdersPopup > div > div > .orderList {
+    margin-bottom: 15px; /* disables bottom margin for order lists in orders without order buttons */
+
+}
+
+.upcomingOrdersPopup > div > .orderContainer.in-progress {
+    min-height: 0;
+}

@@ -41,14 +41,6 @@ export default class PopupWindow extends React.Component {
     }
   }
 
-  getClassName = () => {
-    if (this.props.className) {
-      return 'popup ' + this.props.className;
-    } else {
-      return 'popup';
-    }
-  }
-
   renderCloseButton = (shouldShow) => {
     if (shouldShow) {
         return (
@@ -67,14 +59,14 @@ export default class PopupWindow extends React.Component {
   render () {
     if (this.state.visible)
       return (
-        <div className={this.getClassName()}>
+        <div className="popup">
             <div className='popup-overlay' onClick={this.overlayClick}>
                 <div className='popup-container'>
                     { this.renderCloseButton(this.props.showCloseButton) }
 
                     <h1 className="popup-title">{this.props.title}</h1>
                     <h2 className="popup-subtitle">{this.props.subtitle}</h2>
-                    <div className="popup-children-container">
+                    <div className={"popup-children-container " + this.props.className}>
                       { this.props.children }
                     </div>
                 </div>

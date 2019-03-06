@@ -9,7 +9,7 @@ export default class UpcomingPopupWindow extends React.Component {
     render () {
         return (
             <PopupWindow
-                    className="upcomingOrders"
+                    className="upcomingOrdersPopup"
                     title={"Upcoming orders:"}
                     subtitle={(
                         <span>

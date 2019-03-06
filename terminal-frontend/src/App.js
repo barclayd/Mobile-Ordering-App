@@ -179,7 +179,48 @@ export default class App extends Component {
             }
           ],
           orderState: OrderState.PENDING
-        }
+        },
+        {
+          id: "LJPN",
+          orderDate: new Date(),
+          customerID: 93,
+          orderItems: [
+            {
+              id: 672,
+              name: "Jager bomb",
+              quantity: 4,
+            }
+          ],
+          orderState: OrderState.PENDING
+        },
+        {
+          id: "GVAQ",
+          orderDate: new Date(),
+          customerID: 92,
+          orderItems: [
+            {
+              id: 672,
+              name: "VK Red",
+              quantity: 1,
+            },
+            {
+              id: 122,
+              name: "Jager bomb",
+              quantity: 5,
+            },
+            {
+              id: 484,
+              name: "Mojito",
+              quantity: 1,
+            },
+            {
+              id: 1023,
+              name: "Bottled water",
+              quantity: 2,
+            }
+          ],
+          orderState: OrderState.PENDING
+        },
       ],
 
       staffMembers: [
