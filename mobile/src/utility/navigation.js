@@ -11,6 +11,7 @@ const setDefaultSettings = () => {
             style: "light"
         },
         sideMenu: {
+            openGestureMode: 'bezel',
             left: {
                 visible: false,
                 enabled: false
@@ -64,13 +65,15 @@ const setWelcomePageRoot = () => {
 const setMainAppSettings = (image1, image2) => {
     Navigation.setDefaultOptions({
         sideMenu: {
+            openGestureMode: 'bezel',
             left: {
                 enabled: true,
-                visible: true
+                visible: true,
             },
             right: {
                 visible: true,
-                enabled: true
+                enabled: true,
+                disableOpenGesture: false
             }
         },
         statusBar: {
@@ -143,14 +146,25 @@ const setViewBasket = (componentId, basketName) => {
             passProps: {
                 authState: basketName
             },
-            options: {
-                topBar: {
-                    visible: true,
-                    title: {
-                        text: basketName,
-                    }
+            sideMenu: {
+                openGestureMode: 'bezel',
+                left: {
+                    enabled: false,
+                    visible: false
+                },
+                right: {
+                    visible: false,
+                    enabled: false
                 }
             }
+            // options: {
+            //     topBar: {
+            //         visible: true,
+            //         title: {
+            //             text: basketName,
+            //         }
+            //     }
+            // }
         }
     })
 };
@@ -158,15 +172,15 @@ const setViewBasket = (componentId, basketName) => {
 const setViewBasketSettings = (image2) => {
     Navigation.setDefaultOptions({
         topBar: {
-            visible: true,
-            barStyle: 'black',
-            rightButtons: [
-            {
-                id: 'profileButton',
-                icon: image2,
-                color: colours.white
-            }
-        ]
+            visible: false,
+        //     barStyle: 'black',
+        //     rightButtons: [
+        //     {
+        //         id: 'profileButton',
+        //         icon: image2,
+        //         color: colours.white
+        //     }
+        // ]
     }
     });
 };
