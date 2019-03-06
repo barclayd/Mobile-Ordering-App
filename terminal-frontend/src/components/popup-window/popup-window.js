@@ -66,8 +66,13 @@ export default class PopupWindow extends React.Component {
 
                     <h1 className="popup-title">{this.props.title}</h1>
                     <h2 className="popup-subtitle">{this.props.subtitle}</h2>
-                    <div className={"popup-children-container " + this.props.className}>
-                      { this.props.children }
+
+                    <div className="popup-scroll-area">
+                      <div className="scrollShadow topShadow"></div>
+                      <div className={"popup-children-container " + this.props.className}>
+                        { this.props.children }
+                      </div>
+                      <div className="scrollShadow bottomShadow"></div>
                     </div>
                 </div>
             </div>

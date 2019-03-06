@@ -7,3 +7,7 @@
 .upcomingOrdersPopup > div > .orderContainer.in-progress {
     min-height: 0;
 }
+
+.upcomingOrdersPopup {
+    position: relative;
+}
