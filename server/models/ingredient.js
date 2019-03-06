@@ -6,10 +6,6 @@ const ingredientSchema = mongoose.Schema({
         required: true,
         unique: true
     },
-    "amount": {
-        type: String,
-        enum: ["shot", "mixer", "small", "medium", "large", "half-pint", "pint"]
-    },
     "allergy": {
         type: String,
         required: false
