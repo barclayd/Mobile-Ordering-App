@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Dimensions, StyleSheet, Button } from "react-native";
+import { View, Text, Dimensions, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { Overlay } from "react-native-elements";
 import { SimpleStepper } from "react-native-simple-stepper";
 import ButtonWithBackground from "../../Buttons/ButtonWithBackground";
@@ -11,13 +11,21 @@ class OverlayComponent extends Component {
   }
   state = {
     value: 1,
-    price: '2.09'
+    price: ""
   };
 
   valueChanged = value => {
     const nextValue = Number(value.toFixed(2));
-    this.setState({ value: nextValue });
+    const price = Number(this.props.drinkDetails.price) * nextValue
+    this.setState({ 
+      value: nextValue ,
+      price: price
+    });
   };
+
+  onPressAddDrinks = (drink, price) => {
+    console.log("adding Drink to DB", drink, price)
+  }
 
   render() {
     // console.log(this.state);
@@ -35,10 +43,12 @@ class OverlayComponent extends Component {
         >
           <View style={styles.overlayCard}>
             <View style={styles.container}>
-              <Text style={styles.title}>Fosters</Text>
+              <Text style={styles.title}>{this.props.drinkDetails.name}</Text>
               <View style={styles.rowContainer}>
                 <View style={styles.pad}>
-                <Text style={styles.item}>Quantitiy x {this.state.value} </Text>
+                  <Text style={styles.item}>
+                    Quantitiy x {this.state.value}{" "}
+                  </Text>
                 </View>
                 <SimpleStepper
                   value={this.state.value}
@@ -50,20 +60,21 @@ class OverlayComponent extends Component {
                 />
               </View>
               <View style={styles.btnContainer}>
-                <Button title='Cancel'
-                  color={colours.darkGrey}
-                  textColor={colours.cream}
-                  // onPress={() => this.onLoginButtonHandler("Login")}
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  onPress={() => onPress()}
                 >
-                </Button>
-                <Button
-                  title={'Add (£2.09)'}
-                  color={colours.darkOrange}
-                  textColor={colours.cream}
-                  // onPress={() => this.onLoginButtonHandler("Sign Up")}
-                >
+                  <Text style={styles.textStyle}>Cancel</Text>
+                </TouchableOpacity>
 
-                </Button>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price)}
+                >
+                  <Text style={styles.textStyle}>Add £{this.state.price}</Text>
+                </TouchableOpacity>
+
+
               </View>
             </View>
           </View>
@@ -73,8 +84,23 @@ class OverlayComponent extends Component {
   }
 }
 const styles = StyleSheet.create({
-  pad:{
-    paddingTop: '2%'
+  textStyle: {
+    fontSize:16,
+	color: colours.midnightBlack,
+	textAlign: 'center'
+  },
+  
+  buttonStyle: {
+  padding:10,
+  marginTop: 10,
+  marginRight: 5,
+	backgroundColor: 'white',
+  borderRadius:5,
+  borderColor: colours.orange,
+  borderWidth: 1,
+  },
+  pad: {
+    paddingTop: "2%"
   },
   overlay: {
     position: "absolute",
@@ -95,24 +121,22 @@ const styles = StyleSheet.create({
   btnContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    paddingTop: '7%'
+    paddingTop: "7%"
   },
   container: {
     flex: 1,
     flexDirection: "column",
-    // backgroundColor: 'red',
-    // justifyContent: 'center',
     alignItems: "center",
     paddingTop: "5%"
   },
   overlayCard: {
-    height: Dimensions.get("window").height / 6,
+    height: Dimensions.get("window").height / 5,
     width: Dimensions.get("window").width / 1.5,
     alignContent: "center"
   },
   title: {
-    fontWeight: "600",
-    fontSize: 16
+    fontWeight: "800",
+    fontSize: 18
   },
   item: {
     fontWeight: "600",
