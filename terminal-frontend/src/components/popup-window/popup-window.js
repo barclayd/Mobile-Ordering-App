@@ -8,6 +8,8 @@ export default class PopupWindow extends React.Component {
     this.state = {
       visible: false
     }
+
+    this.popupChildrenContainer = React.createRef();
   }
   
   ShowPopup = () => {
@@ -32,12 +34,24 @@ export default class PopupWindow extends React.Component {
     this.props.showFunc(this.ShowPopup); // Run func from prop binding this.ShowPopup from this instance to allow parent to call ShowPopup() from state
     document.addEventListener("keydown", this.keyPressed, false);
   }
+
+  handleScroll = (event) => {
+    console.log("Scroll pos: " + this.popupChildrenContainer.current.scrollTop);
+  }
+  
+
   componentWillUnmount () {
     document.removeEventListener("keydown", this.keyPressed, false);
   }
   componentDidUpdate(prevProps) {
     if (this.props.closePopup !== prevProps.closePopup) {
       this.HidePopup()
+    }
+
+    if (this.state.visible) {
+      this.popupChildrenContainer.current.addEventListener("scroll", this.handleScroll);
+    } else if (this.popupChildrenContainer.current) {
+      this.popupChildrenContainer.current.removeEventListener("scroll", this.handleScroll);
     }
   }
 
@@ -69,7 +83,7 @@ export default class PopupWindow extends React.Component {
 
                     <div className="popup-scroll-area">
                       <div className="scrollShadow topShadow"></div>
-                      <div className={"popup-children-container " + this.props.className}>
+                      <div ref={this.popupChildrenContainer} className={"popup-children-container " + this.props.className}>
                         { this.props.children }
                       </div>
                       <div className="scrollShadow bottomShadow"></div>
