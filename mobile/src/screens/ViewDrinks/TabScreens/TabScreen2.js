@@ -14,11 +14,15 @@ import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/Overlay
 class TabScreen2 extends Component {
   state = {
     isVisible: false,
+    drinkSelected: {}
   };
 
-  openOverlay = () => {
+  openOverlay = (i) => {
+    const drinkSelected = this.props.drinks[i];
+    console.log("drinkSelected",drinkSelected);
     this.setState({
-      isVisible: true
+      isVisible: true,
+      drinkSelected: drinkSelected
     });
   };
 
@@ -35,7 +39,7 @@ class TabScreen2 extends Component {
       <View>
         {this.props.drinks.length > 0 ? this.props.drinks.map((u, i) => {
           return (
-            <TouchableOpacity key={i} onPress={() => this.openOverlay()}>
+            <TouchableOpacity key={i} onPress={() => this.openOverlay(i)}>
               <Card>
                 <View style={styles.rowContainer}>
                   <View style={styles.leftContainer}>
@@ -49,6 +53,7 @@ class TabScreen2 extends Component {
           );
         }):null}
         <OverlayComponent
+          drinkDetails={this.state.drinkSelected}
           isVisible={this.state.isVisible}
           onBackdropPress={this.onBackdropPress}
         />
