@@ -17,7 +17,6 @@ module.exports = {
     },
     createIngredient: async (args) => {
         try {
-            console.log("made it");
             const createdIngredient = new Ingredient({
                 name: args.ingredientInput.name,
                 amount: args.ingredientInput.amount,
