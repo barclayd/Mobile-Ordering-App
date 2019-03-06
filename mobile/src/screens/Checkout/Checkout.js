@@ -2,14 +2,15 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, Slider} from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as colours from '../../styles/colourScheme';
-const screenHeight =Dimensions.get('window').height;
-const screenWidth =Dimensions.get('window').width;
+import {connect} from 'react-redux';
 
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 class Checkout extends Component {
 
     componentWillMount() {
-        this.animation = new Animated.ValueXY({x:0, y: screenHeight - 180});
+        this.animation = new Animated.ValueXY({x:0, y: screenHeight - 90});
         this.panResponder = PanResponder.create({
             onMoveShouldSetPanResponder: () => true,
             onPanResponderGrant: (event, gestureState) => {
@@ -39,7 +40,7 @@ class Checkout extends Component {
             transform: this.animation.getTranslateTransform()
         };
 
-       const animatedImageHeight = this.animation.y.interpolate({
+        const animatedImageHeight = this.animation.y.interpolate({
             inputRange: [0, screenHeight-90],
             outputRange: [200, 32],
             extrapolate: 'clamp'
@@ -85,8 +86,8 @@ class Checkout extends Component {
                             </Animated.Text>
                         </View>
                         <Animated.View style={[{opacity: animatedTextOpacity}, styles.basketBarContentIcon]}>
-                                <Icon name="shopping-cart" size={30} color={colours.midnightBlack} />
-                            </Animated.View>
+                            <Icon name="shopping-cart" size={30} color={colours.midnightBlack} />
+                        </Animated.View>
                     </Animated.View>
                 </Animated.View>
             </Animated.View>
@@ -142,4 +143,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Checkout
+export default connect(null, null)(Checkout)
