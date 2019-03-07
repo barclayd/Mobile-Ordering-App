@@ -133,11 +133,12 @@
 }
 
 .topShadow {
-  top: 0;
+  top: -2px; /* Fix rendering issue where some browsers have a 1px gap above the shadow */
   background-image: linear-gradient(to bottom, #211624, #211624, rgba(0,0,0,0));
 }
 
 .bottomShadow {
-  bottom: 0;
+  bottom: -2px; /* Fix rendering issue where some browsers have a 1px gap under the shadow */
+  margin: 0;
   background-image: linear-gradient(to top, #211624, #211624, rgba(0,0,0,0));
 }
