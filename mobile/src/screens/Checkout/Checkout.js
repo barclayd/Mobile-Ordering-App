@@ -1,42 +1,34 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, SwipeableFlatList, Image, Slider} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image} from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import {ListItem} from 'react-native-elements';
+import {ListItem, Card, Button} from 'react-native-elements';
 import * as colours from '../../styles/colourScheme';
 import {connect} from 'react-redux';
-
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 class Checkout extends Component {
 
     state = {
-        isScrollEnabled: false
+        isScrollEnabled: false,
+        checkoutList: [
+            {
+                drinkName: 'Jameson Whisky',
+                drinkSize: 'Double (50ml)',
+                itemSpecifics: 'On the Rocks',
+                quantity: 2,
+                itemPrice: '£8.99'
+            },
+            {
+                drinkName: 'Patron',
+                drinkSize: 'Double (50ml)',
+                itemSpecifics: 'No ice, lime or lemon please',
+                quantity: 5,
+                itemPrice: '£16.99'
+            },
+        ]
     };
 
-    list = [
-        {
-            name: 'Amy Farha',
-            avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-            subtitle: 'Vice President'
-        },
-        {
-            name: 'Chris Jackson',
-            avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-            subtitle: 'Vice Chairman'
-        },
-    ];
-
-    keyExtractor = (item, index) => index;
-
-    renderItem = ({ item }) => (
-        <ListItem
-            title={item.name}
-            subtitle={item.subtitle}
-            leftAvatar={{ source: { uri: item.avatar_url } }}
-        />
-    );
 
     componentWillMount() {
         this.scrollOffset = 0;
@@ -86,7 +78,7 @@ class Checkout extends Component {
 
         const animatedImageHeight = this.animation.y.interpolate({
             inputRange: [0, screenHeight-90],
-            outputRange: [200, 32],
+            outputRange: [64, 32],
             extrapolate: 'clamp'
         });
 
@@ -98,13 +90,13 @@ class Checkout extends Component {
 
         const animatedImageMarginLeft = this.animation.y.interpolate({
             inputRange: [0, screenHeight-90],
-            outputRange: [screenWidth/2 - 100, 10],
+            outputRange: [screenWidth/2-16, 10],
             extrapolate: 'clamp'
         });
 
         const animatedHeaderHeight = this.animation.y.interpolate({
             inputRange: [0, screenHeight-90],
-            outputRange: [screenHeight/2, 90],
+            outputRange: [screenHeight/12, 90],
             extrapolate: 'clamp'
         });
 
@@ -120,12 +112,18 @@ class Checkout extends Component {
             extrapolate: 'clamp'
         });
 
+        const animatedSettingsHeight = this.animation.y.interpolate({
+            inputRange: [0, screenHeight-90],
+            outputRange: [screenHeight/12, 90],
+            extrapolate: 'clamp'
+        });
+
 
         return (
             <Animated.View style={{ flex: 1, backgroundColor: animatedBackgroundColor }}>
                 <Animated.View
                     {...this._panResponder.panHandlers}
-                    style={[animatedHeight, { position: 'absolute', left: 0, right: 0, zIndex: 10, backgroundColor: 'white', height: screenHeight }]}
+                    style={[animatedHeight, { position: 'absolute', left: 0, right: 0, zIndex: 10, backgroundColor: colours.midnightBlack, height: screenHeight }]}
 
                 >
                     <ScrollView
@@ -136,7 +134,7 @@ class Checkout extends Component {
                         }}
                     >
                         <Animated.View
-                            style={{ height: animatedHeaderHeight, borderTopWidth: 1, borderTopColor:  colours.midGrey, flexDirection: 'row', alignItems: 'center' }}
+                            style={{ height: animatedHeaderHeight, borderTopWidth: 1, borderTopColor:  colours.midnightBlack, flexDirection: 'row', alignItems: 'center' }}
                         >
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start' }}>
                                 <Animated.View style={{ height: animatedImageHeight, width: animatedImageHeight, marginLeft: animatedImageMarginLeft }}>
@@ -145,10 +143,10 @@ class Checkout extends Component {
                                 </Animated.View>
                             </View>
                             <Animated.View style={{ opacity: animatedTextOpacity, flex: 2, flexDirection: 'row', justifyContent: 'center' }}>
-                                <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}>4 items | £12.48 </Animated.Text>
+                                <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}><Text style={styles.barOrderDetails1}>4 items </Text>|<Text style={styles.barOrderDetails2}> £12.48 </Text></Animated.Text>
                             </Animated.View>
-                            <Animated.View style={{ opacity: animatedTextOpacity, flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 10 }}>
-                                <Icon name="shopping-cart" size={32} />
+                            <Animated.View style={{ opacity: animatedTextOpacity, flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: animatedImageMarginLeft }}>
+                                <Icon name="shopping-cart" size={32} color={colours.white} />
                             </Animated.View>
                         </Animated.View>
 
@@ -158,21 +156,97 @@ class Checkout extends Component {
                                 <Text style={{ fontWeight: 'bold', fontSize: 22 }}>Order Summary</Text>
                             </View>
 
-                            <View style={{ height: 40, width: screenWidth, alignItems: 'center' }}>
-                                <Text>Order Table</Text>
-                            </View>
+                            <Animated.View style={{ height: animatedSettingsHeight, opacity: animatedMainContentOpacity }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingBottom: 20 }}>
+                                    <Icon name="close" size={32} style={{ color: colours.orange }} />
+                                    <Icon name="ellipsis-v" size={32} style={{ color: colours.orange }} />
+                                </View>
+                            </Animated.View>
 
-                            <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                                <Icon name="reorder" size={40} />
-                                <Icon name="check-circle" size={40} />
-                                <Icon name="check-square" size={40} />
+                            <View style={{ height: screenHeight/3, width: screenWidth}}>
+                                <Text style={styles.orderSummaryTitle}>Order Summary</Text>
+                                <View>
+                                    <Card
+                                        title="Spirits"
+                                        containerStyle={{backgroundColor: colours.lightGrey}}
+                                          titleStyle={{color: colours.midBlue, fontWeight: 'bold', fontSize: 24}}
+                                          dividerStyle={{backgroundColor: colours.pureWhite}}>
+                                    {
+                                        this.state.checkoutList.map((l, i) => (
+                                            <ListItem
+                                                key={i}
+                                                titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
+                                                containerStyle={{backgroundColor: colours.lightGrey}}
+                                                title={l.drinkName}
+                                                bottomDivider
+                                                subtitle={
+                                                    <View style={styles.subtitleView}>
+                                                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                                        <Text style={styles.subInformationText}>{l.drinkSize}</Text>
+                                                            <Text style={styles.subInformationTextPrice}>{l.itemPrice}</Text>
+                                                        </View>
+                                                        <Text style={styles.subInformationText}>{l.itemSpecifics}</Text>
+                                                    </View>
+                                                }
+                                                badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: l.quantity, textStyle: { color: colours.pureWhite}}}
+                                            />
+                                        ))
+                                    }
+                                    </Card>
+                                </View>
+                                <View>
+                                    <Card
+                                        containerStyle={{backgroundColor: colours.midnightBlack}}>
+                                        <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
+                                        <Text style={styles.barOrderDetails1}>
+                                            Total Items: 14
+                                        </Text>
+                                            <Text style={{ color: colours.pureWhite, fontSize: 30}}>
+                                                |
+                                            </Text>
+                                        <Text style={styles.barOrderDetails2}>
+                                            Total Price: £25.98
+                                        </Text>
+                                        </View>
+                                    </Card>
+                                </View>
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingBottom: 20 }}>
-                                <Icon name="close" size={32} style={{ color: colours.orange }} />
-                                <Icon name="ellipsis-v" size={32} style={{ color: colours.orange }} />
+                            <View style={{ height: (screenHeight/6)*4, justifyContent: 'center', alignItems: 'center'}}>
+                                <Button
+                                    ViewComponent={require('react-native-linear-gradient').default}
+                                    icon={
+                                        <Icon
+                                            name="check-circle"
+                                            size={24}
+                                            color={colours.white}
+                                            style={{
+                                                marginLeft: 20,
+                                            }}
+                                        />
+                                    }
+                                    iconRight
+                                    raised
+                                    title="King It!"
+                                    linearGradientProps={{
+                                        colors: [colours.orange, colours.midBlue],
+                                        start: { x: 0, y: 0.5 },
+                                        end: { x: 1, y: 0.5 },
+                                    }}
+                                    buttonStyle={{
+                                        paddingLeft: (screenWidth/4),
+                                        paddingRight: (screenWidth/4),
+                                        paddingTop: 20,
+                                        paddingBottom: 20,
+                                        borderRadius: 20
+                                }}
+                                    titleStyle={{
+                                        fontWeight: 'bold',
+                                        fontSize: 24
+                                    }}
+                                />
                             </View>
                         </Animated.View>
-                        <View style={{ height: 1000 }} />
+                        <View style={{ height: 200 }} />
                     </ScrollView>
                 </Animated.View>
 
@@ -242,9 +316,33 @@ const styles = StyleSheet.create({
         paddingBottom: 20
     },
     subtitleView: {
-        flexDirection: 'row',
-        paddingLeft: 10,
         paddingTop: 5
+    },
+    ratingImage: {
+        height: 19.21,
+        width: 100
+    },
+    subInformationText: {
+        paddingLeft: 10,
+        color: colours.darkGrey
+    },
+    barOrderDetails1: {
+        fontWeight: 'bold',
+        color: colours.midGrey
+    },
+    barOrderDetails2: {
+        fontWeight: 'bold',
+        color: colours.orange
+    },
+    orderSummaryTitle: {
+        fontWeight: 'bold',
+        color: colours.pureWhite,
+        fontSize: 32,
+        textAlign: 'center'
+    },
+    subInformationTextPrice: {
+        color: colours.warningRed,
+        fontWeight: 'bold'
     }
 });
 
