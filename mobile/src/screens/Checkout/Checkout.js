@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image} from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
-import {ListItem, Card, Button} from 'react-native-elements';
+import {ListItem, Card, Button, withBadge} from 'react-native-elements';
 import * as colours from '../../styles/colourScheme';
 import {connect} from 'react-redux';
 const screenHeight = Dimensions.get('window').height;
@@ -26,7 +26,8 @@ class Checkout extends Component {
                 quantity: 5,
                 itemPrice: '£16.99'
             },
-        ]
+        ],
+        basketQuantity: 7
     };
 
 
@@ -72,6 +73,9 @@ class Checkout extends Component {
     }
 
     render() {
+
+        const BadgedIcon = withBadge(this.state.basketQuantity)(Icon);
+
         const animatedHeight = {
             transform: this.animation.getTranslateTransform()
         };
@@ -90,7 +94,7 @@ class Checkout extends Component {
 
         const animatedImageMarginLeft = this.animation.y.interpolate({
             inputRange: [0, screenHeight-90],
-            outputRange: [screenWidth/2-16, 10],
+            outputRange: [screenWidth/2-16, 15],
             extrapolate: 'clamp'
         });
 
@@ -142,11 +146,15 @@ class Checkout extends Component {
                                            source={require('../../assets/Logo.png')} />
                                 </Animated.View>
                             </View>
-                            <Animated.View style={{ opacity: animatedTextOpacity, flex: 2, flexDirection: 'row', justifyContent: 'center' }}>
-                                <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}><Text style={styles.barOrderDetails1}>4 items </Text>|<Text style={styles.barOrderDetails2}> £12.48 </Text></Animated.Text>
+                            <Animated.View style={{ opacity: animatedTextOpacity, flex: 2, flexDirection: 'row', alignItems: 'space-between'}}>
+                                <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}>
+                                    <Text style={styles.barOrderDetails1}>4 items </Text>
+                                    <Text style={styles.barOrderDetails2}> £12.48 </Text>
+                                </Animated.Text>
                             </Animated.View>
-                            <Animated.View style={{ opacity: animatedTextOpacity, flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: animatedImageMarginLeft }}>
-                                <Icon name="shopping-cart" size={32} color={colours.white} />
+                            <Animated.View style={{ opacity: animatedTextOpacity, flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 25 }}>
+                                {/*<Icon name="shopping-cart" size={32} color={colours.white} />*/}
+                                <BadgedIcon size={28} name="shopping-cart" color={colours.white}/>
                             </Animated.View>
                         </Animated.View>
 
@@ -157,14 +165,14 @@ class Checkout extends Component {
                             </View>
 
                             <Animated.View style={{ height: animatedSettingsHeight, opacity: animatedMainContentOpacity }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingBottom: 20 }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, paddingHorizontal: 20, paddingBottom: 20 }}>
                                     <Icon name="close" size={32} style={{ color: colours.orange }} />
-                                    <Icon name="ellipsis-v" size={32} style={{ color: colours.orange }} />
+                                    <Text style={styles.orderSummaryTitle}>Order Summary</Text>
+                                    <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} />
                                 </View>
                             </Animated.View>
 
                             <View style={{ height: screenHeight/3, width: screenWidth}}>
-                                <Text style={styles.orderSummaryTitle}>Order Summary</Text>
                                 <View>
                                     <Card
                                         title="Spirits"
