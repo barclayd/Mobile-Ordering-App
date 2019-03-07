@@ -13,12 +13,7 @@ import QrReader from "react-qr-reader"
 import PickupPopupWindow from './components/pickup-popup-window/pickup-popup-window';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import MultiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
-
-const OrderState = {
-  AWAITING_COLLECTION: 0, 
-  IN_PROGRESS: 1, 
-  PENDING: 2
-};
+import OrderState from './OrderStates';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (miliseconds)
@@ -544,7 +539,7 @@ export default class App extends Component {
                 return (
                   <div key={orderData.id} className="orderContainer">
                     <h2>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h2>
-                    <h5>Made by { this.getStaffMemberFullName(orderData.staffMemberID) }</h5>
+                    <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.staffMemberID) }</span></h5>
                     <div className="orderButtonsContainer">
                       <button className="orderButton">
                         <span className="icon notReady"></span>

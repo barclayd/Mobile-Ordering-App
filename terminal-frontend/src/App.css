@@ -38,12 +38,16 @@ h4 {
 h5 {
     margin: 0;
     
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: normal;
     color: #8b9799;
 
     position: absolute;
     bottom: 15px;
     left: 19px;
+}
+h5 .bartenderName {
+  font-weight: bold;
 }
 
 
