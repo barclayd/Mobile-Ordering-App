@@ -82,9 +82,9 @@ class ViewDrinks extends Component {
             {this.state.categories.length > 0
               ? this.state.categories.map((category, index) => {
                   return (
-                    <ScrollView tabLabel={category}>
+                    <ScrollView tabLabel={category} key={index}>
                       <TabScreen2
-                        key={category}
+                        key={index}
                         category={category}
                         drinks={this.getDrinksByCategory(index)}
                       />
