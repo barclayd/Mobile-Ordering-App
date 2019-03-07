@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-  Platform
+  Platform, Animated
 } from "react-native";
 import { connect } from "react-redux";
 import ScrollableTabView, {
@@ -14,7 +14,13 @@ import { setViewBasket, setViewBasketSettings } from "../../utility/navigation";
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import * as actions from "../../store/actions/index";
 import { Navigation } from "react-native-navigation";
+import SlidingUpPanel from 'rn-sliding-up-panel'
 import TabScreen2 from "./TabScreens/TabScreen2";
+import * as colours from '../../styles/colourScheme';
+import Checkout from '../Checkout/Checkout';
+import {Button, Text} from "react-native";
+
+const screenHeight = Dimensions.get('window').height;
 
 class ViewDrinks extends Component {
   constructor(props) {
@@ -73,6 +79,7 @@ class ViewDrinks extends Component {
     console.log(this.state.categories);
     return (
       <View style={styles.background}>
+        <ScrollView>
         {this.state.categories.length > 0 ? (
           <ScrollableTabView
             style={{ marginTop: 20 }}
@@ -94,6 +101,11 @@ class ViewDrinks extends Component {
               : null}
           </ScrollableTabView>
         ) : null}
+        </ScrollView>
+        <View
+            style={[{position: 'absolute', left: 0, right: 0, zIndex: 10, height: screenHeight, bottom: 0 }]}>
+          <Checkout />
+        </View>
       </View>
     );
   }
@@ -119,6 +131,12 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingLeft: Dimensions.get("window").width / 14,
     fontSize: 32
+  },
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
