@@ -6,14 +6,15 @@ export default class PopupWindow extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      visible: false
+      visible: false,
+      topShadowDisplay: "none"
     }
 
     this.popupChildrenContainer = React.createRef();
   }
   
   ShowPopup = () => {
-    this.setState({visible: true})
+    this.setState({visible: true}, this.updateScrollShadows);
   }
   HidePopup = () => {
     this.setState({visible: false})
@@ -35,10 +36,29 @@ export default class PopupWindow extends React.Component {
     document.addEventListener("keydown", this.keyPressed, false);
   }
 
+
   handleScroll = (event) => {
-    console.log("Scroll pos: " + this.popupChildrenContainer.current.scrollTop);
+    this.updateScrollShadows();
   }
-  
+  updateScrollShadows = () => {
+    let scrollElement = this.popupChildrenContainer.current;
+
+    let scrollTop = scrollElement.scrollTop; // PX scrolled from top
+    let scrollBottom = scrollElement.scrollHeight - (scrollTop + scrollElement.clientHeight); // Calc PX scrolled from bottom
+
+    if (scrollTop <= 0) {
+      this.setState({topShadowDisplay: "none"})
+    } else {
+      this.setState({topShadowDisplay: "block"})
+    }
+
+    if (scrollBottom <= 0) {
+      this.setState({bottomShadowDisplay: "none"})
+    } else {
+      this.setState({bottomShadowDisplay: "block"})
+    }
+  }
+
 
   componentWillUnmount () {
     document.removeEventListener("keydown", this.keyPressed, false);
@@ -82,11 +102,11 @@ export default class PopupWindow extends React.Component {
                     <h2 className="popup-subtitle">{this.props.subtitle}</h2>
 
                     <div className="popup-scroll-area">
-                      <div className="scrollShadow topShadow"></div>
+                      <div className="scrollShadow topShadow" style={{display: this.state.topShadowDisplay}}></div>
                       <div ref={this.popupChildrenContainer} className={"popup-children-container " + this.props.className}>
                         { this.props.children }
                       </div>
-                      <div className="scrollShadow bottomShadow"></div>
+                      <div className="scrollShadow bottomShadow" style={{display: this.state.bottomShadowDisplay}}></div>
                     </div>
                     {this.props.buttons}
                 </div>
