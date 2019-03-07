@@ -1,5 +1,5 @@
 export {
-    auth, logout, setAuthRedirectPath, authCheckState, logoutSucceed, authStart, authSuccess, authFail, checkAuthTimeout, checkAuthRole
+    auth, logout, setAuthRedirectPath, authCheckState, logoutSucceed, authStart, authSuccess, authFail, checkAuthTimeout, checkAuthRole, authStoreToken, authAutoSignIn
 } from './auth'
 
 
