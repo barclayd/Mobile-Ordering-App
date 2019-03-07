@@ -88,6 +88,7 @@ export default class PopupWindow extends React.Component {
                       </div>
                       <div className="scrollShadow bottomShadow"></div>
                     </div>
+                    {this.props.buttons}
                 </div>
             </div>
         </div>
@@ -104,5 +105,6 @@ PopupWindow.propTypes = {
   subtitle: PropTypes.object.isRequired, // JSX object
   children: PropTypes.node.isRequired,
   dismissedHandler: PropTypes.func,
-  closePopup: PropTypes.bool // If set to true the window will close
+  closePopup: PropTypes.bool, // If set to true the window will close
+  buttons: PropTypes.object // JSX buttons to show at bottom
 }

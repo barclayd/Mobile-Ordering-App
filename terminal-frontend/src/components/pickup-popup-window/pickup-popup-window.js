@@ -8,6 +8,37 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt, faGlassCheers } from '@fortawesome/free-solid-svg-icons';
 
 export default class PickupPopupWindow extends React.Component {
+    buildButtons = () => {
+        return  (
+            <div className="popupButtonsContainer">
+                <button className="orderButton">
+                    <span className="icon complete"><FontAwesomeIcon icon={faGlassCheers} /></span>
+                    <span className="title">Completed</span>
+                    <br />
+                    <span className="subtitle">Mark as completed</span>
+                </button>
+                <button className="orderButton">
+                    <span className="icon refund"></span>
+                    <span className="title">Refund</span>
+                    <br />
+                    <span className="subtitle">Mark as un-ready</span>
+                </button>
+                <button className="orderButton">
+                    <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
+                    <span className="title">Out of Stock</span>
+                    <br />
+                    <span className="subtitle">Mark unavailable</span>
+                </button>
+                <button className="orderButton">
+                    <span className="icon delete"><FontAwesomeIcon icon={faTrashAlt} /></span>
+                    <span className="title">Delete</span>
+                    <br />
+                    <span className="subtitle">Cancel &amp; charge</span>
+                </button>
+            </div>
+        )
+    }
+    
     buildTitle = (order) => {
         if (order) return "#" + order.id + " pickup"; else return "";
     }
@@ -30,6 +61,7 @@ export default class PickupPopupWindow extends React.Component {
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
                     dismissedHandler={this.props.dismissedHandler}
+                    buttons={this.buildButtons()}
             >
                 <h1>DRINKS:</h1>
                 <div className="indentedContent">
@@ -40,33 +72,6 @@ export default class PickupPopupWindow extends React.Component {
 
                     <h2>Customer notes:</h2>
                     <p className="indentedPara">pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!</p>
-                </div>
-                
-                <div className="popupButtonsContainer">
-                    <button className="orderButton">
-                        <span className="icon complete"><FontAwesomeIcon icon={faGlassCheers} /></span>
-                        <span className="title">Completed</span>
-                        <br />
-                        <span className="subtitle">Mark as completed</span>
-                    </button>
-                    <button className="orderButton">
-                        <span className="icon refund"></span>
-                        <span className="title">Refund</span>
-                        <br />
-                        <span className="subtitle">Mark as un-ready</span>
-                    </button>
-                    <button className="orderButton">
-                        <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
-                        <span className="title">Out of Stock</span>
-                        <br />
-                        <span className="subtitle">Mark unavailable</span>
-                    </button>
-                    <button className="orderButton">
-                        <span className="icon delete"><FontAwesomeIcon icon={faTrashAlt} /></span>
-                        <span className="title">Delete</span>
-                        <br />
-                        <span className="subtitle">Cancel &amp; charge</span>
-                    </button>
                 </div>
             </PopupWindow>
         )

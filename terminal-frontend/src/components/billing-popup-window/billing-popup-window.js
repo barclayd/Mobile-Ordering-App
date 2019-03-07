@@ -6,9 +6,47 @@ import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import OrderState from '../../OrderStates';
 
+
+// SETTINGS:
+const HideStockManagementForAwaitingCollection = false; // Should hide out of stock button for orders awaiting collection?
 
 export default class BillingPopupWindow extends React.Component {
+    renderOutOfStockButton = (orderStatus) => {
+        if (!HideStockManagementForAwaitingCollection || orderStatus !== OrderState.AWAITING_COLLECTION) {
+            return (
+                <button className="orderButton">
+                    <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
+                    <span className="title">Out of Stock</span>
+                    <br />
+                    <span className="subtitle">Mark Unavailable</span>
+                </button>
+            )
+        } else {
+            return null;
+        }
+    }
+    buildButtons = (orderStatus) => {
+        return (
+            <div className="popupButtonsContainer">
+                <button className="orderButton">
+                    <span className="icon refund"></span>
+                    <span className="title">Refund</span>
+                    <br />
+                    <span className="subtitle">Mark as un-ready</span>
+                </button>
+                {this.renderOutOfStockButton(orderStatus)}
+                <button className="orderButton">
+                    <span className="icon delete"><FontAwesomeIcon icon={faTrashAlt} /></span>
+                    <span className="title">Delete</span>
+                    <br />
+                    <span className="subtitle">Cancel &amp; charge</span>
+                </button>
+            </div>
+        )
+    }
+
     buildTitle = (order) => {
         if (order) return "#" + order.id + " options"; else return "";
     }
@@ -31,6 +69,7 @@ export default class BillingPopupWindow extends React.Component {
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
                     dismissedHandler={this.props.dismissedHandler}
+                    buttons={this.buildButtons(OrderState.AWAITING_COLLECTION)}
             >
                 <h1>DRINKS:</h1>
                 <div className="indentedContent">
@@ -54,27 +93,6 @@ export default class BillingPopupWindow extends React.Component {
                     <div className="billingTotal">
                         <span className="totalText">Total:</span><span className="totalAmount">£20</span>
                     </div>
-                </div>
-                    
-                <div className="popupButtonsContainer">
-                    <button className="orderButton">
-                        <span className="icon refund"></span>
-                        <span className="title">Refund</span>
-                        <br />
-                        <span className="subtitle">Mark as un-ready</span>
-                    </button>
-                    <button className="orderButton">
-                        <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
-                        <span className="title">Out of Stock</span>
-                        <br />
-                        <span className="subtitle">Mark unavailable</span>
-                    </button>
-                    <button className="orderButton">
-                        <span className="icon delete"><FontAwesomeIcon icon={faTrashAlt} /></span>
-                        <span className="title">Delete</span>
-                        <br />
-                        <span className="subtitle">Cancel &amp; charge</span>
-                    </button>
                 </div>
             </PopupWindow>
         )
