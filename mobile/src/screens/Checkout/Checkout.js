@@ -4,6 +4,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import {ListItem, Card, Button, withBadge} from 'react-native-elements';
 import * as colours from '../../styles/colourScheme';
 import {connect} from 'react-redux';
+import {transparent} from "../../styles/colourScheme";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -112,7 +113,7 @@ class Checkout extends Component {
 
         const animatedBackgroundColor = this.animation.y.interpolate({
             inputRange: [0, screenHeight-90],
-            outputRange: [colours.midnightBlack, colours.pureWhite],
+            outputRange: [colours.midnightBlack, transparent],
             extrapolate: 'clamp'
         });
 
