@@ -4,6 +4,8 @@ import { Overlay } from "react-native-elements";
 import { SimpleStepper } from "react-native-simple-stepper";
 import ButtonWithBackground from "../../Buttons/ButtonWithBackground";
 import * as colours from "../../../../styles/colourScheme";
+import * as actions from "../../../../store/actions/index";
+import { connect } from "react-redux";
 
 class OverlayComponent extends Component {
   constructor(props) {
@@ -11,7 +13,8 @@ class OverlayComponent extends Component {
   }
   state = {
     value: 1,
-    price: ""
+    price: "",
+    orderedDrinks: []
   };
 
   valueChanged = value => {
@@ -23,8 +26,15 @@ class OverlayComponent extends Component {
     });
   };
 
-  onPressAddDrinks = (drink, price) => {
-    console.log("adding Drink to DB", drink, price)
+  onPressAddDrinks = (drink, price, quantitiy) => {
+    console.log("adding Drink to DB", drink, price, quantitiy)
+    this.setState(prevState => ({
+      orderedDrinks: [...prevState.orderedDrinks, {drink: drink, quantitiy, price}]
+    }))
+  }
+
+  componentDidUpdate(){
+    console.log("overlay state", this.state )
   }
 
   render() {
@@ -69,7 +79,7 @@ class OverlayComponent extends Component {
 
                 <TouchableOpacity
                   style={styles.buttonStyle}
-                  onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price)}
+                  onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price, this.state.value)}
                 >
                   <Text style={styles.textStyle}>Add £{this.state.price}</Text>
                 </TouchableOpacity>
