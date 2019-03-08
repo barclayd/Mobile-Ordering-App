@@ -16,5 +16,5 @@ export {
 } from './order'
 
 export {
-    createBasket, createBasketStart, createBasketSuccess, updateBasketStart, updateBasket, updateBasketSuccess
+    updateBasketStart, updateBasket, updateBasketSuccess
 } from './basket'

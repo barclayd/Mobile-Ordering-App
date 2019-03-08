@@ -1,30 +1,10 @@
 import * as actionTypes from "./actionTypes";
 
-export const createBasket = (drinksObject) => {
-    return {
-        type: actionTypes.CREATE_BASKET,
-        drink: drinksObject,
-    };
-};
-
-export const createBasketStart = () => {
-    return {
-        type: actionTypes.CREATE_BASKET_START
-    };
-};
-
-export const createBasketSuccess = (drinksObject) => {
-    return {
-        type: actionTypes.CREATE_BASKET_SUCCESS,
-        drink: drinksObject
-    };
-};
-
-export const updateBasket = (basketAction, drinksObject) => {
+export const updateBasket = (drinksObject, basketAction) => {
     return {
         type: actionTypes.UPDATE_BASKET,
         drink: drinksObject,
-        basketAction: basketAction
+        basketAction
     };
 };
 
@@ -34,10 +14,11 @@ export const updateBasketStart = () => {
     };
 };
 
-export const updateBasketSuccess = (drinkObject) => {
+export const updateBasketSuccess = (drinkObject, basketAction) => {
     return {
         type: actionTypes.UPDATE_BASKET_SUCCESS,
-        drink: drinkObject
+        drink: drinkObject,
+        basketAction
     };
 };
 
