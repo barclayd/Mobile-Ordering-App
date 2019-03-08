@@ -6,22 +6,32 @@ import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 
 export default class NotesPopupWindow extends React.Component {
+
+    buildNotes = (order) => {
+        if (order) return (<p className="notesPara">{this.props.order.notes}</p>); else return "";
+        
+    }
+
+    // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
+    buildSubtitle = (order) => {
+        if (order) return (
+            <span>
+                for <span className="orderID">#{this.props.order.id}</span> ordered at {DateTime.fromJSDate(this.props.order.orderDate).toFormat("h:mma")},&nbsp;
+                <TimeAgo date={this.props.order.orderDate}/>
+            </span>
+        ); else return (<span></span>);
+    }
+
     render () {
         return (
             <PopupWindow
                     className="notes"
                     title={"Customer notes:"}
-                    subtitle={(
-                        // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
-                        <span>
-                            for <span className="orderID">#{this.props.order.id}</span> ordered at {DateTime.fromJSDate(this.props.order.orderDate).toFormat("h:mma")},&nbsp;
-                            <TimeAgo date={this.props.order.orderDate}/>
-                        </span>
-                    )}
+                    subtitle={this.buildSubtitle(this.props.order)}
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
             >
-                <p className="notesPara">{this.props.order.notes}</p>
+                {this.buildNotes(this.props.order)}
             </PopupWindow>
         )
     }

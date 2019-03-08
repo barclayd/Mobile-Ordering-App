@@ -2,7 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TimeAgo from 'react-timeago'
 
-const secondsUntilTimeShown = 10
+// SETTINGS:
+const secondsUntilTimeShown = 60 // Seconds until "just now" is no longer the time. Using 60 sec because of complaints of distracting updates/changes
+
 export default class TimeAgoClean extends React.Component {
     constructor(props) {
         super(props)

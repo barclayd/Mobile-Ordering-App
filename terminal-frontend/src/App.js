@@ -375,6 +375,23 @@ export default class App extends Component {
     return staffMember.firstName + " " + staffMember.surname;
   }
 
+  // Takes an order index to get an order object to set orderForPopup state obj
+  setOrderForPopup = (orderIndex) => {
+    this.setState({orderForPopup: this.state.orders[orderIndex]});
+  }
+
+  // Displays billing popup for order by order index
+  showBilling = (orderIndex) => {
+    this.setOrderForPopup(orderIndex);
+    this.state.showBilling();
+  }
+
+  // Displays customer notes popup for order by order index
+  showNotes = (orderIndex) => {
+    this.setOrderForPopup(orderIndex);
+    this.state.showNotes();
+  }
+
   handleScan = (data) => {
     if (data) {
       this.setState({
@@ -435,7 +452,7 @@ export default class App extends Component {
     }
   }
 
-  renderCustomerNotes = (notes) => {
+  renderCustomerNotes = (orderIndex, notes) => {
     if (notes) {
       // Crop down long notes to prevent overflowing
       if (notes.length > 50) {
@@ -443,7 +460,7 @@ export default class App extends Component {
       }
 
       return (
-        <div onClick={this.state.showNotes} className="customerNotesContainer">
+        <div onClick={() => this.showNotes(orderIndex) } className="customerNotesContainer">
           <img className="notesIcon" src={NotesIcon} alt="Notes icon"/>
           <h2 className="header">Customer notes:</h2>
           <div className="notes">{notes}</div>
@@ -537,7 +554,7 @@ export default class App extends Component {
               this.state.awaitingOrdersIndexes.map((orderIndex) => {
                 const orderData = this.state.orders[orderIndex];
                 return (
-                  <div key={orderData.id} className="orderContainer">
+                  <div key={orderIndex} className="orderContainer">
                     <h2>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h2>
                     <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.staffMemberID) }</span></h5>
                     <div className="orderButtonsContainer">
@@ -547,7 +564,7 @@ export default class App extends Component {
                         <br />
                         <span className="subtitle">Mark as un-ready</span>
                       </button>
-                      <button onClick={this.state.showBilling} className="orderButton">
+                      <button onClick={() => { this.showBilling(orderIndex) }} className="orderButton">
                         <span className="icon"></span>
                         <span className="title">More</span>
                         <br />
@@ -570,13 +587,13 @@ export default class App extends Component {
                   if (orderData.staffMemberID !== this.state.selectedStaffMember) return null;
 
                   return (
-                    <div key={orderData.id} className="orderContainer in-progress">
+                    <div key={orderIndex} className="orderContainer in-progress">
 
                       <MultiColumnItemList orderItems={orderData.orderItems} />
 
                       <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
 
-                      { this.renderCustomerNotes(orderData.notes) }
+                      { this.renderCustomerNotes(orderIndex, orderData.notes) }
 
                       <div className="orderButtonsContainer">
                         <button className="orderButton">
@@ -591,7 +608,7 @@ export default class App extends Component {
                           <br />
                           <span className="subtitle">Return to pending</span>
                         </button>
-                        <button onClick={this.state.showBilling} className="orderButton">
+                        <button onClick={() => { this.showBilling(orderIndex) }} className="orderButton">
                           <span className="icon"></span>
                           <span className="title">More</span>
                           <br />
@@ -628,8 +645,8 @@ export default class App extends Component {
 
           <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
 
-          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} order={this.state.orders[1]} />
-          <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orders[3]} />
+          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} order={this.state.orderForPopup} />
+          <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
           <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
           <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
           <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
