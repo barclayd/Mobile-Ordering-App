@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-  Platform, Animated
+  Platform
 } from "react-native";
 import { connect } from "react-redux";
 import ScrollableTabView, {
@@ -14,11 +14,8 @@ import { setViewBasket, setViewBasketSettings } from "../../utility/navigation";
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import * as actions from "../../store/actions/index";
 import { Navigation } from "react-native-navigation";
-import SlidingUpPanel from 'rn-sliding-up-panel'
 import TabScreen2 from "./TabScreens/TabScreen2";
-import * as colours from '../../styles/colourScheme';
 import Checkout from '../Checkout/Checkout';
-import {Button, Text} from "react-native";
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -39,12 +36,12 @@ class ViewDrinks extends Component {
     if (buttonId === "profileButton") {
       Promise.all([
         IonicIcon.getImageSource(
-          Platform.OS === "android" ? "md-menu" : "ios-menu",
-          30
+            Platform.OS === "android" ? "md-menu" : "ios-menu",
+            30
         ),
         IonicIcon.getImageSource(
-          Platform.OS === "android" ? "md-person" : "ios-person",
-          30
+            Platform.OS === "android" ? "md-person" : "ios-person",
+            30
         )
       ]).then(sources => {
         setViewBasketSettings(sources[1]);
@@ -78,35 +75,35 @@ class ViewDrinks extends Component {
   render() {
     console.log(this.state.categories);
     return (
-      <View style={styles.background}>
-        <ScrollView>
-        {this.state.categories.length > 0 ? (
-          <ScrollableTabView
-            style={{ marginTop: 20 }}
-            initialPage={0}
-            renderTabBar={() => <ScrollableTabBar />}
-          >
-            {this.state.categories.length > 0
-              ? this.state.categories.map((category, index) => {
-                  return (
-                    <ScrollView tabLabel={category} key={index}>
-                      <TabScreen2
-                        key={index}
-                        category={category}
-                        drinks={this.getDrinksByCategory(index)}
-                      />
-                    </ScrollView>
-                  );
-                })
-              : null}
-          </ScrollableTabView>
-        ) : null}
-        </ScrollView>
-        <View
-            style={[{position: 'absolute', left: 0, right: 0, zIndex: 10, height: screenHeight, bottom: 0 }]}>
-          <Checkout />
+        <View style={styles.background}>
+          <View style={{flex: .9}}>
+          {this.state.categories.length > 0 ? (
+              <ScrollableTabView
+                  style={{ marginTop: 20 }}
+                  initialPage={0}
+                  renderTabBar={() => <ScrollableTabBar />}
+              >
+                {this.state.categories.length > 0
+                    ? this.state.categories.map((category, index) => {
+                      return (
+                          <ScrollView tabLabel={category}>
+                            <TabScreen2
+                                key={category}
+                                category={category}
+                                drinks={this.getDrinksByCategory(index)}
+                            />
+                          </ScrollView>
+                      );
+                    })
+                    : null}
+              </ScrollableTabView>
+          ) : null}
+          </View>
+          <View
+              // style={[{position: 'absolute', backgroundColor: '#eee', left: 0, right: 0, zIndex: 10, height: 100, bottom: 0 }]}>
+              style={[{flex: 0.1, backgroundColor: '#eee' }]}>
+          </View>
         </View>
-      </View>
     );
   }
 }
@@ -123,6 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flex: 1,
     bottom: 0,
+    height: screenHeight/2,
     left: 0,
     right: 0,
     top: 0
@@ -131,12 +129,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingLeft: Dimensions.get("window").width / 14,
     fontSize: 32
-  },
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center'
   }
 });
 
@@ -157,4 +149,3 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewDrinks);
-

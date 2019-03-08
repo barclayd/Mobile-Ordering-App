@@ -156,15 +156,15 @@ const setViewBasket = (componentId, basketName) => {
                     visible: false,
                     enabled: false
                 }
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: basketName,
+                    }
+                }
             }
-            // options: {
-            //     topBar: {
-            //         visible: true,
-            //         title: {
-            //             text: basketName,
-            //         }
-            //     }
-            // }
         }
     })
 };
@@ -172,15 +172,15 @@ const setViewBasket = (componentId, basketName) => {
 const setViewBasketSettings = (image2) => {
     Navigation.setDefaultOptions({
         topBar: {
-            visible: false,
-        //     barStyle: 'black',
-        //     rightButtons: [
-        //     {
-        //         id: 'profileButton',
-        //         icon: image2,
-        //         color: colours.white
-        //     }
-        // ]
+            visible: true,
+            barStyle: 'black',
+            rightButtons: [
+            {
+                id: 'profileButton',
+                icon: image2,
+                color: colours.white
+            }
+        ]
     }
     });
 };
