@@ -40,7 +40,7 @@ const updateBasketSuccess = (state, action) => {
     }
     if (action.basketAction === 'delete') {
         return updateObject(state, {
-            drinks: state.drinks.filter(drink => drink.name === action.drink.name),
+            drink: state.drinks.filter(drink => drink.name === action.drink.name),
             loading: false,
             error: false,
             saved: true

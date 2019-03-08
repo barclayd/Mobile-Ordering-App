@@ -20,16 +20,24 @@ class OverlayComponent extends Component {
   valueChanged = value => {
     const nextValue = Number(value.toFixed(2));
     const price = Number(this.props.drinkDetails.price) * nextValue
-    this.setState({ 
-      value: nextValue ,
+      this.setState({ 
+      value: nextValue,
       price: price
     });
   };
 
-  onPressAddDrinks = (drink, price, quantitiy) => {
-    console.log("adding Drink to DB", drink, price, quantitiy)
+  onPressAddDrinks = (drink, price, quantity) => {
+    console.log("adding Drink to DB", drink, price, quantity)
+    console.log("sumPrice",this.state.price)
+    sumPrice = this.state.price
+    let drinksObj = {
+      ...drink,
+      quantity,
+      sumPrice
+    }
+    this.props.createBasket(drinksObj)
     this.setState(prevState => ({
-      orderedDrinks: [...prevState.orderedDrinks, {drink: drink, quantitiy, price}]
+    orderedDrinks: [...prevState.orderedDrinks, {drink: drink, quantity, price}]
     }))
   }
 
@@ -43,7 +51,7 @@ class OverlayComponent extends Component {
       <View>
         <Overlay
           onBackdropPress={this.props.onBackdropPress}
-          ccontainerStyle={styles.overlay}
+          containerStyle={styles.overlay}
           childrenWrapperStyle={{ backgroundColor: "#eee" }}
           isVisible={this.props.isVisible}
           animationType="zoomIn"
@@ -154,4 +162,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default OverlayComponent;
+const mapStateToProps = state => {
+  return {
+    drinks: state.drinks,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    createBasket: (drink) => dispatch(actions.createBasket(drink))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OverlayComponent);

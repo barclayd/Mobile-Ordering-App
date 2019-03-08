@@ -1,8 +1,9 @@
 import * as actionTypes from "./actionTypes";
 
-export const createBasket = () => {
+export const createBasket = (drinksObject) => {
     return {
-        type: actionTypes.CREATE_BASKET
+        type: actionTypes.CREATE_BASKET,
+        drink: drinksObject,
     };
 };
 
@@ -14,7 +15,7 @@ export const createBasketStart = () => {
 
 export const createBasketSuccess = (drinksObject) => {
     return {
-        type: actionTypes.CREATE_BASKET_START,
+        type: actionTypes.CREATE_BASKET_SUCCESS,
         drink: drinksObject
     };
 };
