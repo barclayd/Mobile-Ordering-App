@@ -60,6 +60,17 @@ module.exports = buildSchema(`
             latitude: Float!
             longitude: Float!
         }
+        
+        input barStaff {
+            firstName: String!
+            surname: String!
+        }
+        
+        input stock {
+            collectionPointId: ID!
+            ingredientId: ID!
+            inStock: Boolean!
+        }
 
         input DrinkInput {
             name: String!
@@ -69,7 +80,7 @@ module.exports = buildSchema(`
         }
         
          input DrinkInput {
-            id: ID!
+            _id: ID!
         }
         
         input IngredientInput {
@@ -83,10 +94,9 @@ module.exports = buildSchema(`
            login(email: String!, password: String!): AuthData!
            findBar(barCode: String!): Bar!
            findOrderById(orderId: String!) : [Order!]!
-           editOrderById(orderId: String!) : [Order!]!
-           createOrder(drinkInputId: id) : [Order!]!
-           findDrinks(category: String!): [Drink!]!
+           findDrinks(category: String!): [Drink!]!           
            drinks: [Drink!]!
+           findUserById(userId: String!): [barStaff!]!
            findIngredients(name: String!): [Ingredient!]!
            findDrinkCategories: [Category!]!
         }
@@ -94,6 +104,8 @@ module.exports = buildSchema(`
         type RootMutation {
             createUser(userInput: UserInput): User
             createBar(barInput: BarInput): Bar
+            createOrder(drinkInputId: id) : [Order!]!
+            editOrderById(orderId: String!) : [Order!]!
             createDrink(drinkInput: DrinkInput): Drink
             createIngredient(ingredientInput: IngredientInput): Ingredient
         }
