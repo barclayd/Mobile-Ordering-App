@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Dimensions, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { View, Text, Dimensions, StyleSheet, Button, TouchableOpacity, Vibration } from "react-native";
 import { Overlay } from "react-native-elements";
 import { SimpleStepper } from "react-native-simple-stepper";
 import ButtonWithBackground from "../../Buttons/ButtonWithBackground";
@@ -7,10 +7,16 @@ import * as colours from "../../../../styles/colourScheme";
 import * as actions from "../../../../store/actions/index";
 import { connect } from "react-redux";
 
+const DURATION = 10000;
+
 class OverlayComponent extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      price: "0.00"
+    }
   }
+
   state = {
     value: 1,
     price: "",
@@ -19,7 +25,9 @@ class OverlayComponent extends Component {
 
   valueChanged = value => {
     const nextValue = Number(value.toFixed(2));
-    const price = Number(this.props.drinkDetails.price) * nextValue
+    let initialPrice = Number(this.props.drinkDetails.price) * nextValue
+    let price = parseFloat(Math.round(initialPrice * 100) / 100).toFixed(2);
+    console.log("next value", nextValue, ". initial price", initialPrice, ". price",price)
       this.setState({ 
       value: nextValue,
       price: price
@@ -27,8 +35,10 @@ class OverlayComponent extends Component {
   };
 
   onPressAddDrinks = (drink, price, quantity) => {
+    if (quantity == 0){
+      alert("Quantity of 0 not aloud")
+    }
     console.log("adding Drink to DB", drink, price, quantity)
-    console.log("sumPrice",this.state.price)
     sumPrice = this.state.price
     let drinksObj = {
       ...drink,
@@ -36,9 +46,16 @@ class OverlayComponent extends Component {
       sumPrice
     }
     this.props.createBasket(drinksObj)
-    this.setState(prevState => ({
-    orderedDrinks: [...prevState.orderedDrinks, {drink: drink, quantity, price}]
-    }))
+    Vibration.vibrate(DURATION);
+    // this.setState(prevState => ({
+    // orderedDrinks: [...prevState.orderedDrinks, {drinksObj}]
+    // }))
+    this.closeModal()
+
+}
+
+  closeModal = () => {
+    this.props.modalVisible()
   }
 
   componentDidUpdate(){
@@ -80,7 +97,7 @@ class OverlayComponent extends Component {
               <View style={styles.btnContainer}>
                 <TouchableOpacity
                   style={styles.buttonStyle}
-                  onPress={() => onPress()}
+                  onPress={() => this.closeModal()}
                 >
                   <Text style={styles.textStyle}>Cancel</Text>
                 </TouchableOpacity>
