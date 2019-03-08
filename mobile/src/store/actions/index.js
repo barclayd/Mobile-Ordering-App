@@ -10,11 +10,3 @@ export {
 export {
     findDrinksStart, findDrinks, findDrinksSuccess, findDrinksFail, findDrinkCategories, findDrinkCategoriesFail, findDrinkCategoriesStart, findDrinkCategoriesSuccess
 } from './drinks'
-
-export {
-    addToOrder, addToOrderStart, addToOrderSuccess, addToOrderFail
-} from './order'
-
-export {
-    updateBasketStart, updateBasket, updateBasketSuccess
-} from './basket'

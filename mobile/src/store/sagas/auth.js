@@ -1,4 +1,4 @@
-import {put, call, delay} from 'redux-saga/effects';
+import {put, call} from 'redux-saga/effects';
 import {AsyncStorage} from 'react-native';
 import axios from '../../axios-instance';
 import {Alert} from 'react-native';
@@ -164,6 +164,7 @@ export function* authCheckStateSaga(action) {
 }
 
 export function* checkAuthTimeoutSaga(action) {
+    yield delay(action.expirationTime * 1000);
     yield put(actions.logout());
 }
 

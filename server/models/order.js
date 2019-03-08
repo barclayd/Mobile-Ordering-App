@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
-    basket: [{
+    drinks: [{
         type: mongoose.Schema.ObjectId, ref:'drink'
     }],
     collectionPoint: {
