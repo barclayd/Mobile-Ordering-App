@@ -16,7 +16,7 @@ class TabbedCategories extends Component {
   };
 
   openOverlay = (i) => {
-    const drinkSelected = this.props.data[i];
+    const drinkSelected = this.props.drinks[i];
     console.log("drinkSelected",drinkSelected);
     this.setState({
       isVisible: true,
