@@ -73,14 +73,11 @@ module.exports = buildSchema(`
         }
 
         input DrinkInput {
+            _id: ID!
             name: String!
             category: String!
             nutritionInfo: String!
             price: String!
-        }
-        
-         input DrinkInput {
-            _id: ID!
         }
         
         input IngredientInput {
@@ -104,7 +101,7 @@ module.exports = buildSchema(`
         type RootMutation {
             createUser(userInput: UserInput): User
             createBar(barInput: BarInput): Bar
-            createOrder(drinkInputId: id) : [Order!]!
+            createOrder(drinkInputId: ID) : [Order!]!
             editOrderById(orderId: String!) : [Order!]!
             createDrink(drinkInput: DrinkInput): Drink
             createIngredient(ingredientInput: IngredientInput): Ingredient

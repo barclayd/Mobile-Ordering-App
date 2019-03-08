@@ -18,7 +18,7 @@ module.exports = {
 
     findDrinks: async (args) => {
         try {
-            const foundDrinks = await Drink.find({id: id});
+            const foundDrinks = await Drink.find({id: ID});
             return foundDrinks.map(foundDrink => {
                 return transformDrink(foundDrink)
             });
@@ -41,8 +41,8 @@ module.exports = {
         try {
             const createOrder = new Order({
                 drinks: args.drinkInputId.id,
-                collectionPoint: collectionPoint,
-
+                collectionPoint: args.collectionPoint,
+                status: args.status,
             })
         } catch (err) {
             throw err;
