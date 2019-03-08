@@ -31,7 +31,14 @@ export default class App extends Component {
           orderDate: new Date(),
           customerID: 42,
           staffMemberID: 4,
-          orderItems: [],
+          items: [
+            {
+              id: 1,
+              name: "VK Orange",
+              price: 250,
+              quantity: 1,
+            },
+          ],
           orderState: OrderState.AWAITING_COLLECTION
         },
         {
@@ -39,7 +46,14 @@ export default class App extends Component {
           orderDate: new Date(),
           customerID: 13,
           staffMemberID: 6,
-          orderItems: [],
+          items: [
+            {
+              id: 1,
+              name: "VK Orange",
+              price: 250,
+              quantity: 1,
+            },
+          ],
           orderState: OrderState.AWAITING_COLLECTION
         },
         {
@@ -47,15 +61,17 @@ export default class App extends Component {
           orderDate: new Date(),
           customerID: 93,
           staffMemberID: 0,
-          orderItems: [
+          items: [
             {
               id: 1,
               name: "VK Orange",
+              price: 250,
               quantity: 1,
             },
             {
               id: 19,
               name: "VK Green",
+              price: 250,
               quantity: 2,
             }
           ],
@@ -66,30 +82,35 @@ export default class App extends Component {
           orderDate: new Date(),
           customerID: 93,
           staffMemberID: 1,
-          orderItems: [
+          items: [
             {
               id: 672,
               name: "VK Red",
+              price: 250,
               quantity: 1,
             },
             {
               id: 122,
               name: "Jager bomb",
+              price: 125,
               quantity: 5,
             },
             {
               id: 484,
               name: "Mojito",
+              price: 125,
               quantity: 1,
             },
             {
               id: 1023,
               name: "Bottled water",
+              price: 90,
               quantity: 2,
             },
             {
               id: 67,
               name: "Jumba juice cocktail",
+              price: 750,
               quantity: 1,
             }
           ],
@@ -100,30 +121,35 @@ export default class App extends Component {
           id: "ACBS",
           orderDate: new Date(),
           customerID: 93,
-          orderItems: [
+          items: [
             {
               id: 672,
               name: "VK Red",
+              price: 250,
               quantity: 1,
             },
             {
               id: 122,
               name: "Jager bomb",
+              price: 125,
               quantity: 5,
             },
             {
               id: 484,
               name: "Mojito",
+              price: 450,
               quantity: 1,
             },
             {
               id: 1023,
               name: "Bottled water",
+              price: 90,
               quantity: 2,
             },
             {
               id: 67,
               name: "Jumba juice cocktail",
+              price: 750,
               quantity: 1,
             }
           ],
@@ -133,30 +159,35 @@ export default class App extends Component {
           id: "PPLC",
           orderDate: new Date(),
           customerID: 93,
-          orderItems: [
+          items: [
             {
               id: 672,
               name: "VK Red",
+              price: 250,
               quantity: 1,
             },
             {
               id: 122,
               name: "Jager bomb",
+              price: 125,
               quantity: 5,
             },
             {
               id: 484,
               name: "Mojito",
+              price: 750,
               quantity: 1,
             },
             {
               id: 1023,
               name: "Bottled water",
+              price: 90,
               quantity: 2,
             },
             {
               id: 67,
               name: "Jumba juice cocktail",
+              price: 750,
               quantity: 1,
             }
           ],
@@ -166,10 +197,11 @@ export default class App extends Component {
           id: "AHBS",
           orderDate: new Date(),
           customerID: 93,
-          orderItems: [
+          items: [
             {
               id: 672,
               name: "VK Red",
+              price: 250,
               quantity: 1,
             }
           ],
@@ -179,10 +211,11 @@ export default class App extends Component {
           id: "LJPN",
           orderDate: new Date(),
           customerID: 93,
-          orderItems: [
+          items: [
             {
               id: 672,
               name: "Jager bomb",
+              price: 125,
               quantity: 4,
             }
           ],
@@ -192,25 +225,29 @@ export default class App extends Component {
           id: "GVAQ",
           orderDate: new Date(),
           customerID: 92,
-          orderItems: [
+          items: [
             {
               id: 672,
               name: "VK Red",
+              price: 250,
               quantity: 1,
             },
             {
               id: 122,
               name: "Jager bomb",
+              price: 125,
               quantity: 5,
             },
             {
               id: 484,
               name: "Mojito",
+              price: 250,
               quantity: 1,
             },
             {
               id: 1023,
               name: "Bottled water",
+              price: 90,
               quantity: 2,
             }
           ],
@@ -589,7 +626,7 @@ export default class App extends Component {
                   return (
                     <div key={orderIndex} className="orderContainer in-progress">
 
-                      <MultiColumnItemList orderItems={orderData.orderItems} />
+                      <MultiColumnItemList orderItems={orderData.items} />
 
                       <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
 

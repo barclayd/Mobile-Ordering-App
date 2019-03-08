@@ -7,11 +7,6 @@ import { DateTime } from 'luxon'
 
 export default class NotesPopupWindow extends React.Component {
 
-    buildNotes = (order) => {
-        if (order) return (<p className="notesPara">{this.props.order.notes}</p>); else return "";
-        
-    }
-
     // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
     buildSubtitle = (order) => {
         if (order) return (
@@ -20,6 +15,10 @@ export default class NotesPopupWindow extends React.Component {
                 <TimeAgo date={this.props.order.orderDate}/>
             </span>
         ); else return (<span></span>);
+    }
+    
+    buildNotes = (order) => {
+        if (order) return (<p className="notesPara">{this.props.order.notes}</p>); else return "";
     }
 
     render () {

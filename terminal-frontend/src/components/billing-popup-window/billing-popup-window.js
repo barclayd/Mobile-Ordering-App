@@ -13,6 +13,54 @@ import OrderState from '../../OrderStates';
 const HideStockManagementForAwaitingCollection = false; // Should hide out of stock button for orders awaiting collection?
 
 export default class BillingPopupWindow extends React.Component {
+    
+    calcTotal = (order) => {
+        if (order) {
+            return order.items.reduce((accumilator, item) => {
+                return accumilator + item.price;
+            },0)
+        } else return 0;
+    }
+
+    buildTitle = (order) => {
+        if (order) return "#" + order.id + " options"; else return "";
+    }
+
+    // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
+    buildSubtitle = (order) => {
+        if (order) return (
+            <span>
+                Ordered <TimeAgo date={order.orderDate}/>, at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")}
+            </span>
+        ); else return (<span></span>);
+    }
+
+    
+    buildChildren = (order) => {
+        if (order) return (
+            <React.Fragment>
+                <h1>DRINKS:</h1>
+                <div className="indentedContent">
+                    <ul className="orderList">
+                        {order.items.map((itemData) => {
+                            return (
+                                <li key={itemData.id}>
+                                    <span className="quantity">{itemData.quantity}</span>
+                                    <span className="item">{itemData.name}</span>
+                                    <span className="price">£{itemData.price}</span>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                    <div className="billingTotal">
+                        <span className="totalText">Total:</span>
+                        <span className="totalAmount">£{this.calcTotal(this.props.order)}</span>
+                    </div>
+                </div>
+            </React.Fragment>
+        ); else return "";
+    }
+    
     renderOutOfStockButton = (orderStatus) => {
         if (!HideStockManagementForAwaitingCollection || orderStatus !== OrderState.AWAITING_COLLECTION) {
             return (
@@ -47,19 +95,6 @@ export default class BillingPopupWindow extends React.Component {
         )
     }
 
-    buildTitle = (order) => {
-        if (order) return "#" + order.id + " options"; else return "";
-    }
-
-    // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
-    buildSubtitle = (order) => {
-        if (order) return (
-            <span>
-                Ordered <TimeAgo date={order.orderDate}/>, at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")}
-            </span>
-        ); else return (<span></span>);
-    }
-
     render () {
         return (
             <PopupWindow
@@ -71,29 +106,7 @@ export default class BillingPopupWindow extends React.Component {
                     dismissedHandler={this.props.dismissedHandler}
                     buttons={this.buildButtons(OrderState.AWAITING_COLLECTION)}
             >
-                <h1>DRINKS:</h1>
-                <div className="indentedContent">
-                    <ul className="orderList">
-                        <li>
-                            <span className="quantity">4x</span>
-                            <span className="item">VK Orange</span>
-                            <span className="price">£2</span>
-                        </li>
-                        <li>
-                            <span className="quantity">1x</span>
-                            <span className="item">VK Green</span>
-                            <span className="price">£2.50</span>
-                        </li>
-                        <li>
-                            <span className="quantity">1x</span>
-                            <span className="item">VK Green</span>
-                            <span className="price">£2.50</span>
-                        </li>
-                    </ul>
-                    <div className="billingTotal">
-                        <span className="totalText">Total:</span><span className="totalAmount">£20</span>
-                    </div>
-                </div>
+                { this.buildChildren(this.props.order) }
             </PopupWindow>
         )
     }

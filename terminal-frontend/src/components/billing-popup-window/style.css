@@ -45,6 +45,6 @@
   margin-left: 9px;
 }
 
-.billingOptionsPopup > div.indentedContent > .orderList {
+.billingOptionsPopup > .indentedContent > .orderList {
   margin-bottom: 0;
 }

@@ -25,7 +25,7 @@ export default class UpcomingPopupWindow extends React.Component {
                             return (
                                 <div key={orderData.id} className="orderContainer in-progress">
 
-                                    <MultiColumnItemList orderItems={orderData.orderItems} />
+                                    <MultiColumnItemList orderItems={orderData.items} />
 
                                     <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
                                     
