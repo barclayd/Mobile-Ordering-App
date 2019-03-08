@@ -11,7 +11,7 @@ import * as screens from './src/utility/screens';
 import createSagaMiddleware from 'redux-saga';
 import {watchAuth, watchBar, watchDrinks, watchBasket} from './src/store/sagas/index';
 import ViewMenus from './src/screens/Menus/Menus';
-import ViewCheckout from './src/screens/Checkout/Checkout';
+import ViewCheckout from './src/components/HOC/Checkout/Checkout';
 const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore(sagaMiddleware);
