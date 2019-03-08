@@ -32,6 +32,13 @@ class TabScreen2 extends Component {
     });
   };
 
+  setModalVisible = () => {
+    console.log("helllo")
+    this.setState({
+      isVisible: false
+    });
+  }
+
 
   render() {
     console.log(this.props.category);
@@ -53,6 +60,7 @@ class TabScreen2 extends Component {
           );
         }):null}
         <OverlayComponent
+          modalVisible={this.setModalVisible}
           drinkDetails={this.state.drinkSelected}
           isVisible={this.state.isVisible}
           onBackdropPress={this.onBackdropPress}
