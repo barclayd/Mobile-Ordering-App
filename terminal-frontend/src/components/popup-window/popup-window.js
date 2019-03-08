@@ -9,7 +9,7 @@ export default class PopupWindow extends React.Component {
     } else {
       return 'popup';
     }
-  }
+  };
 
   renderCloseButton = (shouldShow) => {
     if (shouldShow) {
@@ -17,14 +17,14 @@ export default class PopupWindow extends React.Component {
             <div className="popup-close-button" onClick={this.props.closeFunc} >🗙</div>
         )
     }
-  }
+  };
 
   overlayClick = (event) => {
     // Check that the click event has not been triggered on a child element
     if (event.target === event.currentTarget) {
       this.props.closeFunc()
     }
-  }
+  };
 
   render () {
     return (
@@ -34,7 +34,7 @@ export default class PopupWindow extends React.Component {
                   { this.renderCloseButton(this.props.showCloseButton) }
 
                   <h1 className="popup-title">{this.props.title}</h1>
-                  <h2 className="popup-subtitle">{this.props.subtitle}</h2>
+                  <h2 className="popup-subtitle">{this.props.drinkSize}</h2>
                   <div className="popup-children-container">
                     { this.props.children }
                   </div>
@@ -50,6 +50,6 @@ PopupWindow.propTypes = {
   showCloseButton: PropTypes.bool,
   closeFunc: PropTypes.func,
   title: PropTypes.string,
-  subtitle: PropTypes.string,
+  drinkSize: PropTypes.string,
   children: PropTypes.node
-}
+};

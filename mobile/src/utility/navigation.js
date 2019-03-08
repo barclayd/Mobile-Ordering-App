@@ -139,12 +139,13 @@ const setViewDrinks = (componentId, menuName) => {
     })
 };
 
-const setViewBasket = (componentId, basketName) => {
+const setViewBasket = (componentId, basketName, fullScreenMode) => {
     Navigation.push(componentId, {
         component: {
             name: screens.ViewCheckout,
             passProps: {
-                authState: basketName
+                authState: basketName,
+                fullScreen: fullScreenMode
             },
             sideMenu: {
                 openGestureMode: 'bezel',
@@ -156,44 +157,44 @@ const setViewBasket = (componentId, basketName) => {
                     visible: false,
                     enabled: false
                 }
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: basketName,
+                    }
+                }
             }
-            // options: {
-            //     topBar: {
-            //         visible: true,
-            //         title: {
-            //             text: basketName,
-            //         }
-            //     }
-            // }
         }
     })
 };
 
-const setViewBasketSettings = (image2) => {
-    Navigation.setDefaultOptions({
-        topBar: {
-            visible: false,
-        //     barStyle: 'black',
-        //     rightButtons: [
-        //     {
-        //         id: 'profileButton',
-        //         icon: image2,
-        //         color: colours.white
-        //     }
-        // ]
-    }
-    });
-};
-
-const setViewDrinksSettings = (image2) => {
+const setViewBasketSettings = (image) => {
     Navigation.setDefaultOptions({
         topBar: {
             visible: true,
             barStyle: 'black',
             rightButtons: [
             {
-                id: 'profileButton',
-                icon: image2,
+                id: 'basketButton',
+                icon: image,
+                color: colours.white
+            }
+        ]
+    }
+    });
+};
+
+const setViewDrinksSettings = (image) => {
+    Navigation.setDefaultOptions({
+        topBar: {
+            visible: true,
+            barStyle: 'black',
+            rightButtons: [
+            {
+                id: 'basketButton',
+                icon: image,
                 color: colours.white
             }
         ]

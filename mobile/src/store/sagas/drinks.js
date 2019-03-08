@@ -36,7 +36,7 @@ export function* findDrinksSaga(action){
             `,
             }
         }
-        const response = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
+        const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
             throw Error(response.data.errors[0].message);
         }
@@ -80,7 +80,7 @@ export function* findDrinkCategoriesSaga(action) {
             }
             `
         };
-        const response = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
+        const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
             throw Error(response.data.errors[0].message);
         }
