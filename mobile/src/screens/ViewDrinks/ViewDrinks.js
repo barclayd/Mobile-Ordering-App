@@ -11,11 +11,18 @@ import ScrollableTabView, {
 } from "react-native-scrollable-tab-view";
 import * as actions from "../../store/actions/index";
 import TabScreen2 from "./TabScreens/TabScreen2";
+import Checkout from '../Checkout/Checkout';
+import {Navigation} from "react-native-navigation";
+import {setViewBasket} from "../../utility/navigation";
 
 const screenHeight = Dimensions.get('window').height;
 
 class ViewDrinks extends Component {
 
+  constructor(props) {
+    super(props);
+    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+  }
 
   state = {
     search: "",
@@ -39,6 +46,12 @@ class ViewDrinks extends Component {
     }
   }
 
+  navigationButtonPressed({ buttonId }) {
+    if (buttonId === "basketButton") {
+      setViewBasket(this.props.componentId, "Drinks", true);
+    }
+  }
+
   getDrinksByCategory = (id) => {
     const categoryName = this.state.categories[id];
     console.log(categoryName);
@@ -48,6 +61,7 @@ class ViewDrinks extends Component {
   render() {
     console.log(this.state.categories);
     return (
+        <Checkout componentId={this.props.componentId}>
         <View style={styles.background}>
           <View style={{flex: .85}}>
           {this.state.categories.length > 0 ? (
@@ -73,9 +87,10 @@ class ViewDrinks extends Component {
           ) : null}
           </View>
           <View
-              style={[{flex: 0.1, backgroundColor: 'transparent' }]}>
-          </View>
+            style={[{flex: 0.1, backgroundColor: 'transparent' }]}>
         </View>
+        </View>
+        </Checkout>
     );
   }
 }

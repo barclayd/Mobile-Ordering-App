@@ -186,15 +186,15 @@ const setViewBasketSettings = (image) => {
     });
 };
 
-const setViewDrinksSettings = (image2) => {
+const setViewDrinksSettings = (image) => {
     Navigation.setDefaultOptions({
         topBar: {
             visible: true,
             barStyle: 'black',
             rightButtons: [
             {
-                id: 'profileButton',
-                icon: image2,
+                id: 'basketButton',
+                icon: image,
                 color: colours.white
             }
         ]
