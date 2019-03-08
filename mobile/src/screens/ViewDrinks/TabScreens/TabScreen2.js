@@ -18,7 +18,7 @@ class TabScreen2 extends Component {
   };
 
   openOverlay = (i) => {
-    const drinkSelected = this.props.drinks[i];
+    const drinkSelected = this.props.data[i];
     console.log("drinkSelected",drinkSelected);
     this.setState({
       isVisible: true,
@@ -32,12 +32,18 @@ class TabScreen2 extends Component {
     });
   };
 
+  setModalVisible = () => {
+    this.setState({
+      isVisible: false
+    });
+  };
+
 
   render() {
     console.log(this.props.category);
     return (
       <View>
-        {this.props.drinks.length > 0 ? this.props.drinks.map((u, i) => {
+        {this.props.data.length > 0 ? this.props.data.map((u, i) => {
           return (
             <TouchableOpacity key={i} onPress={() => this.openOverlay(i)}>
               <Card>
@@ -53,6 +59,7 @@ class TabScreen2 extends Component {
           );
         }):null}
         <OverlayComponent
+          modalVisible={this.setModalVisible}
           drinkDetails={this.state.drinkSelected}
           isVisible={this.state.isVisible}
           onBackdropPress={this.onBackdropPress}

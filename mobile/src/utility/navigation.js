@@ -112,7 +112,7 @@ const setMainApp = (componentId, barName) => {
                 topBar: {
                     visible: true,
                     title: {
-                        text: barName ? barName : 'The Taff'
+                        text: barName ? barName : 'The Taf'
                     }
                 }
             }

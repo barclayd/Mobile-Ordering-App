@@ -1,39 +1,60 @@
 import React, { Component } from "react";
-import { View, Text, Dimensions, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { Overlay } from "react-native-elements";
 import { SimpleStepper } from "react-native-simple-stepper";
-import ButtonWithBackground from "../../Buttons/ButtonWithBackground";
 import * as colours from "../../../../styles/colourScheme";
+import * as actions from "../../../../store/actions/index";
+import { connect } from "react-redux";
 
 class OverlayComponent extends Component {
-  constructor(props) {
-    super(props);
-  }
+
   state = {
     value: 1,
-    price: ""
+    price: null,
+    orderedDrinks: []
   };
 
   valueChanged = value => {
+    if (value === 0) {
+      return;
+    }
     const nextValue = Number(value.toFixed(2));
-    const price = Number(this.props.drinkDetails.price) * nextValue
-    this.setState({ 
-      value: nextValue ,
+    let initialPrice = Number(this.props.drinkDetails.price) * nextValue;
+    let price = parseFloat(Math.round(initialPrice * 100) / 100).toFixed(2);
+    console.log("next value", nextValue, ". initial price", initialPrice, ". price",price);
+      this.setState({
+      value: nextValue,
       price: price
     });
   };
 
-  onPressAddDrinks = (drink, price) => {
-    console.log("adding Drink to DB", drink, price)
+  onPressAddDrinks = (drink, price, quantity) => {
+    let drinksObj = {
+      ...drink,
+      quantity
+    };
+    this.props.updateBasket(drinksObj, 'add');
+    this.closeModal()
+};
+
+  closeModal = () => {
+    this.props.modalVisible();
+    this.setState({
+      value: 1,
+      price: null
+    })
+  };
+
+  componentDidUpdate(){
+    console.log("overlay state", this.state )
   }
 
   render() {
-    // console.log(this.state);
     return (
       <View>
         <Overlay
           onBackdropPress={this.props.onBackdropPress}
-          ccontainerStyle={styles.overlay}
+          containerStyle={styles.overlay}
           childrenWrapperStyle={{ backgroundColor: "#eee" }}
           isVisible={this.props.isVisible}
           animationType="zoomIn"
@@ -47,7 +68,7 @@ class OverlayComponent extends Component {
               <View style={styles.rowContainer}>
                 <View style={styles.pad}>
                   <Text style={styles.item}>
-                    Quantitiy x {this.state.value}{" "}
+                    Quantity: {this.state.value}{" "}
                   </Text>
                 </View>
                 <SimpleStepper
@@ -55,23 +76,22 @@ class OverlayComponent extends Component {
                   imageHeight={10}
                   imageWidth={20}
                   tintColor={colours.orange}
-                  // backgroundColor={colours.orange}
                   valueChanged={value => this.valueChanged(value)}
                 />
               </View>
               <View style={styles.btnContainer}>
                 <TouchableOpacity
                   style={styles.buttonStyle}
-                  onPress={() => onPress()}
+                  onPress={() => this.closeModal()}
                 >
                   <Text style={styles.textStyle}>Cancel</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.buttonStyle}
-                  onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price)}
+                  onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price ? this.state.price : this.props.drinkDetails.price, this.state.value)}
                 >
-                  <Text style={styles.textStyle}>Add £{this.state.price}</Text>
+                  <Text style={styles.textStyle}>Add £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>
                 </TouchableOpacity>
 
 
@@ -89,7 +109,7 @@ const styles = StyleSheet.create({
 	color: colours.midnightBlack,
 	textAlign: 'center'
   },
-  
+
   buttonStyle: {
   padding:10,
   marginTop: 10,
@@ -114,9 +134,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     paddingTop: "7%",
-    // paddingBotton: '25%',
     borderBottomColor: "black"
-    // borderBottomWidth: 1,
   },
   btnContainer: {
     flexDirection: "row",
@@ -144,4 +162,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default OverlayComponent;
+const mapStateToProps = state => {
+  return {
+    basket: state.basket,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateBasket: (drink, basketAction) => dispatch(actions.updateBasket(drink, basketAction))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OverlayComponent);
