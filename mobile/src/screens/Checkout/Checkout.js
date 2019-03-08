@@ -4,24 +4,11 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import {ListItem, Card, Button, withBadge} from 'react-native-elements';
 import * as colours from '../../styles/colourScheme';
 import {connect} from 'react-redux';
-import ViewDrinks from '../ViewDrinks/ViewDrinks';
-import {Navigation} from "react-native-navigation";
-import {setViewBasket} from "../../utility/navigation";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 class Checkout extends Component {
 
-    constructor(props) {
-        super(props);
-        Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
-    }
-
-    navigationButtonPressed({ buttonId }) {
-        if (buttonId === "basketButton") {
-            setViewBasket(this.props.componentId, "Drinks", true);
-        }
-    }
 
     state = {
         isScrollEnabled: false,
@@ -143,7 +130,7 @@ class Checkout extends Component {
 
         return (
             <Animated.View style={{ flex: 1, backgroundColor: animatedBackgroundColor }}>
-                <ViewDrinks componentId={this.props.componentId}/>
+                {this.props.children}
                 <Animated.View
                     {...this._panResponder.panHandlers}
                     style={[animatedHeight, { position: 'absolute', left: 0, right: 0, zIndex: 10, backgroundColor: colours.midnightBlack, height: screenHeight }]}
@@ -167,8 +154,8 @@ class Checkout extends Component {
 
                             <Animated.View style={{ opacity: animatedTextOpacity, }}>
                                 <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}>
-                                    <Text style={styles.barOrderDetails1}>4 items </Text>
-                                    <Text style={styles.barOrderDetails2}> £12.48 </Text>
+                                    <Text style={styles.barOrderDetails1}>7 items    </Text>
+                                    <Text style={styles.barOrderDetails2}>    £25.98 </Text>
                                 </Animated.Text>
                             </Animated.View>
                             <Animated.View style={{ opacity: animatedTextOpacity, marginRight: 40 }}>
