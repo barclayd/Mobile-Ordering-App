@@ -1,4 +1,5 @@
 const Order = require('../../models/order');
+const Drink = require('../../models/drink');
 
 module.exports = {
     order: async () => {
@@ -17,7 +18,7 @@ module.exports = {
 
     findDrinks: async (args) => {
         try {
-            const foundDrinks = await Drink.find({category: category});
+            const foundDrinks = await Drink.find({id: id});
             return foundDrinks.map(foundDrink => {
                 return transformDrink(foundDrink)
             });
@@ -26,7 +27,14 @@ module.exports = {
         }
     },
     findCollectionPoint: async (args) => {
-
+        try {
+            const foundCollectionPoint = await Order.find({collectionPoint: collectionPoint}) ;
+            return foundCollectionPoint.map(foundCollectionPoint => {
+                return transformCollectionPoint(foundCollectionPoint)
+            });
+        } catch (err) {
+            throw err;
+        }
     },
 
     createOrder: async (args) => {
