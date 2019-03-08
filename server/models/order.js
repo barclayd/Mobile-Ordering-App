@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
     drinks: [{
-        type: Schema.ObjectId, ref:'drink'
+        type: mongoose.Schema.ObjectId, ref:'drink'
     }],
     collectionPoint: {
         type: 'String',

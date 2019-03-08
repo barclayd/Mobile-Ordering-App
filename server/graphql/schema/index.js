@@ -12,6 +12,14 @@ module.exports = buildSchema(`
      type Category {
         category: String!
      }
+     
+     type Order {
+        drinks: ID!
+        collectionPoint: String!
+        status: String!
+        promotionID: String!
+        orderAssignedTo: ID!
+     }
         
     type Drink {
             _id: ID!
@@ -37,6 +45,12 @@ module.exports = buildSchema(`
             description: String!
             latitude: Float!
             longitude: Float!
+        }
+        
+        type BarStaff {
+            userId: ID!
+            firstName: String!
+            surname: String!
         }
         
         type AuthData {
@@ -93,7 +107,7 @@ module.exports = buildSchema(`
            findOrderById(orderId: String!) : [Order!]!
            findDrinks(category: String!): [Drink!]!           
            drinks: [Drink!]!
-           findUserById(userId: String!): [barStaff!]!
+           findUserById(userId: String!): [BarStaff!]!
            findIngredients(name: String!): [Ingredient!]!
            findDrinkCategories: [Category!]!
         }
