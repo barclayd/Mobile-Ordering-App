@@ -68,14 +68,21 @@ export const setAuthRedirectPath = path => {
     };
 };
 
-export const authCheckState = () => {
+export const authCheckState = (componentId) => {
     return {
-        type: actionTypes.AUTH_CHECK_STATE
+        type: actionTypes.AUTH_CHECK_STATE,
+        componentId
     };
 };
 
 export const authStoreToken = () => {
     return {
+        type: actionTypes.AUTH_STORE_TOKEN
+    };
+};
 
+export const authAutoSignIn = () => {
+    return {
+        type: actionTypes.AUTH_AUTO_LOGIN
     };
 };

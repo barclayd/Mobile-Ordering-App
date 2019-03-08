@@ -16,12 +16,12 @@ let submittedCode;
 class WelcomeScreen extends Component {
 
     componentDidMount() {
+        this.props.onTryAutoSignIn(this.props.componentId);
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
                 visible: false
             }
         });
-        this.props.onTryAutoSignIn();
     }
 
     state = {
@@ -200,7 +200,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onTryAutoSignIn: () => dispatch(actions.authCheckState()),
+        onTryAutoSignIn: (componentId) => dispatch(actions.authCheckState(componentId)),
         findBar: (barCode, componentId) => dispatch(actions.findBar(barCode, componentId))
     };
 };

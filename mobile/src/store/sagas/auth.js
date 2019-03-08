@@ -7,6 +7,17 @@ import IonicIcon from "react-native-vector-icons/Ionicons";
 import {Platform} from "react-native";
 import {setMainApp, setMainAppSettings} from "../../utility/navigation";
 
+const authRedirect = (action) => {
+    Promise.all([
+        IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
+        IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
+    ])
+        .then(sources => {
+            setMainAppSettings(sources[0], sources[1]);
+            setMainApp(action.componentId);
+        });
+};
+
 export function* logoutSaga(action) {
     // call function makes generators more testable
     yield AsyncStorage.removeItem("tokenExpiration");
@@ -42,7 +53,7 @@ export function* authUserSaga(action) {
                 }
             };
 
-            const response = yield axios.post('http://localhost:3000/graphql', JSON.stringify(requestBody));
+            const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.data.errors) {
                 throw Error(response.data.errors[0].message);
             }
@@ -72,21 +83,14 @@ export function* authUserSaga(action) {
                         yield AsyncStorage.setItem("userId", res.data.data.login.userId);
                         yield AsyncStorage.setItem("tokenExpiration", res.data.data.login.tokenExpiration);
                         yield AsyncStorage.setItem("name", res.data.data.login.name);
-
-                        Promise.all([
-                            IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
-                            IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
-                        ])
-                            .then(sources => {
-                                setMainAppSettings(sources[0], sources[1]);
-                                setMainApp(action.componentId);
-                            });
+                        yield authRedirect(action);
                     } else {
                         yield put(actions.authFail());
                         Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again')
                     }
                 } catch (err) {
                     console.log(err);
+                    yield put(actions.authFail());
                     Alert.alert('Unsuccessful login 🔒', 'Authentication failed. Please try again')
                 }
             } else {
@@ -117,15 +121,12 @@ export function* authUserSaga(action) {
 
             const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.status === 200 && response.status !== 201) {
+                yield AsyncStorage.setItem("token", response.data.data.login.token);
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
-                Promise.all([
-                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
-                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
-                ])
-                    .then(sources => {
-                        setMainAppSettings(sources[0], sources[1]);
-                        setMainApp(action.componentId);
-                    });
+                // yield AsyncStorage.setItem("userId", response.data.data.login.userId);
+                // yield AsyncStorage.setItem("tokenExpiration", response.data.data.login.tokenExpiration);
+                // yield AsyncStorage.setItem("name", response.data.data.login.name);
+               yield authRedirect(action);
             } else {
                 yield put(actions.authFail());
                 Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again')
@@ -138,27 +139,37 @@ export function* authUserSaga(action) {
 }
 
 export function* authCheckStateSaga(action) {
+    console.log('checking for token');
     const token = yield AsyncStorage.getItem("token");
+    console.log(token);
     if (!token) {
         yield put(actions.logout());
     } else {
-        const expirationDate = yield new Date(
-            AsyncStorage.getItem("tokenExpiration")
-        );
-        if (expirationDate <= new Date()) {
-            yield put(actions.logout());
-        } else {
-            const userId = yield AsyncStorage.getItem("userId");
-            yield put(actions.authSuccess(token, userId));
-            yield put(
-                actions.checkAuthTimeout(
-                    (expirationDate.getTime() - new Date().getTime()) / 1000
-                )
-            );
-        }
+        // const expirationDate = yield new Date(
+        //     AsyncStorage.getItem("tokenExpiration")
+        // );
+        // if (expirationDate <= new Date()) {
+        //     yield put(actions.logout());
+        // } else {
+        //     const userId = yield AsyncStorage.getItem("userId");
+        //     yield put(actions.authSuccess(token, userId));
+        //     yield put(
+        //         actions.checkAuthTimeout(
+        //             (expirationDate.getTime() - new Date().getTime()) / 1000
+        //         )
+        //     );
+        // }
+        authRedirect(action);
     }
 }
 
 export function* checkAuthTimeoutSaga(action) {
     yield put(actions.logout());
+}
+
+export function* autoSignInSaga(action) {
+    const token = yield AsyncStorage.getItem("token");
+    if (token) {
+        yield authRedirect(action);
+    }
 }
