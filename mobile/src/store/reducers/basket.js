@@ -4,7 +4,7 @@ import {updateObject} from "../utility";
 const initialState = {
     loading: null,
     error: null,
-    drinks: []
+    basket: []
 };
 
 const updateBasketStart = (state, action) => {
@@ -14,17 +14,11 @@ const updateBasketStart = (state, action) => {
     });
 };
 
-const createBasketStart = (state, action) => {
-    return updateObject(state, {
-        error: null,
-        loading: true
-    });
-};
-
 const updateBasketSuccess = (state, action) => {
     if (action.basketAction === 'add') {
+        console.log(action.drink);
         return updateObject(state, {
-            drinks: state.drinks.concat(action.drink),
+            basket: state.basket.concat(action.drink),
             loading: false,
             error: false,
             saved: true
@@ -32,7 +26,7 @@ const updateBasketSuccess = (state, action) => {
     }
     if (action.basketAction === 'update') {
         return updateObject(state, {
-            drinks: state.drinks.concat(action.drink),
+            basket: state.basket.concat(action.drink),
             loading: false,
             error: false,
             saved: true
@@ -40,28 +34,19 @@ const updateBasketSuccess = (state, action) => {
     }
     if (action.basketAction === 'delete') {
         return updateObject(state, {
-            drink: state.drinks.filter(drink => drink.name === action.drink.name),
+            drink: state.basket.filter(drink => drink.name === action.drink.name),
             loading: false,
             error: false,
             saved: true
         });
+    } else {
+        return state;
     }
-};
-
-const createBasketSuccess = (state, action) => {
-    return updateObject(state, {
-        drinks: state.drinks.concat(action.drink),
-        loading: false,
-        error: false,
-        saved: true
-    });
 };
 
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.CREATE_BASKET_START: return createBasketStart(state, action);
-        case actionTypes.CREATE_BASKET_SUCCESS: return createBasketSuccess(state, action);
         case actionTypes.UPDATE_BASKET_START: return updateBasketStart(state, action);
         case actionTypes.UPDATE_BASKET_SUCCESS: return updateBasketSuccess(state, action);
         default: return state;

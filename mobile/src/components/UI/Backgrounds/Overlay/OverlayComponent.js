@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { View, Text, Dimensions, StyleSheet, Button, TouchableOpacity, Vibration } from "react-native";
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity, Vibration } from "react-native";
 import { Overlay } from "react-native-elements";
 import { SimpleStepper } from "react-native-simple-stepper";
-import ButtonWithBackground from "../../Buttons/ButtonWithBackground";
 import * as colours from "../../../../styles/colourScheme";
 import * as actions from "../../../../store/actions/index";
 import { connect } from "react-redux";
@@ -28,42 +27,37 @@ class OverlayComponent extends Component {
     let initialPrice = Number(this.props.drinkDetails.price) * nextValue
     let price = parseFloat(Math.round(initialPrice * 100) / 100).toFixed(2);
     console.log("next value", nextValue, ". initial price", initialPrice, ". price",price)
-      this.setState({ 
+      this.setState({
       value: nextValue,
       price: price
     });
   };
 
   onPressAddDrinks = (drink, price, quantity) => {
-    if (quantity == 0){
+    if (quantity === 0){
       alert("Quantity of 0 not aloud")
     }
-    console.log("adding Drink to DB", drink, price, quantity)
-    sumPrice = this.state.price
+    console.log("adding Drink to DB", drink, price, quantity);
+    const drinkPrice = this.state.price;
     let drinksObj = {
       ...drink,
       quantity,
-      sumPrice
-    }
-    this.props.createBasket(drinksObj)
+      drinkPrice
+    };
+    this.props.updateBasket(drinksObj, 'add');
     Vibration.vibrate(DURATION);
-    // this.setState(prevState => ({
-    // orderedDrinks: [...prevState.orderedDrinks, {drinksObj}]
-    // }))
     this.closeModal()
-
-}
+};
 
   closeModal = () => {
-    this.props.modalVisible()
-  }
+    this.props.modalVisible();
+  };
 
   componentDidUpdate(){
     console.log("overlay state", this.state )
   }
 
   render() {
-    // console.log(this.state);
     return (
       <View>
         <Overlay
@@ -82,7 +76,7 @@ class OverlayComponent extends Component {
               <View style={styles.rowContainer}>
                 <View style={styles.pad}>
                   <Text style={styles.item}>
-                    Quantitiy x {this.state.value}{" "}
+                    Quantity: {this.state.value}{" "}
                   </Text>
                 </View>
                 <SimpleStepper
@@ -90,7 +84,6 @@ class OverlayComponent extends Component {
                   imageHeight={10}
                   imageWidth={20}
                   tintColor={colours.orange}
-                  // backgroundColor={colours.orange}
                   valueChanged={value => this.valueChanged(value)}
                 />
               </View>
@@ -124,7 +117,7 @@ const styles = StyleSheet.create({
 	color: colours.midnightBlack,
 	textAlign: 'center'
   },
-  
+
   buttonStyle: {
   padding:10,
   marginTop: 10,
@@ -149,9 +142,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     paddingTop: "7%",
-    // paddingBotton: '25%',
     borderBottomColor: "black"
-    // borderBottomWidth: 1,
   },
   btnContainer: {
     flexDirection: "row",
@@ -181,13 +172,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    drinks: state.drinks,
+    basket: state.basket,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    createBasket: (drink) => dispatch(actions.createBasket(drink))
+    updateBasket: (drink, basketAction) => dispatch(actions.updateBasket(drink, basketAction))
   };
 };
 
