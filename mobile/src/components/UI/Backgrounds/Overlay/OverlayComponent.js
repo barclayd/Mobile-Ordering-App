@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import { View, Text, Dimensions, StyleSheet, TouchableOpacity, Vibration } from "react-native";
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { Overlay } from "react-native-elements";
 import { SimpleStepper } from "react-native-simple-stepper";
 import * as colours from "../../../../styles/colourScheme";
 import * as actions from "../../../../store/actions/index";
 import { connect } from "react-redux";
-
-const DURATION = 10000;
 
 class OverlayComponent extends Component {
 
@@ -36,7 +34,6 @@ class OverlayComponent extends Component {
       quantity
     };
     this.props.updateBasket(drinksObj, 'add');
-    Vibration.vibrate(DURATION);
     this.closeModal()
 };
 
