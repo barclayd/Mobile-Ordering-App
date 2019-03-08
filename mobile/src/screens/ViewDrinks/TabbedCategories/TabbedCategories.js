@@ -6,12 +6,10 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
-import {connect} from "react-redux";
-import * as actions from "../../../store/actions/index";
 import {Card} from "react-native-elements";
 import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/OverlayComponent";
 
-class TabScreen2 extends Component {
+class TabbedCategories extends Component {
   state = {
     isVisible: false,
     drinkSelected: {}
@@ -43,7 +41,7 @@ class TabScreen2 extends Component {
     console.log(this.props.category);
     return (
       <View>
-        {this.props.data.length > 0 ? this.props.data.map((u, i) => {
+        {this.props.drinks.length > 0 ? this.props.drinks.map((u, i) => {
           return (
             <TouchableOpacity key={i} onPress={() => this.openOverlay(i)}>
               <Card>
@@ -115,22 +113,4 @@ const styles = StyleSheet.create({
   contentContainer: {}
 });
 
-
-const mapStateToProps = state => {
-  return {
-    error: state.drink.error,
-    loading: state.drink.loading,
-    data: state.drink.drinks,
-    saved: state.drink.saved
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    findDrinks: (category, componentId) =>
-      dispatch(actions.findDrinks(category, componentId))
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TabScreen2);
+export default TabbedCategories;

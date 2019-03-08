@@ -17,7 +17,7 @@ import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import beers from "../../assets/beers.jpg";
 import logo from "../../assets/taflogo.png";
-import Checkout from "../../components/HOC/Checkout/Checkout";
+import Checkout from "../Checkout/Checkout";
 
 class ViewMenus extends Component {
   state = {
