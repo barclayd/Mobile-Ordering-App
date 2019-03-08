@@ -4,11 +4,17 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import {ListItem, Card, Button, withBadge} from 'react-native-elements';
 import * as colours from '../../styles/colourScheme';
 import {connect} from 'react-redux';
-import {transparent} from "../../styles/colourScheme";
+import ViewDrinks from '../ViewDrinks/ViewDrinks';
+import {Navigation} from "react-native-navigation";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 class Checkout extends Component {
+
+    constructor(props) {
+        super(props);
+        Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+    }
 
     state = {
         isScrollEnabled: false,
@@ -34,7 +40,10 @@ class Checkout extends Component {
 
     componentWillMount() {
         this.scrollOffset = 0;
-        this.animation = new Animated.ValueXY({x:0, y: screenHeight - 90});
+        this.animation = new Animated.ValueXY({x:0, y: screenHeight - 180});
+
+        // toggle this in state to auto open
+        // this.animation = new Animated.ValueXY({x:0, y: 0});
         this._panResponder = PanResponder.create({
             onMoveShouldSetPanResponder: (event, gestureState) => {
                 return (this.state.isScrollEnabled && this.scrollOffset <= 0 && gestureState.dy > 0) || !this.state.isScrollEnabled && gestureState.dy < 0;
@@ -113,7 +122,7 @@ class Checkout extends Component {
 
         const animatedBackgroundColor = this.animation.y.interpolate({
             inputRange: [0, screenHeight-90],
-            outputRange: [colours.midnightBlack, transparent],
+            outputRange: [colours.midnightBlack, colours.transparent],
             extrapolate: 'clamp'
         });
 
@@ -126,6 +135,8 @@ class Checkout extends Component {
 
         return (
             <Animated.View style={{ flex: 1, backgroundColor: animatedBackgroundColor }}>
+                {/*<Text>HELLO</Text>*/}
+                <ViewDrinks componentId={this.props.componentId}/>
                 <Animated.View
                     {...this._panResponder.panHandlers}
                     style={[animatedHeight, { position: 'absolute', left: 0, right: 0, zIndex: 10, backgroundColor: colours.midnightBlack, height: screenHeight }]}
