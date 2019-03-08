@@ -34,7 +34,7 @@ const updateBasketSuccess = (state, action) => {
     }
     if (action.basketAction === 'delete') {
         return updateObject(state, {
-            drink: state.basket.filter(drink => drink.name === action.drink.name),
+            drink: state.basket.filter(drink => drink.name !== action.drink.name),
             loading: false,
             error: false,
             saved: true

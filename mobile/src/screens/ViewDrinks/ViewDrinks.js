@@ -11,7 +11,7 @@ import ScrollableTabView, {
 } from "react-native-scrollable-tab-view";
 import * as actions from "../../store/actions/index";
 import TabbedCategories from "./TabbedCategories/TabbedCategories";
-import Checkout from '../Checkout/Checkout';
+import Checkout from '../../components/HOC/Checkout/Checkout';
 import {Navigation} from "react-native-navigation";
 import {setViewBasket} from "../../utility/navigation";
 

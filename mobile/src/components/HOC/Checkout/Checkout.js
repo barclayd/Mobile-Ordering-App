@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image} from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
 import {ListItem, Card, Button, withBadge} from 'react-native-elements';
-import * as colours from '../../styles/colourScheme';
+import * as colours from '../../../styles/colourScheme';
 import {connect} from 'react-redux';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -28,7 +28,6 @@ class Checkout extends Component {
                 itemPrice: '£16.99'
             },
         ],
-        basketQuantity: 7,
         basketBarHeight: screenHeight - 180
     };
 
@@ -77,9 +76,25 @@ class Checkout extends Component {
         })
     }
 
+    basketItems = () => {
+    let totalItems = 0;
+    this.props.basket.map(drink => {
+          totalItems += drink.quantity
+      });
+    return totalItems;
+    };
+
+    basketPrice = () => {
+        let totalPrice = 0;
+        this.props.basket.map(drink => {
+            totalPrice += (drink.price * drink.quantity);
+        });
+        return totalPrice.toFixed(2);
+    };
+
     render() {
 
-        const BadgedIcon = withBadge(this.state.basketQuantity)(Icon);
+        const BadgedIcon = withBadge(this.basketItems())(Icon);
 
         const animatedHeight = {
             transform: this.animation.getTranslateTransform()
@@ -149,13 +164,13 @@ class Checkout extends Component {
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Animated.View style={{ height: animatedImageHeight, width: animatedImageHeight, marginLeft: animatedImageMarginLeft }}>
                                     <Image style={{ flex: 1, width: null, height: null }}
-                                           source={require('../../assets/Logo.png')} />
+                                           source={require('../../../assets/Logo.png')} />
                                 </Animated.View>
 
                             <Animated.View style={{ opacity: animatedTextOpacity, }}>
                                 <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}>
-                                    <Text style={styles.barOrderDetails1}>7 items    </Text>
-                                    <Text style={styles.barOrderDetails2}>    £25.98 </Text>
+                                    <Text style={styles.barOrderDetails1}>{this.basketItems()} Drinks   </Text>
+                                    <Text style={styles.barOrderDetails2}>    £{this.basketPrice()} </Text>
                                 </Animated.Text>
                             </Animated.View>
                             <Animated.View style={{ opacity: animatedTextOpacity, marginRight: 40 }}>
@@ -186,23 +201,23 @@ class Checkout extends Component {
                                           titleStyle={{color: colours.midBlue, fontWeight: 'bold', fontSize: 24}}
                                           dividerStyle={{backgroundColor: colours.pureWhite}}>
                                     {
-                                        this.state.checkoutList.map((l, i) => (
+                                        this.props.basket.map((drink, i) => (
                                             <ListItem
                                                 key={i}
                                                 titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
                                                 containerStyle={{backgroundColor: colours.lightGrey}}
-                                                title={l.drinkName}
+                                                title={drink.name}
                                                 bottomDivider
                                                 subtitle={
                                                     <View style={styles.subtitleView}>
                                                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                                        <Text style={styles.subInformationText}>{l.drinkSize}</Text>
-                                                            <Text style={styles.subInformationTextPrice}>{l.itemPrice}</Text>
+                                                        <Text style={styles.subInformationText}>{drink.category}</Text>
+                                                            <Text style={styles.subInformationTextPrice}>{(drink.price * drink.quantity).toFixed(2)}</Text>
                                                         </View>
-                                                        <Text style={styles.subInformationText}>{l.itemSpecifics}</Text>
+                                                        <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
                                                     </View>
                                                 }
-                                                badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: l.quantity, textStyle: { color: colours.pureWhite}}}
+                                                badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: drink.quantity, textStyle: { color: colours.pureWhite}}}
                                             />
                                         ))
                                     }
@@ -213,13 +228,13 @@ class Checkout extends Component {
                                         containerStyle={{backgroundColor: colours.midnightBlack}}>
                                         <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
                                         <Text style={styles.barOrderDetails1}>
-                                            Total Items: 14
+                                            Total Items: {this.basketItems()}
                                         </Text>
-                                            <Text style={{ color: colours.pureWhite, fontSize: 30}}>
+                                            <Text style={{ color: colours.midGrey, fontSize: 30}}>
                                                 |
                                             </Text>
                                         <Text style={styles.barOrderDetails2}>
-                                            Total Price: £25.98
+                                            Total Price: {this.basketPrice()}
                                         </Text>
                                         </View>
                                     </Card>
@@ -360,5 +375,11 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = state => {
+    return {
+        basket: state.basket.basket
+    }
+};
 
-export default connect(null, null)(Checkout)
+
+export default connect(mapStateToProps, null)(Checkout)
