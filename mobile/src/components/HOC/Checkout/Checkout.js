@@ -28,7 +28,8 @@ class Checkout extends Component {
                 itemPrice: '£16.99'
             },
         ],
-        basketBarHeight: screenHeight - 180
+        basketBarHeight: screenHeight - 180,
+        drinkCategories: []
     };
 
 
@@ -92,6 +93,7 @@ class Checkout extends Component {
         return totalPrice.toFixed(2);
     };
 
+
     render() {
 
         const BadgedIcon = withBadge(this.basketItems())(Icon);
@@ -141,7 +143,6 @@ class Checkout extends Component {
             outputRange: [screenHeight/12, 90],
             extrapolate: 'clamp'
         });
-
 
         return (
             <Animated.View style={{ flex: 1, backgroundColor: animatedBackgroundColor }}>
@@ -195,33 +196,40 @@ class Checkout extends Component {
 
                             <View style={{ height: screenHeight/3, width: screenWidth}}>
                                 <View>
-                                    <Card
-                                        title="Spirits"
-                                        containerStyle={{backgroundColor: colours.lightGrey}}
-                                          titleStyle={{color: colours.midBlue, fontWeight: 'bold', fontSize: 24}}
-                                          dividerStyle={{backgroundColor: colours.pureWhite}}>
                                     {
-                                        this.props.basket.map((drink, i) => (
-                                            <ListItem
-                                                key={i}
-                                                titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
+                                        this.props.basketCategories.map(category => (
+                                             <Card
+                                                title={category}
                                                 containerStyle={{backgroundColor: colours.lightGrey}}
-                                                title={drink.name}
-                                                bottomDivider
-                                                subtitle={
-                                                    <View style={styles.subtitleView}>
-                                                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                                        <Text style={styles.subInformationText}>{drink.category}</Text>
-                                                            <Text style={styles.subInformationTextPrice}>{(drink.price * drink.quantity).toFixed(2)}</Text>
-                                                        </View>
-                                                        <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
-                                                    </View>
+                                                titleStyle={{color: colours.midBlue, fontWeight: 'bold', fontSize: 24}}
+                                                dividerStyle={{backgroundColor: colours.pureWhite}}>
+                                                {
+                                                    this.props.basket.map((drink, i) => {
+                                                        if (drink.category === category) {
+                                                            return (
+                                                                <ListItem
+                                                                    key={i}
+                                                                    titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
+                                                                    containerStyle={{backgroundColor: colours.lightGrey}}
+                                                                    title={drink.name}
+                                                                    bottomDivider
+                                                                    subtitle={
+                                                                        <View style={styles.subtitleView}>
+                                                                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                                                                <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
+                                                                                <Text style={styles.subInformationTextPrice}>£{(drink.price * drink.quantity).toFixed(2)}</Text>
+                                                                            </View>
+                                                                        </View>
+                                                                    }
+                                                                    badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: drink.quantity, textStyle: { color: colours.pureWhite}}}
+                                                                />
+                                                            )
+                                                        }
+                                                    })
                                                 }
-                                                badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: drink.quantity, textStyle: { color: colours.pureWhite}}}
-                                            />
+                                            </Card>
                                         ))
                                     }
-                                    </Card>
                                 </View>
                                 <View>
                                     <Card
@@ -240,7 +248,7 @@ class Checkout extends Component {
                                     </Card>
                                 </View>
                             </View>
-                            <View style={{ height: (screenHeight/6)*3, justifyContent: 'center', alignItems: 'center'}}>
+                            <View style={{ height: (screenHeight/6)*5.5, justifyContent: 'center', alignItems: 'center'}}>
                                 <Button
                                     ViewComponent={require('react-native-linear-gradient').default}
                                     icon={
@@ -275,7 +283,7 @@ class Checkout extends Component {
                                 />
                             </View>
                         </Animated.View>
-                        <View style={{ height: 200 }} />
+                        <View style={{ height: 1000 }} />
                     </ScrollView>
                 </Animated.View>
 
@@ -377,7 +385,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        basket: state.basket.basket
+        basket: state.basket.basket,
+        basketCategories: state.basket.categories
     }
 };
 
