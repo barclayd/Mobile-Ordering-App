@@ -68,6 +68,10 @@ module.exports = buildSchema(`
             price: String!
         }
         
+         input DrinkInput {
+            id: ID!
+        }
+        
         input IngredientInput {
             name: String!
             amount: String!
@@ -78,6 +82,9 @@ module.exports = buildSchema(`
         type RootQuery {
            login(email: String!, password: String!): AuthData!
            findBar(barCode: String!): Bar!
+           findOrderById(orderId: String!) : [Order!]!
+           editOrderById(orderId: String!) : [Order!]!
+           createOrder(drinkInputId: id) : [Order!]!
            findDrinks(category: String!): [Drink!]!
            drinks: [Drink!]!
            findIngredients(name: String!): [Ingredient!]!
