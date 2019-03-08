@@ -6,6 +6,7 @@ import * as colours from '../../styles/colourScheme';
 import {connect} from 'react-redux';
 import ViewDrinks from '../ViewDrinks/ViewDrinks';
 import {Navigation} from "react-native-navigation";
+import {setViewBasket} from "../../utility/navigation";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -14,6 +15,12 @@ class Checkout extends Component {
     constructor(props) {
         super(props);
         Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+    }
+
+    navigationButtonPressed({ buttonId }) {
+        if (buttonId === "basketButton") {
+            setViewBasket(this.props.componentId, "Drinks", true);
+        }
     }
 
     state = {
@@ -34,13 +41,14 @@ class Checkout extends Component {
                 itemPrice: '£16.99'
             },
         ],
-        basketQuantity: 7
+        basketQuantity: 7,
+        basketBarHeight: screenHeight - 180
     };
 
 
     componentWillMount() {
         this.scrollOffset = 0;
-        this.animation = new Animated.ValueXY({x:0, y: screenHeight - 180});
+        this.animation = new Animated.ValueXY({x:0, y: this.props.fullScreen ? 0 : this.state.basketBarHeight});
 
         // toggle this in state to auto open
         // this.animation = new Animated.ValueXY({x:0, y: 0});
@@ -97,20 +105,20 @@ class Checkout extends Component {
         });
 
         const animatedTextOpacity = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-500, screenHeight-90],
+            inputRange: [0, screenHeight-500, screenHeight - 180],
             outputRange: [0, 0, 1],
             extrapolate: 'clamp'
         });
 
         const animatedImageMarginLeft = this.animation.y.interpolate({
             inputRange: [0, screenHeight-90],
-            outputRange: [screenWidth/2-16, 15],
+            outputRange: [screenWidth/2-32, 15],
             extrapolate: 'clamp'
         });
 
         const animatedHeaderHeight = this.animation.y.interpolate({
             inputRange: [0, screenHeight-90],
-            outputRange: [screenHeight/12, 90],
+            outputRange: [screenHeight/5, 90],
             extrapolate: 'clamp'
         });
 
@@ -135,7 +143,6 @@ class Checkout extends Component {
 
         return (
             <Animated.View style={{ flex: 1, backgroundColor: animatedBackgroundColor }}>
-                {/*<Text>HELLO</Text>*/}
                 <ViewDrinks componentId={this.props.componentId}/>
                 <Animated.View
                     {...this._panResponder.panHandlers}
@@ -152,22 +159,22 @@ class Checkout extends Component {
                         <Animated.View
                             style={{ height: animatedHeaderHeight, borderTopWidth: 1, borderTopColor:  colours.midnightBlack, flexDirection: 'row', alignItems: 'center' }}
                         >
-                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start' }}>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Animated.View style={{ height: animatedImageHeight, width: animatedImageHeight, marginLeft: animatedImageMarginLeft }}>
                                     <Image style={{ flex: 1, width: null, height: null }}
                                            source={require('../../assets/Logo.png')} />
                                 </Animated.View>
-                            </View>
-                            <Animated.View style={{ opacity: animatedTextOpacity, flex: 2, flexDirection: 'row', alignItems: 'space-between'}}>
+
+                            <Animated.View style={{ opacity: animatedTextOpacity, }}>
                                 <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}>
                                     <Text style={styles.barOrderDetails1}>4 items </Text>
                                     <Text style={styles.barOrderDetails2}> £12.48 </Text>
                                 </Animated.Text>
                             </Animated.View>
-                            <Animated.View style={{ opacity: animatedTextOpacity, flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 25 }}>
-                                {/*<Icon name="shopping-cart" size={32} color={colours.white} />*/}
+                            <Animated.View style={{ opacity: animatedTextOpacity, marginRight: 40 }}>
                                 <BadgedIcon size={28} name="shopping-cart" color={colours.white}/>
                             </Animated.View>
+                            </View>
                         </Animated.View>
 
                         <Animated.View style={{ height: animatedHeaderHeight, opacity: animatedMainContentOpacity }}>
@@ -231,7 +238,7 @@ class Checkout extends Component {
                                     </Card>
                                 </View>
                             </View>
-                            <View style={{ height: (screenHeight/6)*4, justifyContent: 'center', alignItems: 'center'}}>
+                            <View style={{ height: (screenHeight/6)*3, justifyContent: 'center', alignItems: 'center'}}>
                                 <Button
                                     ViewComponent={require('react-native-linear-gradient').default}
                                     icon={

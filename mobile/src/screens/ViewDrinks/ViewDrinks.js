@@ -3,27 +3,19 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ScrollView,
-  Platform
+  ScrollView
 } from "react-native";
 import { connect } from "react-redux";
 import ScrollableTabView, {
   ScrollableTabBar
 } from "react-native-scrollable-tab-view";
-import { setViewBasket, setViewBasketSettings } from "../../utility/navigation";
-import IonicIcon from "react-native-vector-icons/Ionicons";
 import * as actions from "../../store/actions/index";
-import { Navigation } from "react-native-navigation";
 import TabScreen2 from "./TabScreens/TabScreen2";
-import Checkout from '../Checkout/Checkout';
 
 const screenHeight = Dimensions.get('window').height;
 
 class ViewDrinks extends Component {
-  constructor(props) {
-    super(props);
-    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
-  }
+
 
   state = {
     search: "",
@@ -32,25 +24,7 @@ class ViewDrinks extends Component {
     drinksApi: false
   };
 
-  navigationButtonPressed({ buttonId }) {
-    if (buttonId === "profileButton") {
-      Promise.all([
-        IonicIcon.getImageSource(
-            Platform.OS === "android" ? "md-menu" : "ios-menu",
-            30
-        ),
-        IonicIcon.getImageSource(
-            Platform.OS === "android" ? "md-person" : "ios-person",
-            30
-        )
-      ]).then(sources => {
-        setViewBasketSettings(sources[1]);
-        setViewBasket(this.props.componentId, "Checkout");
-      });
-    }
-  }
   componentDidMount() {
-    // get categories dynamically
     this.props.onFetchDrinkCategories();
     this.props.findAllDrinks();
   };
@@ -58,7 +32,6 @@ class ViewDrinks extends Component {
   componentWillReceiveProps(nextProps) {
     console.log(nextProps);
     if (!nextProps.loading) {
-      // sort drinks into categories
       this.setState({
         categories: nextProps.drinkCategories,
         drinks: nextProps.drinks
@@ -76,7 +49,7 @@ class ViewDrinks extends Component {
     console.log(this.state.categories);
     return (
         <View style={styles.background}>
-          <View style={{flex: .9}}>
+          <View style={{flex: .85}}>
           {this.state.categories.length > 0 ? (
               <ScrollableTabView
                   style={{ marginTop: 20 }}
@@ -86,7 +59,7 @@ class ViewDrinks extends Component {
                 {this.state.categories.length > 0
                     ? this.state.categories.map((category, index) => {
                       return (
-                          <ScrollView tabLabel={category}>
+                          <ScrollView tabLabel={category} key={index}>
                             <TabScreen2
                                 key={category}
                                 category={category}
@@ -100,8 +73,7 @@ class ViewDrinks extends Component {
           ) : null}
           </View>
           <View
-              // style={[{position: 'absolute', backgroundColor: '#eee', left: 0, right: 0, zIndex: 10, height: 100, bottom: 0 }]}>
-              style={[{flex: 0.1, backgroundColor: '#eee' }]}>
+              style={[{flex: 0.1, backgroundColor: 'transparent' }]}>
           </View>
         </View>
     );
