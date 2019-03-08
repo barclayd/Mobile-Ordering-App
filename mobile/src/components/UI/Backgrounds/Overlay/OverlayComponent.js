@@ -9,24 +9,21 @@ import { connect } from "react-redux";
 const DURATION = 10000;
 
 class OverlayComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      price: "0.00"
-    }
-  }
 
   state = {
     value: 1,
-    price: "",
+    price: null,
     orderedDrinks: []
   };
 
   valueChanged = value => {
+    if (value === 0) {
+      return;
+    }
     const nextValue = Number(value.toFixed(2));
-    let initialPrice = Number(this.props.drinkDetails.price) * nextValue
+    let initialPrice = Number(this.props.drinkDetails.price) * nextValue;
     let price = parseFloat(Math.round(initialPrice * 100) / 100).toFixed(2);
-    console.log("next value", nextValue, ". initial price", initialPrice, ". price",price)
+    console.log("next value", nextValue, ". initial price", initialPrice, ". price",price);
       this.setState({
       value: nextValue,
       price: price
@@ -34,15 +31,9 @@ class OverlayComponent extends Component {
   };
 
   onPressAddDrinks = (drink, price, quantity) => {
-    if (quantity === 0){
-      alert("Quantity of 0 not aloud")
-    }
-    console.log("adding Drink to DB", drink, price, quantity);
-    const drinkPrice = this.state.price;
     let drinksObj = {
       ...drink,
-      quantity,
-      drinkPrice
+      quantity
     };
     this.props.updateBasket(drinksObj, 'add');
     Vibration.vibrate(DURATION);
@@ -51,6 +42,10 @@ class OverlayComponent extends Component {
 
   closeModal = () => {
     this.props.modalVisible();
+    this.setState({
+      value: 1,
+      price: null
+    })
   };
 
   componentDidUpdate(){
@@ -97,9 +92,9 @@ class OverlayComponent extends Component {
 
                 <TouchableOpacity
                   style={styles.buttonStyle}
-                  onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price, this.state.value)}
+                  onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price ? this.state.price : this.props.drinkDetails.price, this.state.value)}
                 >
-                  <Text style={styles.textStyle}>Add £{this.state.price}</Text>
+                  <Text style={styles.textStyle}>Add £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>
                 </TouchableOpacity>
 
 
