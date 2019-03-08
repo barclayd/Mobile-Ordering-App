@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image} from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
 import {ListItem, Card, Button, withBadge} from 'react-native-elements';
-import * as colours from '../../../styles/colourScheme';
+import * as colours from '../../styles/colourScheme';
 import {connect} from 'react-redux';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -149,7 +149,7 @@ class Checkout extends Component {
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Animated.View style={{ height: animatedImageHeight, width: animatedImageHeight, marginLeft: animatedImageMarginLeft }}>
                                     <Image style={{ flex: 1, width: null, height: null }}
-                                           source={require('../../../assets/Logo.png')} />
+                                           source={require('../../assets/Logo.png')} />
                                 </Animated.View>
 
                             <Animated.View style={{ opacity: animatedTextOpacity, }}>

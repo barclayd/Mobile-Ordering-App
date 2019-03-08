@@ -62,9 +62,9 @@ export function* findDrinksSaga(action){
                 yield put(actions.findDrinksSuccess(fetchData));
             }
         }
-        } catch (err) {
-                    console.log(err);
-                    yield put(actions.findDrinksFail(err));
+    } catch (err) {
+        console.log(err);
+        yield put(actions.findDrinksFail(err));
     }
 }
 
@@ -99,4 +99,3 @@ export function* findDrinkCategoriesSaga(action) {
         yield put(actions.findDrinkCategoriesFail(err));
     }
 }
-

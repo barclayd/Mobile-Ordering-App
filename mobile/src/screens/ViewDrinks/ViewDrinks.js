@@ -10,8 +10,8 @@ import ScrollableTabView, {
   ScrollableTabBar
 } from "react-native-scrollable-tab-view";
 import * as actions from "../../store/actions/index";
-import TabScreen2 from "./TabScreens/TabScreen2";
-import Checkout from '../../components/HOC/Checkout/Checkout';
+import TabbedCategories from "./TabbedCategories/TabbedCategories";
+import Checkout from '../Checkout/Checkout';
 import {Navigation} from "react-native-navigation";
 import {setViewBasket} from "../../utility/navigation";
 
@@ -55,41 +55,44 @@ class ViewDrinks extends Component {
   getDrinksByCategory = (id) => {
     const categoryName = this.state.categories[id];
     console.log(categoryName);
-    return this.state.drinks.filter(drink => drink.category === categoryName);
+    return this.state.drinks.filter(drink => {
+      console.log(drink.category === categoryName);
+      return drink.category === categoryName
+    });
   };
 
   render() {
     console.log(this.state.categories);
     return (
         <Checkout componentId={this.props.componentId}>
-        <View style={styles.background}>
-          <View style={{flex: .85}}>
-          {this.state.categories.length > 0 ? (
-              <ScrollableTabView
-                  style={{ marginTop: 20 }}
-                  initialPage={0}
-                  renderTabBar={() => <ScrollableTabBar />}
-              >
-                {this.state.categories.length > 0
-                    ? this.state.categories.map((category, index) => {
-                      return (
-                          <ScrollView tabLabel={category} key={index}>
-                            <TabScreen2
-                                key={category}
-                                category={category}
-                                drinks={this.getDrinksByCategory(index)}
-                            />
-                          </ScrollView>
-                      );
-                    })
-                    : null}
-              </ScrollableTabView>
-          ) : null}
+          <View style={styles.background}>
+            <View style={{flex: .85}}>
+              {this.state.categories.length > 0 ? (
+                  <ScrollableTabView
+                      style={{ marginTop: 20 }}
+                      initialPage={0}
+                      renderTabBar={() => <ScrollableTabBar />}
+                  >
+                    {this.state.categories.length > 0
+                        ? this.state.categories.map((category, index) => {
+                          return (
+                              <ScrollView tabLabel={category} key={index}>
+                                <TabbedCategories
+                                    key={category}
+                                    category={category}
+                                    drinks={this.getDrinksByCategory(index)}
+                                />
+                              </ScrollView>
+                          );
+                        })
+                        : null}
+                  </ScrollableTabView>
+              ) : null}
+            </View>
+            <View
+                style={[{flex: 0.1, backgroundColor: 'transparent' }]}>
+            </View>
           </View>
-          <View
-            style={[{flex: 0.1, backgroundColor: 'transparent' }]}>
-        </View>
-        </View>
         </Checkout>
     );
   }
