@@ -139,12 +139,13 @@ const setViewDrinks = (componentId, menuName) => {
     })
 };
 
-const setViewBasket = (componentId, basketName) => {
+const setViewBasket = (componentId, basketName, fullScreenMode) => {
     Navigation.push(componentId, {
         component: {
             name: screens.ViewCheckout,
             passProps: {
-                authState: basketName
+                authState: basketName,
+                fullScreen: fullScreenMode
             },
             sideMenu: {
                 openGestureMode: 'bezel',
@@ -169,15 +170,15 @@ const setViewBasket = (componentId, basketName) => {
     })
 };
 
-const setViewBasketSettings = (image2) => {
+const setViewBasketSettings = (image) => {
     Navigation.setDefaultOptions({
         topBar: {
             visible: true,
             barStyle: 'black',
             rightButtons: [
             {
-                id: 'profileButton',
-                icon: image2,
+                id: 'basketButton',
+                icon: image,
                 color: colours.white
             }
         ]

@@ -9,23 +9,14 @@ import {
   TouchableOpacity,
   Platform
 } from "react-native";
-import { setViewDrinks, setViewDrinksSettings } from "../../utility/navigation";
+import {setViewBasket, setViewBasketSettings} from "../../utility/navigation";
 import * as colours from "../../styles/colourScheme";
 import * as fontWeight from "../../styles/fontStyles";
 import { Navigation } from "react-native-navigation";
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
 import beers from "../../assets/beers.jpg";
 import logo from "../../assets/taflogo.png";
-import LinearGradient from "react-native-linear-gradient";
-
-const theme = {
-  Button: {
-    raised: true
-  },
-  SearchBar: {}
-};
 
 class ViewMenus extends Component {
   state = {
@@ -76,12 +67,12 @@ class ViewMenus extends Component {
         30
       ),
       Icon.getImageSource(
-        Platform.OS === "android" ? "md-person" : "shopping-basket",
+        Platform.OS === "android" ? "shopping-basket" : "shopping-basket",
         20
       )
     ]).then(sources => {
-      setViewDrinksSettings(sources[2]);
-      setViewDrinks(this.props.componentId, "View Drinks");
+      setViewBasketSettings(sources[2]);
+      setViewBasket(this.props.componentId, "Drinks", false);
     });
   };
 
@@ -91,10 +82,6 @@ class ViewMenus extends Component {
         <View style={styles.logoHeader}>
           <Image style={styles.logo} resizeMode={"contain"} source={logo} />
         </View>
-        {/* <LinearGradient
-          colors={["black", colours.orange]}
-          style={styles.linearGradient}
-        > */}
           <View style={styles.view}>
             <FlatList
               horizontal
@@ -106,21 +93,17 @@ class ViewMenus extends Component {
                     key={rowData}
                     onPress={() => this.navigateToViewDrinks()}
                   >
-                    {/* <Card title={null} style={styles.card}> */}
                       <Image
                         style={styles.image}
-                        // resizeMode="cover"
                         source={beers}
                       />
                       <Text style={styles.menuName}>{rowData}</Text>
-                    {/* </Card> */}
                   </TouchableOpacity>
                 );
               }}
               keyExtractor={(item, index) => index}
             />
           </View>
-        {/* </LinearGradient> */}
       </View>
     );
   }
