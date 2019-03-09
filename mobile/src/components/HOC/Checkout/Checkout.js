@@ -11,28 +11,11 @@ const screenWidth = Dimensions.get('window').width;
 
 class Checkout extends Component {
 
-
     state = {
         isScrollEnabled: false,
-        checkoutList: [
-            {
-                drinkName: 'Jameson Whisky',
-                drinkSize: 'Double (50ml)',
-                itemSpecifics: 'On the Rocks',
-                quantity: 2,
-                itemPrice: '£8.99'
-            },
-            {
-                drinkName: 'Patron',
-                drinkSize: 'Double (50ml)',
-                itemSpecifics: 'No ice, lime or lemon please',
-                quantity: 5,
-                itemPrice: '£16.99'
-            },
-        ],
         basketBarHeight: screenHeight - 180,
-        drinkCategories: ['Hello', 'Hello2'],
-        activeSections: []
+        activeSections: [],
+        multipleSelect: true
     };
 
 
@@ -96,23 +79,6 @@ class Checkout extends Component {
         return totalPrice.toFixed(2);
     };
 
-    renderHeader = (section, _, isActive) => {
-        return (
-            <Animatable.View
-                duration={400}
-                style={[styles.header, isActive ? styles.active : styles.inactive]}
-                transition="backgroundColor"
-                onPress={() => this.setSections([section])}
-            >
-                <Card
-                            title={section}
-                            containerStyle={{backgroundColor: colours.lightGrey}}
-                            titleStyle={{color: colours.midBlue, fontWeight: 'bold', fontSize: 24}}
-                            dividerStyle={{backgroundColor: colours.pureWhite}} />
-            </Animatable.View>
-        );
-    };
-
     renderContent = (section, _, isActive) => {
         return (
             <Animatable.View
@@ -120,7 +86,6 @@ class Checkout extends Component {
                 transition="backgroundColor"
             >
                 <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
-                    {/*{section.content}*/}
                     {this.props.basket.filter(basketItem => basketItem.category === section).map((drink, i) => (
                     <ListItem
                         key={i}
@@ -145,14 +110,47 @@ class Checkout extends Component {
         );
     };
 
-    setSections = sections => {
-        console.log('this was called');
-        this.setState({
-            activeSections: sections.includes(undefined) ? [] : sections,
-        });
+    setSections = (sections, option) => {
+        if (option === 'all') {
+            for (let i in this.props.basketCategories) {
+                console.log(i);
+                this.setState(prevState => {
+                    if (prevState.activeSections.length > 1) {
+                        return {
+                            ...prevState,
+                            activeSections: []
+                        }
+                    } else {
+                        return {
+                            ...prevState,
+                            activeSections: prevState.activeSections.concat(parseInt(i))
+                        };
+                    }
+                });
+            }
+        } else {
+            this.setState({
+                activeSections: sections.includes(undefined) ? [] : sections,
+            });
+        }
+    };
+
+    renderHeader = (section, _, isActive) => {
+        return (
+            <Animatable.View
+                duration={400}
+                style={[styles.header, isActive ? styles.active : styles.inactive]}
+                transition="backgroundColor"
+            >
+                <View style={styles.headerStyles}>
+                    <Text style={styles.headerText}>{section}</Text>
+                </View>
+            </Animatable.View>
+        );
     };
 
     render() {
+        const { activeSections } = this.state;
 
         const BadgedIcon = withBadge(this.basketItems())(Icon);
 
@@ -240,32 +238,25 @@ class Checkout extends Component {
 
                         <Animated.View style={{ height: animatedHeaderHeight, opacity: animatedMainContentOpacity }}>
 
-                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 22 }}>Order Summary</Text>
-                            </View>
-
                             <Animated.View style={{ height: animatedSettingsHeight, opacity: animatedMainContentOpacity }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, paddingHorizontal: 20, paddingBottom: 20 }}>
                                     <Icon name="close" size={32} style={{ color: colours.orange }} />
-                                    <Text style={styles.orderSummaryTitle}>Order Summary</Text>
+                                    <Text style={styles.orderSummaryTitle} onPress={() => this.setSections(null, 'all')}>Order Summary</Text>
                                     <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} />
                                 </View>
                             </Animated.View>
 
                             <View style={{ height: screenHeight/3, width: screenWidth}}>
-                                {this.props.basketCategories ?
-                                    <Accordion
-                                    activeSections={this.state.activeSections}
+                                <Accordion
+                                    activeSections={activeSections}
                                     sections={this.props.basketCategories}
                                     touchableComponent={TouchableOpacity}
-                                    expandMultiple={true}
+                                    expandMultiple={this.state.multipleSelect}
                                     renderHeader={this.renderHeader}
-                                    duration={400}
-                                    onPress={() => console.log('hello')}
-                                    onChange={this.setSections}
                                     renderContent={this.renderContent}
-
-                                /> : null}
+                                    duration={400}
+                                    onChange={this.setSections}
+                                />
                                 <View>
                                     <Card
                                         containerStyle={{backgroundColor: colours.midnightBlack}}>
@@ -277,7 +268,7 @@ class Checkout extends Component {
                                                 |
                                             </Text>
                                         <Text style={styles.barOrderDetails2}>
-                                            Total Price: {this.basketPrice()}
+                                            Total Price: £{this.basketPrice()}
                                         </Text>
                                         </View>
                                     </Card>
@@ -415,6 +406,23 @@ const styles = StyleSheet.create({
     subInformationTextPrice: {
         color: colours.warningRed,
         fontWeight: 'bold'
+    },
+    active: {
+        backgroundColor: 'rgba(255,255,255,1)',
+    },
+    headerText: {
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: '500',
+        color: colours.midnightBlack
+    },
+    headerStyles: {
+        backgroundColor: colours.white,
+        borderBottomColor: colours.midnightBlack,
+        borderBottomWidth: 5,
+        borderTopColor: colours.midnightBlack,
+        borderTopWidth: 5,
+        padding: 15,
     }
 });
 
