@@ -4,7 +4,7 @@ export const updateBasket = (drinksObject, basketAction) => {
     return {
         type: actionTypes.UPDATE_BASKET,
         drink: drinksObject,
-        basketAction
+        basketAction: basketAction
     };
 };
 
@@ -18,7 +18,7 @@ export const updateBasketSuccess = (drinkObject, basketAction) => {
     return {
         type: actionTypes.UPDATE_BASKET_SUCCESS,
         drink: drinkObject,
-        basketAction
+        basketAction: basketAction
     };
 };
 

@@ -11,6 +11,8 @@ import {Card} from "react-native-elements";
 import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/OverlayComponent";
 import * as colours from "../../../styles/colourScheme"
 import {connect} from 'react-redux';
+import { SimpleStepper } from "react-native-simple-stepper";
+import * as actions from "../../../store/actions/index";
 
 class TabbedCategories extends Component {
   state = {
@@ -18,7 +20,8 @@ class TabbedCategories extends Component {
     drinkSelected: {},
     trashCanVisible: false,
     itemSelected: "",
-    quantity: 0
+    quantity: 0,
+    value: 1
   };
 
   openOverlay = (i) => {
@@ -43,30 +46,69 @@ class TabbedCategories extends Component {
   };
 
   _onLongPressButton = (i,u) => {
-    console.log("this.props.basket",this.props.basket)
-    // let basketItems = []
-  //   this.props.basket.map(drink => {
-  //     basketItems.push({name: drink.name, quantity: drink.quantity})
-  // });
-  // console.log("basketItems",basketItems)
+    const drinkSelected = this.props.drinks[i];
     this.setState({
-      trashCanVisible: !this.state.trashCanVisible,
       itemSelected: u.name,
-      // basketItems: basketItems
-    });
+      drinkSelected: u
+    })
+    if (this.basketItems(this.props.drinks[i].name)>0){
+      this.setState({
+        trashCanVisible: !this.state.trashCanVisible
+      });
+    }
   }
 
   componentDidUpdate(){
-    console.log(this.state.trashCanVisible," Trash can vis")
+    // console.log(this.state," state")
   }
 
   basketItems = (name) => {
-    let totalItems = 0;
+    let quantity = 0;
     this.props.basket.map(drink => {
         if (drink.name == name)
-          totalItems += drink.quantity
+          quantity = drink.quantity
       });
-    return totalItems;
+      console.log("quantity",quantity)
+    return quantity;
+    };
+
+
+    valueChanged = (value)  => {
+      if (value === 0) {
+        return;
+      }
+      const drink = this.state.drinkSelected
+      const quantity = Number(value.toFixed(2));
+      console.log("quantity",quantity)
+      console.log(this.props.basket);
+      this.props.basket.map(drinks => {
+        if (drinks.name == drink.name)
+          console.log('update quantity of order',drinks)
+      });
+
+      let drinksObj = {
+        ...drink,
+        quantity
+    }    
+      this.props.updateBasket(drinksObj, 'update');
+      // let totalItems = 0;
+      // this.props.basket.map(drink => {
+      //   if (drink.name == u.name)
+      //     totalItems += drink.quantity
+      // });
+      // console.log(totalItems,"totalItems")
+      // let nextValue = totalItems ++;
+      // console.log("next vale",nextValue)
+        
+      // console.log("quantity", this.state.value)
+
+      // let drinksObj = {
+      //   ...u,
+      //   totalItems
+      // };
+      // this.props.updateBasket(drinksObj, 'update');
+// on increasing stepper value set the quantity of the drink to equal value
+    //   let drink = ...this.state.drinks[i]
     };
 
 
@@ -92,15 +134,30 @@ class TabbedCategories extends Component {
 
                   <Text style={styles.description}>{u.nutritionInfo}</Text>
 
-                  <View style={styles.trashContainer}>
 
-                  {this.state.trashCanVisible &&  this.props.drinks[i].name == this.state.itemSelected ? 
+                  <View style={styles.rowContainer}>
+
+                  {/* this.props.drinks[i].name == this.props.basket.map(drink => drink.name) */}
+
+                  {this.basketItems(u.name) > 0 ?
+                   <Text style={styles.quantity}>x{this.basketItems(u.name)} Pint </Text>
+                   : null
+                  }
+                 
+                  {this.state.trashCanVisible &&  this.props.drinks[i].name == this.state.itemSelected? 
+                  <View style={styles.rightContainer}>
                   <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/> 
+                  <SimpleStepper
+                  value={this.basketItems(u.name)}
+                  imageHeight={10}
+                  imageWidth={20}
+                  tintColor={colours.orange}
+                  valueChanged={(value) => this.valueChanged(value)}
+                />
+                </View>
                   : null}
+                  
 
-                  {this.state.trashCanVisible && this.props.drinks[i].name == this.props.basket.map(drink => drink.name) && this.props.drinks[i].name == this.state.itemSelected ?
-                  <Text style={styles.price}>x{this.basketItems(u.name)}</Text>
-                  :null}
 
                   </View>
                 
@@ -121,6 +178,14 @@ class TabbedCategories extends Component {
 }
 
 const styles = StyleSheet.create({
+  rightContainer:{
+    flexDirection: 'row',
+    justifyContent: "flex-end",
+    width: Dimensions.get("window").width/2.3,
+  },
+  item:{
+    width: Dimensions.get("window").width/2,
+  },
   trash: {
     marginRight: 5
   },
@@ -148,15 +213,17 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   description: {
-    fontWeight: "400"
+    fontWeight: "400",
+    marginTop: 3
+  },
+  quantity: {
+    fontWeight: "600",
+    marginTop: 5,
+    color: colours.orange
   },
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between"
-  },
-  trashContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-start"
   },
   title: {
     paddingTop: 10,
@@ -172,5 +239,10 @@ const mapStateToProps = state => {
       basketCategories: state.basket.categories
   }
 };
+const mapDispatchToProps = dispatch => {
+  return {
+    updateBasket: (drink, basketAction) => dispatch(actions.updateBasket(drink, basketAction))
+  };
+};
 
-export default connect(mapStateToProps, null)(TabbedCategories)
+export default connect(mapStateToProps, mapDispatchToProps)(TabbedCategories)
