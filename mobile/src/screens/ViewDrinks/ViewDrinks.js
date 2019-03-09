@@ -37,7 +37,6 @@ class ViewDrinks extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (!nextProps.loading) {
       this.setState({
         categories: nextProps.drinkCategories,
@@ -54,15 +53,10 @@ class ViewDrinks extends Component {
 
   getDrinksByCategory = (id) => {
     const categoryName = this.state.categories[id];
-    console.log(categoryName);
-    return this.state.drinks.filter(drink => {
-      console.log(drink.category === categoryName);
-      return drink.category === categoryName
-    });
+    return this.state.drinks.filter(drink => drink.category === categoryName);
   };
 
   render() {
-    console.log(this.state.categories);
     return (
         <Checkout componentId={this.props.componentId}>
           <View style={styles.background}>

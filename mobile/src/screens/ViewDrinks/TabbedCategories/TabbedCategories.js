@@ -26,7 +26,6 @@ class TabbedCategories extends Component {
 
   openOverlay = (i) => {
     const drinkSelected = this.props.drinks[i];
-    console.log("drinkSelected",drinkSelected);
     this.setState({
       isVisible: true,
       drinkSelected: drinkSelected
@@ -50,55 +49,37 @@ class TabbedCategories extends Component {
     this.setState({
       itemSelected: u.name,
       drinkSelected: u
-    })
+    });
     if (this.basketItems(this.props.drinks[i].name)>0){
       this.setState({
         trashCanVisible: !this.state.trashCanVisible
       });
     }
-  }
-
-  componentDidUpdate(){
-    // console.log(this.state," state")
-  }
+  };
 
   basketItems = (name) => {
     let quantity = 0;
     this.props.basket.map(drink => {
-        if (drink.name == name)
+        if (drink.name === name)
           quantity = drink.quantity
       });
-      console.log("quantity",quantity)
     return quantity;
     };
-
 
     valueChanged = (value)  => {
       if (value === 0) {
         return;
       }
-      const drink = this.state.drinkSelected
+      const drink = this.state.drinkSelected;
       const quantity = Number(value.toFixed(2));
-      console.log("quantity",quantity)
-      console.log(this.props.basket);
-      this.props.basket.map(drinks => {
-        if (drinks.name == drink.name)
-          console.log('update quantity of order',drinks)
-      });
-
       let drinksObj = {
         ...drink,
         quantity
-    }    
+    };
       this.props.updateBasket(drinksObj, 'update');
-      
-// on increasing stepper value replace the quantity of the 
-// same drink in the store to the new stepper value
     };
 
-
   render() {
-    console.log(this.props.category);
     return (
       <View>
         {this.props.drinks.length > 0 ? this.props.drinks.map((u, i) => {
@@ -106,51 +87,36 @@ class TabbedCategories extends Component {
             <TouchableHighlight key={i} onPress={() => this.openOverlay(i)}  onLongPress={()=> this._onLongPressButton(i,u)} underlayColor="white">
               <Card>
                 <View style={styles.rowContainer}>
+                    <View style={styles.leftContainer}>
+                      <Text style={styles.name}>{u.name}</Text>
+                    </View>
 
-                  <View style={styles.leftContainer}>
-                    <Text style={styles.name}>{u.name}</Text>
+                    <View>
+                      <Text style={styles.price}>£{u.price}</Text>
+                    </View>
                   </View>
-
-                  
-                  <View>
-                  <Text style={styles.price}>£{u.price}</Text>
-                  </View>
-                  </View>
-
                   <Text style={styles.description}>{u.nutritionInfo}</Text>
-
-
                   <View style={styles.rowContainer}>
-
-                  {/* this.props.drinks[i].name == this.props.basket.map(drink => drink.name) */}
-
-                  {this.basketItems(u.name) > 0 ?
-                   <Text style={styles.quantity}>x{this.basketItems(u.name)} Pint </Text>
-                   : null
-                  }
-
-                  {!this.state.trashCanVisible && this.basketItems(u.name) > 0? 
-                  <Icon name="sort" style={styles.trash} size={30} color={colours.orange}/> 
-                  : null}
-                 
-                  {this.state.trashCanVisible &&  this.props.drinks[i].name == this.state.itemSelected? 
-                  <View style={styles.rightContainer}>
-                  <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/> 
-                  <SimpleStepper
-                  value={this.basketItems(u.name)}
-                  imageHeight={10}
-                  imageWidth={20}
-                  tintColor={colours.orange}
-                  valueChanged={(value) => this.valueChanged(value)}
-                />
-                </View>
-                  : null}
-                  
-
-
+                    {this.basketItems(u.name) > 0 ?
+                     <Text style={styles.quantity}>x{this.basketItems(u.name)} Pint </Text>
+                     : null
+                    }
+                    {!this.state.trashCanVisible && this.basketItems(u.name) > 0?
+                    <Icon name="sort" style={styles.trash} size={30} color={colours.orange}/>
+                    : null}
+                    {this.state.trashCanVisible &&  this.props.drinks[i].name === this.state.itemSelected?
+                    <View style={styles.rightContainer}>
+                        <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/>
+                          <SimpleStepper
+                          value={this.basketItems(u.name)}
+                          imageHeight={10}
+                          imageWidth={20}
+                          tintColor={colours.orange}
+                          valueChanged={(value) => this.valueChanged(value)}
+                        />
+                    </View>
+                    : null}
                   </View>
-                
-                
               </Card>
             </TouchableHighlight>
           );

@@ -38,7 +38,6 @@ class WelcomeScreen extends Component {
 
     onSubmitCodeHandler = () => {
         if(this.state.controls.barCode.valid) {
-            console.log('valid was called');
             this.props.findBar(this.state.controls.barCode.value, this.props.componentId);
             submittedCode = this.state.controls.barCode.value;
         }

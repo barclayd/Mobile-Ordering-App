@@ -113,7 +113,6 @@ class Checkout extends Component {
     setSections = (sections, option) => {
         if (option === 'all') {
             for (let i in this.props.basketCategories) {
-                console.log(i);
                 this.setState(prevState => {
                     if (prevState.activeSections.length > 1) {
                         return {
