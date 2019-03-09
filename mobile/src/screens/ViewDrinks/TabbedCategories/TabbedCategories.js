@@ -91,24 +91,9 @@ class TabbedCategories extends Component {
         quantity
     }    
       this.props.updateBasket(drinksObj, 'update');
-      // let totalItems = 0;
-      // this.props.basket.map(drink => {
-      //   if (drink.name == u.name)
-      //     totalItems += drink.quantity
-      // });
-      // console.log(totalItems,"totalItems")
-      // let nextValue = totalItems ++;
-      // console.log("next vale",nextValue)
-        
-      // console.log("quantity", this.state.value)
-
-      // let drinksObj = {
-      //   ...u,
-      //   totalItems
-      // };
-      // this.props.updateBasket(drinksObj, 'update');
-// on increasing stepper value set the quantity of the drink to equal value
-    //   let drink = ...this.state.drinks[i]
+      
+// on increasing stepper value replace the quantity of the 
+// same drink in the store to the new stepper value
     };
 
 
