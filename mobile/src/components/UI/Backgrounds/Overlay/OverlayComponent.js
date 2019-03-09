@@ -21,7 +21,6 @@ class OverlayComponent extends Component {
     const nextValue = Number(value.toFixed(2));
     let initialPrice = Number(this.props.drinkDetails.price) * nextValue;
     let price = parseFloat(Math.round(initialPrice * 100) / 100).toFixed(2);
-    console.log("next value", nextValue, ". initial price", initialPrice, ". price",price);
       this.setState({
       value: nextValue,
       price: price
@@ -34,7 +33,7 @@ class OverlayComponent extends Component {
       quantity
     };
     this.props.updateBasket(drinksObj, 'add');
-    this.closeModal()
+    this.closeModal();
 };
 
   closeModal = () => {
@@ -44,10 +43,6 @@ class OverlayComponent extends Component {
       price: null
     })
   };
-
-  componentDidUpdate(){
-    console.log("overlay state", this.state )
-  }
 
   render() {
     return (

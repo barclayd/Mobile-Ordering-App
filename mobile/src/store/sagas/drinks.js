@@ -49,7 +49,6 @@ export function* findDrinksSaga(action){
                         id: key
                     });
                 }
-                console.log("Drinks Found Successfully");
                 yield put(actions.findDrinksSuccess(fetchData));
             } else {
                 for (let key in response.data.data.drinks) {
@@ -58,7 +57,6 @@ export function* findDrinksSaga(action){
                         id: key
                     });
                 }
-                console.log("Drinks Found Successfully");
                 yield put(actions.findDrinksSuccess(fetchData));
             }
         }
@@ -91,7 +89,6 @@ export function* findDrinkCategoriesSaga(action) {
                     response.data.data.findDrinkCategories[key].category,
                 );
             }
-            console.log("Drink Categories Found Successfully");
             yield put(actions.findDrinkCategoriesSuccess(fetchData));
         }
     } catch (err) {

@@ -17,7 +17,6 @@ const updateBasketStart = (state, action) => {
 
 const updateBasketSuccess = (state, action) => {
     if (action.basketAction === 'add') {
-        console.log(action.drink);
         return updateObject(state, {
             basket: state.basket.concat(action.drink),
             categories: (!state.categories.includes(action.drink.category)) ? state.categories.concat(action.drink.category) : state.categories,
@@ -27,12 +26,12 @@ const updateBasketSuccess = (state, action) => {
         });
     }
     if (action.basketAction === 'update') {
-        const oldDrinkObject = state.basket.filter(drink => drink.name === action.drink.name)
-        const updatedQuantity = action.drink.quantity
+        const oldDrinkObject = state.basket.filter(drink => drink.name === action.drink.name);
+        const updatedQuantity = action.drink.quantity;
         const newDrinkObject = {
             ...oldDrinkObject[0],
             quantity: updatedQuantity
-        }
+        };
         return updateObject(state, {
             basket: state.basket.filter(drink => drink.name !== action.drink.name).concat(newDrinkObject),
             loading: false,
