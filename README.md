@@ -1,5 +1,5 @@
 ## Drinks App
-###### 29th January 2019
+###### 4th March 2019
 
 
 ## Motivation
@@ -10,6 +10,10 @@
 ## Demos and Screenshots
 
 ## System Architecture
+
+#### Server
+
+<img width="1261" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
 
 ## Tech/framework used
 

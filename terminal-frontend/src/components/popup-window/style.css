@@ -10,6 +10,7 @@
   align-items: center;
   z-index: 2;
 }
+
 .popup-container {
   max-width: 940px;
   max-height: 100vh;
@@ -28,8 +29,12 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  animation: fadein 0.3s ease-out;
 }
-
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
 .popup-close-button {
   position: absolute;
@@ -68,6 +73,9 @@
 
 .popup-children-container {
   font-size: 28px;
+  overflow-y: auto; /* Show vertical scrollbar when required */
+  padding-right: 5px;
+  max-height: 550px;
 }
 
 .popup-children-container > h1 {
@@ -93,19 +101,44 @@
   color: #aaa;
 }
 
-.orderList {
-  list-style-type: none;
-  margin-top: 0;
-  padding: 0;
+
+
+.popupButtonsContainer .orderButton:not(:last-child) {
+  margin-right: 8px;
+}
+.popupButtonsContainer {
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 20px;
 }
 
-.orderList > li {
-  font-size: 32px;
-  color: #eee;
+
+
+
+.popup-scroll-area {
+  position: relative;
 }
 
-.orderList > li > .quantity {
-  width: 68px;
-  font-weight: bold;
-  display: inline-block;
+
+
+.scrollShadow {
+  content: "";
+  z-index: 1;
+  position: absolute;
+  left: -15px; /* webkit scrollbar width */
+  height: 25px;
+  width: 100%;
+}
+
+.topShadow {
+  top: -2px; /* Fix rendering issue where some browsers have a 1px gap above the shadow */
+  background-image: linear-gradient(to bottom, #211624, #211624, rgba(0,0,0,0));
+}
+
+.bottomShadow {
+  bottom: -2px; /* Fix rendering issue where some browsers have a 1px gap under the shadow */
+  margin: 0;
+  background-image: linear-gradient(to top, #211624, #211624, rgba(0,0,0,0));
 }
