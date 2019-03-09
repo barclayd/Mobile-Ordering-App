@@ -128,6 +128,10 @@ class TabbedCategories extends Component {
                    <Text style={styles.quantity}>x{this.basketItems(u.name)} Pint </Text>
                    : null
                   }
+
+                  {!this.state.trashCanVisible && this.basketItems(u.name) > 0? 
+                  <Icon name="sort" style={styles.trash} size={30} color={colours.orange}/> 
+                  : null}
                  
                   {this.state.trashCanVisible &&  this.props.drinks[i].name == this.state.itemSelected? 
                   <View style={styles.rightContainer}>
