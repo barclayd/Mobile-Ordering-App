@@ -16,12 +16,12 @@ let submittedCode;
 class WelcomeScreen extends Component {
 
     componentDidMount() {
+        this.props.onTryAutoSignIn(this.props.componentId);
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
                 visible: false
             }
         });
-        this.props.onTryAutoSignIn();
     }
 
     state = {
@@ -38,7 +38,6 @@ class WelcomeScreen extends Component {
 
     onSubmitCodeHandler = () => {
         if(this.state.controls.barCode.valid) {
-            console.log('valid was called');
             this.props.findBar(this.state.controls.barCode.value, this.props.componentId);
             submittedCode = this.state.controls.barCode.value;
         }
@@ -86,15 +85,15 @@ class WelcomeScreen extends Component {
                     <TextInput
                         placeholder='Enter a bar code...'
                         value={this.state.controls.barCode.value}
-                        style={[styles.input, {borderColor: this.props.barError && submittedCode === this.state.controls.barCode.value ? colours.warningRed : this.state.controls.barCode.valid ? colours.green : colours.white}]}
+                        style={[styles.input, {borderColor: this.props.barError && submittedCode === this.state.controls.barCode.value  ? colours.warningRed : this.state.controls.barCode.valid ? colours.green : colours.white}]}
                         placeholderTextColor={colours.white}
                         maxLength={4}
                         autoCorrect={false}
                         selectionColor={colours.orange}
                         onChangeText={(val) => this.inputUpdateHandler('barCode', val)}/>
-                    <View style={[styles.btn, {borderColor: this.props.barError && submittedCode === this.state.controls.barCode.value ? colours.warningRed : this.state.controls.barCode.valid ? colours.green : colours.white}]} >
+                    <View style={[styles.btn, {borderColor: this.props.barError && submittedCode === this.state.controls.barCode.value  ? colours.warningRed : this.state.controls.barCode.valid ? colours.green : colours.white}]} >
                     <TouchableOpacity onPress={() => this.onSubmitCodeHandler()}>
-                        {this.props.barError && submittedCode === this.state.controls.barCode.value ? <Icon name="warning" size={30} color={colours.warningRed}/> : this.props.barLoading ?
+                        {this.props.barError && submittedCode === this.state.controls.barCode.value  ? <Icon name="warning" size={30} color={colours.warningRed}/> : this.props.barLoading ?
                             <Icon name="spinner" size={30} color={colours.grey}/> :
                             <Icon name="check" size={30} color={this.state.controls.barCode.valid ? colours.green : colours.white} />
                         }
@@ -102,7 +101,7 @@ class WelcomeScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.rowContainer}>
-                    {this.props.barError && submittedCode === this.state.controls.barCode.value? <Text style={styles.h3}>Bar code <Text style={{color: colours.warningRed}}>{submittedCode}</Text> could not be found. Please try again</Text> : null}
+                    {this.props.barError && submittedCode === this.state.controls.barCode.value ? <Text style={styles.h3}>Bar code <Text style={{color: colours.warningRed}}>{submittedCode}</Text> could not be found. Please try again</Text> : null}
                 </View>
                 <View style={styles.loginButtonContainer}>
                         <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
@@ -200,7 +199,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onTryAutoSignIn: () => dispatch(actions.authCheckState()),
+        onTryAutoSignIn: (componentId) => dispatch(actions.authCheckState(componentId)),
         findBar: (barCode, componentId) => dispatch(actions.findBar(barCode, componentId))
     };
 };

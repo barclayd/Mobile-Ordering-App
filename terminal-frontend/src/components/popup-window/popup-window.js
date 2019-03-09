@@ -73,7 +73,7 @@ export default class PopupWindow extends React.Component {
     } else if (this.popupChildrenContainer.current) {
       this.popupChildrenContainer.current.removeEventListener("scroll", this.handleScroll);
     }
-  }
+  };
 
   renderCloseButton = (shouldShow) => {
     if (shouldShow) {
@@ -81,14 +81,14 @@ export default class PopupWindow extends React.Component {
             <div className="popup-close-button" onClick={this.DismissPopup} >🗙</div>
         )
     }
-  }
+  };
 
   overlayClick = (event) => {
     // Check that the click event has not been triggered on a child element
     if (event.target === event.currentTarget) {
       this.DismissPopup()
     }
-  }
+  };
 
   render () {
     if (this.state.visible)

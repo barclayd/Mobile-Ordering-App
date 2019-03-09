@@ -11,6 +11,7 @@ const setDefaultSettings = () => {
             style: "light"
         },
         sideMenu: {
+            openGestureMode: 'bezel',
             left: {
                 visible: false,
                 enabled: false
@@ -64,13 +65,15 @@ const setWelcomePageRoot = () => {
 const setMainAppSettings = (image1, image2) => {
     Navigation.setDefaultOptions({
         sideMenu: {
+            openGestureMode: 'bezel',
             left: {
                 enabled: true,
-                visible: true
+                visible: true,
             },
             right: {
                 visible: true,
-                enabled: true
+                enabled: true,
+                disableOpenGesture: false
             }
         },
         statusBar: {
@@ -109,7 +112,7 @@ const setMainApp = (componentId, barName) => {
                 topBar: {
                     visible: true,
                     title: {
-                        text: barName ? barName : 'The Taff'
+                        text: barName ? barName : 'The Taf'
                     }
                 }
             }
@@ -136,15 +139,62 @@ const setViewDrinks = (componentId, menuName) => {
     })
 };
 
-const setViewDrinksSettings = (image2) => {
+const setViewBasket = (componentId, basketName, fullScreenMode) => {
+    Navigation.push(componentId, {
+        component: {
+            name: screens.ViewCheckout,
+            passProps: {
+                authState: basketName,
+                fullScreen: fullScreenMode
+            },
+            sideMenu: {
+                openGestureMode: 'bezel',
+                left: {
+                    enabled: false,
+                    visible: false
+                },
+                right: {
+                    visible: false,
+                    enabled: false
+                }
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: basketName,
+                    }
+                }
+            }
+        }
+    })
+};
+
+const setViewBasketSettings = (image) => {
     Navigation.setDefaultOptions({
         topBar: {
             visible: true,
             barStyle: 'black',
             rightButtons: [
             {
-                id: 'profileButton',
-                icon: image2,
+                id: 'basketButton',
+                icon: image,
+                color: colours.white
+            }
+        ]
+    }
+    });
+};
+
+const setViewDrinksSettings = (image) => {
+    Navigation.setDefaultOptions({
+        topBar: {
+            visible: true,
+            barStyle: 'black',
+            rightButtons: [
+            {
+                id: 'basketButton',
+                icon: image,
                 color: colours.white
             }
         ]
@@ -183,5 +233,5 @@ const setLoginScreen = (componentId, authType) => {
 
 
 export {
-    setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, 
+    setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
 }

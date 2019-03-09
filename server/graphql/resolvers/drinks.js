@@ -1,4 +1,5 @@
 const Drink = require('../../models/drink');
+// const {findIngredients} = require('./ingredients');
 const {transformDrink} = require('./merge');
 
 module.exports = {
@@ -17,9 +18,10 @@ module.exports = {
     },
     createDrink: async (args) => {
         try {
+            // const foundIngredients = await findIngredients(args.drinkInput.ingredientName);
             const createdDrink = new Drink({
                 name: args.drinkInput.name,
-                type: args.drinkInput.type,
+                category: args.drinkInput.category,
                 nutritionInfo: args.drinkInput.nutritionInfo,
                 price: args.drinkInput.price
             });
@@ -32,11 +34,25 @@ module.exports = {
             throw err;
         }
     },
-    findDrinks: async ({type}) => {
+    findDrinks: async ({category}) => {
         try {
-            const foundDrinks = await Drink.find({type: type});
+            const foundDrinks = await Drink.find({category: category});
             return foundDrinks.map(foundDrink => {
                 return transformDrink(foundDrink)
+            });
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+    findDrinkCategories: async () => {
+        try {
+            const foundCategories = await Drink.distinct('category');
+            console.log(foundCategories);
+            return foundCategories.map(category => {
+                return {
+                    category: category
+                }
             });
         } catch (err) {
             console.log(err);

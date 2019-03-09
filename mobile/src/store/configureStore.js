@@ -1,10 +1,16 @@
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import authReducer from './reducers/auth';
 import barReducer from './reducers/bar';
+import drinkReducer from './reducers/drinks';
+import orderReducer from './reducers/order';
+import basketReducer from './reducers/basket';
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    bar: barReducer
+    bar: barReducer,
+    drink: drinkReducer,
+    order: orderReducer,
+    basket: basketReducer
 });
 
 let composeEnhancers = compose;
