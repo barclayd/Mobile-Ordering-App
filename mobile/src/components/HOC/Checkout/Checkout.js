@@ -95,10 +95,10 @@ class Checkout extends Component {
                         bottomDivider
                         subtitle={
                             <View style={styles.subtitleView}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
-                            <Text style={styles.subInformationTextPrice}>£{(drink.price * drink.quantity).toFixed(2)}</Text>
-                            </View>
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                    <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
+                                    <Text style={styles.subInformationTextPrice}>£{(drink.price * drink.quantity).toFixed(2)}</Text>
+                                </View>
                             </View>
                         }
                         badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: drink.quantity, textStyle: { color: colours.pureWhite}}}
@@ -413,15 +413,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
         fontWeight: '500',
-        color: colours.midnightBlack
+        color: colours.midnightBlack,
+        backgroundColor: colours.cream,
     },
     headerStyles: {
         backgroundColor: colours.white,
         borderBottomColor: colours.midnightBlack,
         borderBottomWidth: 5,
         borderTopColor: colours.midnightBlack,
-        borderTopWidth: 5,
-        padding: 15,
+        borderTopWidth: 5
     }
 });
 
