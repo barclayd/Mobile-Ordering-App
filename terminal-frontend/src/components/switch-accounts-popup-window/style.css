@@ -1,0 +1,13 @@
+.staffMemberButton {
+  height: 80px;
+  width: 150px;
+  margin: 10px 15px;
+  font-size: 25px;
+  font-weight: normal;
+
+}
+
+.staffMembersButtonContainer {
+  padding: 0 30px;
+  text-align: center;
+}
