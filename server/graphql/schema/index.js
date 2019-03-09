@@ -8,13 +8,25 @@ module.exports = buildSchema(`
             password: String
             name: String!
         }
-
+        
+     type Category {
+        category: String!
+     }
+        
     type Drink {
             _id: ID!
             name: String!
-            type: String!
+            category: String!
             nutritionInfo: String!
             price: String!
+    }
+    
+    type Ingredient {
+            _id: ID!
+            name: String!
+            amount: String!
+            allergy: String
+            containsAlcohol: Boolean!
     }
         
      type Bar {
@@ -51,22 +63,32 @@ module.exports = buildSchema(`
 
         input DrinkInput {
             name: String!
-            type: String!
+            category: String!
             nutritionInfo: String!
-            price: Float!
+            price: String!
+        }
+        
+        input IngredientInput {
+            name: String!
+            amount: String!
+            allergy: String
+            containsAlcohol: Boolean!
         }
         
         type RootQuery {
            login(email: String!, password: String!): AuthData!
            findBar(barCode: String!): Bar!
-           findDrinks(type: String!): [Drink!]!
+           findDrinks(category: String!): [Drink!]!
            drinks: [Drink!]!
+           findIngredients(name: String!): [Ingredient!]!
+           findDrinkCategories: [Category!]!
         }
         
         type RootMutation {
             createUser(userInput: UserInput): User
             createBar(barInput: BarInput): Bar
             createDrink(drinkInput: DrinkInput): Drink
+            createIngredient(ingredientInput: IngredientInput): Ingredient
         }
         
         schema {

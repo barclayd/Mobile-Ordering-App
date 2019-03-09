@@ -1,53 +1,93 @@
 import React, { Component } from "react";
 import {
   View,
-  Text,
   StyleSheet,
-  Image,
   Dimensions,
-  ScrollView,
-  TouchableOpacity
+  ScrollView
 } from "react-native";
-import * as colours from "../../styles/colourScheme";
-import { Button, ThemeProvider, SearchBar, Card } from "react-native-elements";
+import { connect } from "react-redux";
 import ScrollableTabView, {
-  DefaultTabBar
+  ScrollableTabBar
 } from "react-native-scrollable-tab-view";
+import * as actions from "../../store/actions/index";
+import TabbedCategories from "./TabbedCategories/TabbedCategories";
+import Checkout from '../../components/HOC/Checkout/Checkout';
+import {Navigation} from "react-native-navigation";
+import {setViewBasket} from "../../utility/navigation";
 
-
-import TabScreen1 from "./TabScreens/TabScreen1";
-import TabScreen2 from "./TabScreens/TabScreen2";
-import TabScreen3 from "./TabScreens/TabScreen3";
-
-const theme = {
-  Button: {
-    raised: true
-  },
-  SearchBar: {}
-};
+const screenHeight = Dimensions.get('window').height;
 
 class ViewDrinks extends Component {
+
+  constructor(props) {
+    super(props);
+    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+  }
+
   state = {
     search: "",
+    drinks: [],
+    categories: [],
+    drinksApi: false
+  };
+
+  componentDidMount() {
+    this.props.onFetchDrinkCategories();
+    this.props.findAllDrinks();
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.loading) {
+      this.setState({
+        categories: nextProps.drinkCategories,
+        drinks: nextProps.drinks
+      });
+    }
+  }
+
+  navigationButtonPressed({ buttonId }) {
+    if (buttonId === "basketButton") {
+      setViewBasket(this.props.componentId, "Drinks", true);
+    }
+  }
+
+  getDrinksByCategory = (id) => {
+    const categoryName = this.state.categories[id];
+    return this.state.drinks.filter(drink => drink.category === categoryName);
   };
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={styles.background}>
-          <ThemeProvider theme={theme}>
-            <ScrollableTabView
-              style={{ marginTop: 20 }}
-              initialPage={0}
-              renderTabBar={() => <DefaultTabBar />}
-            >
-              <TabScreen2 tabLabel="Beers" />
-              <TabScreen1 tabLabel="Spirits" />
-              <TabScreen3 tabLabel="Wines" />
-            </ScrollableTabView>
-          </ThemeProvider>
-        </View>
-      </ScrollView>
+        <Checkout componentId={this.props.componentId}>
+          <View style={styles.background}>
+            <View style={{flex: .85}}>
+              {this.state.categories.length > 0 ? (
+                  <ScrollableTabView
+                      style={{ marginTop: 20 }}
+                      initialPage={0}
+                      renderTabBar={() => <ScrollableTabBar />}
+                  >
+                    {this.state.categories.length > 0
+                        ? this.state.categories.map((category, index) => {
+                          return (
+                              <ScrollView tabLabel={category} key={index}>
+                                <TabbedCategories
+                                    key={category}
+                                    category={category}
+                                    drinks={this.getDrinksByCategory(index)}
+                                />
+                              </ScrollView>
+                          );
+                        })
+                        : null}
+                  </ScrollableTabView>
+              ) : null}
+            </View>
+            <View
+                style={[{flex: 0.1, backgroundColor: 'transparent' }]}>
+            </View>
+          </View>
+        </Checkout>
     );
   }
 }
@@ -64,6 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flex: 1,
     bottom: 0,
+    height: screenHeight/2,
     left: 0,
     right: 0,
     top: 0
@@ -75,4 +116,20 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ViewDrinks;
+const mapStateToProps = state => {
+  return {
+    drinkCategories: state.drink.categories,
+    drinks: state.drink.drinks
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onFetchDrinkCategories: () => dispatch(actions.findDrinkCategories()),
+    findDrinks: (category, componentId) =>
+        dispatch(actions.findDrinks(category, componentId)),
+    findAllDrinks: (componentId) => dispatch(actions.findDrinks(null, componentId))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewDrinks);
