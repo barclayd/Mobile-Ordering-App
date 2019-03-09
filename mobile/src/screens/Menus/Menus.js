@@ -106,7 +106,7 @@ class ViewMenus extends Component {
                   </TouchableOpacity>
                 );
               }}
-              keyExtractor={(item, index) => index}
+              keyExtractor={(item, index) => index.toString()}
             />
           </View>
         </View>
