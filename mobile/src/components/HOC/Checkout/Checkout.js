@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity} from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
+import Accordion from 'react-native-collapsible/Accordion';
 import {ListItem, Card, Button, withBadge} from 'react-native-elements';
 import * as colours from '../../../styles/colourScheme';
 import {connect} from 'react-redux';
@@ -29,7 +31,8 @@ class Checkout extends Component {
             },
         ],
         basketBarHeight: screenHeight - 180,
-        drinkCategories: []
+        drinkCategories: ['Hello', 'Hello2'],
+        activeSections: []
     };
 
 
@@ -93,6 +96,61 @@ class Checkout extends Component {
         return totalPrice.toFixed(2);
     };
 
+    renderHeader = (section, _, isActive) => {
+        return (
+            <Animatable.View
+                duration={400}
+                style={[styles.header, isActive ? styles.active : styles.inactive]}
+                transition="backgroundColor"
+                onPress={() => this.setSections([section])}
+            >
+                <Card
+                            title={section}
+                            containerStyle={{backgroundColor: colours.lightGrey}}
+                            titleStyle={{color: colours.midBlue, fontWeight: 'bold', fontSize: 24}}
+                            dividerStyle={{backgroundColor: colours.pureWhite}} />
+            </Animatable.View>
+        );
+    };
+
+    renderContent = (section, _, isActive) => {
+        return (
+            <Animatable.View
+                duration={400}
+                transition="backgroundColor"
+            >
+                <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
+                    {/*{section.content}*/}
+                    {this.props.basket.filter(basketItem => basketItem.category === section).map((drink, i) => (
+                    <ListItem
+                        key={i}
+                        titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
+                        containerStyle={{backgroundColor: colours.lightGrey}}
+                        title={drink.name}
+                        bottomDivider
+                        subtitle={
+                            <View style={styles.subtitleView}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
+                            <Text style={styles.subInformationTextPrice}>£{(drink.price * drink.quantity).toFixed(2)}</Text>
+                            </View>
+                            </View>
+                        }
+                        badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: drink.quantity, textStyle: { color: colours.pureWhite}}}
+                        />
+                    ))
+                    }
+                </Animatable.View>
+            </Animatable.View>
+        );
+    };
+
+    setSections = sections => {
+        console.log('this was called');
+        this.setState({
+            activeSections: sections.includes(undefined) ? [] : sections,
+        });
+    };
 
     render() {
 
@@ -195,42 +253,19 @@ class Checkout extends Component {
                             </Animated.View>
 
                             <View style={{ height: screenHeight/3, width: screenWidth}}>
-                                <View>
-                                    {
-                                        this.props.basketCategories.map(category => (
-                                             <Card
-                                                title={category}
-                                                containerStyle={{backgroundColor: colours.lightGrey}}
-                                                titleStyle={{color: colours.midBlue, fontWeight: 'bold', fontSize: 24}}
-                                                dividerStyle={{backgroundColor: colours.pureWhite}}>
-                                                {
-                                                    this.props.basket.map((drink, i) => {
-                                                        if (drink.category === category) {
-                                                            return (
-                                                                <ListItem
-                                                                    key={i}
-                                                                    titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
-                                                                    containerStyle={{backgroundColor: colours.lightGrey}}
-                                                                    title={drink.name}
-                                                                    bottomDivider
-                                                                    subtitle={
-                                                                        <View style={styles.subtitleView}>
-                                                                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                                                                <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
-                                                                                <Text style={styles.subInformationTextPrice}>£{(drink.price * drink.quantity).toFixed(2)}</Text>
-                                                                            </View>
-                                                                        </View>
-                                                                    }
-                                                                    badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: drink.quantity, textStyle: { color: colours.pureWhite}}}
-                                                                />
-                                                            )
-                                                        }
-                                                    })
-                                                }
-                                            </Card>
-                                        ))
-                                    }
-                                </View>
+                                {this.props.basketCategories ?
+                                    <Accordion
+                                    activeSections={this.state.activeSections}
+                                    sections={this.props.basketCategories}
+                                    touchableComponent={TouchableOpacity}
+                                    expandMultiple={true}
+                                    renderHeader={this.renderHeader}
+                                    duration={400}
+                                    onPress={() => console.log('hello')}
+                                    onChange={this.setSections}
+                                    renderContent={this.renderContent}
+
+                                /> : null}
                                 <View>
                                     <Card
                                         containerStyle={{backgroundColor: colours.midnightBlack}}>
