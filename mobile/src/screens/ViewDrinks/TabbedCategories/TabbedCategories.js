@@ -97,25 +97,33 @@ class TabbedCategories extends Component {
                   </View>
                   <Text style={styles.description}>{u.nutritionInfo}</Text>
                   <View style={styles.rowContainer}>
-                    {this.basketItems(u.name) > 0 ?
-                     <Text style={styles.quantity}>x{this.basketItems(u.name)} Pint </Text>
-                     : null
-                    }
-                    {!this.state.trashCanVisible && this.basketItems(u.name) > 0?
-                    <Icon name="sort" style={styles.trash} size={30} color={colours.orange}/>
-                    : null}
-                    {this.state.trashCanVisible &&  this.props.drinks[i].name === this.state.itemSelected?
-                    <View style={styles.rightContainer}>
-                        <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/>
-                          <SimpleStepper
-                          value={this.basketItems(u.name)}
-                          imageHeight={10}
-                          imageWidth={20}
-                          tintColor={colours.orange}
-                          valueChanged={(value) => this.valueChanged(value)}
-                        />
-                    </View>
-                    : null}
+
+                  {/* this.props.drinks[i].name == this.props.basket.map(drink => drink.name) */}
+
+                  {this.basketItems(u.name) > 0 ?
+                   <Text style={styles.quantity}>x{this.basketItems(u.name)} Pint </Text>
+                   : null
+                  }
+
+                  {/* {!this.state.trashCanVisible && this.basketItems(u.name) > 0? 
+                  <Icon name="sort" style={styles.trash} size={30} color={colours.orange}/> 
+                  : null} */}
+                 
+                  {this.state.trashCanVisible &&  this.props.drinks[i].name == this.state.itemSelected? 
+                  <View style={styles.rightContainer}>
+                  <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/> 
+                  <SimpleStepper
+                  value={this.basketItems(u.name)}
+                  imageHeight={10}
+                  imageWidth={20}
+                  tintColor={colours.orange}
+                  valueChanged={(value) => this.valueChanged(value)}
+                />
+                </View>
+                  : null}
+                  
+
+
                   </View>
               </Card>
             </TouchableHighlight>
