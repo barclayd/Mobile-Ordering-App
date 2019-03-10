@@ -15,7 +15,8 @@ class Checkout extends Component {
         isScrollEnabled: false,
         basketBarHeight: screenHeight - 180,
         activeSections: [],
-        multipleSelect: true
+        multipleSelect: true,
+        editVisible: false
     };
 
 
@@ -79,6 +80,18 @@ class Checkout extends Component {
         return totalPrice.toFixed(2);
     };
 
+    onEditPress = () => {
+        this.setState({
+            editVisible : !this.state.editVisible
+        })
+
+        console.log("eidt button",this.state.editVisible)
+    }
+
+    addValue = () => {
+        console.log("addValue")
+    }
+
     renderContent = (section, _, isActive) => {
         return (
             <Animatable.View
@@ -99,6 +112,15 @@ class Checkout extends Component {
                                     <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
                                     <Text style={styles.subInformationTextPrice}>£{(drink.price * drink.quantity).toFixed(2)}</Text>
                                 </View>
+                                {this.state.editVisible ? 
+                                <View style={styles.editContainer}>
+                                <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/> 
+                                <View style={{justifyContent: 'flex-start', flexDirection: 'row'}}>
+                                <Icon name="plus-circle" style={styles.trash} size={30} color={colours.orange} onPress={()=>this.addValue()}/> 
+                                <Icon name="minus-circle" style={styles.trash} size={30} color={colours.orange}/> 
+                                </View>
+                                </View>
+                                : null}
                             </View>
                         }
                         badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: drink.quantity, textStyle: { color: colours.pureWhite}}}
@@ -241,7 +263,7 @@ class Checkout extends Component {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, paddingHorizontal: 20, paddingBottom: 20 }}>
                                     <Icon name="close" size={32} style={{ color: colours.orange }} />
                                     <Text style={styles.orderSummaryTitle} onPress={() => this.setSections(null, 'all')}>Order Summary</Text>
-                                    <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} />
+                                    <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} onPress={()=> this.onEditPress()}/>
                                 </View>
                             </Animated.View>
 
@@ -318,6 +340,11 @@ class Checkout extends Component {
 }
 
 const styles = StyleSheet.create({
+    editContainer:{
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginLeft: 10
+    },
     container: {
         flex: 1
     },

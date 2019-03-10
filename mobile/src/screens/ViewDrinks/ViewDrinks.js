@@ -28,7 +28,7 @@ class ViewDrinks extends Component {
     search: "",
     drinks: [],
     categories: [],
-    drinksApi: false
+    drinksApi: false,
   };
 
   componentDidMount() {
