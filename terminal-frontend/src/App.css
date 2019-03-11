@@ -430,6 +430,7 @@ button.orderButton .subtitle {
 .customerNotesContainer .notes {
   color: #AEAEAE;
   font-size: 19px;
+  font-family: Georgia;
   padding-left: 101px;
 }
 .customerNotesContainer .notesIcon {
