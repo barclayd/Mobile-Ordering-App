@@ -357,7 +357,7 @@ export default class App extends Component {
       pendingOrders: [],
 
       lastValidScan: 0,
-      qrResult: "No result",
+      qrResult: "empty",
     }
 
     let awaitingOrdersIndexes=[], inProgressOrdersIndexes=[], pendingOrders=[];
@@ -693,14 +693,15 @@ export default class App extends Component {
 
           {
             this.state.disableScanner ? null :
-              <QrReader
-                delay={qrDelay}
-                onError={this.handleError}
-                onScan={this.handleScan}
-                className="qrReader"
-              />
+              <div className="qrReader">
+                <QrReader
+                  delay={qrDelay}
+                  onError={this.handleError}
+                  onScan={this.handleScan}
+                />
+                <p>QR content: {this.state.qrResult}</p>
+              </div>
           }
-          <p>{this.state.qrResult}</p>
         </header>
       </div>
     );
