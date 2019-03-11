@@ -3,7 +3,8 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ScrollView
+  ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
 import ScrollableTabView, {
@@ -80,8 +81,12 @@ class ViewDrinks extends Component {
                           );
                         })
                         : null}
+
                   </ScrollableTabView>
-              ) : null}
+              ) : <View style={[styles.container, styles.horizontal]}>
+              <ActivityIndicator size="large" color="#0000ff" />
+              </View>}
+              
             </View>
             <View
                 style={[{flex: 0.1, backgroundColor: 'transparent' }]}>
@@ -93,6 +98,15 @@ class ViewDrinks extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
+  },
   slidingTabs: {
     flex: 1,
     top: 0,
