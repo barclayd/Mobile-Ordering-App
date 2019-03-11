@@ -1,7 +1,6 @@
 import * as actionTypes from "./actionTypes";
 
 export const submitOrder = (basket, componentId) => {
-    console.log("submitOrder",basket)
     return {
         type: actionTypes.SUBMIT_ORDER,
         order: basket,
@@ -10,7 +9,6 @@ export const submitOrder = (basket, componentId) => {
 };
 
 export const submitOrderStart = () => {
-    console.log("submitOrderStart")
     return {
         type: actionTypes.SUBMIT_ORDER_START
     };

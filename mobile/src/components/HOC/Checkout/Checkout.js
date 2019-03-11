@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, FlatList, VirtualizedList} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -38,12 +38,12 @@ class Checkout extends Component {
                 this.animation.setValue({x: 0, y: gestureState.dy})
             },
             onPanResponderRelease: (event, gestureState) => {
-                if(gestureState.moveY > screenHeight - 120) {
+                if(gestureState.moveY > screenHeight - 180) {
                     Animated.spring(this.animation.y, {
                         toValue: 0,
                         tension: 1
                     }).start();
-                } else if (gestureState.moveY < 120) {
+                } else if (gestureState.moveY < 180) {
                     Animated.spring(this.animation.y, {
                         toValue: 0,
                         tension: 1
@@ -84,20 +84,20 @@ class Checkout extends Component {
     onEditPress = () => {
         this.setState({
             editVisible : !this.state.editVisible
-        })
+        });
 
         console.log("eidt button",this.state.editVisible)
-    }
+    };
 
     addValue = () => {
         console.log("addValue")
-    }
+    };
 
     processOrder = () => {
         console.log("processOrder");
         console.log("this.props.basket",this.props.basket)
         console.log("price",this.basketPrice())
-    }
+    };
 
     renderContent = (section, _, isActive) => {
         return (
@@ -107,7 +107,7 @@ class Checkout extends Component {
             >
                 <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
                     {this.props.basket.filter(basketItem => basketItem.category === section).map((drink, i) => (
-                        <View key={i}>
+                        <TouchableOpacity key={i} onPress={() => (alert('hello'))}>
                     <ListItem
                         key={i}
                         titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
@@ -124,18 +124,19 @@ class Checkout extends Component {
                         }
                         badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: drink.quantity, textStyle: { color: colours.pureWhite}}}
                         />
-                        {this.state.editVisible ? 
+
+                        {this.state.editVisible ?
                             <View style={styles.editContainer}>
-                            <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/> 
+                            <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/>
                             <View style={{justifyContent: 'flex-start', flexDirection: 'row'}}>
                             <TouchableOpacity onPress={()=>{this.addValue()}}>
-                            <Icon name="plus-circle" style={styles.trash} size={30} color={colours.orange} /> 
+                            <Icon name="plus-circle" style={styles.trash} size={30} color={colours.orange} />
                             </TouchableOpacity>
-                            <Icon name="minus-circle" style={styles.trash} size={30} color={colours.orange}/> 
+                            <Icon name="minus-circle" style={styles.trash} size={30} color={colours.orange}/>
                             </View>
                             </View>
                             : null}
-                            </View>
+                            </TouchableOpacity>
                     ))
                     }
                 </Animatable.View>
@@ -278,19 +279,53 @@ class Checkout extends Component {
                                 </View>
                             </Animated.View>
 
+                            <View style={{ height: screenHeight/3, width: screenWidth}}>
+                            <View>
+                                    <Card
+                                        containerStyle={{backgroundColor: colours.midnightBlack}}>
+                                        <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
+                                        <Text style={styles.barOrderDetails1}>
+                                            Total Items: {this.basketItems()}
+                                        </Text>
+                                            <Text style={{ color: colours.midGrey, fontSize: 30}}>
+                                                |
+                                            </Text>
+                                        <Text style={styles.barOrderDetails2}>
+                                            Total Price: £{this.basketPrice()}
+                                        </Text>
+                                        </View>
+                                    </Card>
+                                </View>
+
+                            {/* <View style={{ height: (screenHeight/6), justifyContent: 'center', alignItems: 'center'}}>
+
+                            </View> */}
+                            </View>
+                        </Animated.View>
+                        <View style={{ height: 1000 }}>
+                            <Accordion
+                                activeSections={activeSections}
+                                sections={this.props.basketCategories}
+                                touchableComponent={TouchableOpacity}
+                                expandMultiple={this.state.multipleSelect}
+                                renderHeader={this.renderHeader}
+                                renderContent={this.renderContent}
+                                duration={400}
+                                onChange={this.setSections}
+                            />
                             {this.basketItems() > 0 ?
-                                <View style={{marginTop: 20}}>
+                            <View style={{marginTop: 20}}>
                                 <Button
-                                    ViewComponent={require('react-native-linear-gradient').default}
-                                    icon={
-                                        <Icon
-                                            name="check-circle"
-                                            size={24}
-                                            color={colours.white}
-                                            style={{
-                                                marginLeft: 20,
-                                            }}
-                                        />
+                                ViewComponent={require('react-native-linear-gradient').default}
+                                icon={
+                                    <Icon
+                                    name="check-circle"
+                                    size={24}
+                                    color={colours.white}
+                                    style={{
+                                    marginLeft: 20,
+                                    }}
+                                    />
                                     }
                                     iconRight
                                     raised
@@ -307,53 +342,17 @@ class Checkout extends Component {
                                         paddingTop: 20,
                                         paddingBottom: 20,
                                         borderRadius: 20
-                                }}
+                                    }}
                                     titleStyle={{
                                         fontWeight: 'bold',
                                         fontSize: 24
                                     }}
-                                />
-                            </View>
-                            : null }
-
-                            <View style={{ height: screenHeight/3, width: screenWidth}}>
-                                <Accordion
-                                    activeSections={activeSections}
-                                    sections={this.props.basketCategories}
-                                    touchableComponent={TouchableOpacity}
-                                    expandMultiple={this.state.multipleSelect}
-                                    renderHeader={this.renderHeader}
-                                    renderContent={this.renderContent}
-                                    duration={400}
-                                    onChange={this.setSections}
-                                />
-                                <View>
-                                    <Card
-                                        containerStyle={{backgroundColor: colours.midnightBlack}}>
-                                        <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
-                                        <Text style={styles.barOrderDetails1}>
-                                            Total Items: {this.basketItems()}
-                                        </Text>
-                                            <Text style={{ color: colours.midGrey, fontSize: 30}}>
-                                                |
-                                            </Text>
-                                        <Text style={styles.barOrderDetails2}>
-                                            Total Price: £{this.basketPrice()}
-                                        </Text>
-                                        </View>
-                                    </Card>
-                                </View>
-                            
-                            </View>
-                            
-                            {/* <View style={{ height: (screenHeight/6), justifyContent: 'center', alignItems: 'center'}}>
-                                
-                            </View> */}
-                        </Animated.View>
-                        <View style={{ height: 1000 }} />
+                                    />
+                                    </View>
+                                    : null }
+                        </View>
                     </ScrollView>
                 </Animated.View>
-
             </Animated.View>
         )
     }
