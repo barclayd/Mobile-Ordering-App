@@ -1,30 +1,31 @@
 import * as actionTypes from "./actionTypes";
 
-export const addToOrder = (drink, quantity, componentId) => {
+export const submitOrder = (basket, componentId) => {
+    console.log("submitOrder",basket)
     return {
-        type: actionTypes.ADD_TO_ORDER,
-        drink: drink,
-        quantity: quantity,
+        type: actionTypes.SUBMIT_ORDER,
+        order: basket,
         componentId: componentId
     };
 };
 
-export const addToOrderStart = () => {
+export const submitOrderStart = () => {
+    console.log("submitOrderStart")
     return {
-        type: actionTypes.ADD_TO_ORDER_START
+        type: actionTypes.SUBMIT_ORDER_START
     };
 };
 
-export const addToOrderSuccess = (data) => {
+export const submitOrderSuccess = (data) => {
     return {
-        type: actionTypes.ADD_TO_ORDER_SUCCESS,
+        type: actionTypes.SUBMIT_ORDER_SUCCESS,
         data: data
     };
 };
 
-export const addToOrderFail= error => {
+export const submitOrderFail= error => {
     return {
-        type: actionTypes.ADD_TO_ORDER_FAIL,
+        type: actionTypes.SUBMIT_ORDER_FAIL,
         error: error
     };
 };

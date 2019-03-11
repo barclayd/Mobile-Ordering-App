@@ -3,25 +3,25 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     loading: null,
     error: null,
-    drinksOrdered: [],
+    order: [],
 };
 
-const addToOrderStart = (state, action) => {
+const submitOrderStart = (state, action) => {
     return updateObject(state, {
         error: null,
         loading: true
     });
 };
 
-const addToOrderSuccess = (state, action) => {
+const submitOrderSuccess = (state, action) => {
     return updateObject(state, {
-        drinksOrdered: action.data,
+        order: action.data,
         loading: false,
         error: false,
     });
 };
 
-const addToOrderFail = (state, action) => {
+const submitOrderFail = (state, action) => {
     return updateObject(state, {
         loading: false,
         error: action.error
@@ -30,9 +30,9 @@ const addToOrderFail = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.ADD_TO_ORDER_START: return addToOrderStart(state, action);
-        case actionTypes.ADD_TO_ORDER_SUCCESS: return addToOrderSuccess(state, action);
-        case actionTypes.ADD_TO_ORDER_FAIL: return addToOrderFail(state, action);
+        case actionTypes.SUBMIT_ORDER_START: return submitOrderStart(state, action);
+        case actionTypes.SUBMIT_ORDER_SUCCESS: return submitOrderSuccess(state, action);
+        case actionTypes.SUBMIT_ORDER_FAIL: return submitOrderFail(state, action);
         default: return state;
     }
 };

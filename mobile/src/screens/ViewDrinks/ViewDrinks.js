@@ -11,6 +11,7 @@ import ScrollableTabView, {
   ScrollableTabBar
 } from "react-native-scrollable-tab-view";
 import * as actions from "../../store/actions/index";
+import * as colours from "../../styles/colourScheme"
 import TabbedCategories from "./TabbedCategories/TabbedCategories";
 import Checkout from '../../components/HOC/Checkout/Checkout';
 import {Navigation} from "react-native-navigation";
@@ -84,9 +85,9 @@ class ViewDrinks extends Component {
 
                   </ScrollableTabView>
               ) : <View style={[styles.container, styles.horizontal]}>
-              <ActivityIndicator size="large" color="#0000ff" />
+              <ActivityIndicator size="large" color={colours.orange} />
               </View>}
-              
+
             </View>
             <View
                 style={[{flex: 0.1, backgroundColor: 'transparent' }]}>
