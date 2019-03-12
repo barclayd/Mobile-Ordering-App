@@ -51,11 +51,27 @@ const updateBasketSuccess = (state, action) => {
     }
 };
 
+const emptyBasketStart = (state, action) => {
+    return updateObject(state, {
+        error: null,
+        loading: true
+    });
+};
+
+const emptyBasketSuccess = (state, action) => {
+    return updateObject(state, {
+        basket: [],
+        loading: false,
+        error: false
+    });
+};
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.UPDATE_BASKET_START: return updateBasketStart(state, action);
         case actionTypes.UPDATE_BASKET_SUCCESS: return updateBasketSuccess(state, action);
+        case actionTypes.EMPTY_BASKET_START: return emptyBasketStart(state, action);
+        case actionTypes.EMPTY_BASKET_SUCCESS: return emptyBasketSuccess(state, action);
         default: return state;
     }
 };

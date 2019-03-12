@@ -21,7 +21,7 @@ class SideDrawer extends Component {
 
     state = {
         pastOrders: []
-    }
+    };
 
   logoutHandler = () => {
     this.props.onLogout();
@@ -30,19 +30,14 @@ class SideDrawer extends Component {
   };
 
   componentDidMount(){
-      console.log("finding orders")
-      this.props.findUserOrders()
-  }
-  componentDidUpdate(){
-      console.log("this.state",this.state)
+      this.props.findUserOrders();
   }
 
   componentWillReceiveProps(nextProps) {
-      console.log("this.props.pastOrders",this.props.pastOrders)
-    if (!nextProps.loading) {
-      this.setState({
-        pastOrders: nextProps.pastOrders,
-      });
+        if (!nextProps.loading) {
+          this.setState({
+            pastOrders: nextProps.pastOrders,
+          });
     }
   }
 
