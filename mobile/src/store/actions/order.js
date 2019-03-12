@@ -14,10 +14,10 @@ export const submitOrderStart = () => {
     };
 };
 
-export const submitOrderSuccess = (data) => {
+export const submitOrderSuccess = (order) => {
     return {
         type: actionTypes.SUBMIT_ORDER_SUCCESS,
-        data: data
+        order: order
     };
 };
 

@@ -1,9 +1,24 @@
 import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../../axios-instance';
+import {AsyncStorage} from 'react-native';
 
 export function* submitOrderSaga(action) {
+    let date = new Date();
+    const value = yield AsyncStorage.getItem('userId');
+    console.log("userValue",value)
     yield put(actions.submitOrderStart());
+    let drinksList = []
+    action.order.map(drink => {
+      if (drink.quantity > 1)
+        for (let i = 0; i < drink.quantity; i++){
+          drinksList.push(drink._id)
+        }
+        else {
+          drinksList.push(drink._id)
+        }
+    })
+    // console.log("drinkList",drinksList)
     try {
         let requestBody = {
             query: `
@@ -15,16 +30,26 @@ export function* submitOrderSaga(action) {
                         date: $date
                         userInfo: $userInfo
                     }) {
-                        collectionPoint
                         _id
+                        drinks {
+                          name
+                          price
+                          _id
+                       }
+                        collectionPoint
+                        status
+                        userInfo {
+                          email
+                          name
+                        }
                    } 
                 }
             `,
             variables: {
-                drinks: ["5c7d3046a90475bf3c7dec51", "5c7dff60a28b7af82260a1d4"],
+                drinks: drinksList,
                 collectionPoint: "MOBILE APP",
                 status: "PENDING",
-                date: "2019-03-12T00:35:17.559Z",
+                date: date,
                 userInfo: "5c69d87973c39d2e28fbe9cf"
             }
         };
@@ -36,6 +61,8 @@ export function* submitOrderSaga(action) {
         if (response.status === 200 && response.status !== 201) {
             console.log('made it');
             console.log(response.data);
+            yield put(actions.submitOrderSuccess(response.data))
+
         }
     } catch (err) {
         console.log(err);
