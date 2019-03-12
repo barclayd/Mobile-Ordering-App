@@ -16,8 +16,9 @@ const submitOrderStart = (state, action) => {
 };
 
 const submitOrderSuccess = (state, action) => {
+    console.log("submitOrderSuccess, action:",action.order.data)
     return updateObject(state, {
-        order: action.data,
+        order: action.order.data,
         loading: false,
         error: false,
     });
