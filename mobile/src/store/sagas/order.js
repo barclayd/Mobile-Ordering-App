@@ -6,9 +6,8 @@ import {AsyncStorage} from 'react-native';
 export function* submitOrderSaga(action) {
     let date = new Date();
     const value = yield AsyncStorage.getItem('userId');
-    console.log("userValue",value)
     yield put(actions.submitOrderStart());
-    let drinksList = []
+    let drinksList = [];
     action.order.map(drink => {
       if (drink.quantity > 1)
         for (let i = 0; i < drink.quantity; i++){
@@ -17,7 +16,7 @@ export function* submitOrderSaga(action) {
         else {
           drinksList.push(drink._id)
         }
-    })
+    });
     // console.log("drinkList",drinksList)
     try {
         let requestBody = {
@@ -89,14 +88,17 @@ export function* orderHistorySaga(action) {
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
-            // dispatch to ordrerHistoryFailure action
+            yield put(actions.orderHistoryFailure());
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            // need to map data into new array
-            console.log(response.data);
-            yield put(actions.orderHistorySuccess());
-
+            const fetchData = [];
+            for (let key in response.data.data.findOrdersByUser) {
+                fetchData.push(
+                    response.data.data.findOrdersByUser[key],
+                );
+            }
+            yield put(actions.orderHistorySuccess(fetchData));
         }
     } catch (err) {
         console.log(err);

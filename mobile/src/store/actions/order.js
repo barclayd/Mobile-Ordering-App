@@ -28,7 +28,7 @@ export const submitOrderFail = error => {
     };
 };
 
-export const orderHistory = (basket, componentId) => {
+export const orderHistory = () => {
     return {
         type: actionTypes.ORDER_HISTORY,
     };
