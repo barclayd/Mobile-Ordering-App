@@ -3,6 +3,7 @@ const Order = require('../../models/order');
 const User = require('../../models/user');
 const {dateToString} = require("../../helpers/date");
 const {transformOrder} = require('./merge');
+const {drinks} = require('./mergeResolvers/drinks');
 
 
 module.exports = {
@@ -40,7 +41,7 @@ module.exports = {
     },
     findOrdersById: async ({orderId}) => {
         try {
-            const foundOrders = await Order.find({_id: orderId}).populate('drinks').populate('userInfo');
+            const foundOrders = await Order.find({_id: orderId}).populate('userInfo');
             return foundOrders.map(foundOrder => {
                 return {
                     drinks: foundOrder.drinks,
@@ -58,14 +59,16 @@ module.exports = {
     },
     findOrdersByUser: async ({userInfo}) => {
         try {
-            const foundOrders = await Order.find({userInfo}).populate('drinks').populate('userInfo');
-            return foundOrders.map(foundOrder => {
+            const foundOrders = await Order.find({userInfo}).populate('userInfo');
+            return foundOrders.map(async foundOrder => {
                 const modifiedUserInfo = {
-                      ...foundOrder.userInfo._doc,
-                      password: null
+                    ...foundOrder.userInfo._doc,
+                    password: null
                 };
+                console.log(`ids passed in: ${foundOrder.drinks}`);
+                const returnedDrinks = await drinks(foundOrder.drinks);
                 return {
-                    drinks: foundOrder.drinks,
+                    drinks: returnedDrinks,
                     collectionPoint: foundOrder.collectionPoint,
                     status: foundOrder.status,
                     orderAssignedTo: foundOrder.orderAssignedTo,
@@ -80,11 +83,12 @@ module.exports = {
     },
     findOrders: async () => {
         try {
-            const foundOrders = await Order.find().populate('drinks').populate('userInfo');
-            return foundOrders.map(foundOrder => {
-                console.log(foundOrder);
+            const foundOrders = await Order.find().populate('userInfo');
+            return foundOrders.map(async foundOrder => {
+                const returnedDrinks = await drinks(foundOrder.drinks);
                 return {
                     ...foundOrder._doc,
+                    drinks: returnedDrinks,
                     collectionPoint: foundOrder.collectionPoint,
                     status: foundOrder.status,
                     orderAssignedTo: foundOrder.orderAssignedTo,
