@@ -1,3 +1,7 @@
+const DataLoader = require('dataloader');
+const {drinks} = require('./mergeResolvers/drinks');
+const {dateToString} = require('../../helpers/date');
+
 const transformDrink = drink => {
     return {
         ...drink._doc,
@@ -8,6 +12,33 @@ const transformDrink = drink => {
     };
 };
 
+const drinkLoader = new DataLoader((drinkIds) => {
+    return drinks(drinkIds);
+});
+
+const drinksList = async drinkIds => {
+    try {
+        const drinks = await drinkLoader.load(drinkIds.toString());
+        return drinks;
+    } catch (err) {
+        throw err;
+    }
+};
+
+const transformOrder = order => {
+    return {
+        ...order._doc,
+        _id: order.id,
+        userInfo: order.userInfo,
+        drinks: order.drinks,
+        collectionPoint: order.collectionPoint,
+        status: order.status,
+        orderAssignedTo: order.orderAssignedTo,
+        date: dateToString(order.date),
+    };
+};
+
 module.exports = {
-    transformDrink
+    transformDrink,
+    transformOrder
 };

@@ -2,15 +2,18 @@ const Drink = require('../../models/drink');
 const Order = require('../../models/order');
 const User = require('../../models/user');
 const {dateToString} = require("../../helpers/date");
+const {transformOrder} = require('./merge');
 
 
 module.exports = {
     createOrder: async (args) => {
         try {
             let drinksIdCheck = false;
+            let foundDrinks = [];
             for (let i in args.orderInput.drinks) {
                 const searchedDrinks = await Drink.findOne({_id: args.orderInput.drinks[i]});
                 if (searchedDrinks) {
+                    foundDrinks.push(searchedDrinks);
                     drinksIdCheck = true;
                 }
             }
@@ -22,7 +25,7 @@ module.exports = {
                 throw new Error ('Invalid user account to process order');
             }
             const createdOrder = new Order({
-                drinks: args.orderInput.drinks,
+                drinks: foundDrinks,
                 collectionPoint: args.orderInput.collectionPoint,
                 status: args.orderInput.status,
                 orderAssignedTo: args.orderInput.orderAssignedTo,
@@ -30,17 +33,14 @@ module.exports = {
                 userInfo: user._id
             });
             const result = await createdOrder.save();
-            return {
-                ...result._doc,
-                _id: result.id,
-            };
+            return transformOrder(result);
         } catch (err) {
             throw err;
         }
     },
     findOrdersById: async ({orderId}) => {
         try {
-            const foundOrders = await Order.find({_id: orderId});
+            const foundOrders = await Order.find({_id: orderId}).populate('drinks');
             return foundOrders.map(foundOrder => {
                 return {
                     drinks: foundOrder.drinks,
@@ -58,9 +58,7 @@ module.exports = {
     },
     findOrdersByUser: async ({userInfo}) => {
         try {
-            const foundOrders = await Order.find({userInfo});
-            console.log(userInfo);
-            console.log(foundOrders);
+            const foundOrders = await Order.find({userInfo}).populate('drinks');
             return foundOrders.map(foundOrder => {
                 return {
                     drinks: foundOrder.drinks,
@@ -78,11 +76,11 @@ module.exports = {
     },
     findOrders: async () => {
         try {
-            const foundOrders = await Order.find();
+            const foundOrders = await Order.find().populate('drinks');
             return foundOrders.map(foundOrder => {
                 console.log(foundOrder);
                 return {
-                    drinks: foundOrder.drinks,
+                    ...foundOrder._doc,
                     collectionPoint: foundOrder.collectionPoint,
                     status: foundOrder.status,
                     orderAssignedTo: foundOrder.orderAssignedTo,

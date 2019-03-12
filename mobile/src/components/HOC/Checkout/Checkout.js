@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, FlatList, VirtualizedList} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
-import {ListItem, Card, Button, withBadge} from 'react-native-elements';
+import {ListItem, Card, Button, withBadge, CheckBox} from 'react-native-elements';
 import * as colours from '../../../styles/colourScheme';
 import {connect} from 'react-redux';
 import * as actions from "../../../store/actions/index"
@@ -17,7 +17,8 @@ class Checkout extends Component {
         basketBarHeight: screenHeight - 180,
         activeSections: [],
         multipleSelect: true,
-        editVisible: false
+        editVisible: false,
+        emptyBasketChecked: false
     };
 
 
@@ -280,6 +281,16 @@ class Checkout extends Component {
                             </Animated.View>
 
                             <View style={{ height: screenHeight/3, width: screenWidth}}>
+                                {/*<View>*/}
+                                    {/*{this.state.editVisible ? <CheckBox*/}
+                                        {/*right*/}
+                                        {/*title='Empty Basket?'*/}
+                                        {/*checkedIcon='dot-circle-o'*/}
+                                        {/*uncheckedIcon='circle-o'*/}
+                                        {/*checked={this.state.emptyBasketChecked}*/}
+                                        {/*onPress={() => this.setState({checked: !this.state.emptyBasketChecked})}*/}
+                                    {/*/> : null}*/}
+                                {/*</View>*/}
                             <View>
                                     <Card
                                         containerStyle={{backgroundColor: colours.midnightBlack}}>
