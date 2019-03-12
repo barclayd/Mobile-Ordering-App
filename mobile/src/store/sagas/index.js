@@ -3,7 +3,9 @@ import {authUserSaga, logoutSaga, authCheckStateSaga, checkAuthTimeoutSaga, auto
 import {findBarSaga} from './bar';
 import {findDrinksSaga, findDrinkCategoriesSaga} from './drinks';
 import {updateBasketSaga} from './basket';
+import {submitOrderSaga} from './order';
 import * as actionTypes from '../actions/actionTypes';
+import {put} from 'redux-saga/effects';
 
 
 export function* watchAuth() {
@@ -27,4 +29,8 @@ export function* watchDrinks() {
 
 export function* watchBasket() {
     yield takeLatest(actionTypes.UPDATE_BASKET, updateBasketSaga);
+}
+
+export function* watchOrder() {
+    yield takeLatest(actionTypes.SUBMIT_ORDER, submitOrderSaga);
 }
