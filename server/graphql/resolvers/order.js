@@ -38,9 +38,29 @@ module.exports = {
             throw err;
         }
     },
-    findOrders: async ({orderId}) => {
+    findOrdersById: async ({orderId}) => {
         try {
-            const foundOrders = await Drink.find({_id: orderId});
+            const foundOrders = await Order.find({_id: orderId});
+            return foundOrders.map(foundOrder => {
+                return {
+                    drinks: foundOrder.drinks,
+                    collectionPoint: foundOrder.collectionPoint,
+                    status: foundOrder.status,
+                    orderAssignedTo: foundOrder.orderAssignedTo,
+                    date: dateToString(foundOrder.date),
+                    userInfo: foundOrder.userInfo
+                };
+            });
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+    findOrdersByUser: async ({userInfo}) => {
+        try {
+            const foundOrders = await Order.find({userInfo});
+            console.log(userInfo);
+            console.log(foundOrders);
             return foundOrders.map(foundOrder => {
                 return {
                     drinks: foundOrder.drinks,
@@ -55,6 +75,25 @@ module.exports = {
             console.log(err);
             throw err;
         }
-    }
+    },
+    findOrders: async () => {
+        try {
+            const foundOrders = await Order.find();
+            return foundOrders.map(foundOrder => {
+                console.log(foundOrder);
+                return {
+                    drinks: foundOrder.drinks,
+                    collectionPoint: foundOrder.collectionPoint,
+                    status: foundOrder.status,
+                    orderAssignedTo: foundOrder.orderAssignedTo,
+                    date: dateToString(foundOrder.date),
+                    userInfo: foundOrder.userInfo
+                };
+            });
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
 };
 

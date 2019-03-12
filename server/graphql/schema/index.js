@@ -102,6 +102,7 @@ module.exports = buildSchema(`
        findIngredients(name: String!): [Ingredient!]!
        findDrinkCategories: [Category!]!
        findOrders: [Order!]!
+       findOrdersByUser(userInfo: ID!): [Order!]!
     }
     
     type RootMutation {
