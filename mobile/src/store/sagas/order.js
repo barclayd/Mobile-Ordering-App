@@ -5,7 +5,7 @@ import {AsyncStorage} from 'react-native';
 
 export function* submitOrderSaga(action) {
     let date = new Date();
-    const value = yield AsyncStorage.getItem('userId');
+    const user = yield AsyncStorage.getItem('userId');
     yield put(actions.submitOrderStart());
     let drinksList = [];
     action.order.map(drink => {
@@ -49,7 +49,7 @@ export function* submitOrderSaga(action) {
                 collectionPoint: "MOBILE APP",
                 status: "PENDING",
                 date: date,
-                userInfo: "5c69d87973c39d2e28fbe9cf"
+                userInfo: user
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
