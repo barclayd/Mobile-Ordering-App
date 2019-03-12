@@ -17,7 +17,7 @@ export function* submitOrderSaga(action) {
           drinksList.push(drink._id)
         }
     });
-    // console.log("drinkList",drinksList)
+    console.log(drinksList);
     try {
         let requestBody = {
             query: `
@@ -49,21 +49,25 @@ export function* submitOrderSaga(action) {
                 collectionPoint: "MOBILE APP",
                 status: "PENDING",
                 date: date,
-                userInfo: user
+                userInfo: user ? user : '5c69c7c058574e24c841ddc8'
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
             console.log('error was found');
+            yield put(actions.submitOrderFail());
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
             console.log('made it');
             console.log(response.data);
-            yield put(actions.submitOrderSuccess(response.data))
+            yield put(actions.submitOrderSuccess(response.data));
+            yield put(actions.emptyBasketStart());
+            yield put(actions.emptyBasketSuccess());
 
         }
     } catch (err) {
+        yield put(actions.submitOrderFail(err));
         console.log(err);
     }
 }
