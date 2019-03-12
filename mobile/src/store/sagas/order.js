@@ -41,3 +41,40 @@ export function* submitOrderSaga(action) {
         console.log(err);
     }
 }
+
+export function* orderHistorySaga(action) {
+    yield put(actions.orderHistoryStart());
+    try {
+        let requestBody = {
+            query: `
+                query FindOrdersByUser($userInfo: ID!) {
+                    findOrdersByUser(userInfo: $userInfo) {
+                        collectionPoint
+                        status
+                        date
+                        _id
+                   }
+                }
+            `,
+            variables: {
+                userInfo: "5c69d87973c39d2e28fbe9cf"
+            }
+        };
+        const response = yield axios.post('/', JSON.stringify(requestBody));
+        if (response.data.errors) {
+            // dispatch to ordrerHistoryFailure action
+            throw Error(response.data.errors[0].message);
+        }
+        if (response.status === 200 && response.status !== 201) {
+            // need to map data into new array
+            console.log(response.data);
+            yield put(actions.orderHistorySuccess());
+
+        }
+    } catch (err) {
+        console.log(err);
+        yield put(actions.orderHistoryFailure());
+    }
+}
+
+

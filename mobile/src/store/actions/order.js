@@ -21,9 +21,35 @@ export const submitOrderSuccess = (data) => {
     };
 };
 
-export const submitOrderFail= error => {
+export const submitOrderFail = error => {
     return {
         type: actionTypes.SUBMIT_ORDER_FAIL,
+        error: error
+    };
+};
+
+export const orderHistory = (basket, componentId) => {
+    return {
+        type: actionTypes.ORDER_HISTORY,
+    };
+};
+
+export const orderHistoryStart = () => {
+    return {
+        type: actionTypes.ORDER_HISTORY_START
+    };
+};
+
+export const orderHistorySuccess = (foundOrders) => {
+    return {
+        type: actionTypes.ORDER_HISTORY_SUCCESS,
+        previousOrders: foundOrders
+    };
+};
+
+export const orderHistoryFailure = error => {
+    return {
+        type: actionTypes.ORDER_HISTORY_FAIL,
         error: error
     };
 };
