@@ -109,8 +109,6 @@ class TabbedCategories extends Component {
 
                     <View style={styles.rowContainer}>
 
-                      {/* User feed back when selected dirnk */}
-
                       {this.basketItems(u.name) > 0 ? (
                         <Text style={styles.quantity}>
                           x{this.basketItems(u.name)} Pint{" "}
@@ -118,7 +116,7 @@ class TabbedCategories extends Component {
                       ) : null}
 
                       {this.state.trashCanVisible &&
-                      this.props.drinks[i].name == this.state.itemSelected ? (
+                      this.props.drinks[i].name === this.state.itemSelected ? (
                         <View style={styles.rightContainer}>
                           <Icon
                             name="trash-o"
