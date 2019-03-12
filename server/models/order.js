@@ -1,30 +1,30 @@
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
-    basket: [{
-        type: mongoose.Schema.ObjectId, ref:'drink'
+    drinks: [{
+        type: mongoose.Schema.ObjectId,
+        ref:'Drink',
     }],
     collectionPoint: {
-        type: 'String',
+        type: String,
         required: true,
     },
     status: {
         type: String,
         enum: ["AWAITING_COLLECTION", "IN_PROGRESS", "PENDING"],
     },
-    promotionID: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'promotion'
-        }
-    ],
-    orderAssignedTo: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'barStaff'
-        }
-    ]
+    orderAssignedTo: {
+        type: String,
+        ref: 'barStaff'
+    },
+    date: {
+        type: Date,
+        required: true
+    },
+    userInfo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
-const order = mongoose.model('Order', orderSchema);
-module.exports = order;
+module.exports = mongoose.model('Order', orderSchema);
