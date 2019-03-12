@@ -35,6 +35,7 @@ const transformOrder = order => {
         status: order.status,
         orderAssignedTo: order.orderAssignedTo,
         date: dateToString(order.date),
+        transactionId: order.transactionId
     };
 };
 
