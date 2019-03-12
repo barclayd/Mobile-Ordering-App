@@ -60,13 +60,17 @@ module.exports = {
         try {
             const foundOrders = await Order.find({userInfo}).populate('drinks').populate('userInfo');
             return foundOrders.map(foundOrder => {
+                const modifiedUserInfo = {
+                      ...foundOrder.userInfo._doc,
+                      password: null
+                };
                 return {
                     drinks: foundOrder.drinks,
                     collectionPoint: foundOrder.collectionPoint,
                     status: foundOrder.status,
                     orderAssignedTo: foundOrder.orderAssignedTo,
                     date: dateToString(foundOrder._doc.date),
-                    userInfo: foundOrder.userInfo
+                    userInfo: modifiedUserInfo
                 };
             });
         } catch (err) {
