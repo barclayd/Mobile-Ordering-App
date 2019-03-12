@@ -33,20 +33,20 @@ module.exports = buildSchema(`
         _id: ID!
         collectionPoint: String!
         drinks: [Drink!]
-        orderAssignedTo: String!
+        orderAssignedTo: String
         status: String!
         date: String!
         userInfo: User!
     }
         
      type Bar {
-            _id: ID!
-            name: String!
-            barCode: String!
-            type: String!
-            description: String!
-            latitude: Float!
-            longitude: Float!
+        _id: ID!
+        name: String!
+        barCode: String!
+        type: String!
+        description: String!
+        latitude: Float!
+        longitude: Float!
      }
         
     type AuthData {
@@ -66,7 +66,6 @@ module.exports = buildSchema(`
     input OrderInput {
         drinks: [ID!]
         collectionPoint: String!
-        orderAssignedTo: String!
         status: String!
         date: String!
         userInfo: ID!
