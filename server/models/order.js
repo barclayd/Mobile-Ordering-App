@@ -24,6 +24,9 @@ const orderSchema = mongoose.Schema({
     userInfo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    transactionId: {
+        type: String,
     }
 });
 

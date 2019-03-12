@@ -4,10 +4,11 @@ const User = require('../../models/user');
 const {dateToString} = require("../../helpers/date");
 const {transformOrder} = require('./merge');
 const {drinks} = require('./mergeResolvers/drinks');
-
+const {processPayment} = require('../../helpers/stripe');
+const uuid = require('uuid/v4');
 
 module.exports = {
-    createOrder: async (args) => {
+    createOrder: async (args, req) => {
         try {
             let drinksIdCheck = false;
             let foundDrinks = [];
@@ -25,14 +26,21 @@ module.exports = {
             if (!user) {
                 throw new Error ('Invalid user account to process order');
             }
-            console.log(`args was hit: ${args}`);
+            const generatedTransactionId = uuid();
+            // process payment with stripe
+            const userPayment = await processPayment(null, 9.99, generatedTransactionId, 'uk');
+            if (!userPayment) {
+                // userPayment failed
+                throw new Error ('Attempt to process user payment failed.');
+            }
             const createdOrder = new Order({
                 drinks: foundDrinks,
                 collectionPoint: args.orderInput.collectionPoint,
                 status: args.orderInput.status,
                 orderAssignedTo: args.orderInput.orderAssignedTo,
                 date: dateToString(args.orderInput.date),
-                userInfo: user
+                userInfo: user,
+                transactionId: generatedTransactionId
             });
             const result = await createdOrder.save();
             return transformOrder(result);
@@ -57,7 +65,8 @@ module.exports = {
                     status: foundOrder.status,
                     orderAssignedTo: foundOrder.orderAssignedTo,
                     date: dateToString(foundOrder._doc.date),
-                    userInfo: modifiedUserInfo
+                    userInfo: modifiedUserInfo,
+                    transactionId: foundOrder.transactionId
                 };
             });
         } catch (err) {
@@ -77,7 +86,8 @@ module.exports = {
                     status: foundOrder.status,
                     orderAssignedTo: foundOrder.orderAssignedTo,
                     date: dateToString(foundOrder.date),
-                    userInfo: foundOrder.userInfo
+                    userInfo: foundOrder.userInfo,
+                    transactionId: foundOrder.transactionId
                 };
             });
         } catch (err) {
