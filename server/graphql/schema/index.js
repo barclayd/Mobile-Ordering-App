@@ -37,6 +37,7 @@ module.exports = buildSchema(`
         status: String!
         date: String!
         userInfo: User!
+        transactionId: String!
     }
         
      type Bar {
