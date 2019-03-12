@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-import {updateObject} from "../utility";
+import {updateObject, storeBasket} from "../utility";
 
 const initialState = {
     loading: null,
@@ -15,10 +15,12 @@ const updateBasketStart = (state, action) => {
     });
 };
 
-const updateBasketSuccess = (state, action) => {
+const updateBasketSuccess = async (state, action) => {
     if (action.basketAction === 'add') {
+        const updatedBasket = state.basket.concat(action.drink);
+        await storeBasket(updatedBasket);
         return updateObject(state, {
-            basket: state.basket.concat(action.drink),
+            basket: updatedBasket,
             categories: (!state.categories.includes(action.drink.category)) ? state.categories.concat(action.drink.category) : state.categories,
             loading: false,
             error: false,
@@ -32,16 +34,20 @@ const updateBasketSuccess = (state, action) => {
             ...oldDrinkObject[0],
             quantity: updatedQuantity
         };
+        const updatedBasket = state.basket.filter(drink => drink.name !== action.drink.name).concat(newDrinkObject);
+        await storeBasket(updatedBasket);
         return updateObject(state, {
-            basket: state.basket.filter(drink => drink.name !== action.drink.name).concat(newDrinkObject),
+            basket: updatedBasket,
             loading: false,
             error: false,
             saved: true
         });
     }
     if (action.basketAction === 'delete') {
+        const updatedBasket = state.basket.filter(drink => drink.name !== action.drink.name);
+        await storeBasket(updatedBasket);
         return updateObject(state, {
-            drink: state.basket.filter(drink => drink.name !== action.drink.name),
+            drink: updatedBasket,
             loading: false,
             error: false,
             saved: true
