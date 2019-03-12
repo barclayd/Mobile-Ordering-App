@@ -25,6 +25,7 @@ module.exports = {
             if (!user) {
                 throw new Error ('Invalid user account to process order');
             }
+            console.log(`args was hit: ${args}`);
             const createdOrder = new Order({
                 drinks: foundDrinks,
                 collectionPoint: args.orderInput.collectionPoint,
@@ -36,24 +37,6 @@ module.exports = {
             const result = await createdOrder.save();
             return transformOrder(result);
         } catch (err) {
-            throw err;
-        }
-    },
-    findOrdersById: async ({orderId}) => {
-        try {
-            const foundOrders = await Order.find({_id: orderId}).populate('userInfo');
-            return foundOrders.map(foundOrder => {
-                return {
-                    drinks: foundOrder.drinks,
-                    collectionPoint: foundOrder.collectionPoint,
-                    status: foundOrder.status,
-                    orderAssignedTo: foundOrder.orderAssignedTo,
-                    date: dateToString(foundOrder.date),
-                    userInfo: foundOrder.userInfo
-                };
-            });
-        } catch (err) {
-            console.log(err);
             throw err;
         }
     },
