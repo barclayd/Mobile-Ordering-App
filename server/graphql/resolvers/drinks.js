@@ -1,5 +1,4 @@
 const Drink = require('../../models/drink');
-// const {findIngredients} = require('./ingredients');
 const {transformDrink} = require('./merge');
 
 module.exports = {
