@@ -64,7 +64,7 @@ export function* submitOrderSaga(action) {
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
             yield put(actions.emptyBasketSuccess());
-
+            yield AsyncStorage.removeItem("basket");
         }
     } catch (err) {
         yield put(actions.submitOrderFail(err));
