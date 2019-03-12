@@ -30,7 +30,7 @@ module.exports = {
                 status: args.orderInput.status,
                 orderAssignedTo: args.orderInput.orderAssignedTo,
                 date: dateToString(args.orderInput.date),
-                userInfo: user._id
+                userInfo: user
             });
             const result = await createdOrder.save();
             return transformOrder(result);
@@ -40,7 +40,7 @@ module.exports = {
     },
     findOrdersById: async ({orderId}) => {
         try {
-            const foundOrders = await Order.find({_id: orderId}).populate('drinks');
+            const foundOrders = await Order.find({_id: orderId}).populate('drinks').populate('userInfo');
             return foundOrders.map(foundOrder => {
                 return {
                     drinks: foundOrder.drinks,
@@ -58,7 +58,7 @@ module.exports = {
     },
     findOrdersByUser: async ({userInfo}) => {
         try {
-            const foundOrders = await Order.find({userInfo}).populate('drinks');
+            const foundOrders = await Order.find({userInfo}).populate('drinks').populate('userInfo');
             return foundOrders.map(foundOrder => {
                 return {
                     drinks: foundOrder.drinks,
@@ -76,7 +76,7 @@ module.exports = {
     },
     findOrders: async () => {
         try {
-            const foundOrders = await Order.find().populate('drinks');
+            const foundOrders = await Order.find().populate('drinks').populate('userInfo');
             return foundOrders.map(foundOrder => {
                 console.log(foundOrder);
                 return {

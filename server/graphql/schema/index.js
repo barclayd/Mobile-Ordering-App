@@ -36,7 +36,7 @@ module.exports = buildSchema(`
         orderAssignedTo: String!
         status: String!
         date: String!
-        userInfo: ID!
+        userInfo: User!
     }
         
      type Bar {
