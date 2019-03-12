@@ -11,14 +11,14 @@ export default class NotesPopupWindow extends React.Component {
     buildSubtitle = (order) => {
         if (order) return (
             <span>
-                for <span className="orderID">#{this.props.order.id}</span> ordered at {DateTime.fromJSDate(this.props.order.orderDate).toFormat("h:mma")},&nbsp;
-                <TimeAgo date={this.props.order.orderDate}/>
+                for <span className="orderID">#{order.id}</span> ordered at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")},&nbsp;
+                <TimeAgo date={order.orderDate}/>
             </span>
         ); else return (<span></span>);
     }
     
     buildNotes = (order) => {
-        if (order) return (<p className="notesPara">{this.props.order.notes}</p>); else return "";
+        if (order) return (<p className="notesPara">{order.notes}</p>); else return "";
     }
 
     render () {
