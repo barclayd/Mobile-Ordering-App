@@ -68,6 +68,7 @@ module.exports = {
                 console.log(`ids passed in: ${foundOrder.drinks}`);
                 const returnedDrinks = await drinks(foundOrder.drinks);
                 return {
+                    _id: foundOrder._id,
                     drinks: returnedDrinks,
                     collectionPoint: foundOrder.collectionPoint,
                     status: foundOrder.status,
