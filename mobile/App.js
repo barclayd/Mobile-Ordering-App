@@ -7,6 +7,7 @@ import SideDrawer from './src/screens/SideDraw/SideDraw';
 import Settings from './src/screens/Settings/Settings';
 import WelcomeScreen from './src/screens/WelcomeScreen/WelcomeScreen';
 import OrderStatus from './src/screens/OrderStatus/OrderStatus';
+import ViewPastOrders from './src/screens/ViewPastOrders/ViewPastOrders';
 import {setWelcomePageRoot, setDefaultSettings} from './src/utility/navigation';
 import * as screens from './src/utility/screens';
 import createSagaMiddleware from 'redux-saga';
@@ -32,6 +33,7 @@ Navigation.registerComponentWithRedux(screens.Settings, () => Settings, Provider
 Navigation.registerComponentWithRedux(screens.ViewMenus, () => ViewMenus, Provider, store);
 Navigation.registerComponentWithRedux(screens.ViewCheckout, () => ViewCheckout, Provider, store);
 Navigation.registerComponentWithRedux(screens.OrderStatus, () => OrderStatus, Provider, store);
+Navigation.registerComponentWithRedux(screens.ViewPastOrders, () => ViewPastOrders, Provider, store);
 
 Navigation.events().registerAppLaunchedListener(() => {
   setDefaultSettings();

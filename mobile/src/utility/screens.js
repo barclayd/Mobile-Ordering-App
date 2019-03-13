@@ -6,3 +6,4 @@ export const Settings = 'drinks-app.Settings';
 export const ViewMenus = 'drinks-app.ViewMenus';
 export const ViewCheckout = 'drinks-app.ViewCheckout';
 export const OrderStatus = 'drinks-app.OrderStatus';
+export const ViewPastOrders = 'drinks-app.ViewPastOrders';

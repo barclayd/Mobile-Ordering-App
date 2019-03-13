@@ -229,6 +229,50 @@ const setViewDrinksSettings = (image) => {
     });
 };
 
+const setViewPastOrders = async (componentId, menuName) => {
+    await Navigation.push(componentId, {
+        component: {
+            name: screens.ViewPastOrders,
+            // passProps: {
+            //     menuName: menuName
+            // },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: 'Order History',
+                        color: colours.white,
+                        largeTitle: true
+                    },
+                    subtitle: {
+                        text: 'user id',
+                        color: colours.orange,
+                        fontSize: 12,
+                        fontFamily: 'HelveticaNeue-Italic',
+                    }
+                }
+            }
+        }
+    })
+};
+
+
+const setViewPastOrdersSettings = (image) => {
+    Navigation.setDefaultOptions({
+        topBar: {
+            visible: true,
+            barStyle: 'black',
+            rightButtons: [
+            {
+                id: 'basketButton',
+                icon: image,
+                color: colours.white
+            }
+        ]
+    }
+    });
+};
+
 const setLoginSettings = () => {
     Navigation.setDefaultOptions({
         topBar: {
@@ -263,5 +307,5 @@ const popToRoot = async (componentId) => {
 };
 
 export {
-    popToRoot, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, setOrderStatus
+    setOrderStatus, popToRoot ,setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
 }
