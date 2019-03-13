@@ -2,7 +2,7 @@ import {takeEvery, takeLatest, all} from 'redux-saga/effects';
 import {authUserSaga, logoutSaga, authCheckStateSaga, checkAuthTimeoutSaga, autoSignInSaga} from "./auth";
 import {findBarSaga} from './bar';
 import {findDrinksSaga, findDrinkCategoriesSaga} from './drinks';
-import {updateBasketSaga} from './basket';
+import {updateBasketSaga, emptyBasketSaga} from './basket';
 import {submitOrderSaga, orderHistorySaga} from './order';
 import * as actionTypes from '../actions/actionTypes';
 
@@ -27,6 +27,7 @@ export function* watchDrinks() {
 
 export function* watchBasket() {
     yield takeLatest(actionTypes.UPDATE_BASKET, updateBasketSaga);
+    yield takeLatest(actionTypes.EMPTY_BASKET, emptyBasketSaga);
 }
 
 export function* watchOrder() {

@@ -2,6 +2,7 @@ import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../../axios-instance';
 import {AsyncStorage} from 'react-native';
+import {emptyBasket} from "../utility";
 
 export function* submitOrderSaga(action) {
     let date = new Date();
@@ -64,7 +65,7 @@ export function* submitOrderSaga(action) {
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
             yield put(actions.emptyBasketSuccess());
-            yield AsyncStorage.removeItem("basket");
+            yield emptyBasket();
         }
     } catch (err) {
         yield put(actions.submitOrderFail(err));

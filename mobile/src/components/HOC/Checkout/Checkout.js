@@ -112,7 +112,7 @@ class Checkout extends Component {
             >
                 <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
                     {this.props.basket.filter(basketItem => basketItem.category === section).map((drink, i) => (
-                        <TouchableOpacity key={i} onPress={() => (alert('hello'))}>
+                        <TouchableOpacity key={i}>
                     <ListItem
                         key={i}
                         titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
@@ -278,7 +278,7 @@ class Checkout extends Component {
 
                             <Animated.View style={{ height: animatedSettingsHeight, opacity: animatedMainContentOpacity }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingBottom: 20 }}>
-                                    <Icon name="close" size={32} style={{ color: colours.orange }} />
+                                    <Icon name="close" size={32} style={{ color: colours.orange }} onPress={() => this.props.emptyBasket()}/>
                                     <Text style={styles.orderSummaryTitle} onPress={() => this.setSections(null, 'all')}>Order Summary</Text>
                                     <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} onPress={()=> this.onEditPress()}/>
                                 </View>
@@ -495,8 +495,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-      submitOrder: (basket, componentId) =>
-        dispatch(actions.submitOrder(basket, componentId))
+      submitOrder: (basket, componentId) => dispatch(actions.submitOrder(basket, componentId)),
+      emptyBasket: () => dispatch(actions.emptyBasket())
     };
   };
 
