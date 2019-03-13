@@ -561,7 +561,7 @@ export default class App extends Component {
     setInterval(this.loadNotificationsJSX, notificationDuration + 1)
   }
 
-  ToggleAwaitingCollapse = () => {
+  ToggleAwaitingCollapse = (event) => {
     let newStyle = "collapsed";
     let collapsed = true;
     if (this.state.awaitingOrdersClass === newStyle) {
@@ -570,6 +570,12 @@ export default class App extends Component {
     }
       
     this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed})
+  }
+
+  // Function to run passed callback and stop parent onClick handlers being fired
+  runWithoutCollapse = (clickEvent, callback) => {
+    callback();
+    return clickEvent.stopPropagation(); // Block other onClick events (i.e. awaiting orders collapse toggle when child button clicked)
   }
   
   render() {
@@ -628,7 +634,7 @@ export default class App extends Component {
                         <br />
                         <span className="subtitle">Mark as un-ready</span>
                       </button>
-                      <button onClick={() => { this.showBilling(orderIndex) }} className="orderButton">
+                      <button onClick={(clickEvent) => { this.runWithoutCollapse(clickEvent, ()=>{this.showBilling(orderIndex)}) }} className="orderButton">
                         <span className="icon"></span>
                         <span className="title">More</span>
                         <br />
