@@ -67,18 +67,22 @@ class Checkout extends Component {
     }
 
     basketItems = () => {
-    let totalItems = 0;
-    this.props.basket.map(drink => {
-          totalItems += drink.quantity
-      });
-    return totalItems;
+        let totalItems = 0;
+        if (this.props.basket) {
+            this.props.basket.map(drink => {
+                totalItems += drink.quantity
+            });
+        }
+        return totalItems;
     };
 
     basketPrice = () => {
         let totalPrice = 0;
-        this.props.basket.map(drink => {
-            totalPrice += (drink.price * drink.quantity);
-        });
+        if (this.props.basket) {
+            this.props.basket.map(drink => {
+                totalPrice += (drink.price * drink.quantity);
+            });
+        }
         return totalPrice.toFixed(2);
     };
 
@@ -491,8 +495,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-      submitOrder: (basket, componenetId) =>
-        dispatch(actions.submitOrder(basket, componenetId))
+      submitOrder: (basket, componentId) =>
+        dispatch(actions.submitOrder(basket, componentId))
     };
   };
 

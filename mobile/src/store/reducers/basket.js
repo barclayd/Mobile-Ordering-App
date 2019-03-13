@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-import {updateObject, storeBasket} from "../utility";
+import {updateObject, retrieveBasket, retrieveCategories} from "../utility";
 
 const initialState = {
     loading: null,
@@ -15,12 +15,10 @@ const updateBasketStart = (state, action) => {
     });
 };
 
-const updateBasketSuccess = async (state, action) => {
+const updateBasketSuccess = (state, action) => {
     if (action.basketAction === 'add') {
-        const updatedBasket = state.basket.concat(action.drink);
-        await storeBasket(updatedBasket);
         return updateObject(state, {
-            basket: updatedBasket,
+            basket: state.basket.concat(action.drink),
             categories: (!state.categories.includes(action.drink.category)) ? state.categories.concat(action.drink.category) : state.categories,
             loading: false,
             error: false,
@@ -34,20 +32,16 @@ const updateBasketSuccess = async (state, action) => {
             ...oldDrinkObject[0],
             quantity: updatedQuantity
         };
-        const updatedBasket = state.basket.filter(drink => drink.name !== action.drink.name).concat(newDrinkObject);
-        await storeBasket(updatedBasket);
         return updateObject(state, {
-            basket: updatedBasket,
+            basket: state.basket.filter(drink => drink.name !== action.drink.name).concat(newDrinkObject),
             loading: false,
             error: false,
             saved: true
         });
     }
     if (action.basketAction === 'delete') {
-        const updatedBasket = state.basket.filter(drink => drink.name !== action.drink.name);
-        await storeBasket(updatedBasket);
         return updateObject(state, {
-            drink: updatedBasket,
+            drink: state.basket.filter(drink => drink.name !== action.drink.name),
             loading: false,
             error: false,
             saved: true
@@ -67,10 +61,39 @@ const emptyBasketStart = (state, action) => {
 const emptyBasketSuccess = (state, action) => {
     return updateObject(state, {
         basket: [],
+        categories: [],
         loading: false,
         error: false
     });
 };
+
+const retrieveBasketStart = (state, action) => {
+    return updateObject(state, {
+        basket: [],
+        loading: true,
+        error: null
+    });
+};
+
+const retrieveBasketSuccess = (state, action) => {
+    const savedBasket = retrieveBasket(action.foundBasket);
+    const savedCategories = retrieveCategories(action.foundCategories);
+    return updateObject(state, {
+        basket: savedBasket,
+        categories: savedCategories,
+        loading: false,
+        error: false
+    });
+};
+
+const retrieveBasketFail = (state, action) => {
+    return updateObject(state, {
+        basket: [],
+        loading: false,
+        error: true
+    });
+};
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -78,6 +101,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.UPDATE_BASKET_SUCCESS: return updateBasketSuccess(state, action);
         case actionTypes.EMPTY_BASKET_START: return emptyBasketStart(state, action);
         case actionTypes.EMPTY_BASKET_SUCCESS: return emptyBasketSuccess(state, action);
+        case actionTypes.RETRIEVE_BASKET_START: return retrieveBasketStart(state, action);
+        case actionTypes.RETRIEVE_BASKET_SUCCESS: return retrieveBasketSuccess(state, action);
+        case actionTypes.RETRIEVE_BASKET_FAIL: return retrieveBasketFail(state, action);
         default: return state;
     }
 };
