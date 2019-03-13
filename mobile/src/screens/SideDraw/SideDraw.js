@@ -7,13 +7,17 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
-  ScrollView
+  Scrollview,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as colours from "../../styles/colourScheme";
 import {
-  setDefaultSettings, setOrderStatus,
-  setWelcomePageRoot
+  setDefaultSettings,
+  setWelcomePageRoot,
+  setViewPastOrders,
+  setViewPastOrdersSettings,
+  setOrderStatus
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
 import {Navigation} from "react-native-navigation";
@@ -34,6 +38,12 @@ class SideDrawer extends Component {
     setDefaultSettings();
     setWelcomePageRoot();
   };
+
+  previousOrders = async () => {
+    await setViewPastOrders(this.props.componentId,"ViewMenus");
+    setViewPastOrdersSettings();
+}
+
 
   componentDidMount() {
     console.log("mounting menu screen");
@@ -57,21 +67,32 @@ class SideDrawer extends Component {
     await setOrderStatus(this.props.componentId, 128);
   };
 
-  renderContent() {
-    {this.state.pastOrders.length > 0
-        ? this.state.pastOrders.map((pastOrder, i) => {
-            return (
-          <View key={i}>
-            <TouchableOpacity>
-              <View style={styles.drawItem}>
-                <Text style={styles.text}>{pastOrder._id}</Text>
-              </View>
-            </TouchableOpacity>;
-          </View>
-            );
-      })
-        : null
-  }
+//   renderContent() {
+//     {this.state.pastOrders.length > 0
+//         ? this.state.pastOrders.map((pastOrder, i) => {
+//             return (
+//           <View key={i}>
+//             <TouchableOpacity>
+//               <View style={styles.drawItem}>
+//                 <Text style={styles.text}>{pastOrder._id}</Text>
+//               </View>
+//             </TouchableOpacity>;
+//           </View>
+//             );
+//       })
+//         : null
+//   }
+
+  renderContent = () => {
+    {this.state.pastOrders.length > 0 ?
+    this.state.pastOrders.map(order => {
+        return (
+            <Text style={styles.text}>i
+            </Text>
+        );
+    }) : null}
+            
+                // <ActivityIndicator size="large" color={colours.orange} /
   }
 
   render() {
@@ -98,7 +119,32 @@ class SideDrawer extends Component {
             <Text style={styles.text}>Sign Out</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+
+        <TouchableOpacity onPress={() => this.previousOrders()}>
+          <View style={styles.drawItem}>
+            <Icon
+              size={30}
+              color="#fff"
+              name={Platform.OS === "android" ? "md-log-out" : "ios-wine"}
+              style={styles.drawItemIcon}
+            />
+            <Text style={styles.text}>Previous Orders</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => this.orderStatus()}>
+          <View style={styles.drawItem}>
+            <Icon
+              size={30}
+              color="#fff"
+              name={Platform.OS === "android" ? "md-log-out" : "md-information-circle-outline"}
+              style={styles.drawItemIcon}
+            />
+            <Text style={styles.text}>Order Status</Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* <TouchableOpacity>
           <View style={styles.drawItem}>
             <Icon
               size={30}
@@ -118,18 +164,13 @@ class SideDrawer extends Component {
               style={styles.drawItemIcon}
             />
             <Text style={styles.text}>Location Services</Text>
-          </View>
-        </TouchableOpacity>
-        <View style={[styles.drawItem, styles.header]}>
+          </View> */}
+        {/* </TouchableOpacity> */}
+        {/* <View style={[styles.drawItem, styles.header]}>
           <Text style={styles.text}>Past Orders</Text>
-        </View>
-        <TouchableOpacity onPress={() => this.orderStatus()}>
-          <View style={[styles.drawItem, styles.header]}>
-            <Text style={styles.text}>Order Status</Text>
-          </View>
-        </TouchableOpacity>
+        </View> */}
 
-        <View style={styles.drawItem}>{this.renderContent()}</View>
+        <View style={styles.drawItem}>{() => this.renderContent()}</View>
       </View>
     );
   }
@@ -137,10 +178,12 @@ class SideDrawer extends Component {
 
 const styles = StyleSheet.create({
   header: {
+    fontSize: 24,
+    color: colours.cream,
     borderBottomWidth: 2,
     borderBottomColor: colours.cream,
     padding: 20,
-    marginTop: 20
+    marginTop: 20,
   },
   container: {
     paddingTop: 30,
@@ -157,7 +200,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colours.cream,
-    fontSize: 24,
+    fontSize: 16,
     width: "80%"
   },
   drawItemIcon: {

@@ -99,6 +99,12 @@ export function* orderHistorySaga(action) {
             query: `
                 query FindOrdersByUser($userInfo: ID!) {
                     findOrdersByUser(userInfo: $userInfo) {
+                        drinks {
+                            _id
+                            name
+                            category
+                            price
+                        }
                         collectionPoint
                         status
                         date
