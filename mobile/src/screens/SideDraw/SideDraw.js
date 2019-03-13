@@ -7,17 +7,24 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
-  Scrollview
+  ScrollView
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as colours from "../../styles/colourScheme";
 import {
-  setDefaultSettings,
+  setDefaultSettings, setOrderStatus,
   setWelcomePageRoot
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
+import {Navigation} from "react-native-navigation";
 
 class SideDrawer extends Component {
+
+  constructor(props) {
+    super(props);
+    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+  }
+
   state = {
     pastOrders: []
   };
@@ -45,6 +52,10 @@ class SideDrawer extends Component {
   componentDidUpdate() {
     console.log(this.state);
   }
+
+  orderStatus = async () => {
+    await setOrderStatus(this.props.componentId, 128);
+  };
 
   renderContent() {
     {this.state.pastOrders.length > 0
@@ -112,6 +123,11 @@ class SideDrawer extends Component {
         <View style={[styles.drawItem, styles.header]}>
           <Text style={styles.text}>Past Orders</Text>
         </View>
+        <TouchableOpacity onPress={() => this.orderStatus()}>
+          <View style={[styles.drawItem, styles.header]}>
+            <Text style={styles.text}>Order Status</Text>
+          </View>
+        </TouchableOpacity>
 
         <View style={styles.drawItem}>{this.renderContent()}</View>
       </View>

@@ -74,8 +74,6 @@ class ViewMenus extends Component {
     ]).then(sources => {
       setViewDrinksSettings(sources[2]);
       setViewDrinks(this.props.componentId, "View Drinks");
-
-
     });
   };
 

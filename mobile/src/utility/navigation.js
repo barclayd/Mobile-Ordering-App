@@ -14,11 +14,11 @@ const setDefaultSettings = () => {
             openGestureMode: 'bezel',
             left: {
                 visible: false,
-                enabled: false
+                enabled: true
             },
             right: {
                 visible: false,
-                enabled: false
+                enabled: true
             }
         }
     });
@@ -139,8 +139,8 @@ const setViewDrinks = (componentId, menuName) => {
     })
 };
 
-const setOrderStatus = async (componentId, orderNumber) => {
-    await Navigation.push(componentId, {
+const setOrderStatus = (componentId, orderNumber) => {
+    Navigation.push(componentId, {
         component: {
             name: screens.OrderStatus,
             passProps: {
@@ -164,15 +164,6 @@ const setOrderStatus = async (componentId, orderNumber) => {
             }
         }
     })
-};
-
-const setOrderStatusSettigns = () => {
-    Navigation.setDefaultOptions({
-        topBar: {
-            visible: true,
-            barStyle: 'black',
-        },
-    });
 };
 
 const setViewBasket = (componentId, basketName, fullScreenMode) => {
