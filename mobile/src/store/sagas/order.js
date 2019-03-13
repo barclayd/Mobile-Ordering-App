@@ -1,8 +1,17 @@
 import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../../axios-instance';
-import {AsyncStorage} from 'react-native';
-import {emptyBasket} from "../utility";
+import {AsyncStorage, Platform} from 'react-native';
+import {popToRoot, setOrderStatus} from "../../utility/navigation";
+import {emptyBasket} from '../utility';
+
+const orderRedirect = async (action) => {
+    await popToRoot(action.componentId);
+};
+
+const redirectOrderStatus = async (action) => {
+    await setOrderStatus(action.componentId, '189');
+};
 
 export function* submitOrderSaga(action) {
     let date = new Date();
@@ -63,9 +72,11 @@ export function* submitOrderSaga(action) {
             console.log('made it');
             console.log(response.data);
             yield put(actions.submitOrderSuccess(response.data));
+            // yield orderRedirect(action);
             yield put(actions.emptyBasketStart());
-            yield put(actions.emptyBasketSuccess());
             yield emptyBasket();
+            yield put(actions.emptyBasketSuccess());
+            yield redirectOrderStatus(action);
         }
     } catch (err) {
         yield put(actions.submitOrderFail(err));

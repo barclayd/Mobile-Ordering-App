@@ -344,7 +344,7 @@ class Checkout extends Component {
                                     }
                                     iconRight
                                     raised
-                                    onPress={()=>{this.props.submitOrder(this.props.basket, this.props.componenetId)}}
+                                    onPress={()=>{this.props.submitOrder(this.props.basket, this.props.componentId)}}
                                     title="King It!"
                                     linearGradientProps={{
                                         colors: [colours.orange, colours.midBlue],
