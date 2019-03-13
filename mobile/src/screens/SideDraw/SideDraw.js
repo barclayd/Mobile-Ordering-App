@@ -18,10 +18,9 @@ import {
 import * as actions from "../../store/actions/index";
 
 class SideDrawer extends Component {
-
-    state = {
-        pastOrders: []
-    };
+  state = {
+    pastOrders: []
+  };
 
   logoutHandler = () => {
     this.props.onLogout();
@@ -29,16 +28,39 @@ class SideDrawer extends Component {
     setWelcomePageRoot();
   };
 
-  componentDidMount(){
-      this.props.findUserOrders();
+  componentDidMount() {
+    console.log("mounting menu screen");
+    this.props.findUserOrders();
   }
 
   componentWillReceiveProps(nextProps) {
-        if (!nextProps.loading) {
-          this.setState({
-            pastOrders: nextProps.pastOrders,
-          });
+    console.log("props recieved", nextProps);
+    if (!nextProps.loading) {
+      this.setState({
+        pastOrders: nextProps.pastOrders
+      });
     }
+  }
+
+  componentDidUpdate() {
+    console.log(this.state);
+  }
+
+  renderContent() {
+    {this.state.pastOrders.length > 0
+        ? this.state.pastOrders.map((pastOrder, i) => {
+            return (
+          <View key={i}>
+            <TouchableOpacity>
+              <View style={styles.drawItem}>
+                <Text style={styles.text}>{pastOrder._id}</Text>
+              </View>
+            </TouchableOpacity>;
+          </View>
+            );
+      })
+        : null
+  }
   }
 
   render() {
@@ -65,7 +87,6 @@ class SideDrawer extends Component {
             <Text style={styles.text}>Sign Out</Text>
           </View>
         </TouchableOpacity>
-
         <TouchableOpacity>
           <View style={styles.drawItem}>
             <Icon
@@ -77,7 +98,6 @@ class SideDrawer extends Component {
             <Text style={styles.text}>Notifications</Text>
           </View>
         </TouchableOpacity>
-
         <TouchableOpacity>
           <View style={styles.drawItem}>
             <Icon
@@ -89,18 +109,11 @@ class SideDrawer extends Component {
             <Text style={styles.text}>Location Services</Text>
           </View>
         </TouchableOpacity>
-
         <View style={[styles.drawItem, styles.header]}>
           <Text style={styles.text}>Past Orders</Text>
         </View>
 
-        {/* <Scrollview>   */}
-        <TouchableOpacity>
-          <View style={styles.drawItem}>
-            <Text style={styles.text}>Text</Text>
-          </View>
-        </TouchableOpacity>
-        {/* </Scrollview> */}
+        <View style={styles.drawItem}>{this.renderContent()}</View>
       </View>
     );
   }
@@ -138,14 +151,14 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogout: () => dispatch(actions.logout()),
-    findUserOrders: () => dispatch(actions.orderHistory())
+    findUserOrders: () => dispatch(actions.orderHistory()),
+    onLogout: () => dispatch(actions.logout())
   };
 };
 
 const mapStateToProps = state => {
   return {
-    pastOrders: state.pastOrders
+    pastOrders: state.order.pastOrders
   };
 };
 
