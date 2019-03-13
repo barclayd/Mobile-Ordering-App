@@ -66,6 +66,30 @@ class SideDrawer extends Component {
           </View>
         </TouchableOpacity>
 
+        <TouchableOpacity>
+          <View style={styles.drawItem}>
+            <Icon
+              size={30}
+              color="#fff"
+              name={Platform.OS === "android" ? "md-log-out" : "ios-log-out"}
+              style={styles.drawItemIcon}
+            />
+            <Text style={styles.text}>Notifications</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <View style={styles.drawItem}>
+            <Icon
+              size={30}
+              color="#fff"
+              name={Platform.OS === "android" ? "md-log-out" : "ios-log-out"}
+              style={styles.drawItemIcon}
+            />
+            <Text style={styles.text}>Location Services</Text>
+          </View>
+        </TouchableOpacity>
+
         <View style={[styles.drawItem, styles.header]}>
           <Text style={styles.text}>Past Orders</Text>
         </View>
@@ -85,7 +109,9 @@ class SideDrawer extends Component {
 const styles = StyleSheet.create({
   header: {
     borderBottomWidth: 2,
-    borderBottomColor: colours.cream
+    borderBottomColor: colours.cream,
+    padding: 20,
+    marginTop: 20
   },
   container: {
     paddingTop: 30,
@@ -98,8 +124,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    padding: 20,
-    marginTop: 20
+    padding: 20
   },
   text: {
     color: colours.cream,

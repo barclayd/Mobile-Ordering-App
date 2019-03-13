@@ -40,10 +40,10 @@ export const orderHistoryStart = () => {
     };
 };
 
-export const orderHistorySuccess = (foundOrders) => {
+export const orderHistorySuccess = (pastOrders) => {
     return {
         type: actionTypes.ORDER_HISTORY_SUCCESS,
-        previousOrders: foundOrders
+        pastOrders: pastOrders
     };
 };
 
