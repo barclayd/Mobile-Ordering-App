@@ -24,8 +24,8 @@ const setDefaultSettings = () => {
     });
 };
 
-const setWelcomePageRoot = () => {
-    Navigation.setRoot({
+const setWelcomePageRoot = async () => {
+    await Navigation.setRoot({
         root: {
             sideMenu: {
                 left: {
@@ -99,8 +99,8 @@ const setMainAppSettings = (image1, image2) => {
     });
 };
 
-const setMainApp = (componentId, barName) => {
-    Navigation.setStackRoot(componentId, {
+const setMainApp = async (componentId, barName) => {
+    await Navigation.setStackRoot(componentId, {
         component: {
             name: screens.ViewMenus,
             options: {
@@ -120,8 +120,8 @@ const setMainApp = (componentId, barName) => {
     });
 };
 
-const setViewDrinks = (componentId, menuName) => {
-    Navigation.push(componentId, {
+const setViewDrinks = async (componentId, menuName) => {
+    await Navigation.push(componentId, {
         component: {
             name: screens.ViewDrinksScreen,
             passProps: {
@@ -139,8 +139,8 @@ const setViewDrinks = (componentId, menuName) => {
     })
 };
 
-const setOrderStatus = (componentId, orderNumber) => {
-    Navigation.push(componentId, {
+const setOrderStatus = async (componentId, orderNumber) => {
+    await Navigation.push(componentId, {
         component: {
             name: screens.OrderStatus,
             passProps: {
@@ -166,8 +166,8 @@ const setOrderStatus = (componentId, orderNumber) => {
     })
 };
 
-const setViewBasket = (componentId, basketName, fullScreenMode) => {
-    Navigation.push(componentId, {
+const setViewBasket = async (componentId, basketName, fullScreenMode) => {
+    await Navigation.push(componentId, {
         component: {
             name: screens.ViewCheckout,
             passProps: {
@@ -238,10 +238,10 @@ const setLoginSettings = () => {
     });
 };
 
-const setLoginScreen = (componentId, authType) => {
+const setLoginScreen = async (componentId, authType) => {
     let authText;
     authText = authType === 'login' ? 'Login' : 'Sign Up';
-    Navigation.push(componentId, {
+    await Navigation.push(componentId, {
         component: {
             name: screens.AuthScreen,
             passProps: {
