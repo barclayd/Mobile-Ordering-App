@@ -40,8 +40,10 @@ const updateBasketSuccess = (state, action) => {
         });
     }
     if (action.basketAction === 'delete') {
+        const countIn = state.basket.filter(drink => drink === action.drink.category).length > 1;
         return updateObject(state, {
             drink: state.basket.filter(drink => drink.name !== action.drink.name),
+            categories: countIn ? state.categories : state.categories.includes(action.drink.category) ? state.categories.filter(category => category !== action.drink.category) : state.categories,
             loading: false,
             error: false,
             saved: true
