@@ -10,6 +10,8 @@ import {
   Scrollview,
   ActivityIndicator,
 } from "react-native";
+// import IonicIcon from "react-native-vector-icons/Ionicons";
+// import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as colours from "../../styles/colourScheme";
 import {
@@ -40,24 +42,19 @@ class SideDrawer extends Component {
   };
 
   previousOrders = async () => {
-    await setViewPastOrders(this.props.componentId,"ViewMenus");
+    // Promise.all([
+    //     Icon.getImageSource(
+    //         Platform.OS === "android" ? "shopping-basket" : "shopping-basket",
+    //         20
+    //       ),
+    //       Icon.getImageSource(
+    //         Platform.OS === "android" ? "shopping-basket" : "shopping-basket",
+    //         20)
+    // ].then(sources => {
     setViewPastOrdersSettings();
+    setViewPastOrders(this.props.componentId,"ViewMenus");
+    // }))
 }
-
-
-  componentDidMount() {
-    console.log("mounting menu screen");
-    this.props.findUserOrders();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log("props recieved", nextProps);
-    if (!nextProps.loading) {
-      this.setState({
-        pastOrders: nextProps.pastOrders
-      });
-    }
-  }
 
   componentDidUpdate() {
     console.log(this.state);
@@ -170,7 +167,7 @@ class SideDrawer extends Component {
           <Text style={styles.text}>Past Orders</Text>
         </View> */}
 
-        <View style={styles.drawItem}>{() => this.renderContent()}</View>
+        {/* <View style={styles.drawItem}>{() => this.renderContent()}</View> */}
       </View>
     );
   }
@@ -210,18 +207,11 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
   return {
-    findUserOrders: () => dispatch(actions.orderHistory()),
     onLogout: () => dispatch(actions.logout())
   };
 };
 
-const mapStateToProps = state => {
-  return {
-    pastOrders: state.order.pastOrders
-  };
-};
-
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(SideDrawer);
