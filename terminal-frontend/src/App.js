@@ -31,6 +31,7 @@ export default class App extends Component {
           orderDate: new Date(),
           customerID: 42,
           staffMemberID: 4,
+          notes: "hi",
           items: [
             {
               id: 1,
