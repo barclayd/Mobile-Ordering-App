@@ -16,7 +16,6 @@ const submitOrderStart = (state, action) => {
 };
 
 const submitOrderSuccess = (state, action) => {
-    console.log("submitOrderSuccess, action:",action.order.data)
     return updateObject(state, {
         order: action.order.data,
         loading: false,
@@ -40,7 +39,7 @@ const orderHistoryStart = (state, action) => {
 
 const orderHistorySuccess = (state, action) => {
     return updateObject(state, {
-        pastOrders: action.previousOrders,
+        pastOrders: action.pastOrders,
         loading: false,
         error: false,
     });

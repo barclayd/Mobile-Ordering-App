@@ -73,6 +73,7 @@ export function* submitOrderSaga(action) {
 }
 
 export function* orderHistorySaga(action) {
+    const user = yield AsyncStorage.getItem('userId');
     yield put(actions.orderHistoryStart());
     try {
         let requestBody = {
@@ -87,7 +88,7 @@ export function* orderHistorySaga(action) {
                 }
             `,
             variables: {
-                userInfo: "5c69d87973c39d2e28fbe9cf"
+                userInfo: user ? user : '5c69c7c058574e24c841ddc8'
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
@@ -96,11 +97,13 @@ export function* orderHistorySaga(action) {
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
+            console.log("Found previous orders")
             const fetchData = [];
             for (let key in response.data.data.findOrdersByUser) {
                 fetchData.push(
                     response.data.data.findOrdersByUser[key],
                 );
+                console.log("fetch data",fetchData)
             }
             yield put(actions.orderHistorySuccess(fetchData));
         }
