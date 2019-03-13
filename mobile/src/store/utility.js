@@ -9,5 +9,23 @@ export const updateObject = (oldObject, updatedValues) => {
 
 export const storeBasket = async (basket) => {
     const storedBasket = JSON.stringify(basket);
-    return await AsyncStorage.setItem("basket", storedBasket);
+    await AsyncStorage.setItem("basket", storedBasket);
+};
+
+export const storeCategories = async (categories) => {
+    const storedCategories = JSON.stringify(categories);
+    await AsyncStorage.setItem("categories", storedCategories);
+};
+
+export const retrieveBasket = (foundBasket) => {
+    return JSON.parse(foundBasket);
+};
+
+export const retrieveCategories = (foundCategories) => {
+    return JSON.parse(foundCategories);
+};
+
+export const emptyBasket = async () => {
+    await AsyncStorage.removeItem("basket");
+    await AsyncStorage.removeItem("categories");
 };
