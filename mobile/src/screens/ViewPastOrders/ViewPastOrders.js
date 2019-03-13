@@ -1,26 +1,20 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import * as colours from './../../styles/colourScheme'
-import { ViewPastOrders } from '../../utility/screens';
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 
 class componentName extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      pastOrders: []
-    };
-  }
+  state = {
+    pastOrders: []
+  };
 
   componentDidMount() {
-    console.log("mounting menu screen");
     this.props.findUserOrders();
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("props recieved", nextProps);
     if (!nextProps.loading) {
       this.setState({
         pastOrders: nextProps.pastOrders
@@ -28,20 +22,17 @@ class componentName extends Component {
     }
   }
 
-  renderPastOrders = () => {
-    console.log("this.state",this.state.pastOrders)
-    // return <View>(
-    //   {this.state.pastOrders.map((order, i) => (
-    //       <Text key={i}>Hello, {order.date}</Text>
-    //   ))}
-    //   )</View>
-    this.state.pastOrders.map((order,i) => <Text key={i} style={styles.text}>Test</Text>)
-  };
-
   render() {
+
+    const renderPastOrders = this.state.pastOrders.map((order,i) => {
+      return <Text key={i} style={styles.text}>
+        {order.collectionPoint}
+      </Text>
+      });
+
     return (
       <View style={[styles.container]}>
-          <View>{this.state.pastOrders.length > 0 ? this.renderPastOrders() : null}</View>
+          <View>{this.state.pastOrders.length > 0 ? renderPastOrders : null}</View>
         </View>
     );
   }
