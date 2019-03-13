@@ -2,15 +2,22 @@ import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../../axios-instance';
 import {AsyncStorage, Platform} from 'react-native';
-import {popToRoot, setOrderStatus} from "../../utility/navigation";
+import {
+    setMainAppSettings,
+    setOrderStatus
+} from "../../utility/navigation";
 import {emptyBasket} from '../utility';
+import IonicIcon from "react-native-vector-icons/Ionicons";
 
 const orderRedirect = async (action) => {
-    await popToRoot(action.componentId);
-};
-
-const redirectOrderStatus = async (action) => {
-    await setOrderStatus(action.componentId, '189');
+    Promise.all([
+        IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
+        IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
+    ])
+        .then(sources => {
+            setMainAppSettings(sources[0], sources[1]);
+            setOrderStatus(action.componentId, 189);
+        });
 };
 
 export function* submitOrderSaga(action) {
@@ -76,7 +83,7 @@ export function* submitOrderSaga(action) {
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
             yield put(actions.emptyBasketSuccess());
-            yield redirectOrderStatus(action);
+            yield orderRedirect(action);
         }
     } catch (err) {
         yield put(actions.submitOrderFail(err));
@@ -109,13 +116,11 @@ export function* orderHistorySaga(action) {
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            console.log("Found previous orders")
             const fetchData = [];
             for (let key in response.data.data.findOrdersByUser) {
                 fetchData.push(
                     response.data.data.findOrdersByUser[key],
                 );
-                console.log("fetch data",fetchData)
             }
             yield put(actions.orderHistorySuccess(fetchData));
         }
