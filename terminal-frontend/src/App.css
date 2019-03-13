@@ -50,6 +50,11 @@ h5 .bartenderName {
   font-weight: bold;
 }
 
+/* IMPROVE READABILITY WITH DROP SHADOWS: */
+h1, h2, h3, h4, h5, .orderButton.title, .orderButton.subtitle, button, .orderList {
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.25);
+}
+button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /* Text-shadow for button React font-awesome icons (text-shadow is unsupported) */
 
 
 #accountsHotbar {
