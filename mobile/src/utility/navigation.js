@@ -139,6 +139,42 @@ const setViewDrinks = (componentId, menuName) => {
     })
 };
 
+const setOrderStatus = async (componentId, orderNumber) => {
+    await Navigation.push(componentId, {
+        component: {
+            name: screens.OrderStatus,
+            passProps: {
+                orderNumber: orderNumber
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: 'Order Status',
+                        color: colours.white,
+                        largeTitle: true
+                    },
+                    subtitle: {
+                        text: 'ETA: 10:59pm',
+                        color: colours.orange,
+                        fontSize: 12,
+                        fontFamily: 'HelveticaNeue-Italic',
+                    }
+                }
+            }
+        }
+    })
+};
+
+const setOrderStatusSettigns = () => {
+    Navigation.setDefaultOptions({
+        topBar: {
+            visible: true,
+            barStyle: 'black',
+        },
+    });
+};
+
 const setViewBasket = (componentId, basketName, fullScreenMode) => {
     Navigation.push(componentId, {
         component: {
@@ -231,7 +267,10 @@ const setLoginScreen = (componentId, authType) => {
     })
 };
 
+const popToRoot = async (componentId) => {
+    await Navigation.popToRoot(componentId);
+};
 
 export {
-    setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
+    popToRoot, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, setOrderStatus
 }
