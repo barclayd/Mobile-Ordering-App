@@ -103,6 +103,7 @@ const setMainApp = async (componentId, barName) => {
     await Navigation.setStackRoot(componentId, {
         component: {
             name: screens.ViewMenus,
+            id: 'ViewMenus',
             options: {
                 animations: {
                     setStackRoot: {
@@ -229,13 +230,13 @@ const setViewDrinksSettings = (image) => {
     });
 };
 
-const setViewPastOrders = async (componentId, menuName) => {
-    await Navigation.push(componentId, {
+const setViewPastOrders = (componentId, menuName) => {
+    Navigation.push("ViewMenus", {
         component: {
             name: screens.ViewPastOrders,
-            // passProps: {
-            //     menuName: menuName
-            // },
+            passProps: {
+                menuName: menuName
+            },
             options: {
                 topBar: {
                     visible: true,
@@ -244,12 +245,6 @@ const setViewPastOrders = async (componentId, menuName) => {
                         color: colours.white,
                         largeTitle: true
                     },
-                    subtitle: {
-                        text: 'user id',
-                        color: colours.orange,
-                        fontSize: 12,
-                        fontFamily: 'HelveticaNeue-Italic',
-                    }
                 }
             }
         }
@@ -257,19 +252,38 @@ const setViewPastOrders = async (componentId, menuName) => {
 };
 
 
-const setViewPastOrdersSettings = (image) => {
+const setViewPastOrdersSettings = () => {
     Navigation.setDefaultOptions({
+        sideMenu: {
+            openGestureMode: 'bezel',
+            left: {
+                enabled: true,
+                visible: true,
+            },
+            right: {
+                visible: true,
+                enabled: true,
+                disableOpenGesture: false
+            }
+        },
+        statusBar: {
+            hideWithTopBar: false,
+        },
         topBar: {
-            visible: true,
+            leftButtons: [
+                {
+                    id: 'menuButton',
+                    color: colours.white
+                }
+            ],
             barStyle: 'black',
             rightButtons: [
-            {
-                id: 'basketButton',
-                icon: image,
-                color: colours.white
-            }
-        ]
-    }
+                {
+                    id: 'profileButton',
+                    color: colours.white
+                }
+            ]
+        }
     });
 };
 
