@@ -14,9 +14,9 @@ const orderRedirect = async (action) => {
         IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
         IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
     ])
-        .then(sources => {
+        .then(async (sources) => {
             setMainAppSettings(sources[0], sources[1]);
-            setOrderStatus(action.componentId, 189);
+            await setOrderStatus(action.componentId, 189);
         });
 };
 
@@ -79,7 +79,6 @@ export function* submitOrderSaga(action) {
             console.log('made it');
             console.log(response.data);
             yield put(actions.submitOrderSuccess(response.data));
-            // yield orderRedirect(action);
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
             yield put(actions.emptyBasketSuccess());

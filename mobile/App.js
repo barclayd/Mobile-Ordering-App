@@ -35,8 +35,8 @@ Navigation.registerComponentWithRedux(screens.ViewCheckout, () => ViewCheckout, 
 Navigation.registerComponentWithRedux(screens.OrderStatus, () => OrderStatus, Provider, store);
 Navigation.registerComponentWithRedux(screens.ViewPastOrders, () => ViewPastOrders, Provider, store);
 
-Navigation.events().registerAppLaunchedListener(() => {
+Navigation.events().registerAppLaunchedListener(async () => {
   setDefaultSettings();
-  setWelcomePageRoot();
+  await setWelcomePageRoot();
 });
 
