@@ -21,6 +21,7 @@ const notificationDuration = 8000; // How long notifications stay on-screen (mil
 const qrDelay = 200; // How fast to scan for QR codes (more info: https://www.npmjs.com/package/react-qr-reader)
 const validScanCooldown = 3000; // Delay before accepting more QR codes after a valid scan (blocks notification scan)
 const maxCollapsedOrdersToShow = 3; // How many orders show in a collapsed stack before fading to nothing
+const collapsedOrderOpacityOffset = 35; // Opacity dim amount for collapsed awaiting orders
 
 export default class App extends Component {
   constructor (props) {
@@ -571,12 +572,6 @@ export default class App extends Component {
       
     this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed})
   }
-
-  // Function to run passed callback and stop parent onClick handlers being fired
-  runWithoutCollapse = (clickEvent, callback) => {
-    callback();
-    return clickEvent.stopPropagation(); // Block other onClick events (i.e. awaiting orders collapse toggle when child button clicked)
-  }
   
   render() {
     return (
@@ -615,26 +610,32 @@ export default class App extends Component {
                 const orderData = this.state.orders[orderIndex];
                 const orderZIndex = this.state.awaitingOrdersIndexes.length - incrementer;
 
-                // Calculate order opacity (lowered when collapsed and far down)
-                let orderOpacity = 1;
+                // Calculate styles
+                let orderOpacity = 1; // Order opacity (lowered when collapsed and far down)
+                let width = 100; // Width as percentage
                 if (incrementer !== 0) {
-                  const opacityOffset = 35; // Starting opacity dimmer
                   if (this.state.awaitingOrdersCollapsed)
-                    orderOpacity = rangeScaling(incrementer, 100 - opacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
+                    orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
+                    width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
                 }
 
                 return (
-                  <div key={orderIndex} onClick={this.ToggleAwaitingCollapse} className="orderContainer collapseable" style={{zIndex: orderZIndex, opacity: orderOpacity}}>
+                  <div
+                      key={orderIndex}
+                      onClick={this.ToggleAwaitingCollapse}
+                      className="orderContainer collapseable"
+                      style={{zIndex: orderZIndex, opacity: orderOpacity, width: width + "%"}}
+                  >
                     <h2>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h2>
                     <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.staffMemberID) }</span></h5>
-                    <div className="orderButtonsContainer">
+                    <div className="orderButtonsContainer" onClick={(e)=>{e.stopPropagation()}}>
                       <button className="orderButton">
                         <span className="icon notReady"></span>
                         <span className="title">Not ready</span>
                         <br />
                         <span className="subtitle">Mark as un-ready</span>
                       </button>
-                      <button onClick={(clickEvent) => { this.runWithoutCollapse(clickEvent, ()=>{this.showBilling(orderIndex)}) }} className="orderButton">
+                      <button onClick={()=>{this.showBilling(orderIndex)}} className="orderButton">
                         <span className="icon"></span>
                         <span className="title">More</span>
                         <br />
