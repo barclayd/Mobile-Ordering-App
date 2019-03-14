@@ -20,7 +20,7 @@ import rangeScaling from "./FunctionLib.js"
 const notificationDuration = 8000; // How long notifications stay on-screen (miliseconds)
 const qrDelay = 200; // How fast to scan for QR codes (more info: https://www.npmjs.com/package/react-qr-reader)
 const validScanCooldown = 3000; // Delay before accepting more QR codes after a valid scan (blocks notification scan)
-const maxCollapsedOrdersToShow = 4; // How many orders show in a collapsed stack before fading to nothing
+const maxCollapsedOrdersToShow = 3; // How many orders show in a collapsed stack before fading to nothing
 
 export default class App extends Component {
   constructor (props) {
@@ -618,7 +618,7 @@ export default class App extends Component {
                 // Calculate order opacity (lowered when collapsed and far down)
                 let orderOpacity = 1;
                 if (incrementer !== 0) {
-                  const opacityOffset = 20; // Starting opacity dimmer
+                  const opacityOffset = 35; // Starting opacity dimmer
                   if (this.state.awaitingOrdersCollapsed)
                     orderOpacity = rangeScaling(incrementer, 100 - opacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
                 }
