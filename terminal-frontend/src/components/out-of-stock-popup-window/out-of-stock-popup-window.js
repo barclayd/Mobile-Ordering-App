@@ -16,9 +16,7 @@ export default class OutOfStockPopUpWindow extends React.Component {
                         {order.items.map((itemData) => {
                             return (
                                 <li key={itemData.id}>
-                                    <span className="quantity">{itemData.quantity}</span>
                                     <span className="item">{itemData.name}</span>
-                                    <span className="price">£{itemData.price}</span>
                                 </li>
                             )
                         })}
