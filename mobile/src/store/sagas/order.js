@@ -108,6 +108,7 @@ export function* orderHistorySaga(action) {
                         status
                         date
                         _id
+                        transactionId
                    }
                 }
             `,

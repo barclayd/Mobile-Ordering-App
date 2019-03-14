@@ -56,7 +56,6 @@ module.exports = {
                     ...foundOrder.userInfo._doc,
                     password: null
                 };
-                console.log(`ids passed in: ${foundOrder.drinks}`);
                 const returnedDrinks = await drinks(foundOrder.drinks);
                 return {
                     _id: foundOrder._id,
