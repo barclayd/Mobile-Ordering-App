@@ -31,14 +31,14 @@ class SideDrawer extends Component {
     pastOrders: []
   };
 
-  logoutHandler = () => {
+  logoutHandler = async () => {
     this.props.onLogout();
     setDefaultSettings();
-    setWelcomePageRoot();
+    await setWelcomePageRoot();
   };
 
   redirectMenus = async () => {
-    await popToRoot(this.props.componentId);
+    await popToRoot("ViewMenus");
   };
 
   previousOrders = async () => {
@@ -47,7 +47,7 @@ class SideDrawer extends Component {
 };
 
   orderStatus = async () => {
-    await setOrderStatus(this.props.componentId,124);
+    await setOrderStatus(null,124);
   };
 
   render() {
