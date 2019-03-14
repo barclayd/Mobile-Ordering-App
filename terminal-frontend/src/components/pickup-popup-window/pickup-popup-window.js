@@ -59,6 +59,38 @@ export default class PickupPopupWindow extends React.Component {
     buildOutOfStockPopup = (order) => {
         if (order) return (
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={order} />
+        )
+    }
+    
+    // Only shows customer notes if some exist
+    buildNotes = (customerNotes) => {
+        if (customerNotes) return (
+            <React.Fragment>
+                <h2>Customer notes:</h2>
+                <p className="indentedPara notesPara">{ customerNotes }</p>
+            </React.Fragment>
+        ); else return ""
+    }
+
+    buildChildren = (order) => {
+        if (order) return (
+            <React.Fragment>
+                <h1>DRINKS:</h1>
+                <div className="indentedContent">
+                    <ul className="orderList">
+                        {order.items.map((itemData) => {
+                            return (
+                                <li key={itemData.id}>
+                                    <span className="quantity">{itemData.quantity}</span>
+                                    <span className="item">{itemData.name}</span>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                    
+                    { this.buildNotes(order.notes) }
+                </div>
+            </React.Fragment>
         ); else return "";
     }
 
@@ -74,16 +106,7 @@ export default class PickupPopupWindow extends React.Component {
                         dismissedHandler={this.props.dismissedHandler}
                         buttons={this.buildButtons()}
                 >
-                    <h1>DRINKS:</h1>
-                    <div className="indentedContent">
-                        <ul className="orderList">
-                            <li><span className="quantity">4x</span>VK Orange</li>
-                            <li><span className="quantity">1x</span>VK Green</li>
-                        </ul>
-
-                        <h2>Customer notes:</h2>
-                        <p className="indentedPara">pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!</p>
-                    </div>
+                    { this.buildChildren(this.props.order) }
                 </PopupWindow>
 
                 { this.buildOutOfStockPopup(this.props.order) }

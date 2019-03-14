@@ -1,24 +1,27 @@
-import React, { Component } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRetweet, faLongArrowAltUp, faCamera, faBeer, faExclamation, faInfo, faTrophy, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
-import { faClock } from '@fortawesome/free-regular-svg-icons'
-import TimeAgo from './components/time-ago-clean/time-ago-clean'
-import BillingPopupWindow from './components/billing-popup-window/billing-popup-window'
-import NotesPopupWindow from './components/notes-popup-window/notes-popup-window'
-import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window'
-import ManualPickupPopupWindow from './components/manual-pickup-popup-window/manual-pickup-popup-window'
-import NotesIcon from "./notes.svg"
-import './App.css'
-import QrReader from "react-qr-reader"
-import PickupPopupWindow from './components/pickup-popup-window/pickup-popup-window';
-import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
+import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Component } from 'react';
+import QrReader from "react-qr-reader";
+import './App.css';
+import BillingPopupWindow from './components/billing-popup-window/billing-popup-window';
+import ManualPickupPopupWindow from './components/manual-pickup-popup-window/manual-pickup-popup-window';
 import MultiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
+import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
+import PickupPopupWindow from './components/pickup-popup-window/pickup-popup-window';
+import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
+import TimeAgo from './components/time-ago-clean/time-ago-clean';
+import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
+import NotesIcon from "./notes.svg";
 import OrderState from './OrderStates';
+import rangeScaling from "./FunctionLib.js"
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (miliseconds)
 const qrDelay = 200; // How fast to scan for QR codes (more info: https://www.npmjs.com/package/react-qr-reader)
 const validScanCooldown = 3000; // Delay before accepting more QR codes after a valid scan (blocks notification scan)
+const maxCollapsedOrdersToShow = 3; // How many orders show in a collapsed stack before fading to nothing
+const collapsedOrderOpacityOffset = 35; // Opacity dim amount for collapsed awaiting orders
 
 export default class App extends Component {
   constructor (props) {
@@ -31,6 +34,7 @@ export default class App extends Component {
           orderDate: new Date(),
           customerID: 42,
           staffMemberID: 4,
+          notes: "hi",
           items: [
             {
               id: 1,
@@ -42,11 +46,7 @@ export default class App extends Component {
           orderState: OrderState.AWAITING_COLLECTION
         },
         {
-          id: "KHVD",
-          orderDate: new Date(),
-          customerID: 13,
-          staffMemberID: 6,
-          items: [
+          id: "KHVD", orderDate: new Date(), customerID: 13, staffMemberID: 6, items: [
             {
               id: 1,
               name: "VK Orange",
@@ -56,6 +56,10 @@ export default class App extends Component {
           ],
           orderState: OrderState.AWAITING_COLLECTION
         },
+        { id: "EOPL", orderDate: new Date(), customerID: 13, staffMemberID: 4, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], orderState: OrderState.AWAITING_COLLECTION },
+        { id: "KJHS", orderDate: new Date(), customerID: 13, staffMemberID: 2, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], orderState: OrderState.AWAITING_COLLECTION },
+        { id: "KXHS", orderDate: new Date(), customerID: 13, staffMemberID: 10, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], orderState: OrderState.AWAITING_COLLECTION },
+        { id: "KAHS", orderDate: new Date(), customerID: 13, staffMemberID: 1, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], orderState: OrderState.AWAITING_COLLECTION },
         {
           id: "XHBS",
           orderDate: new Date(),
@@ -358,6 +362,9 @@ export default class App extends Component {
 
       lastValidScan: 0,
       qrResult: "empty",
+
+      awaitingOrdersClass: "collapsed",
+      awaitingOrdersCollapsed: true,
     }
 
     let awaitingOrdersIndexes=[], inProgressOrdersIndexes=[], pendingOrders=[];
@@ -378,6 +385,8 @@ export default class App extends Component {
     this.state.awaitingOrdersIndexes = awaitingOrdersIndexes;
     this.state.inProgressOrdersIndexes = inProgressOrdersIndexes;
     this.state.pendingOrders = pendingOrders;
+
+    this.previewDiv = React.createRef();
   }
 
   addNotification = (iconClassName, title, description) => {
@@ -552,6 +561,21 @@ export default class App extends Component {
     this.loadNotificationsJSX()
     setInterval(this.loadNotificationsJSX, notificationDuration + 1)
   }
+
+  ToggleAwaitingCollapse = (event) => {
+    let newStyle = "collapsed";
+    let collapsed = true;
+    if (this.state.awaitingOrdersClass === newStyle) {
+      newStyle = "";
+      collapsed = false;
+    }
+      
+    this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed})
+  }
+
+  scrollToPreview = () => {
+    this.previewDiv.current.scrollIntoView({ behavior: 'smooth' })
+  }
   
   render() {
     return (
@@ -571,7 +595,8 @@ export default class App extends Component {
             <button className="large" onClick={() => {
               this.setState({showPreview: !this.state.showPreview}, () => {
                 if (this.state.showPreview) {
-                  document.getElementsByClassName("qrReader")[0].style.display = "block"
+                  document.getElementsByClassName("qrReader")[0].style.display = "block";
+                  this.scrollToPreview();
                 } else {
                   document.getElementsByClassName("qrReader")[0].style.display = "none";
                 }
@@ -584,22 +609,38 @@ export default class App extends Component {
           </div>
 
           <h1>AWAITING COLLECTION ({ this.state.awaitingOrdersIndexes.length }):</h1>
-          <div className="ordersContainer">
+          <div className={"ordersContainer " + this.state.awaitingOrdersClass}>
             {
-              this.state.awaitingOrdersIndexes.map((orderIndex) => {
+              this.state.awaitingOrdersIndexes.map((orderIndex, incrementer) => {
                 const orderData = this.state.orders[orderIndex];
+                const orderZIndex = this.state.awaitingOrdersIndexes.length - incrementer;
+
+                // Calculate styles
+                let orderOpacity = 1; // Order opacity (lowered when collapsed and far down)
+                let width = 100; // Width as percentage
+                if (incrementer !== 0) {
+                  if (this.state.awaitingOrdersCollapsed)
+                    orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
+                    width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
+                }
+
                 return (
-                  <div key={orderIndex} className="orderContainer">
+                  <div
+                      key={orderIndex}
+                      onClick={this.ToggleAwaitingCollapse}
+                      className="orderContainer collapseable"
+                      style={{zIndex: orderZIndex, opacity: orderOpacity, width: width + "%"}}
+                  >
                     <h2>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h2>
                     <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.staffMemberID) }</span></h5>
-                    <div className="orderButtonsContainer">
+                    <div className="orderButtonsContainer" onClick={(e)=>{e.stopPropagation()}}>
                       <button className="orderButton">
                         <span className="icon notReady"></span>
                         <span className="title">Not ready</span>
                         <br />
                         <span className="subtitle">Mark as un-ready</span>
                       </button>
-                      <button onClick={() => { this.showBilling(orderIndex) }} className="orderButton">
+                      <button onClick={()=>{this.showBilling(orderIndex)}} className="orderButton">
                         <span className="icon"></span>
                         <span className="title">More</span>
                         <br />
@@ -691,13 +732,16 @@ export default class App extends Component {
 
           {
             this.state.disableScanner ? null :
-              <div className="qrReader">
+              <div ref={this.previewDiv} className="qrReader">
                 <QrReader
                     delay={qrDelay}
                     onError={this.handleError}
                     onScan={this.handleScan}
                 />
-                <p>QR content: {this.state.qrResult}</p>
+                <p>
+                  QR content:<br />
+                  {this.state.qrResult}
+                </p>
               </div>
           }
         </header>
