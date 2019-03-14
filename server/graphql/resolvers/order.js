@@ -94,5 +94,27 @@ module.exports = {
             throw err;
         }
     },
+    findOrderById: async ({_id}) => {
+        try {
+            const foundOrder = await Order.findOne({_id});
+            console.log('foundOrder',foundOrder.userInfo)
+                const returnedDrinks = await drinks(foundOrder.drinks);
+                return {
+                    _id: _id,
+                    drinks: returnedDrinks,
+                    collectionPoint: foundOrder.collectionPoint,
+                    status: foundOrder.status,
+                    orderAssignedTo: foundOrder.orderAssignedTo,
+                    date: dateToString(foundOrder._doc.date),
+                    userInfo: foundOrder.userInfo,
+                    // transactionId: foundOrder.transactionId
+                };
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
 };
+
+
 
