@@ -14,6 +14,7 @@ import TimeAgo from './components/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./notes.svg";
 import OrderStatus from './OrderStatuses.js';
+import IngredientAmounts from './IngredientAmounts.js';
 import rangeScaling from "./FunctionLib.js";
 import OutOfStockPopUpWindow from './components/out-of-stock-popup-window/out-of-stock-popup-window';
 
@@ -93,30 +94,103 @@ export default class App extends Component {
               name: "VK Red",
               price: 250,
               quantity: 1,
+              ingredients: [
+                {
+                  id: 921,
+                  name: "VK Red",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.FACTORY,
+                }
+              ]
             },
             {
               id: 122,
               name: "Jager bomb",
               price: 125,
               quantity: 5,
+              ingredients: [
+                {
+                  id: 8349,
+                  name: "Jagermeister",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.SHOT,
+                },
+                {
+                  id: 13,
+                  name: "Redbull",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.FILL,
+                }
+              ]
             },
             {
               id: 484,
               name: "Mojito",
               price: 125,
               quantity: 1,
+              ingredients: [
+                {
+                  id: 48,
+                  name: "Lime cordial",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.FILL,
+                },
+                {
+                  id: 10,
+                  name: "White rum",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.DOUBLE_SHOT,
+                }
+              ]
             },
             {
               id: 1023,
               name: "Bottled water",
               price: 90,
               quantity: 2,
+              ingredients: [
+                {
+                  id: 19,
+                  name: "Bottled water",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.FACTORY,
+                }
+              ]
             },
             {
               id: 67,
               name: "Jumba juice cocktail",
               price: 750,
               quantity: 1,
+              ingredients: [
+                {
+                  id: 123,
+                  name: "Slurp juice",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.DOUBLE_SHOT,
+                },
+                {
+                  id: 276,
+                  name: "Tomato soup",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.SHOT,
+                },
+                {
+                  id: 2384,
+                  name: "Diced Lego bricks",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.PINT,
+                }
+              ]
             }
           ],
           notes: "pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!",
