@@ -6,7 +6,7 @@ import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import OrderState from '../../OrderStates';
+import OrderState from '../../OrderStatuses';
 
 
 // SETTINGS:
@@ -62,8 +62,9 @@ export default class BillingPopupWindow extends React.Component {
         ); else return "";
     }
     
-    renderOutOfStockButton = (orderStatus) => {
-        if (!HideStockManagementForAwaitingCollection || orderStatus !== OrderState.AWAITING_COLLECTION) {
+    // Function to hide stock button if the order is awaiting collection (if user setting permits)
+    renderOutOfStockButton = (order) => {
+        if (!HideStockManagementForAwaitingCollection || order.status !== OrderState.AWAITING_COLLECTION) {
             return (
                 <button onClick={this.props.showOutOfStock} className="orderButton">
                     <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
@@ -76,7 +77,9 @@ export default class BillingPopupWindow extends React.Component {
             return null;
         }
     }
-    buildButtons = (orderStatus) => {
+
+    // Function to build buttons for order
+    buildButtons = (order) => {
         return (
             <div className="popupButtonsContainer">
                 <button className="orderButton">
@@ -85,7 +88,7 @@ export default class BillingPopupWindow extends React.Component {
                     <br />
                     <span className="subtitle">Mark as un-ready</span>
                 </button>
-                {this.renderOutOfStockButton(orderStatus)}
+                {this.renderOutOfStockButton(order)}
                 <button className="orderButton">
                     <span className="icon delete"><FontAwesomeIcon icon={faTrashAlt} /></span>
                     <span className="title">Delete</span>
@@ -105,7 +108,7 @@ export default class BillingPopupWindow extends React.Component {
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
                     dismissedHandler={this.props.dismissedHandler}
-                    buttons={this.buildButtons(OrderState.AWAITING_COLLECTION)}
+                    buttons={this.buildButtons(this.props.order)}
             >
                 { this.buildChildren(this.props.order) }
             </PopupWindow>
