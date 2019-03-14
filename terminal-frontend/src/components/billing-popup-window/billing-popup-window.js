@@ -7,7 +7,6 @@ import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import OrderState from '../../OrderStates';
-import OutOfStockPopUpWindow from '../out-of-stock-popup-window/out-of-stock-popup-window';
 
 
 // SETTINGS:
@@ -66,7 +65,7 @@ export default class BillingPopupWindow extends React.Component {
     renderOutOfStockButton = (orderStatus) => {
         if (!HideStockManagementForAwaitingCollection || orderStatus !== OrderState.AWAITING_COLLECTION) {
             return (
-                <button onClick={this.showOutOfStock} className="orderButton">
+                <button onClick={this.props.showOutOfStock} className="orderButton">
                     <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
                     <span className="title">Out of Stock</span>
                     <br />
@@ -97,29 +96,19 @@ export default class BillingPopupWindow extends React.Component {
         )
     }
 
-    buildOutOfStockPopup = (order) => {
-        if (order) return (
-            <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={order} />
-        ); else return "";
-    }
-
     render () {
         return (
-            <React.Fragment>
-                <PopupWindow
-                        className="billingOptionsPopup"
-                        title={this.buildTitle(this.props.order)}
-                        subtitle={this.buildSubtitle(this.props.order)}
-                        showCloseButton={true}
-                        showFunc={this.props.showFunc}
-                        dismissedHandler={this.props.dismissedHandler}
-                        buttons={this.buildButtons(OrderState.AWAITING_COLLECTION)}
-                >
-                    { this.buildChildren(this.props.order) }
-                </PopupWindow>
-
-                { this.buildOutOfStockPopup(this.props.order) }
-            </React.Fragment>
+            <PopupWindow
+                    className="billingOptionsPopup"
+                    title={this.buildTitle(this.props.order)}
+                    subtitle={this.buildSubtitle(this.props.order)}
+                    showCloseButton={true}
+                    showFunc={this.props.showFunc}
+                    dismissedHandler={this.props.dismissedHandler}
+                    buttons={this.buildButtons(OrderState.AWAITING_COLLECTION)}
+            >
+                { this.buildChildren(this.props.order) }
+            </PopupWindow>
         )
     }
 }
@@ -127,4 +116,5 @@ export default class BillingPopupWindow extends React.Component {
 BillingPopupWindow.propTypes = {
     order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
+    showOutOfStock: PropTypes.func.isRequired, // Function to show out of stock window
 }
