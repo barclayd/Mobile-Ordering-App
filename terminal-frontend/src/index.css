@@ -1,3 +1,6 @@
+
+html { overflow-y: scroll } /* Always show scrollbar (prevents page jump) */
+
 body {
   margin: 0;
   padding: 0;

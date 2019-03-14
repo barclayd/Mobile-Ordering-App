@@ -227,13 +227,15 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
   border: 2px solid #000000;
   position: relative;
   padding-left: 12px;
+  box-sizing: border-box;
 }
 .orderContainer:not(:last-child) { margin-bottom: 7px } /* Add space between orders */
 
 .orderContainer.collapseable { cursor: pointer } /* Show pointer cursor for collapsable feeds */
-.ordersContainer.collapsed .orderContainer:not(:first-child) { margin-top: -83px } /* Collapse orders under one another */
+.ordersContainer.collapsed .orderContainer:not(:first-child) { margin-top: -83px; margin-left: auto; margin-right: auto; } /* Bump collapsed orders under one another, centering them in case their width changes */
 .ordersContainer.collapsed .orderContainer:nth-child(n+4) { display: none } /* Limit how many collapsed orders are rendered (1 less than maxCollapsedOrdersToShow) */
-.ordersContainer.collapsed .orderContainer:not(:first-child) * {visibility: hidden} /* Hide children of a collapsed order item */
+.ordersContainer.collapsed .orderContainer:not(:first-child) * { visibility: hidden } /* Hide children of a collapsed order item */
+.ordersContainer:not(.collapsed) .orderContainer { width: 100% !important } /* Disable inline CSS that forces item width */
 
 .orderContainer.in-progress {
   min-height: 150px;
