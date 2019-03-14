@@ -422,20 +422,18 @@ export default class App extends Component {
   }
 
   // Takes an order index to get an order object to set orderForPopup state obj
-  setOrderForPopup = (orderIndex) => {
-    this.setState({orderForPopup: this.state.orders[orderIndex]});
+  setOrderForPopup = (orderIndex, callback) => {
+    this.setState({orderForPopup: this.state.orders[orderIndex]}, callback());
   }
 
   // Displays billing popup for order by order index
   showBilling = (orderIndex) => {
-    this.setOrderForPopup(orderIndex);
-    this.state.showBilling();
+    this.setOrderForPopup(orderIndex, () => { this.state.showBilling() });
   }
 
   // Displays customer notes popup for order by order index
   showNotes = (orderIndex) => {
-    this.setOrderForPopup(orderIndex);
-    this.state.showNotes();
+    this.setOrderForPopup(orderIndex, () => { this.state.showNotes() });
   }
 
   handleScan = (data) => {
@@ -724,10 +722,10 @@ export default class App extends Component {
           <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
 
           <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} order={this.state.orderForPopup} />
+          <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
           <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
           <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
           <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
-          <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
           <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
           
           { this.state.notificationsJSX }
@@ -736,9 +734,9 @@ export default class App extends Component {
             this.state.disableScanner ? null :
               <div ref={this.previewDiv} className="qrReader">
                 <QrReader
-                  delay={qrDelay}
-                  onError={this.handleError}
-                  onScan={this.handleScan}
+                    delay={qrDelay}
+                    onError={this.handleError}
+                    onScan={this.handleScan}
                 />
                 <p>
                   QR content:<br />
