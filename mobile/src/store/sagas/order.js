@@ -1,23 +1,16 @@
 import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../../axios-instance';
-import {AsyncStorage, Platform} from 'react-native';
+import {AsyncStorage} from 'react-native';
 import {
-    setMainAppSettings,
+    popToRoot,
     setOrderStatus
 } from "../../utility/navigation";
 import {emptyBasket} from '../utility';
-import IonicIcon from "react-native-vector-icons/Ionicons";
 
-const orderRedirect = async (action) => {
-    Promise.all([
-        IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
-        IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
-    ])
-        .then(async (sources) => {
-            setMainAppSettings(sources[0], sources[1]);
-            await setOrderStatus(action.componentId, 189);
-        });
+const orderRedirect = async () => {
+    await popToRoot('ViewMenus');
+    await setOrderStatus('ViewMenus', 189);
 };
 
 export function* submitOrderSaga(action) {
