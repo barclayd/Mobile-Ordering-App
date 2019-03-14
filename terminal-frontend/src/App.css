@@ -231,8 +231,9 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
 .orderContainer:not(:last-child) { margin-bottom: 7px } /* Add space between orders */
 
 .orderContainer.collapseable { cursor: pointer } /* Show pointer cursor for collapsable feeds */
-.ordersContainer.collapsed .orderContainer:not(:first-child) { margin-top: -80px } /* Collapse orders under one another */
-.ordersContainer.collapsed .orderContainer:nth-child(n+5) { display: none } /* Limit how many collapsed orders are visible */
+.ordersContainer.collapsed .orderContainer:not(:first-child) { margin-top: -83px } /* Collapse orders under one another */
+.ordersContainer.collapsed .orderContainer:nth-child(n+4) { display: none } /* Limit how many collapsed orders are rendered (1 less than maxCollapsedOrdersToShow) */
+.ordersContainer.collapsed .orderContainer:not(:first-child) * {visibility: hidden} /* Hide children of a collapsed order item */
 
 .orderContainer.in-progress {
   min-height: 150px;
