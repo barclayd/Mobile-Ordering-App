@@ -69,7 +69,7 @@ export default class BillingPopupWindow extends React.Component {
                     <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
                     <span className="title">Out of Stock</span>
                     <br />
-                    <span className="subtitle">Mark Unavailable</span>
+                    <span className="subtitle">Mark unavailable</span>
                 </button>
             )
         } else {
