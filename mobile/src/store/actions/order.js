@@ -1,30 +1,55 @@
 import * as actionTypes from "./actionTypes";
 
-export const addToOrder = (drink, quantity, componentId) => {
+export const submitOrder = (basket, componentId) => {
     return {
-        type: actionTypes.ADD_TO_ORDER,
-        drink: drink,
-        quantity: quantity,
+        type: actionTypes.SUBMIT_ORDER,
+        order: basket,
         componentId: componentId
     };
 };
 
-export const addToOrderStart = () => {
+export const submitOrderStart = () => {
     return {
-        type: actionTypes.ADD_TO_ORDER_START
+        type: actionTypes.SUBMIT_ORDER_START
     };
 };
 
-export const addToOrderSuccess = (data) => {
+export const submitOrderSuccess = (order) => {
     return {
-        type: actionTypes.ADD_TO_ORDER_SUCCESS,
-        data: data
+        type: actionTypes.SUBMIT_ORDER_SUCCESS,
+        order: order
     };
 };
 
-export const addToOrderFail= error => {
+export const submitOrderFail = error => {
     return {
-        type: actionTypes.ADD_TO_ORDER_FAIL,
+        type: actionTypes.SUBMIT_ORDER_FAIL,
+        error: error
+    };
+};
+
+export const orderHistory = () => {
+    return {
+        type: actionTypes.ORDER_HISTORY,
+    };
+};
+
+export const orderHistoryStart = () => {
+    return {
+        type: actionTypes.ORDER_HISTORY_START
+    };
+};
+
+export const orderHistorySuccess = (pastOrders) => {
+    return {
+        type: actionTypes.ORDER_HISTORY_SUCCESS,
+        pastOrders: pastOrders
+    };
+};
+
+export const orderHistoryFailure = error => {
+    return {
+        type: actionTypes.ORDER_HISTORY_FAIL,
         error: error
     };
 };
