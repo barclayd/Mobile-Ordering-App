@@ -13,7 +13,7 @@ import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window
 import TimeAgo from './components/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./notes.svg";
-import OrderState from './OrderStates';
+import OrderStatus from './OrderStatuses.js';
 import rangeScaling from "./FunctionLib.js";
 import OutOfStockPopUpWindow from './components/out-of-stock-popup-window/out-of-stock-popup-window';
 
@@ -44,7 +44,7 @@ export default class App extends Component {
               quantity: 1,
             },
           ],
-          orderState: OrderState.AWAITING_COLLECTION
+          status: OrderStatus.AWAITING_COLLECTION
         },
         {
           id: "KHVD", orderDate: new Date(), customerID: 13, staffMemberID: 6, items: [
@@ -55,12 +55,12 @@ export default class App extends Component {
               quantity: 1,
             },
           ],
-          orderState: OrderState.AWAITING_COLLECTION
+          status: OrderStatus.AWAITING_COLLECTION
         },
-        { id: "EOPL", orderDate: new Date(), customerID: 13, staffMemberID: 4, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], orderState: OrderState.AWAITING_COLLECTION },
-        { id: "KJHS", orderDate: new Date(), customerID: 13, staffMemberID: 2, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], orderState: OrderState.AWAITING_COLLECTION },
-        { id: "KXHS", orderDate: new Date(), customerID: 13, staffMemberID: 10, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], orderState: OrderState.AWAITING_COLLECTION },
-        { id: "KAHS", orderDate: new Date(), customerID: 13, staffMemberID: 1, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], orderState: OrderState.AWAITING_COLLECTION },
+        { id: "EOPL", orderDate: new Date(), customerID: 13, staffMemberID: 4, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], status: OrderStatus.AWAITING_COLLECTION },
+        { id: "KJHS", orderDate: new Date(), customerID: 13, staffMemberID: 2, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], status: OrderStatus.AWAITING_COLLECTION },
+        { id: "KXHS", orderDate: new Date(), customerID: 13, staffMemberID: 10, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], status: OrderStatus.AWAITING_COLLECTION },
+        { id: "KAHS", orderDate: new Date(), customerID: 13, staffMemberID: 1, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], status: OrderStatus.AWAITING_COLLECTION },
         {
           id: "XHBS",
           orderDate: new Date(),
@@ -80,7 +80,7 @@ export default class App extends Component {
               quantity: 2,
             }
           ],
-          orderState: OrderState.IN_PROGRESS
+          status: OrderStatus.IN_PROGRESS
         },
         {
           id: "ZBNU",
@@ -120,7 +120,7 @@ export default class App extends Component {
             }
           ],
           notes: "pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!",
-          orderState: OrderState.IN_PROGRESS
+          status: OrderStatus.IN_PROGRESS
         },
         {
           id: "ACBS",
@@ -158,7 +158,7 @@ export default class App extends Component {
               quantity: 1,
             }
           ],
-          orderState: OrderState.PENDING
+          status: OrderStatus.PENDING
         },
         {
           id: "PPLC",
@@ -196,7 +196,7 @@ export default class App extends Component {
               quantity: 1,
             }
           ],
-          orderState: OrderState.PENDING
+          status: OrderStatus.PENDING
         },
         {
           id: "AHBS",
@@ -210,7 +210,7 @@ export default class App extends Component {
               quantity: 1,
             }
           ],
-          orderState: OrderState.PENDING
+          status: OrderStatus.PENDING
         },
         {
           id: "LJPN",
@@ -224,7 +224,7 @@ export default class App extends Component {
               quantity: 4,
             }
           ],
-          orderState: OrderState.PENDING
+          status: OrderStatus.PENDING
         },
         {
           id: "GVAQ",
@@ -256,7 +256,7 @@ export default class App extends Component {
               quantity: 2,
             }
           ],
-          orderState: OrderState.PENDING
+          status: OrderStatus.PENDING
         },
       ],
 
@@ -371,11 +371,11 @@ export default class App extends Component {
     let awaitingOrdersIndexes=[], inProgressOrdersIndexes=[], pendingOrders=[];
     for (let orderIndex in this.state.orders) {
       let order = this.state.orders[orderIndex];
-      switch (order.orderState) {
-        case OrderState.AWAITING_COLLECTION:
+      switch (order.status) {
+        case OrderStatus.AWAITING_COLLECTION:
           awaitingOrdersIndexes.push(orderIndex);
           break;
-        case OrderState.IN_PROGRESS:
+        case OrderStatus.IN_PROGRESS:
           inProgressOrdersIndexes.push(orderIndex);
           break;
         default:
@@ -472,7 +472,7 @@ export default class App extends Component {
 
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
-      if (order.orderState === OrderState.AWAITING_COLLECTION) {
+      if (order.status === OrderStatus.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order, orderWindowOpen: true}, this.state.showPickup) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
@@ -487,7 +487,7 @@ export default class App extends Component {
   pickupOrderInsecure = (orderID) => {
     let order = this.state.orders.find(order => order.id === orderID) // Find order by ID
     if (order) {
-      if (order.orderState === OrderState.AWAITING_COLLECTION) {
+      if (order.status === OrderStatus.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order}, this.state.showPickup) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
