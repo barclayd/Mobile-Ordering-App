@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
 import * as colours from './../../styles/colourScheme'
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
@@ -24,8 +24,10 @@ class componentName extends Component {
   }
 
   render() {
-
-    const renderPastOrders = this.state.pastOrders.map((order,i) => {
+    const spinner = <ActivityIndicator size="large" color={colours.orange} />;
+    let renderPastOrders = null;
+    if (this.state.pastOrders) {
+      renderPastOrders = this.state.pastOrders.map((order,i) => {
       return (
                 <Card
                 key={i}
@@ -56,10 +58,13 @@ class componentName extends Component {
       });
 
     return (
-      <View style={[styles.container]}>
-          <View>{this.state.pastOrders.length > 0 ? renderPastOrders : null}</View>
-        </View>
-    );
+          <View style={[styles.container]}>
+            <ScrollView>
+            <View>{this.props.ordersLoading ? spinner : renderPastOrders}</View>
+            </ScrollView>
+          </View>
+      );
+    }
   }
 }
 
@@ -100,11 +105,9 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
+    ordersLoading: state.order.loading,
     pastOrders: state.order.pastOrders
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentName);
+export default connect(mapStateToProps, mapDispatchToProps)(componentName);
