@@ -102,18 +102,24 @@ class TabbedCategories extends Component {
 
                       <View>
                         <Text style={styles.price}>£{u.price}</Text>
-                      </View>
+                      </View>                      
                     </View>
 
-                    <Text style={styles.description}>{u.nutritionInfo}</Text>
-
                     <View style={styles.rowContainer}>
-
+                      <View style={styles.leftContainer}>
+                      <Text style={styles.description}>{u.nutritionInfo}</Text>
+                      </View>
                       {this.basketItems(u.name) > 0 ? (
                         <Text style={styles.quantity}>
                           x{this.basketItems(u.name)} Pint{" "}
                         </Text>
                       ) : null}
+                      
+                    </View>
+
+                    
+
+                    <View style={styles.rowContainer}>
 
                       {this.state.trashCanVisible &&
                       this.props.drinks[i].name === this.state.itemSelected ? (
