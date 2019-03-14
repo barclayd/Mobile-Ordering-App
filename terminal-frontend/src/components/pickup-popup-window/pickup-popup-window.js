@@ -6,8 +6,12 @@ import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt, faGlassCheers } from '@fortawesome/free-solid-svg-icons';
+import OutOfStockPopUpWindow from '../out-of-stock-popup-window/out-of-stock-popup-window';
 
 export default class PickupPopupWindow extends React.Component {
+    
+    showOutOfStock = () => { this.state.showOutOfStock() }
+    
     buildButtons = () => {
         return  (
             <div className="popupButtonsContainer">
@@ -23,7 +27,7 @@ export default class PickupPopupWindow extends React.Component {
                     <br />
                     <span className="subtitle">Mark as un-ready</span>
                 </button>
-                <button className="orderButton">
+                <button onClick={this.showOutOfStock} className="orderButton">
                     <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
                     <span className="title">Out of Stock</span>
                     <br />
@@ -52,28 +56,38 @@ export default class PickupPopupWindow extends React.Component {
         ); else return (<span></span>);
     }
 
+    buildOutOfStockPopup = (order) => {
+        if (order) return (
+            <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={order} />
+        ); else return "";
+    }
+
     render () {
         return (
-            <PopupWindow
-                    className="pickupPopup"
-                    title={this.buildTitle(this.props.order)}
-                    subtitle={this.buildSubtitle(this.props.order)}
-                    showCloseButton={true}
-                    showFunc={this.props.showFunc}
-                    dismissedHandler={this.props.dismissedHandler}
-                    buttons={this.buildButtons()}
-            >
-                <h1>DRINKS:</h1>
-                <div className="indentedContent">
-                    <ul className="orderList">
-                        <li><span className="quantity">4x</span>VK Orange</li>
-                        <li><span className="quantity">1x</span>VK Green</li>
-                    </ul>
+            <React.Fragment>
+                <PopupWindow
+                        className="pickupPopup"
+                        title={this.buildTitle(this.props.order)}
+                        subtitle={this.buildSubtitle(this.props.order)}
+                        showCloseButton={true}
+                        showFunc={this.props.showFunc}
+                        dismissedHandler={this.props.dismissedHandler}
+                        buttons={this.buildButtons()}
+                >
+                    <h1>DRINKS:</h1>
+                    <div className="indentedContent">
+                        <ul className="orderList">
+                            <li><span className="quantity">4x</span>VK Orange</li>
+                            <li><span className="quantity">1x</span>VK Green</li>
+                        </ul>
 
-                    <h2>Customer notes:</h2>
-                    <p className="indentedPara">pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!</p>
-                </div>
-            </PopupWindow>
+                        <h2>Customer notes:</h2>
+                        <p className="indentedPara">pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!</p>
+                    </div>
+                </PopupWindow>
+
+                { this.buildOutOfStockPopup(this.props.order) }
+            </React.Fragment>
         )
     }
 }
