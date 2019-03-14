@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import * as colours from './../../styles/colourScheme'
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
+import {Card, ListItem} from "react-native-elements";
 
 class componentName extends Component {
 
@@ -25,9 +26,33 @@ class componentName extends Component {
   render() {
 
     const renderPastOrders = this.state.pastOrders.map((order,i) => {
-      return <Text key={i} style={styles.text}>
-        {order.collectionPoint}
-      </Text>
+      return (
+                <Card
+                key={i}
+                title={order.transactionId ? `#${order.transactionId.slice(0, 7).toUpperCase()}` : `#${Math.random().toString(36).substring(2, 9).toUpperCase()}` }
+                containerStyle={{backgroundColor: colours.lightGrey}}
+                titleStyle={{color: colours.midBlue, fontWeight: 'bold', fontSize: 24}}
+                dividerStyle={{backgroundColor: colours.pureWhite}}>
+                  <ListItem
+                  key={i}
+                  titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
+                  containerStyle={{backgroundColor: colours.lightGrey}}
+                  title={`The Taf: ${order.collectionPoint}`}
+                  bottomDivider
+                  subtitle={
+                    <View style={styles.subtitleView}>
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={styles.subInformationText}>{new Date(order.date).toDateString()}</Text>
+                        <Text style={styles.subInformationText}>{new Date(order.date).toTimeString().slice(0,8)}</Text>
+                        <Text style={styles.subInformationTextPrice}>{order.status}</Text>
+                      </View>
+                        {order.drinks.map((drink, index) => (
+                            <Text key={index} style={styles.subInformationDrinksText}>{drink.name}</Text>
+                        ))}
+                    </View>
+                  }/>
+                </Card>
+      )
       });
 
     return (
@@ -50,7 +75,21 @@ containerText: {
 },
 text: {
     color: colours.white,
-}
+},
+subInformationText: {
+  color: colours.darkGrey
+},
+  subInformationDrinksText: {
+    fontWeight: 'bold',
+    color: colours.midBlue,
+  },
+  subInformationTextPrice: {
+    color: colours.warningRed,
+    fontWeight: 'bold'
+  },
+  subtitleView: {
+    paddingTop: 5
+  }
 });
 
 const mapDispatchToProps = dispatch => {

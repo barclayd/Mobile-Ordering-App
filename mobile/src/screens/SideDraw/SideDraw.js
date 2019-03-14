@@ -6,12 +6,8 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Platform,
-  Scrollview,
-  ActivityIndicator,
+  Platform
 } from "react-native";
-// import IonicIcon from "react-native-vector-icons/Ionicons";
-// import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as colours from "../../styles/colourScheme";
 import {
@@ -19,7 +15,7 @@ import {
   setWelcomePageRoot,
   setViewPastOrders,
   setViewPastOrdersSettings,
-  setOrderStatus
+  setOrderStatus, popToRoot
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
 import {Navigation} from "react-native-navigation";
@@ -28,7 +24,7 @@ class SideDrawer extends Component {
 
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+    Navigation.events().bindComponent(this);
   }
 
   state = {
@@ -41,56 +37,18 @@ class SideDrawer extends Component {
     setWelcomePageRoot();
   };
 
-  previousOrders = async () => {
-    // Promise.all([
-    //     Icon.getImageSource(
-    //         Platform.OS === "android" ? "shopping-basket" : "shopping-basket",
-    //         20
-    //       ),
-    //       Icon.getImageSource(
-    //         Platform.OS === "android" ? "shopping-basket" : "shopping-basket",
-    //         20)
-    // ].then(sources => {
-    setViewPastOrdersSettings();
-    setViewPastOrders(this.props.componentId,"ViewMenus");
-    // }))
-}
-
-  componentDidUpdate() {
-    console.log(this.state);
-  }
-
-  orderStatus = async () => {
-    await setOrderStatus(this.props.componentId, 128);
+  redirectMenus = async () => {
+    await popToRoot(this.props.componentId);
   };
 
-//   renderContent() {
-//     {this.state.pastOrders.length > 0
-//         ? this.state.pastOrders.map((pastOrder, i) => {
-//             return (
-//           <View key={i}>
-//             <TouchableOpacity>
-//               <View style={styles.drawItem}>
-//                 <Text style={styles.text}>{pastOrder._id}</Text>
-//               </View>
-//             </TouchableOpacity>;
-//           </View>
-//             );
-//       })
-//         : null
-//   }
+  previousOrders = async () => {
+    setViewPastOrdersSettings();
+    setViewPastOrders(this.props.componentId,"ViewMenus");
+};
 
-  renderContent = () => {
-    {this.state.pastOrders.length > 0 ?
-    this.state.pastOrders.map(order => {
-        return (
-            <Text style={styles.text}>i
-            </Text>
-        );
-    }) : null}
-            
-                // <ActivityIndicator size="large" color={colours.orange} /
-  }
+  orderStatus = async () => {
+    await setOrderStatus(this.props.componentId,124);
+  };
 
   render() {
     return (
@@ -114,6 +72,18 @@ class SideDrawer extends Component {
               style={styles.drawItemIcon}
             />
             <Text style={styles.text}>Sign Out</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => this.redirectMenus()}>
+          <View style={styles.drawItem}>
+            <Icon
+                size={30}
+                color="#fff"
+                name={Platform.OS === "android" ? "md-paper" : "ios-paper"}
+                style={styles.drawItemIcon}
+            />
+            <Text style={styles.text}>Menus</Text>
           </View>
         </TouchableOpacity>
 
