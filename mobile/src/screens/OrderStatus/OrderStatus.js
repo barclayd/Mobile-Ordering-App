@@ -9,11 +9,7 @@ class OrderStatus extends Component {
 
     constructor(props) {
         super(props);
-        Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
-    }
-
-    componentDidMount(){
-        console.log("mounted");
+        Navigation.events().bindComponent(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -71,11 +67,11 @@ class OrderStatus extends Component {
                 {/* <View style={styles.box}>
                 <Text style={styles.status}>In Progress...</Text>
                 </View>
-                
+
 
                 <View style={styles.orderInfo}>
                     <Text style={styles.text}> Order Number </Text>
-                     
+
                 <TouchableOpacity>
                         <Text style={styles.text}> View QR Code </Text>
                     </TouchableOpacity>
@@ -114,7 +110,6 @@ const styles = StyleSheet.create({
     success:{
         fontSize: 20,
         fontWeight: '500',
-        color: colours.cream,
         padding: 10,
         color: colours.orange,
         marginBottom: 25,

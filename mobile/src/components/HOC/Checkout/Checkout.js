@@ -90,18 +90,6 @@ class Checkout extends Component {
         this.setState({
             editVisible : !this.state.editVisible
         });
-
-        console.log("eidt button",this.state.editVisible)
-    };
-
-    addValue = () => {
-        console.log("addValue")
-    };
-
-    processOrder = () => {
-        console.log("processOrder");
-        console.log("this.props.basket",this.props.basket)
-        console.log("price",this.basketPrice())
     };
 
     renderContent = (section, _, isActive) => {
@@ -278,7 +266,7 @@ class Checkout extends Component {
 
                             <Animated.View style={{ height: animatedSettingsHeight, opacity: animatedMainContentOpacity }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingBottom: 20 }}>
-                                    <Icon name="close" size={32} style={{ color: colours.orange }} onPress={() => this.props.emptyBasket()}/>
+                                    <Icon name="trash-o" size={32} style={{ color: colours.orange }} onPress={() => this.props.emptyBasket()}/>
                                     <Text style={styles.orderSummaryTitle} onPress={() => this.setSections(null, 'all')}>Order Summary</Text>
                                     <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} onPress={()=> this.onEditPress()}/>
                                 </View>
