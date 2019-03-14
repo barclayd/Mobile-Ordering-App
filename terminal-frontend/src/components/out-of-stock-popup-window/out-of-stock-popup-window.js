@@ -6,17 +6,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 export default class OutOfStockPopUpWindow extends React.Component {
-    
+    buildIngredients = (ingredients) => { // Check item contains more ingredients than just itself
+
+        if (ingredients.length > 1) {
+            return (
+                <ul className="ingredientList">
+                    {
+                        ingredients.map((ingredientData, incrementer) => {
+                            return (
+                                <li key={incrementer} className="item">{ingredientData.name}</li>
+                            )
+                        })
+                    }
+                </ul>
+            )
+        }
+    }
     buildChildren = (order) => {
         if (order) return (
             <React.Fragment>
-                <h1>DRINKS:</h1>
                 <div className="indentedContent">
                     <ul className="orderList">
-                        {order.items.map((itemData) => {
+                        {order.items.map((itemData, incrementer) => {
                             return (
-                                <li key={itemData.id}>
+                                <li key={incrementer}>
                                     <span className="item">{itemData.name}</span>
+                                    { this.buildIngredients(itemData.ingredients) }
                                 </li>
                             )
                         })}
@@ -51,7 +66,7 @@ export default class OutOfStockPopUpWindow extends React.Component {
             <PopupWindow
                     className="outofStockPopup"
                     title="OUT OF STOCK:"
-                    subtitle={<span>Tap on items to mark out of stock</span>}
+                    subtitle={<span>Tap items or ingredients to mark out of stock</span>}
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
                     buttons={ this.buildButtons() }
