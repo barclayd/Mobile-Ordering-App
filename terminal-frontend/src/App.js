@@ -385,6 +385,8 @@ export default class App extends Component {
     this.state.awaitingOrdersIndexes = awaitingOrdersIndexes;
     this.state.inProgressOrdersIndexes = inProgressOrdersIndexes;
     this.state.pendingOrders = pendingOrders;
+
+    this.previewDiv = React.createRef();
   }
 
   addNotification = (iconClassName, title, description) => {
@@ -572,6 +574,10 @@ export default class App extends Component {
       
     this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed})
   }
+
+  scrollToPreview = () => {
+    this.previewDiv.current.scrollIntoView({ behavior: 'smooth' })
+  }
   
   render() {
     return (
@@ -591,7 +597,8 @@ export default class App extends Component {
             <button className="large" onClick={() => {
               this.setState({showPreview: !this.state.showPreview}, () => {
                 if (this.state.showPreview) {
-                  document.getElementsByClassName("qrReader")[0].style.display = "block"
+                  document.getElementsByClassName("qrReader")[0].style.display = "block";
+                  this.scrollToPreview();
                 } else {
                   document.getElementsByClassName("qrReader")[0].style.display = "none";
                 }
@@ -727,7 +734,7 @@ export default class App extends Component {
 
           {
             this.state.disableScanner ? null :
-              <div className="qrReader">
+              <div ref={this.previewDiv} className="qrReader">
                 <QrReader
                   delay={qrDelay}
                   onError={this.handleError}
