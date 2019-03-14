@@ -9,19 +9,20 @@ import {
   Platform
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { Avatar } from "react-native-elements";
 import * as colours from "../../styles/colourScheme";
 import {
   setDefaultSettings,
   setWelcomePageRoot,
   setViewPastOrders,
   setViewPastOrdersSettings,
-  setOrderStatus, popToRoot
+  setOrderStatus,
+  popToRoot
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
-import {Navigation} from "react-native-navigation";
+import { Navigation } from "react-native-navigation";
 
 class SideDrawer extends Component {
-
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this);
@@ -43,11 +44,11 @@ class SideDrawer extends Component {
 
   previousOrders = async () => {
     setViewPastOrdersSettings();
-    setViewPastOrders(this.props.componentId,"ViewMenus");
-};
+    setViewPastOrders(this.props.componentId, "ViewMenus");
+  };
 
   orderStatus = async () => {
-    await setOrderStatus(null,124);
+    await setOrderStatus(null, 124);
   };
 
   render() {
@@ -61,6 +62,13 @@ class SideDrawer extends Component {
         ]}
       >
         <View style={[styles.drawItem, styles.header]}>
+          <Avatar
+            rounded
+            source={{
+              uri:
+                "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+            }}
+          />
           <Text style={styles.text}>Account</Text>
         </View>
         <TouchableOpacity onPress={() => this.logoutHandler()}>
@@ -78,10 +86,10 @@ class SideDrawer extends Component {
         <TouchableOpacity onPress={() => this.redirectMenus()}>
           <View style={styles.drawItem}>
             <Icon
-                size={30}
-                color="#fff"
-                name={Platform.OS === "android" ? "md-paper" : "ios-paper"}
-                style={styles.drawItemIcon}
+              size={30}
+              color="#fff"
+              name={Platform.OS === "android" ? "md-paper" : "ios-paper"}
+              style={styles.drawItemIcon}
             />
             <Text style={styles.text}>Menus</Text>
           </View>
@@ -104,7 +112,11 @@ class SideDrawer extends Component {
             <Icon
               size={30}
               color="#fff"
-              name={Platform.OS === "android" ? "md-log-out" : "md-information-circle-outline"}
+              name={
+                Platform.OS === "android"
+                  ? "md-log-out"
+                  : "md-information-circle-outline"
+              }
               style={styles.drawItemIcon}
             />
             <Text style={styles.text}>Order Status</Text>
@@ -150,7 +162,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: colours.cream,
     padding: 20,
-    marginTop: 20,
+    marginTop: 20
   },
   container: {
     paddingTop: 30,
