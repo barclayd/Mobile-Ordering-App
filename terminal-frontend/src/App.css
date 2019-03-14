@@ -319,6 +319,23 @@ button.orderButton .icon.refund::after {
   top: 6px;
   font-size: 32px;
 }
+
+button.orderButton .icon.save {
+  background: #2b2;
+  letter-spacing: normal;
+  line-height: 48px;
+  font-size: 27px;
+}
+button.orderButton .icon.save::after { content: "" }
+
+button.orderButton .icon.cancel {
+  background: #b22;
+  letter-spacing: normal;
+  line-height: 48px;
+  font-size: 27px;
+}
+button.orderButton .icon.cancel::after { content: "" }
+
 button.orderButton .icon.outOfStock {
   background: #ff9d1c;
   letter-spacing: normal;
