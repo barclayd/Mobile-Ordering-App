@@ -32,7 +32,7 @@ class OverlayComponent extends Component {
       ...drink,
       quantity
     };
-    this.props.updateBasket(drinksObj, 'add');
+    this.props.updateBasket(drinksObj, 'add', this.props.basket, this.props.categories);
     this.closeModal();
 };
 
@@ -159,13 +159,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    basket: state.basket,
+    basket: state.basket.basket,
+    categories: state.basket.categories,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateBasket: (drink, basketAction) => dispatch(actions.updateBasket(drink, basketAction))
+    updateBasket: (drink, basketAction, oldBasket, oldCategories) => dispatch(actions.updateBasket(drink, basketAction, oldBasket, oldCategories))
   };
 };
 

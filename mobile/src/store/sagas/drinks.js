@@ -31,6 +31,7 @@ export function* findDrinksSaga(action){
                     category
                     nutritionInfo
                     price
+                    _id
                 }
             }
             `,
@@ -46,7 +47,7 @@ export function* findDrinksSaga(action){
                 for (let key in response.data.data.findDrinks) {
                     fetchData.push({
                         ...response.data.data.findDrinks[key],
-                        id: key
+                        id: key,
                     });
                 }
                 yield put(actions.findDrinksSuccess(fetchData));
@@ -54,7 +55,7 @@ export function* findDrinksSaga(action){
                 for (let key in response.data.data.drinks) {
                     fetchData.push({
                         ...response.data.data.drinks[key],
-                        id: key
+                        id: key,
                     });
                 }
                 yield put(actions.findDrinksSuccess(fetchData));

@@ -50,6 +50,11 @@ h5 .bartenderName {
   font-weight: bold;
 }
 
+/* IMPROVE READABILITY WITH DROP SHADOWS: */
+h1, h2, h3, h4, h5, .orderButton.title, .orderButton.subtitle, button, .orderList {
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.25);
+}
+button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /* Text-shadow for button React font-awesome icons (text-shadow is unsupported) */
 
 
 #accountsHotbar {
@@ -77,7 +82,26 @@ h5 .bartenderName {
 
 
 .qrReader {
-  display: none
+  display: none;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  
+  border-radius: 8px;
+  overflow: hidden;
+}
+.qrReader p {
+  font-family: "Lucida Console", Monaco, monospace;
+  position: absolute;
+  top: 65px;
+  left: 0;
+  margin: 0 80px 0 80px; /* Using margin rather than left prevents text overflowing outside the red border */
+  font-size: 24px;
+  text-shadow: 1px 1px 5px#000;
+  padding: 4px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
 }
 
 
@@ -94,7 +118,7 @@ h5 .bartenderName {
   position: fixed;
   width: 600px;
 
-  z-index: 999;
+  z-index: 9999; /* Always show on top */
 }
 
 .notificationBanner {
@@ -200,17 +224,22 @@ h5 .bartenderName {
 .ordersContainer {
   padding-left: 18px;
 }
-
 .orderContainer {
   background: #3F2B44;
   border-radius: 16px;
   border: 2px solid #000000;
   position: relative;
   padding-left: 12px;
+  box-sizing: border-box;
 }
-.orderContainer:not(:last-child) {
-  margin-bottom: 7px;
-}
+.orderContainer:not(:last-child) { margin-bottom: 7px } /* Add space between orders */
+
+.orderContainer.collapseable { cursor: pointer } /* Show pointer cursor for collapsable feeds */
+.ordersContainer.collapsed .orderContainer:not(:first-child) { margin-top: -83px; margin-left: auto; margin-right: auto; } /* Bump collapsed orders under one another, centering them in case their width changes */
+.ordersContainer.collapsed .orderContainer:nth-child(n+4) { display: none } /* Limit how many collapsed orders are rendered (1 less than maxCollapsedOrdersToShow) */
+.ordersContainer.collapsed .orderContainer:not(:first-child) * { visibility: hidden } /* Hide children of a collapsed order item */
+.ordersContainer:not(.collapsed) .orderContainer { width: 100% !important } /* Disable inline CSS that forces item width */
+
 .orderContainer.in-progress {
   min-height: 150px;
 }

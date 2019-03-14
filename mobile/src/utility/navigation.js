@@ -14,18 +14,18 @@ const setDefaultSettings = () => {
             openGestureMode: 'bezel',
             left: {
                 visible: false,
-                enabled: false
+                enabled: true
             },
             right: {
                 visible: false,
-                enabled: false
+                enabled: true
             }
         }
     });
 };
 
-const setWelcomePageRoot = () => {
-    Navigation.setRoot({
+const setWelcomePageRoot = async () => {
+    await Navigation.setRoot({
         root: {
             sideMenu: {
                 left: {
@@ -99,10 +99,11 @@ const setMainAppSettings = (image1, image2) => {
     });
 };
 
-const setMainApp = (componentId, barName) => {
-    Navigation.setStackRoot(componentId, {
+const setMainApp = async (componentId, barName) => {
+    await Navigation.setStackRoot(componentId, {
         component: {
             name: screens.ViewMenus,
+            id: 'ViewMenus',
             options: {
                 animations: {
                     setStackRoot: {
@@ -120,8 +121,8 @@ const setMainApp = (componentId, barName) => {
     });
 };
 
-const setViewDrinks = (componentId, menuName) => {
-    Navigation.push(componentId, {
+const setViewDrinks = async (componentId, menuName) => {
+    await Navigation.push(componentId, {
         component: {
             name: screens.ViewDrinksScreen,
             passProps: {
@@ -139,8 +140,35 @@ const setViewDrinks = (componentId, menuName) => {
     })
 };
 
-const setViewBasket = (componentId, basketName, fullScreenMode) => {
-    Navigation.push(componentId, {
+const setOrderStatus = async (componentId, orderNumber) => {
+    await Navigation.push(componentId, {
+        component: {
+            name: screens.OrderStatus,
+            passProps: {
+                orderNumber: orderNumber
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: 'Order Status',
+                        color: colours.white,
+                        largeTitle: true
+                    },
+                    subtitle: {
+                        text: 'ETA: 10:59pm',
+                        color: colours.orange,
+                        fontSize: 12,
+                        fontFamily: 'HelveticaNeue-Italic',
+                    }
+                }
+            }
+        }
+    })
+};
+
+const setViewBasket = async (componentId, basketName, fullScreenMode) => {
+    await Navigation.push(componentId, {
         component: {
             name: screens.ViewCheckout,
             passProps: {
@@ -202,6 +230,63 @@ const setViewDrinksSettings = (image) => {
     });
 };
 
+const setViewPastOrders = (componentId, menuName) => {
+    Navigation.push("ViewMenus", {
+        component: {
+            name: screens.ViewPastOrders,
+            passProps: {
+                menuName: menuName
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: 'Order History',
+                        color: colours.white,
+                        largeTitle: true
+                    },
+                }
+            }
+        }
+    })
+};
+
+
+const setViewPastOrdersSettings = () => {
+    Navigation.setDefaultOptions({
+        sideMenu: {
+            openGestureMode: 'bezel',
+            left: {
+                enabled: true,
+                visible: true,
+            },
+            right: {
+                visible: true,
+                enabled: true,
+                disableOpenGesture: false
+            }
+        },
+        statusBar: {
+            hideWithTopBar: false,
+        },
+        topBar: {
+            leftButtons: [
+                {
+                    id: 'menuButton',
+                    color: colours.white
+                }
+            ],
+            barStyle: 'black',
+            rightButtons: [
+                {
+                    id: 'profileButton',
+                    color: colours.white
+                }
+            ]
+        }
+    });
+};
+
 const setLoginSettings = () => {
     Navigation.setDefaultOptions({
         topBar: {
@@ -211,10 +296,10 @@ const setLoginSettings = () => {
     });
 };
 
-const setLoginScreen = (componentId, authType) => {
+const setLoginScreen = async (componentId, authType) => {
     let authText;
     authText = authType === 'login' ? 'Login' : 'Sign Up';
-    Navigation.push(componentId, {
+    await Navigation.push(componentId, {
         component: {
             name: screens.AuthScreen,
             passProps: {
@@ -231,7 +316,10 @@ const setLoginScreen = (componentId, authType) => {
     })
 };
 
+const popToRoot = async (componentId) => {
+    await Navigation.popToRoot(componentId);
+};
 
 export {
-    setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
+    setOrderStatus, popToRoot ,setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
 }
