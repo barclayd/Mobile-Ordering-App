@@ -74,8 +74,6 @@ class ViewMenus extends Component {
     ]).then(sources => {
       setViewDrinksSettings(sources[2]);
       setViewDrinks(this.props.componentId, "View Drinks");
-
-
     });
   };
 
@@ -106,7 +104,7 @@ class ViewMenus extends Component {
                   </TouchableOpacity>
                 );
               }}
-              keyExtractor={(item, index) => index}
+              keyExtractor={(item, index) => index.toString()}
             />
           </View>
         </View>

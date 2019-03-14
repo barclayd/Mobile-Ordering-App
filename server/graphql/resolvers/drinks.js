@@ -1,5 +1,4 @@
 const Drink = require('../../models/drink');
-// const {findIngredients} = require('./ingredients');
 const {transformDrink} = require('./merge');
 
 module.exports = {
@@ -18,7 +17,6 @@ module.exports = {
     },
     createDrink: async (args) => {
         try {
-            // const foundIngredients = await findIngredients(args.drinkInput.ingredientName);
             const createdDrink = new Drink({
                 name: args.drinkInput.name,
                 category: args.drinkInput.category,

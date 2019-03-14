@@ -3,9 +3,10 @@ import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, 
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
-import {ListItem, Card, Button, withBadge} from 'react-native-elements';
+import {ListItem, Card, Button, withBadge, CheckBox} from 'react-native-elements';
 import * as colours from '../../../styles/colourScheme';
 import {connect} from 'react-redux';
+import * as actions from "../../../store/actions/index"
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -15,7 +16,9 @@ class Checkout extends Component {
         isScrollEnabled: false,
         basketBarHeight: screenHeight - 180,
         activeSections: [],
-        multipleSelect: true
+        multipleSelect: true,
+        editVisible: false,
+        emptyBasketChecked: false
     };
 
 
@@ -36,12 +39,12 @@ class Checkout extends Component {
                 this.animation.setValue({x: 0, y: gestureState.dy})
             },
             onPanResponderRelease: (event, gestureState) => {
-                if(gestureState.moveY > screenHeight - 120) {
+                if(gestureState.moveY > screenHeight - 180) {
                     Animated.spring(this.animation.y, {
                         toValue: 0,
                         tension: 1
                     }).start();
-                } else if (gestureState.moveY < 120) {
+                } else if (gestureState.moveY < 180) {
                     Animated.spring(this.animation.y, {
                         toValue: 0,
                         tension: 1
@@ -64,19 +67,41 @@ class Checkout extends Component {
     }
 
     basketItems = () => {
-    let totalItems = 0;
-    this.props.basket.map(drink => {
-          totalItems += drink.quantity
-      });
-    return totalItems;
+        let totalItems = 0;
+        if (this.props.basket) {
+            this.props.basket.map(drink => {
+                totalItems += drink.quantity
+            });
+        }
+        return totalItems;
     };
 
     basketPrice = () => {
         let totalPrice = 0;
-        this.props.basket.map(drink => {
-            totalPrice += (drink.price * drink.quantity);
-        });
+        if (this.props.basket) {
+            this.props.basket.map(drink => {
+                totalPrice += (drink.price * drink.quantity);
+            });
+        }
         return totalPrice.toFixed(2);
+    };
+
+    onEditPress = () => {
+        this.setState({
+            editVisible : !this.state.editVisible
+        });
+
+        console.log("eidt button",this.state.editVisible)
+    };
+
+    addValue = () => {
+        console.log("addValue")
+    };
+
+    processOrder = () => {
+        console.log("processOrder");
+        console.log("this.props.basket",this.props.basket)
+        console.log("price",this.basketPrice())
     };
 
     renderContent = (section, _, isActive) => {
@@ -87,6 +112,7 @@ class Checkout extends Component {
             >
                 <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
                     {this.props.basket.filter(basketItem => basketItem.category === section).map((drink, i) => (
+                        <TouchableOpacity key={i}>
                     <ListItem
                         key={i}
                         titleStyle={{color: colours.midnightBlack, fontWeight: 'bold'}}
@@ -95,14 +121,27 @@ class Checkout extends Component {
                         bottomDivider
                         subtitle={
                             <View style={styles.subtitleView}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
-                            <Text style={styles.subInformationTextPrice}>£{(drink.price * drink.quantity).toFixed(2)}</Text>
-                            </View>
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                    <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
+                                    <Text style={styles.subInformationTextPrice}>£{(drink.price * drink.quantity).toFixed(2)}</Text>
+                                </View>
                             </View>
                         }
                         badge={{ badgeStyle: {backgroundColor: colours.midnightBlack}, value: drink.quantity, textStyle: { color: colours.pureWhite}}}
                         />
+
+                        {this.state.editVisible ?
+                            <View style={styles.editContainer}>
+                            <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/>
+                            <View style={{justifyContent: 'flex-start', flexDirection: 'row'}}>
+                            <TouchableOpacity onPress={()=>{this.addValue()}}>
+                            <Icon name="plus-circle" style={styles.trash} size={30} color={colours.orange} />
+                            </TouchableOpacity>
+                            <Icon name="minus-circle" style={styles.trash} size={30} color={colours.orange}/>
+                            </View>
+                            </View>
+                            : null}
+                            </TouchableOpacity>
                     ))
                     }
                 </Animatable.View>
@@ -238,25 +277,25 @@ class Checkout extends Component {
                         <Animated.View style={{ height: animatedHeaderHeight, opacity: animatedMainContentOpacity }}>
 
                             <Animated.View style={{ height: animatedSettingsHeight, opacity: animatedMainContentOpacity }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, paddingHorizontal: 20, paddingBottom: 20 }}>
-                                    <Icon name="close" size={32} style={{ color: colours.orange }} />
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingBottom: 20 }}>
+                                    <Icon name="close" size={32} style={{ color: colours.orange }} onPress={() => this.props.emptyBasket()}/>
                                     <Text style={styles.orderSummaryTitle} onPress={() => this.setSections(null, 'all')}>Order Summary</Text>
-                                    <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} />
+                                    <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} onPress={()=> this.onEditPress()}/>
                                 </View>
                             </Animated.View>
 
                             <View style={{ height: screenHeight/3, width: screenWidth}}>
-                                <Accordion
-                                    activeSections={activeSections}
-                                    sections={this.props.basketCategories}
-                                    touchableComponent={TouchableOpacity}
-                                    expandMultiple={this.state.multipleSelect}
-                                    renderHeader={this.renderHeader}
-                                    renderContent={this.renderContent}
-                                    duration={400}
-                                    onChange={this.setSections}
-                                />
-                                <View>
+                                {/*<View>*/}
+                                    {/*{this.state.editVisible ? <CheckBox*/}
+                                        {/*right*/}
+                                        {/*title='Empty Basket?'*/}
+                                        {/*checkedIcon='dot-circle-o'*/}
+                                        {/*uncheckedIcon='circle-o'*/}
+                                        {/*checked={this.state.emptyBasketChecked}*/}
+                                        {/*onPress={() => this.setState({checked: !this.state.emptyBasketChecked})}*/}
+                                    {/*/> : null}*/}
+                                {/*</View>*/}
+                            <View>
                                     <Card
                                         containerStyle={{backgroundColor: colours.midnightBlack}}>
                                         <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
@@ -272,22 +311,40 @@ class Checkout extends Component {
                                         </View>
                                     </Card>
                                 </View>
+
+                            {/* <View style={{ height: (screenHeight/6), justifyContent: 'center', alignItems: 'center'}}>
+
+                            </View> */}
                             </View>
-                            <View style={{ height: (screenHeight/6)*5.5, justifyContent: 'center', alignItems: 'center'}}>
+                        </Animated.View>
+                        <View style={{ height: 1000 }}>
+                            <Accordion
+                                activeSections={activeSections}
+                                sections={this.props.basketCategories}
+                                touchableComponent={TouchableOpacity}
+                                expandMultiple={this.state.multipleSelect}
+                                renderHeader={this.renderHeader}
+                                renderContent={this.renderContent}
+                                duration={400}
+                                onChange={this.setSections}
+                            />
+                            {this.basketItems() > 0 ?
+                            <View style={{marginTop: 20}}>
                                 <Button
-                                    ViewComponent={require('react-native-linear-gradient').default}
-                                    icon={
-                                        <Icon
-                                            name="check-circle"
-                                            size={24}
-                                            color={colours.white}
-                                            style={{
-                                                marginLeft: 20,
-                                            }}
-                                        />
+                                ViewComponent={require('react-native-linear-gradient').default}
+                                icon={
+                                    <Icon
+                                    name="check-circle"
+                                    size={24}
+                                    color={colours.white}
+                                    style={{
+                                    marginLeft: 20,
+                                    }}
+                                    />
                                     }
                                     iconRight
                                     raised
+                                    onPress={()=>{this.props.submitOrder(this.props.basket, this.props.componentId)}}
                                     title="King It!"
                                     linearGradientProps={{
                                         colors: [colours.orange, colours.midBlue],
@@ -300,24 +357,28 @@ class Checkout extends Component {
                                         paddingTop: 20,
                                         paddingBottom: 20,
                                         borderRadius: 20
-                                }}
+                                    }}
                                     titleStyle={{
                                         fontWeight: 'bold',
                                         fontSize: 24
                                     }}
-                                />
-                            </View>
-                        </Animated.View>
-                        <View style={{ height: 1000 }} />
+                                    />
+                                    </View>
+                                    : null }
+                        </View>
                     </ScrollView>
                 </Animated.View>
-
             </Animated.View>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    editContainer:{
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginLeft: 10
+    },
     container: {
         flex: 1
     },
@@ -413,15 +474,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
         fontWeight: '500',
-        color: colours.midnightBlack
+        color: colours.midnightBlack,
+        backgroundColor: colours.cream,
     },
     headerStyles: {
         backgroundColor: colours.white,
         borderBottomColor: colours.midnightBlack,
         borderBottomWidth: 5,
         borderTopColor: colours.midnightBlack,
-        borderTopWidth: 5,
-        padding: 15,
+        borderTopWidth: 5
     }
 });
 
@@ -432,5 +493,12 @@ const mapStateToProps = state => {
     }
 };
 
+const mapDispatchToProps = dispatch => {
+    return {
+      submitOrder: (basket, componentId) => dispatch(actions.submitOrder(basket, componentId)),
+      emptyBasket: () => dispatch(actions.emptyBasket())
+    };
+  };
 
-export default connect(mapStateToProps, null)(Checkout)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout)
