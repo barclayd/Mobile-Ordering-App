@@ -3,13 +3,15 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ScrollView
+  ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
 import ScrollableTabView, {
   ScrollableTabBar
 } from "react-native-scrollable-tab-view";
 import * as actions from "../../store/actions/index";
+import * as colours from "../../styles/colourScheme"
 import TabbedCategories from "./TabbedCategories/TabbedCategories";
 import Checkout from '../../components/HOC/Checkout/Checkout';
 import {Navigation} from "react-native-navigation";
@@ -21,14 +23,14 @@ class ViewDrinks extends Component {
 
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+    Navigation.events().bindComponent(this);
   }
 
   state = {
     search: "",
     drinks: [],
     categories: [],
-    drinksApi: false
+    drinksApi: false,
   };
 
   componentDidMount() {
@@ -80,8 +82,12 @@ class ViewDrinks extends Component {
                           );
                         })
                         : null}
+
                   </ScrollableTabView>
-              ) : null}
+              ) : <View style={[styles.container, styles.horizontal]}>
+              <ActivityIndicator size="large" color={colours.orange} />
+              </View>}
+
             </View>
             <View
                 style={[{flex: 0.1, backgroundColor: 'transparent' }]}>
@@ -93,6 +99,15 @@ class ViewDrinks extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
+  },
   slidingTabs: {
     flex: 1,
     top: 0,

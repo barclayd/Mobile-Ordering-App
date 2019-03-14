@@ -6,6 +6,7 @@ import * as actions from '../actions/index';
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import {Platform} from "react-native";
 import {setMainApp, setMainAppSettings} from "../../utility/navigation";
+import {emptyBasket} from '../utility';
 
 const authRedirect = (action) => {
     Promise.all([
@@ -23,6 +24,9 @@ export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("tokenExpiration");
     yield AsyncStorage.removeItem("token");
     yield AsyncStorage.removeItem("userId");
+    yield put(actions.emptyBasketStart());
+    yield emptyBasket();
+    yield put(actions.emptyBasketSuccess());
     yield put(actions.logoutSucceed());
 }
 
@@ -122,10 +126,10 @@ export function* authUserSaga(action) {
             const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.status === 200 && response.status !== 201) {
                 yield AsyncStorage.setItem("token", response.data.data.login.token);
+                yield AsyncStorage.setItem("userId", response.data.data.login.userId);
+                yield AsyncStorage.setItem("tokenExpiration", response.data.data.login.tokenExpiration);
+                yield AsyncStorage.setItem("name", response.data.data.login.name);
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
-                // yield AsyncStorage.setItem("userId", response.data.data.login.userId);
-                // yield AsyncStorage.setItem("tokenExpiration", response.data.data.login.tokenExpiration);
-                // yield AsyncStorage.setItem("name", response.data.data.login.name);
                yield authRedirect(action);
             } else {
                 yield put(actions.authFail());
@@ -139,9 +143,7 @@ export function* authUserSaga(action) {
 }
 
 export function* authCheckStateSaga(action) {
-    console.log('checking for token');
     const token = yield AsyncStorage.getItem("token");
-    console.log(token);
     if (!token) {
         yield put(actions.logout());
     } else {
@@ -160,6 +162,21 @@ export function* authCheckStateSaga(action) {
         //     );
         // }
         authRedirect(action);
+    }
+    yield put(actions.retrieveBasketStart());
+    const basket = yield AsyncStorage.getItem("basket");
+    const categories = yield AsyncStorage.getItem("categories");
+    if (basket && categories) {
+        yield put(actions.retrieveBasketSuccess(basket, categories));
+    } else {
+        yield put(actions.retrieveBasketFail());
+        yield put(actions.emptyBasketStart());
+        yield emptyBasket();
+        const basket = yield AsyncStorage.getItem("basket");
+        const categories = yield AsyncStorage.getItem("categories");
+        if (!basket && !categories) {
+            yield put(actions.emptyBasketSuccess());
+        }
     }
 }
 

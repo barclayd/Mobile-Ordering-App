@@ -8,7 +8,7 @@ module.exports = {
             const users = await User.find();
             return users.map(user => {
                 return {
-                    ...user._doc
+                    ...user._doc,
                 };
             });
         } catch (err) {
