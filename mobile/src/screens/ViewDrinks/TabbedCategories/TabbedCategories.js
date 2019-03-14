@@ -3,14 +3,15 @@ import {
   Text,
   View,
   TouchableHighlight,
+  TouchableOpacity,
   StyleSheet,
-  Dimensions,
+  Dimensions
 } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {Card} from "react-native-elements";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { Card } from "react-native-elements";
 import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/OverlayComponent";
-import * as colours from "../../../styles/colourScheme"
-import {connect} from 'react-redux';
+import * as colours from "../../../styles/colourScheme";
+import { connect } from "react-redux";
 import { SimpleStepper } from "react-native-simple-stepper";
 import * as actions from "../../../store/actions/index";
 
@@ -21,20 +22,24 @@ class TabbedCategories extends Component {
     trashCanVisible: false,
     itemSelected: "",
     quantity: 0,
-    value: 1
+    value: 1,
+    cardColour: ""
   };
 
-  openOverlay = (i) => {
+  openOverlay = i => {
     const drinkSelected = this.props.drinks[i];
     this.setState({
       isVisible: true,
-      drinkSelected: drinkSelected
+      drinkSelected: drinkSelected,
+      cardColour: "#DCDCDC"
     });
+    console.log("this.state.cardColour", this.state.cardColour);
   };
 
   onBackdropPress = () => {
     this.setState({
-      isVisible: false
+      isVisible: false,
+      cardColour: ""
     });
   };
 
@@ -44,83 +49,96 @@ class TabbedCategories extends Component {
     });
   };
 
-  _onLongPressButton = (i,u) => {
+  _onLongPressButton = (i, u) => {
     const drinkSelected = this.props.drinks[i];
     this.setState({
       itemSelected: u.name,
       drinkSelected: u
     });
-    if (this.basketItems(this.props.drinks[i].name)>0){
+    if (this.basketItems(this.props.drinks[i].name) > 0) {
       this.setState({
         trashCanVisible: !this.state.trashCanVisible
       });
     }
   };
 
-  basketItems = (name) => {
+  basketItems = name => {
     let quantity = 0;
     this.props.basket.map(drink => {
-        if (drink.name === name)
-          quantity = drink.quantity
-      });
+      if (drink.name === name) quantity = drink.quantity;
+    });
     return quantity;
-    };
+  };
 
-    valueChanged = (value)  => {
-      if (value === 0) {
-        return;
-      }
-      const drink = this.state.drinkSelected;
-      const quantity = Number(value.toFixed(2));
-      let drinksObj = {
-        ...drink,
-        quantity
+  valueChanged = value => {
+    if (value === 0) {
+      return;
+    }
+    const drink = this.state.drinkSelected;
+    const quantity = Number(value.toFixed(2));
+    let drinksObj = {
+      ...drink,
+      quantity
     };
-      this.props.updateBasket(drinksObj, 'update');
-    };
+    this.props.updateBasket(drinksObj, "update");
+  };
 
   render() {
     return (
       <View>
-        {this.props.drinks.length > 0 ? this.props.drinks.map((u, i) => {
-          return (
-            <TouchableHighlight key={i} onPress={() => this.openOverlay(i)}  onLongPress={()=> this._onLongPressButton(i,u)} underlayColor="white">
-              <Card>
-                <View style={styles.rowContainer}>
-                    <View style={styles.leftContainer}>
-                      <Text style={styles.name}>{u.name}</Text>
+        {this.props.drinks.length > 0
+          ? this.props.drinks.map((u, i) => {
+              return (
+                <TouchableOpacity
+                  key={i}
+                  onPress={() => this.openOverlay(i)}
+                  onLongPress={() => this._onLongPressButton(i, u)}
+                >
+                  <Card>
+                    <View style={styles.rowContainer}>
+                      <View style={styles.leftContainer}>
+                        <Text style={styles.name}>{u.name}</Text>
+                      </View>
+
+                      <View>
+                        <Text style={styles.price}>£{u.price}</Text>
+                      </View>
                     </View>
 
-                    <View>
-                      <Text style={styles.price}>£{u.price}</Text>
-                    </View>
-                  </View>
-                  <Text style={styles.description}>{u.nutritionInfo}</Text>
-                  <View style={styles.rowContainer}>
-                    {this.basketItems(u.name) > 0 ?
-                     <Text style={styles.quantity}>x{this.basketItems(u.name)} Pint </Text>
-                     : null
-                    }
-                    {!this.state.trashCanVisible && this.basketItems(u.name) > 0?
-                    <Icon name="sort" style={styles.trash} size={30} color={colours.orange}/>
-                    : null}
-                    {this.state.trashCanVisible &&  this.props.drinks[i].name === this.state.itemSelected?
-                    <View style={styles.rightContainer}>
-                        <Icon name="trash-o" style={styles.trash} size={30} color={colours.orange}/>
+                    <Text style={styles.description}>{u.nutritionInfo}</Text>
+
+                    <View style={styles.rowContainer}>
+
+                      {this.basketItems(u.name) > 0 ? (
+                        <Text style={styles.quantity}>
+                          x{this.basketItems(u.name)} Pint{" "}
+                        </Text>
+                      ) : null}
+
+                      {this.state.trashCanVisible &&
+                      this.props.drinks[i].name === this.state.itemSelected ? (
+                        <View style={styles.rightContainer}>
+                          <Icon
+                            name="trash-o"
+                            style={styles.trash}
+                            size={30}
+                            color={colours.orange}
+                          />
                           <SimpleStepper
-                          value={this.basketItems(u.name)}
-                          imageHeight={10}
-                          imageWidth={20}
-                          tintColor={colours.orange}
-                          valueChanged={(value) => this.valueChanged(value)}
-                        />
+                            value={this.basketItems(u.name)}
+                            imageHeight={10}
+                            imageWidth={20}
+                            tintColor={colours.orange}
+                            valueChanged={value => this.valueChanged(value)}
+                          />
+                        </View>
+                      ) : null}
                     </View>
-                    : null}
-                  </View>
-              </Card>
-            </TouchableHighlight>
-          );
-        }):null}
+                  </Card>
+                </TouchableOpacity>
+              );
+            })
+          : null}
         <OverlayComponent
           modalVisible={this.setModalVisible}
           drinkDetails={this.state.drinkSelected}
@@ -133,13 +151,13 @@ class TabbedCategories extends Component {
 }
 
 const styles = StyleSheet.create({
-  rightContainer:{
-    flexDirection: 'row',
+  rightContainer: {
+    flexDirection: "row",
     justifyContent: "flex-end",
-    width: Dimensions.get("window").width/2.3,
+    width: Dimensions.get("window").width / 2.3
   },
-  item:{
-    width: Dimensions.get("window").width/2,
+  item: {
+    width: Dimensions.get("window").width / 2
   },
   trash: {
     marginRight: 5
@@ -190,14 +208,18 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-      basket: state.basket.basket,
-      basketCategories: state.basket.categories
-  }
+    basket: state.basket.basket,
+    basketCategories: state.basket.categories
+  };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    updateBasket: (drink, basketAction) => dispatch(actions.updateBasket(drink, basketAction))
+    updateBasket: (drink, basketAction) =>
+      dispatch(actions.updateBasket(drink, basketAction))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TabbedCategories)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TabbedCategories);

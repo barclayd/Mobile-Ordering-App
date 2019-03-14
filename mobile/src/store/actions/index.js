@@ -12,9 +12,9 @@ export {
 } from './drinks'
 
 export {
-    addToOrder, addToOrderStart, addToOrderSuccess, addToOrderFail
+    submitOrder, submitOrderSuccess, submitOrderStart, submitOrderFail, orderHistory, orderHistoryFailure, orderHistoryStart, orderHistorySuccess
 } from './order'
 
 export {
-    updateBasketStart, updateBasket, updateBasketSuccess
+    updateBasketStart, updateBasket, updateBasketSuccess, emptyBasketSuccess, emptyBasketStart, emptyBasket, retrieveBasket, retrieveBasketStart, retrieveBasketSuccess, retrieveBasketFail
 } from './basket'
