@@ -14,7 +14,8 @@ import TimeAgo from './components/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./notes.svg";
 import OrderState from './OrderStates';
-import rangeScaling from "./FunctionLib.js"
+import rangeScaling from "./FunctionLib.js";
+import OutOfStockPopUpWindow from './components/out-of-stock-popup-window/out-of-stock-popup-window';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (miliseconds)
@@ -576,6 +577,8 @@ export default class App extends Component {
   scrollToPreview = () => {
     this.previewDiv.current.scrollIntoView({ behavior: 'smooth' })
   }
+
+  showOutOfStock = () => { this.state.showOutOfStock() }
   
   render() {
     return (
@@ -721,12 +724,13 @@ export default class App extends Component {
 
           <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
 
-          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} order={this.state.orderForPopup} />
-          <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
+          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
+          <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
           <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
           <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
           <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
           <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
+          <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
           
           { this.state.notificationsJSX }
 

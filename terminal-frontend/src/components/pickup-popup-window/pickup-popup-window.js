@@ -6,7 +6,6 @@ import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt, faGlassCheers } from '@fortawesome/free-solid-svg-icons';
-import OutOfStockPopUpWindow from '../out-of-stock-popup-window/out-of-stock-popup-window';
 
 export default class PickupPopupWindow extends React.Component {
     
@@ -27,7 +26,7 @@ export default class PickupPopupWindow extends React.Component {
                     <br />
                     <span className="subtitle">Mark as un-ready</span>
                 </button>
-                <button onClick={this.showOutOfStock} className="orderButton">
+                <button onClick={this.props.showOutOfStock} className="orderButton">
                     <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
                     <span className="title">Out of Stock</span>
                     <br />
@@ -54,12 +53,6 @@ export default class PickupPopupWindow extends React.Component {
                 Ordered <TimeAgo date={order.orderDate}/>, at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")}
             </span>
         ); else return (<span></span>);
-    }
-
-    buildOutOfStockPopup = (order) => {
-        if (order) return (
-            <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={order} />
-        )
     }
     
     // Only shows customer notes if some exist
@@ -96,21 +89,17 @@ export default class PickupPopupWindow extends React.Component {
 
     render () {
         return (
-            <React.Fragment>
-                <PopupWindow
-                        className="pickupPopup"
-                        title={this.buildTitle(this.props.order)}
-                        subtitle={this.buildSubtitle(this.props.order)}
-                        showCloseButton={true}
-                        showFunc={this.props.showFunc}
-                        dismissedHandler={this.props.dismissedHandler}
-                        buttons={this.buildButtons()}
-                >
-                    { this.buildChildren(this.props.order) }
-                </PopupWindow>
-
-                { this.buildOutOfStockPopup(this.props.order) }
-            </React.Fragment>
+            <PopupWindow
+                    className="pickupPopup"
+                    title={this.buildTitle(this.props.order)}
+                    subtitle={this.buildSubtitle(this.props.order)}
+                    showCloseButton={true}
+                    showFunc={this.props.showFunc}
+                    dismissedHandler={this.props.dismissedHandler}
+                    buttons={this.buildButtons()}
+            >
+                { this.buildChildren(this.props.order) }
+            </PopupWindow>
         )
     }
 }
@@ -118,5 +107,6 @@ export default class PickupPopupWindow extends React.Component {
 PickupPopupWindow.propTypes = {
     order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
+    showOutOfStock: PropTypes.func.isRequired, // Function to show out of stock window
     dismissedHandler: PropTypes.func.isRequired, // Function ran when billing popup is closed without action
 }
