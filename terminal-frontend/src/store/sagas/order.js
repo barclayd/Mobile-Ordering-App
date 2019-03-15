@@ -6,26 +6,23 @@ export function* getOrdersSaga(action) {
     yield put(actions.getOrdersStart());
     try {
         let requestBody = {
-            // query: `
-            //     query FindOrdersByUser($userInfo: ID!) {
-            //         findOrdersByUser(userInfo: $userInfo) {
-            //             drinks {
-            //                 _id
-            //                 name
-            //                 category
-            //                 price
-            //             }
-            //             collectionPoint
-            //             status
-            //             date
-            //             _id
-            //             transactionId
-            //        }
-            //     }
-            // `,
-            // variables: {
-            //     userInfo: user ? user : '5c69c7c058574e24c841ddc8'
-            // }
+            query: `
+                query {
+                    findOrders {
+                        drinks {
+                            _id
+                            name
+                            category
+                            price
+                        }
+                        collectionPoint
+                        status
+                        date
+                        _id
+                        transactionId
+                   }
+                }
+            `
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
@@ -34,9 +31,9 @@ export function* getOrdersSaga(action) {
         }
         if (response.status === 200 && response.status !== 201) {
             const fetchData = [];
-            for (let key in response.data.data.findOrdersByUser) {
+            for (let key in response.data.data.findOrders) {
                 fetchData.push(
-                    response.data.data.findOrdersByUser[key],
+                    response.data.data.findOrders[key],
                 );
             }
             yield put(actions.getOrdersSuccess(fetchData));

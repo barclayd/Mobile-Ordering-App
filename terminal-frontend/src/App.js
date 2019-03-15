@@ -2,6 +2,7 @@ import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 import QrReader from "react-qr-reader";
 import './App.css';
 import BillingPopupWindow from './components/billing-popup-window/billing-popup-window';
@@ -17,6 +18,7 @@ import {OrderStatus} from './utility/OrderStatus.js';
 import {IngredientAmounts} from './utility/IngredientAmounts.js';
 import {rangeScaling} from "./utility/UI/FunctionLib.js";
 import OutOfStockPopUpWindow from './components/out-of-stock-popup-window/out-of-stock-popup-window';
+import * as actions from './store/actions/index';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (miliseconds)
@@ -25,7 +27,7 @@ const validScanCooldown = 3000; // Delay before accepting more QR codes after a 
 const maxCollapsedOrdersToShow = 3; // How many orders show in a collapsed stack before fading to nothing
 const collapsedOrderOpacityOffset = 35; // Opacity dim amount for collapsed awaiting orders
 
-export default class App extends Component {
+class App extends Component {
   constructor (props) {
     super(props);
 
@@ -634,8 +636,9 @@ export default class App extends Component {
   };
 
   componentDidMount() {
+    this.props.getOrders();
     this.loadNotificationsJSX();
-    setInterval(this.loadNotificationsJSX, notificationDuration + 1)
+    setInterval(this.loadNotificationsJSX, notificationDuration + 1);
   }
 
   ToggleAwaitingCollapse = (event) => {
@@ -828,3 +831,11 @@ export default class App extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getOrders: () => dispatch(actions.getOrders())
+  }
+};
+
+export default connect(null, mapDispatchToProps)(App);
