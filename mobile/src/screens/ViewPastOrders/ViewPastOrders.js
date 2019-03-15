@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import * as colours from './../../styles/colourScheme'
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import {Card, ListItem} from "react-native-elements";
+import ShowOrder from '../../components/UI/Overlays/ShowOrder';
 
 class componentName extends Component {
 
   state = {
-    pastOrders: []
+    pastOrders: [],
+    selectedOrder: null,
+    showOrderOverlay: false
   };
 
   componentDidMount() {
@@ -23,13 +26,22 @@ class componentName extends Component {
     }
   }
 
+  toggleOrderOverlay = () => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        showOrderOverlay: !prevState.showOrderOverlay
+      }
+    })
+  };
+
   render() {
     const spinner = <ActivityIndicator size="large" color={colours.orange} />;
     let renderPastOrders = null;
     if (this.state.pastOrders) {
       renderPastOrders = this.state.pastOrders.map((order,i) => {
       return (
-                <Card
+          <Card
                 key={i}
                 title={order.transactionId ? `#${order.transactionId.slice(0, 7).toUpperCase()}` : `#${Math.random().toString(36).substring(2, 9).toUpperCase()}` }
                 containerStyle={{backgroundColor: colours.lightGrey}}
@@ -60,7 +72,12 @@ class componentName extends Component {
     return (
           <View style={[styles.container]}>
             <ScrollView>
-            <View>{this.props.ordersLoading ? spinner : renderPastOrders}</View>
+              <TouchableOpacity onPress={() => this.toggleOrderOverlay()}>
+                {this.props.ordersLoading ? spinner : renderPastOrders}
+              </TouchableOpacity>
+              <ShowOrder
+                  visible={this.state.showOrderOverlay}
+                  hideOrder={this.toggleOrderOverlay}/>
             </ScrollView>
           </View>
       );
