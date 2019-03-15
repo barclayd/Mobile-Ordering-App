@@ -24,7 +24,6 @@ class MobilePayments extends Component {
     };
 
     onInputChange = (formData) => {
-        console.log(formData);
         this.setState({
             number: {
                 valid: formData.status.number === 'valid',
@@ -42,7 +41,6 @@ class MobilePayments extends Component {
     };
 
     render() {
-        console.log(this.state);
         return (
             <Overlay
                 animationType="slide"
@@ -89,7 +87,7 @@ class MobilePayments extends Component {
                                 color={colours.white}
                                 disabled={!this.state.cvc.valid || !this.state.number.valid || !this.state.expiration.valid}
                                 textColor={colours.orange}
-                                onPress={this.props.submitOrder}>
+                                onPress={() => this.props.submitOrder(this.state)}>
                                 Pay
                             </ButtonBackground>
                         </View>
@@ -129,8 +127,6 @@ const styles = StyleSheet.create({
     header: {
         fontWeight: 'bold',
         color: colours.white,
-        borderColor: colours.darkGrey,
-        borderWidth: 3,
         fontSize: 24,
         textAlign: 'center'
     }

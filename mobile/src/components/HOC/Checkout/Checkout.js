@@ -71,7 +71,6 @@ class Checkout extends Component {
     }
 
     addValue = () => {
-        console.log("addValue");
     };
 
     basketItems = () => {
@@ -100,8 +99,10 @@ class Checkout extends Component {
         });
     };
 
-    onSubmitOrder = () => {
-        this.props.submitOrder(this.props.basket, this.props.componentId);
+    onSubmitOrder = (paymentInfo) => {
+        const basketPrice = this.basketPrice();
+        console.log(basketPrice);
+        this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, basketPrice);
         this.setState({
             showPaymentOverlay: false
         })
@@ -516,7 +517,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-      submitOrder: (basket, componentId) => dispatch(actions.submitOrder(basket, componentId)),
+      submitOrder: (basket, componentId, paymentInfo, basketPrice) => dispatch(actions.submitOrder(basket, componentId, paymentInfo, basketPrice)),
       emptyBasket: () => dispatch(actions.emptyBasket())
     };
   };

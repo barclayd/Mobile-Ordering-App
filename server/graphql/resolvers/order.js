@@ -27,8 +27,11 @@ module.exports = {
                 throw new Error ('Invalid user account to process order');
             }
             const generatedTransactionId = uuid();
+            const transactionId = generatedTransactionId.toString().substring(0, 6).toUpperCase();
+            const token = await req.get('Payment');
+            const orderPrice = await req.get('Checkout');
             // process payment with stripe
-            const userPayment = await processPayment(null, 9.99, generatedTransactionId, 'uk');
+            const userPayment = await processPayment(token, parseInt(orderPrice), transactionId, 'gbp');
             if (!userPayment) {
                 // userPayment failed
                 throw new Error ('Attempt to process user payment failed.');
@@ -40,7 +43,7 @@ module.exports = {
                 orderAssignedTo: args.orderInput.orderAssignedTo,
                 date: dateToString(args.orderInput.date),
                 userInfo: user,
-                transactionId: generatedTransactionId
+                transactionId: transactionId
             });
             const result = await createdOrder.save();
             return transformOrder(result);
