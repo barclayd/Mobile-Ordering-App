@@ -19,6 +19,7 @@ module.exports = buildSchema(`
             category: String!
             nutritionInfo: String!
             price: String!
+            quantity: Int
     }
     
     type Ingredient {
