@@ -33,8 +33,6 @@ class AddDrinks extends Component {
       quantity
     };
     let updateMethod = 'add';
-    console.log(this.props.basket);
-    console.log(drink);
     this.props.basket.filter(basketDrink => {
       if (basketDrink.name === drink.name) {
         updateMethod = 'update';

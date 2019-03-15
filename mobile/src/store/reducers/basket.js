@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-import {updateObject, retrieveBasket, retrieveCategories} from "../utility";
+import {updateObject, retrieveBasket, retrieveCategories, addUpdateBasket, addUpdateCategories, updateUpdateBasket, deleteUpdateCategories, deleteUpdateBasket} from "../utility";
 
 const initialState = {
     loading: null,
@@ -18,32 +18,25 @@ const updateBasketStart = (state, action) => {
 const updateBasketSuccess = (state, action) => {
     if (action.basketAction === 'add') {
         return updateObject(state, {
-            basket: state.basket.concat(action.drink),
-            categories: (!state.categories.includes(action.drink.category)) ? state.categories.concat(action.drink.category) : state.categories,
+            basket: addUpdateBasket(state.basket, action.drink),
+            categories: addUpdateCategories(state.categories, action.drink),
             loading: false,
             error: false,
             saved: true
         });
     }
     if (action.basketAction === 'update') {
-        const oldDrinkObject = state.basket.filter(drink => drink.name === action.drink.name);
-        const updatedQuantity = action.drink.quantity;
-        const newDrinkObject = {
-            ...oldDrinkObject[0],
-            quantity: updatedQuantity + oldDrinkObject[0].quantity
-        };
         return updateObject(state, {
-            basket: state.basket.filter(drink => drink.name !== action.drink.name).concat(newDrinkObject),
+            basket: updateUpdateBasket(state.basket, action.drink),
             loading: false,
             error: false,
             saved: true
         });
     }
     if (action.basketAction === 'delete') {
-        const countIn = state.basket.filter(drink => drink === action.drink.category).length > 1;
         return updateObject(state, {
-            drink: state.basket.filter(drink => drink.name !== action.drink.name),
-            categories: countIn ? state.categories : state.categories.includes(action.drink.category) ? state.categories.filter(category => category !== action.drink.category) : state.categories,
+            drink: deleteUpdateBasket(state.basket, action.drink),
+            categories: deleteUpdateCategories(state.basket, state.categories, action.drink),
             loading: false,
             error: false,
             saved: true
