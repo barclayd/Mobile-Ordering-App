@@ -5,7 +5,7 @@ const buttonWithBackground = props => {
 
     const content = (
         <View style={[styles.button, {backgroundColor: props.color}, props.disabled ? styles.disabledButtonBackground : null ]}>
-            <Text style={[styles.buttonTextStyle, {color: props.textColor}, props.disabled ? styles.disabledButtonText : null ]}>{props.children}</Text>
+            <Text style={[styles.buttonTextStyle, {color: props.textColor}, props.disabled ? styles.disabledButtonText : null,  ]}>{props.children}</Text>
         </View>
     );
     if (props.disabled) {

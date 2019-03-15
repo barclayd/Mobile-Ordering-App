@@ -51,7 +51,7 @@ module.exports = {
     findOrdersByUser: async ({userInfo}) => {
         try {
             const foundOrders = await Order.find({userInfo}).populate('userInfo');
-            return foundOrders.map(async foundOrder => {
+            return foundOrders.reverse().map(async foundOrder => {
                 const modifiedUserInfo = {
                     ...foundOrder.userInfo._doc,
                     password: null
@@ -75,7 +75,7 @@ module.exports = {
     findOrders: async () => {
         try {
             const foundOrders = await Order.find().populate('userInfo');
-            return foundOrders.map(async foundOrder => {
+            return foundOrders.reverse().map(async foundOrder => {
                 const returnedDrinks = await drinks(foundOrder.drinks);
                 return {
                     ...foundOrder._doc,
