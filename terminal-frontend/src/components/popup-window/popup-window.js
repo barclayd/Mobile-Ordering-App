@@ -1,36 +1,36 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
 
-export default class PopupWindow extends React.Component {
+class PopupWindow extends Component {
   constructor(props) {
-    super(props)
-    this.state = {
-      visible: false,
-      topShadowDisplay: "none"
-    }
-
-    this.popupChildrenContainer = React.createRef();
+    super(props);
+      this.popupChildrenContainer = React.createRef();
   }
-  
+
+  state = {
+    visible: false,
+    topShadowDisplay: "none"
+  };
+
   ShowPopup = () => {
     this.setState({visible: true}, this.updateScrollShadows);
-  }
+  };
   HidePopup = () => {
     this.setState({visible: false})
-  }
+  };
   DismissPopup = () => {
     if (this.props.dismissedHandler) {
       this.props.dismissedHandler() // Tell parent that the window was forcefully dismissed (not directly hidden with HidePopup i.e. after marking an order complete)
     }
     this.HidePopup()
-  }
-  
+  };
+
   keyPressed = (event) => {
     // Listen for escape key to close popup
     if (event.keyCode === 27)
       this.DismissPopup();
-  }
+  };
   componentDidMount () {
     this.props.showFunc(this.ShowPopup); // Run func from prop binding this.ShowPopup from this instance to allow parent to call ShowPopup() from state
     document.addEventListener("keydown", this.keyPressed, false);
@@ -39,7 +39,8 @@ export default class PopupWindow extends React.Component {
 
   handleScroll = (event) => {
     this.updateScrollShadows();
-  }
+  };
+
   updateScrollShadows = () => {
     let scrollElement = this.popupChildrenContainer.current;
 
@@ -57,7 +58,7 @@ export default class PopupWindow extends React.Component {
     } else {
       this.setState({bottomShadowDisplay: "block"})
     }
-  }
+  };
 
 
   componentWillUnmount () {
@@ -112,7 +113,7 @@ export default class PopupWindow extends React.Component {
                 </div>
             </div>
         </div>
-      )
+      );
     else return null
   }
 }
@@ -127,4 +128,6 @@ PopupWindow.propTypes = {
   dismissedHandler: PropTypes.func,
   closePopup: PropTypes.bool, // If set to true the window will close
   buttons: PropTypes.object // JSX buttons to show at bottom
-}
+};
+
+export default PopupWindow;

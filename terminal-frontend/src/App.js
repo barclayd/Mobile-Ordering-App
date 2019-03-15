@@ -193,7 +193,7 @@ export default class App extends Component {
               ]
             }
           ],
-          notes: "pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!",
+          notes: "Please don't put a lime in blue VK as I am allergic",
           status: OrderStatus.IN_PROGRESS
         },
         {
@@ -440,7 +440,7 @@ export default class App extends Component {
 
       awaitingOrdersClass: "collapsed",
       awaitingOrdersCollapsed: true,
-    }
+    };
 
     let awaitingOrdersIndexes=[], inProgressOrdersIndexes=[], pendingOrders=[];
     for (let orderIndex in this.state.orders) {
@@ -456,7 +456,7 @@ export default class App extends Component {
           pendingOrders.push(order);
       }
     }
-    
+
     this.state.awaitingOrdersIndexes = awaitingOrdersIndexes;
     this.state.inProgressOrdersIndexes = inProgressOrdersIndexes;
     this.state.pendingOrders = pendingOrders;
@@ -477,7 +477,7 @@ export default class App extends Component {
         description: description,
         date: new Date(),
         isDismissed: false,
-      }
+      };
 
       // Add notification to notifications state
       this.setState((prevState) => {
@@ -486,30 +486,30 @@ export default class App extends Component {
         }
       }, () => {
         // Re-render notifications
-        this.loadNotificationsJSX()
+        this.loadNotificationsJSX();
       })
     })
-  }
+  };
 
   getStaffMemberFullName = (staffID) => {
-    let staffMember = this.state.staffMembers.find(x => x.id === staffID)
+    let staffMember = this.state.staffMembers.find(x => x.id === staffID);
     return staffMember.firstName + " " + staffMember.surname;
-  }
+  };
 
   // Takes an order index to get an order object to set orderForPopup state obj
   setOrderForPopup = (orderIndex, callback) => {
     this.setState({orderForPopup: this.state.orders[orderIndex]}, callback());
-  }
+  };
 
   // Displays billing popup for order by order index
   showBilling = (orderIndex) => {
     this.setOrderForPopup(orderIndex, () => { this.state.showBilling() });
-  }
+  };
 
   // Displays customer notes popup for order by order index
   showNotes = (orderIndex) => {
     this.setOrderForPopup(orderIndex, () => { this.state.showNotes() });
-  }
+  };
 
   handleScan = (data) => {
     if (data) {
@@ -520,7 +520,7 @@ export default class App extends Component {
       try {
         let qrJSON = JSON.parse(data); // Attempt to parse QR data to see if it contains valid JSON
         if (qrJSON.orderID && new Date() - this.state.lastValidScan > validScanCooldown) { // Check the JSON contains an order ID, then run the pickup function
-          this.pickupOrder(qrJSON.orderID, qrJSON.customerID)
+          this.pickupOrder(qrJSON.orderID, qrJSON.customerID);
           this.setState({
             lastValidScan: new Date()
           });
@@ -530,19 +530,20 @@ export default class App extends Component {
         console.error(error);
       }
     }
-  }
+  };
+
   handleError = (err) => {
     console.error(err);
-  }
+  };
 
   // Handler to re-enable order scanning for the same order when knowingly dismissed by bartender
   pickupPopupDismissed = () => {
     this.setState({orderWindowOpen: null})
-  }
+  };
 
   // Strict func that takes order ID and corrisponding customer ID from QR to prevent order code theft
   pickupOrder = (orderID, customerID) => {
-    let order = this.state.orders.find(order => order.id === orderID && order.customerID === customerID) // Find order sharing the same ID and customer ID
+    let order = this.state.orders.find(order => order.id === orderID && order.customerID === customerID); // Find order sharing the same ID and customer ID
 
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
@@ -555,7 +556,7 @@ export default class App extends Component {
     } else if (!order) {
       this.addNotification("error", "Scan error", "Customer QR has been tampered with!")
     }
-  }
+  };
 
   // Relaxed version of pickup order, used for bartenders to manaully input just an order ID (not corrisponding customer ID)
   pickupOrderInsecure = (orderID) => {
@@ -569,7 +570,7 @@ export default class App extends Component {
     } else {
       this.addNotification("error", "Order not found", "No order with code " + orderID + " exists!")
     }
-  }
+  };
 
   renderCustomerNotes = (orderIndex, notes) => {
     if (notes) {
@@ -586,18 +587,18 @@ export default class App extends Component {
         </div>
       )
     }
-  }
+  };
 
   getNotificationIconJSX(notificationClass) {
     switch (notificationClass) {
       case "info":
-        return <FontAwesomeIcon icon={faInfo} />
+        return <FontAwesomeIcon icon={faInfo} />;
       case "success":
-        return <FontAwesomeIcon icon={faTrophy} />
+        return <FontAwesomeIcon icon={faTrophy} />;
       case "warning":
-        return <FontAwesomeIcon icon={faExclamationTriangle} />
+        return <FontAwesomeIcon icon={faExclamationTriangle} />;
       default: // "error"
-        return <FontAwesomeIcon icon={faExclamation} />
+        return <FontAwesomeIcon icon={faExclamation} />;
     }
   }
 
@@ -627,13 +628,13 @@ export default class App extends Component {
         })
       }
       </div>
-    )
+    );
 
     this.setState({notificationsJSX: notificationsJSX})
-  }
+  };
 
   componentDidMount() {
-    this.loadNotificationsJSX()
+    this.loadNotificationsJSX();
     setInterval(this.loadNotificationsJSX, notificationDuration + 1)
   }
 
@@ -644,16 +645,16 @@ export default class App extends Component {
       newStyle = "";
       collapsed = false;
     }
-      
-    this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed})
-  }
+
+    this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed});
+  };
 
   scrollToPreview = () => {
-    this.previewDiv.current.scrollIntoView({ behavior: 'smooth' })
-  }
+    this.previewDiv.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
-  showOutOfStock = () => { this.state.showOutOfStock() }
-  
+  showOutOfStock = () => { this.state.showOutOfStock() };
+
   render() {
     return (
       <div className="App">
@@ -773,7 +774,7 @@ export default class App extends Component {
                 })
               }
           </div>
-          
+
           <div className="pendingOrderButtons">
             <button className="pendingOrderButton">
               <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
@@ -805,7 +806,7 @@ export default class App extends Component {
           <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
           <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
           <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
-          
+
           { this.state.notificationsJSX }
 
           {

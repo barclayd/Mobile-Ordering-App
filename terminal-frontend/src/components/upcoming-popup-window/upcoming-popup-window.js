@@ -5,9 +5,7 @@ import PopupWindow from '../popup-window/popup-window'
 import TimeAgo from '../time-ago-clean/time-ago-clean'
 import MultiColumnItemList from '../multi-column-item-list/multi-column-item-list';
 
-export default class UpcomingPopupWindow extends React.Component {
-    render () {
-        return (
+const UpcomingPopupWindow = props => (
             <PopupWindow
                     className="upcomingOrdersPopup"
                     title={"Upcoming orders:"}
@@ -17,19 +15,19 @@ export default class UpcomingPopupWindow extends React.Component {
                         </span>
                     )}
                     showCloseButton={true}
-                    showFunc={this.props.showFunc}
+                    showFunc={props.showFunc}
             >
                 <div className="ordersContainer">
                     {
-                        this.props.pendingOrders.map((orderData) => {
+                        props.pendingOrders.map((orderData) => {
                             return (
                                 <div key={orderData.id} className="orderContainer in-progress">
 
                                     <MultiColumnItemList orderItems={orderData.items} />
 
                                     <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
-                                    
-                                    {/* 
+
+                                    {/*
                                         { this.renderCustomerNotes(orderData.notes) }
 
                                         <div className="orderButtonsContainer">
@@ -59,11 +57,11 @@ export default class UpcomingPopupWindow extends React.Component {
                     }
                 </div>
             </PopupWindow>
-        )
-    }
-}
+);
 
 UpcomingPopupWindow.propTypes = {
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
     pendingOrders: PropTypes.array.isRequired // Pending orders to be listed
-}
+};
+
+export default UpcomingPopupWindow;

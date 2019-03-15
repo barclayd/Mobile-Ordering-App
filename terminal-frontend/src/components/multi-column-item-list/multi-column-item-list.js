@@ -1,29 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+const MultiColumnItemList = props => {
 
-// SETTINGS:
-const itemsPerOrderListColumn = 4; // How many order items show per column
+    // SETTINGS:
+    const itemsPerOrderListColumn = 4; // How many order items show per column
 
-
-
-export default class MultiColumnItemList extends React.Component {
-    renderListItems = (items) => {
+    const renderListItems = (items) => {
         return items.map((itemData) => {
             return (
                 <li key={itemData.id}><span className="quantity">{itemData.quantity}x</span>{itemData.name}</li>
             );
         })
-    }
+    };
 
-    renderMultiColumItemList = (items) => {
+    const renderMultiColumnItemList = (items) => {
         if (items.length > itemsPerOrderListColumn) {
             const columnCount = Math.floor(items.length / itemsPerOrderListColumn) + 1; // Calculate how many columns are needed
             let columns = []; // Array of arrays of rows
 
             // Build columns array
             for (let i=0; i < columnCount; i++) {
-                let startIndex = i*itemsPerOrderListColumn
+                let startIndex = i*itemsPerOrderListColumn;
                 columns.push(items.slice(startIndex, startIndex + itemsPerOrderListColumn));
             }
 
@@ -33,21 +31,21 @@ export default class MultiColumnItemList extends React.Component {
                 i++;
                 return(
                     <ul key={i} className="orderList multiColumn">
-                    { this.renderListItems(columnData) }
+                    { renderListItems(columnData) }
                     </ul>
                 )
             });
 
         } else {
-            return <ul className="orderList">{ this.renderListItems(items) }</ul>
+            return <ul className="orderList">{ renderListItems(items) }</ul>
         }
-    }
+    };
 
-    render () {
-        return this.renderMultiColumItemList(this.props.orderItems);
-    }
-}
+        return renderMultiColumnItemList(props.orderItems);
+};
 
 MultiColumnItemList.propTypes = {
     orderItems: PropTypes.array.isRequired // Items to be rendered
-}
+};
+
+export default MultiColumnItemList;

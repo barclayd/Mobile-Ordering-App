@@ -5,8 +5,9 @@ import PopupWindow from '../popup-window/popup-window'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
-export default class OutOfStockPopUpWindow extends React.Component {
-    buildIngredients = (ingredients) => { // Check item contains more ingredients than just itself
+const OutOfStockPopUpWindow = props => {
+
+    const buildIngredients = (ingredients) => { // Check item contains more ingredients than just itself
 
         if (ingredients.length > 1) {
             return (
@@ -21,8 +22,9 @@ export default class OutOfStockPopUpWindow extends React.Component {
                 </ul>
             )
         }
-    }
-    buildChildren = (order) => {
+    };
+
+    const buildChildren = (order) => {
         if (order) return (
             <React.Fragment>
                 <div className="indentedContent">
@@ -31,7 +33,7 @@ export default class OutOfStockPopUpWindow extends React.Component {
                             return (
                                 <li key={incrementer}>
                                     <span className="item">{itemData.name}</span>
-                                    { this.buildIngredients(itemData.ingredients) }
+                                    { buildIngredients(itemData.ingredients) }
                                 </li>
                             )
                         })}
@@ -39,9 +41,9 @@ export default class OutOfStockPopUpWindow extends React.Component {
                 </div>
             </React.Fragment>
         ); else return "";
-    }
+    };
 
-    buildButtons = () => {
+    const buildButtons = () => {
         return (
             <div className="popupButtonsContainer">
                 <button className="orderButton">
@@ -59,25 +61,25 @@ export default class OutOfStockPopUpWindow extends React.Component {
                 </button>
             </div>
         )
-    }
+    };
 
-    render () {
        return (
             <PopupWindow
                     className="outofStockPopup"
                     title="OUT OF STOCK:"
                     subtitle={<span>Tap items or ingredients to mark out of stock</span>}
                     showCloseButton={true}
-                    showFunc={this.props.showFunc}
-                    buttons={ this.buildButtons() }
+                    showFunc={props.showFunc}
+                    buttons={buildButtons()}
             >
-                { this.buildChildren(this.props.order) }
+                { buildChildren(props.order) }
             </PopupWindow>
         )
-    }
-}
+};
 
 OutOfStockPopUpWindow.propTypes = {
     order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
-}
+};
+
+export default OutOfStockPopUpWindow;

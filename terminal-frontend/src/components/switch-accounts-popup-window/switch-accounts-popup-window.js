@@ -1,10 +1,9 @@
-
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
 import PopupWindow from '../popup-window/popup-window'
 
-export default class SwitchAccountsPopupWindow extends React.Component {
+class SwitchAccountsPopupWindow extends Component {
     render () {
         return (
             <PopupWindow
@@ -35,4 +34,6 @@ export default class SwitchAccountsPopupWindow extends React.Component {
 SwitchAccountsPopupWindow.propTypes = {
     staffMembers: PropTypes.array,
     showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
-}
+};
+
+export default SwitchAccountsPopupWindow;
