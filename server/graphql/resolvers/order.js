@@ -75,7 +75,7 @@ module.exports = {
     },
     findOrders: async () => {
         try {
-            const foundOrders = await Order.find().populate('userInfo');
+            const foundOrders = await Order.find();
             return foundOrders.map(async foundOrder => {
                 const returnedDrinks = await drinks(foundOrder.drinks);
                 return {
@@ -94,21 +94,20 @@ module.exports = {
             throw err;
         }
     },
-    findOrderById: async ({_id}) => {
+    findOrderById: async ({id}) => {
         try {
-            const foundOrder = await Order.findOne({_id});
-            console.log('foundOrder',foundOrder.userInfo)
-                const returnedDrinks = await drinks(foundOrder.drinks);
-                return {
-                    _id: _id,
-                    drinks: returnedDrinks,
-                    collectionPoint: foundOrder.collectionPoint,
-                    status: foundOrder.status,
-                    orderAssignedTo: foundOrder.orderAssignedTo,
-                    date: dateToString(foundOrder._doc.date),
-                    userInfo: foundOrder.userInfo,
-                    // transactionId: foundOrder.transactionId
-                };
+            const foundOrder = await Order.findOne({_id: id}).populate('userInfo');
+            const returnedDrinks = await drinks(foundOrder.drinks);
+            return {
+                _id: foundOrder._id,
+                drinks: returnedDrinks,
+                collectionPoint: foundOrder.collectionPoint,
+                status: foundOrder.status,
+                orderAssignedTo: foundOrder.orderAssignedTo,
+                date: dateToString(foundOrder._doc.date),
+                userInfo: foundOrder.userInfo,
+                transactionId: foundOrder.transactionId
+            };
         } catch (err) {
             console.log(err);
             throw err;
