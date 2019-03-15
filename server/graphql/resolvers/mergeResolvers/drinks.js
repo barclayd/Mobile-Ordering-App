@@ -1,18 +1,19 @@
 const Drink = require('../../../models/drink');
-const {quantityCalculator} = require('../../../helpers/quantityCalculator');
 
 const drinks = async (drinkIds) => {
     try {
-        const searchedDrinks = await Drink.find({_id: {$in: drinkIds}});
-        console.log(searchedDrinks);
-        const drinkQuantity = quantityCalculator(drinkIds);
-        searchedDrinks.map(drink => {
+        const foundDrinks = [];
+        await drinkIds.forEach(id => {
+            const drink = Drink.findOne({_id: id});
+            foundDrinks.push(drink);
+        });
+        await foundDrinks.map(drink => {
             return {
                 ...drink.doc,
                 _id: drink.id
             }
         });
-        return searchedDrinks;
+        return foundDrinks;
     } catch (err) {
         console.log(err);
         throw err;
