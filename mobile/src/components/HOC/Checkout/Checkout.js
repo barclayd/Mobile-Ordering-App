@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, TouchableHighlight} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import * as actions from "../../../store/actions/index"
 import ApplePay from '../../../assets/apple-pay-payment-mark.svg';
 import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
+import Payment from '../../UI/Overlays/Payment';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -20,7 +21,8 @@ class Checkout extends Component {
         activeSections: [],
         multipleSelect: true,
         editVisible: false,
-        emptyBasketChecked: false
+        emptyBasketChecked: false,
+        showPaymentOverlay: false
     };
 
 
@@ -163,6 +165,15 @@ class Checkout extends Component {
         }
     };
 
+    togglePaymentOverlay = () => {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                showPaymentOverlay: !prevState.showPaymentOverlay
+            }
+        })
+    };
+
     renderHeader = (section, _, isActive) => {
         return (
             <Animatable.View
@@ -174,6 +185,22 @@ class Checkout extends Component {
                     <Text style={styles.headerText}>{section}</Text>
                 </View>
             </Animatable.View>
+        );
+    };
+
+    showApplePayAlert = () => {
+        Alert.alert(
+            'ApplePay Not Available',
+            'Please try again soon when we hope to have Apple Pay supported. \n Tap OK to Pay with Card instead.',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'OK', onPress: () => this.togglePaymentOverlay()},
+            ],
+            {cancelable: false},
         );
     };
 
@@ -318,51 +345,20 @@ class Checkout extends Component {
                                 duration={400}
                                 onChange={this.setSections}
                             />
+                            <Payment
+                                visible={this.state.showPaymentOverlay}
+                                hidePayment={this.togglePaymentOverlay}/>
                             {this.basketItems() > 0 ?
                             <View style={{marginTop: 20}}>
-                                {/*<Button*/}
-                                {/*ViewComponent={require('react-native-linear-gradient').default}*/}
-                                {/*icon={*/}
-                                    {/*<Icon*/}
-                                    {/*name="check-circle"*/}
-                                    {/*size={24}*/}
-                                    {/*color={colours.white}*/}
-                                    {/*style={{*/}
-                                    {/*marginLeft: 20,*/}
-                                    {/*}}*/}
-                                    {/*/>*/}
-                                    {/*}*/}
-                                    {/*iconRight*/}
-                                    {/*raised*/}
-                                    {/*onPress={()=>{this.props.submitOrder(this.props.basket, this.props.componentId)}}*/}
-                                    {/*title="King It!"*/}
-                                    {/*linearGradientProps={{*/}
-                                        {/*colors: [colours.orange, colours.midBlue],*/}
-                                        {/*start: { x: 0, y: 0.5 },*/}
-                                        {/*end: { x: 1, y: 0.5 },*/}
-                                    {/*}}*/}
-                                    {/*buttonStyle={{*/}
-                                        {/*paddingLeft: (screenWidth/4),*/}
-                                        {/*paddingRight: (screenWidth/4),*/}
-                                        {/*paddingTop: 20,*/}
-                                        {/*paddingBottom: 20,*/}
-                                        {/*borderRadius: 20*/}
-                                    {/*}}*/}
-                                    {/*titleStyle={{*/}
-                                        {/*fontWeight: 'bold',*/}
-                                        {/*fontSize: 24*/}
-                                    {/*}}*/}
-                                    {/*/>*/}
                                     <View style={styles.paymentButtons}>
                                         <TouchableHighlight>
-                                            <ButtonBackground color={colours.orange} textColor={colours.white}>
+                                            <ButtonBackground color={colours.orange} textColor={colours.pureWhite} onPress={() => this.togglePaymentOverlay()}>
                                                 Pay with Card
                                             </ButtonBackground>
                                         </TouchableHighlight>
-                                        <TouchableHighlight onPress={() => console.log('Hello')} style={styles.applePayButton}>
+                                        <TouchableHighlight onPress={() => this.showApplePayAlert()} style={styles.applePayButton}>
                                            <ApplePay width={Dimensions.get('window').width/4} height={Dimensions.get('window').height/8}/>
                                         </TouchableHighlight>
-
                                     </View>
                                     </View>
                                     : null }

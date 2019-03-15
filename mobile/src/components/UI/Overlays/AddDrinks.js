@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { View, Text, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { Overlay } from "react-native-elements";
 import { SimpleStepper } from "react-native-simple-stepper";
-import * as colours from "../../../../styles/colourScheme";
-import * as actions from "../../../../store/actions/index";
+import * as colours from "../../../styles/colourScheme";
+import * as actions from "../../../store/actions";
 import { connect } from "react-redux";
 
-class OverlayComponent extends Component {
+class AddDrinks extends Component {
 
   state = {
     value: 1,
@@ -170,4 +170,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OverlayComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(AddDrinks);
