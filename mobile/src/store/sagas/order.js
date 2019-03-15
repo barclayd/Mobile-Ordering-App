@@ -1,6 +1,7 @@
 import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../../axios-instance';
+import stripe from 'tipsi-stripe'
 import {AsyncStorage} from 'react-native';
 import {
     popToRoot,
@@ -14,17 +15,35 @@ const orderRedirect = async () => {
 };
 
 export function* submitOrderSaga(action) {
-    let date = new Date();
+
+    yield stripe.setOptions({
+        publishableKey: 'pk_test_YTzEkzlEFVjyy6GAez7JqTse'
+    });
+
+    const expMonth = parseInt(action.paymentInfo.expiration.value.substring(0, action.paymentInfo.expiration.value.indexOf("/")));
+    const expYear = parseInt(action.paymentInfo.expiration.value.split('/').pop());
+
+    const payment = {
+        number: action.paymentInfo.number.value,
+        cvc: action.paymentInfo.cvc.value,
+        expMonth,
+        expYear
+    };
+
+    const token = yield stripe.createTokenWithCard(payment);
+    const orderPrice = parseFloat(action.basketPrice) * 100;
+
+    const date = new Date().toISOString();
     const user = yield AsyncStorage.getItem('userId');
     yield put(actions.submitOrderStart());
     let drinksList = [];
     action.order.map(drink => {
       if (drink.quantity > 1)
         for (let i = 0; i < drink.quantity; i++){
-          drinksList.push(drink._id)
+          drinksList.push(drink._id);
         }
         else {
-          drinksList.push(drink._id)
+          drinksList.push(drink._id);
         }
     });
     console.log(drinksList);
@@ -62,7 +81,12 @@ export function* submitOrderSaga(action) {
                 userInfo: user ? user : '5c69c7c058574e24c841ddc8'
             }
         };
-        const response = yield axios.post('/', JSON.stringify(requestBody));
+        const response = yield axios.post('/', JSON.stringify(requestBody), {
+            headers: {
+                'Payment': token.tokenId,
+                'Checkout': orderPrice
+            }
+        });
         if (response.data.errors) {
             console.log('error was found');
             yield put(actions.submitOrderFail());
