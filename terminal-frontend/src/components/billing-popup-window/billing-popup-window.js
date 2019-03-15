@@ -1,12 +1,12 @@
-﻿import React from 'react'
-import PropTypes from 'prop-types'
-import './style.css'
-import PopupWindow from '../popup-window/popup-window'
-import TimeAgo from '../time-ago-clean/time-ago-clean'
-import { DateTime } from 'luxon'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+﻿import React from 'react';
+import PropTypes from 'prop-types';
+import './style.css';
+import PopupWindow from '../popup-window/popup-window';
+import TimeAgo from '../time-ago-clean/time-ago-clean';
+import { DateTime } from 'luxon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import OrderState from '../../OrderStatuses';
+import {OrderStatus} from '../../utility/OrderStatus';
 
 const BillingPopupWindow = props => {
 
@@ -65,7 +65,7 @@ const BillingPopupWindow = props => {
 
     // Function to hide stock button if the order is awaiting collection (if user setting permits)
     const renderOutOfStockButton = (order) => {
-        if (!HideStockManagementForAwaitingCollection || order.status !== OrderState.AWAITING_COLLECTION) {
+        if (!HideStockManagementForAwaitingCollection || order.status !== OrderStatus.AWAITING_COLLECTION) {
             return (
                 <button onClick={props.showOutOfStock} className="orderButton">
                     <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>

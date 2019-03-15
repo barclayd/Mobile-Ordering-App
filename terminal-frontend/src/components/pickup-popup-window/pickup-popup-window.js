@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './style.css'
-import PopupWindow from '../popup-window/popup-window'
-import TimeAgo from '../time-ago-clean/time-ago-clean'
-import { DateTime } from 'luxon'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import './style.css';
+import PopupWindow from '../popup-window/popup-window';
+import TimeAgo from '../time-ago-clean/time-ago-clean';
+import { DateTime } from 'luxon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faTrashAlt, faGlassCheers } from '@fortawesome/free-solid-svg-icons';
 
 const PickupPopupWindow = props => {

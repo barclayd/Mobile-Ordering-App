@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
-import PropTypes from 'prop-types'
-import './style.css'
-import PopupWindow from '../popup-window/popup-window'
-import TicketMockup from "../../screenshot-mockup.png"
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import './style.css';
+import PopupWindow from '../popup-window/popup-window';
+import TicketMockup from "../../screenshot-mockup.png";
 
 class ManualPickupPopupWindow extends Component {
 
