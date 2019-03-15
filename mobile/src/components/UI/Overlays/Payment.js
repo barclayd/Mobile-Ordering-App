@@ -14,17 +14,21 @@ const mobilePayments = props => {
     return (
         <Overlay
             animationType="slide"
+            height={(screenHeight/3)*2}
             overlayBackgroundColor={colours.midnightBlack}
             overlayStyle={styles.overlayBorder}
             onBackdropPress={props.hidePayment}
             isVisible={props.visible}>
-            <CreditCardInput
-                cardScale={0.7}
-                onChange={onInputChange}
-                labelStyle={{color: colours.pureWhite}}
-                inputStyle={{color: colours.orange}}
-                allowScroll/>
-            <View style={[{height: screenHeight/5}]}>
+            <View style={[{height: screenHeight/2.5}]}>
+                <Text style={styles.header}>
+                    Checkout
+                </Text>
+                    <CreditCardInput
+                    cardScale={0.7}
+                    onChange={onInputChange}
+                    labelStyle={{color: colours.pureWhite}}
+                    inputStyle={{color: colours.orange}}
+                    allowScroll/>
             <Card
                 containerStyle={{backgroundColor: colours.midnightBlack}}>
                 <View style={styles.summary}>
@@ -39,11 +43,11 @@ const mobilePayments = props => {
                     </Text>
                 </View>
             </Card>
-            </View>
-            <View style={[{height: screenHeight/4}, styles.buttons]}>
+            <View style={[{height: screenHeight/3}, styles.buttons]}>
                 <View style={styles.buttonStyle}>
                     <ButtonBackground
                         color={colours.warningRed}
+                        onPress={props.onCancel}
                         textColor={colours.white}>
                         Cancel
                     </ButtonBackground>
@@ -51,10 +55,12 @@ const mobilePayments = props => {
                 <View style={styles.buttonStyle}>
                     <ButtonBackground
                         color={colours.orange}
-                        textColor={colours.white}>
+                        textColor={colours.white}
+                        onPress={props.submitOrder}>
                         Pay
                     </ButtonBackground>
                 </View>
+            </View>
             </View>
         </Overlay>
     )
@@ -85,6 +91,14 @@ const styles = StyleSheet.create({
     barOrderDetails2: {
         fontWeight: 'bold',
         color: colours.orange
+    },
+    header: {
+        fontWeight: 'bold',
+        color: colours.white,
+        borderColor: colours.darkGrey,
+        borderWidth: 3,
+        fontSize: 24,
+        textAlign: 'center'
     }
 });
 
