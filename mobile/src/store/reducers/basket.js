@@ -30,7 +30,7 @@ const updateBasketSuccess = (state, action) => {
         const updatedQuantity = action.drink.quantity;
         const newDrinkObject = {
             ...oldDrinkObject[0],
-            quantity: updatedQuantity
+            quantity: updatedQuantity + oldDrinkObject[0].quantity
         };
         return updateObject(state, {
             basket: state.basket.filter(drink => drink.name !== action.drink.name).concat(newDrinkObject),

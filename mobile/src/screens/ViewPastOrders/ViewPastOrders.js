@@ -36,11 +36,12 @@ class componentName extends Component {
   };
 
   render() {
-    const spinner = <ActivityIndicator size="large" color={colours.orange} />;
+    const spinner = this.props.ordersLoading ? <ActivityIndicator size="large" color={colours.orange} /> : null;
     let renderPastOrders = null;
     if (this.state.pastOrders) {
       renderPastOrders = this.state.pastOrders.map((order,i) => {
       return (
+          <TouchableOpacity onPress={() => this.toggleOrderOverlay()}>
           <Card
                 key={i}
                 title={order.transactionId ? `#${order.transactionId.slice(0, 7).toUpperCase()}` : `#${Math.random().toString(36).substring(2, 9).toUpperCase()}` }
@@ -66,15 +67,17 @@ class componentName extends Component {
                     </View>
                   }/>
                 </Card>
+          </TouchableOpacity>
       )
       });
 
     return (
           <View style={[styles.container]}>
             <ScrollView>
-              <TouchableOpacity onPress={() => this.toggleOrderOverlay()}>
-                {this.props.ordersLoading ? spinner : renderPastOrders}
-              </TouchableOpacity>
+              <View>
+                {spinner}
+                {renderPastOrders}
+              </View>
               <ShowOrder
                   visible={this.state.showOrderOverlay}
                   hideOrder={this.toggleOrderOverlay}/>

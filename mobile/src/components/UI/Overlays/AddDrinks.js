@@ -32,7 +32,15 @@ class AddDrinks extends Component {
       ...drink,
       quantity
     };
-    this.props.updateBasket(drinksObj, 'add', this.props.basket, this.props.categories);
+    let updateMethod = 'add';
+    console.log(this.props.basket);
+    console.log(drink);
+    this.props.basket.filter(basketDrink => {
+      if (basketDrink.name === drink.name) {
+        updateMethod = 'update';
+      }
+    });
+    this.props.updateBasket(drinksObj, updateMethod, this.props.basket, this.props.categories);
     this.closeModal();
 };
 

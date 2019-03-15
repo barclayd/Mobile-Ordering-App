@@ -34,7 +34,7 @@ class Checkout extends Component {
         // this.animation = new Animated.ValueXY({x:0, y: 0});
         this._panResponder = PanResponder.create({
             onMoveShouldSetPanResponder: (event, gestureState) => {
-                return (this.state.isScrollEnabled && this.scrollOffset <= 0 && gestureState.dy > 0) || !this.state.isScrollEnabled && gestureState.dy < 0;
+                return (!this.state.showPaymentOverlay && this.state.isScrollEnabled && this.scrollOffset <= 0 && gestureState.dy > 0) || !this.state.isScrollEnabled && gestureState.dy < 0;
             },
             onPanResponderGrant: (event, gestureState) => {
                 this.animation.extractOffset();
@@ -69,6 +69,10 @@ class Checkout extends Component {
             }
         })
     }
+
+    addValue = () => {
+        console.log("addValue");
+    };
 
     basketItems = () => {
         let totalItems = 0;
@@ -302,16 +306,6 @@ class Checkout extends Component {
                             </Animated.View>
 
                             <View style={{ height: screenHeight/3, width: screenWidth}}>
-                                {/*<View>*/}
-                                    {/*{this.state.editVisible ? <CheckBox*/}
-                                        {/*right*/}
-                                        {/*title='Empty Basket?'*/}
-                                        {/*checkedIcon='dot-circle-o'*/}
-                                        {/*uncheckedIcon='circle-o'*/}
-                                        {/*checked={this.state.emptyBasketChecked}*/}
-                                        {/*onPress={() => this.setState({checked: !this.state.emptyBasketChecked})}*/}
-                                    {/*/> : null}*/}
-                                {/*</View>*/}
                             <View>
                                     <Card
                                         containerStyle={{backgroundColor: colours.midnightBlack}}>
@@ -347,6 +341,8 @@ class Checkout extends Component {
                             />
                             <Payment
                                 visible={this.state.showPaymentOverlay}
+                                basketItems={this.basketItems()}
+                                basketPrice={this.basketPrice()}
                                 hidePayment={this.togglePaymentOverlay}/>
                             {this.basketItems() > 0 ?
                             <View style={{marginTop: 20}}>
