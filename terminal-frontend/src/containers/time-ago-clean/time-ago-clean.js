@@ -6,12 +6,10 @@ import TimeAgo from 'react-timeago'
 const secondsUntilTimeShown = 60; // Seconds until "just now" is no longer the time. Using 60 sec because of complaints of distracting updates/changes
 
 class TimeAgoClean extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            dateNow: new Date()
-        }
-    }
+
+    state = {
+        dateNow: new Date()
+    };
 
     // Trigger a re-render every second
     componentDidMount () {

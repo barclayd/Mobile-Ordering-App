@@ -5,12 +5,12 @@ import React, { Component } from 'react';
 import QrReader from "react-qr-reader";
 import './App.css';
 import BillingPopupWindow from './components/billing-popup-window/billing-popup-window';
-import ManualPickupPopupWindow from './components/manual-pickup-popup-window/manual-pickup-popup-window';
+import ManualPickupPopupWindow from './containers/manual-pickup-popup-window/manual-pickup-popup-window';
 import MultiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
 import PickupPopupWindow from './components/pickup-popup-window/pickup-popup-window';
 import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
-import TimeAgo from './components/time-ago-clean/time-ago-clean';
+import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./notes.svg";
 import {OrderStatus} from './utility/OrderStatus.js';
@@ -560,7 +560,7 @@ export default class App extends Component {
 
   // Relaxed version of pickup order, used for bartenders to manaully input just an order ID (not corrisponding customer ID)
   pickupOrderInsecure = (orderID) => {
-    let order = this.state.orders.find(order => order.id === orderID) // Find order by ID
+    let order = this.state.orders.find(order => order.id === orderID); // Find order by ID
     if (order) {
       if (order.status === OrderStatus.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order}, this.state.showPickup) // Show billing popup

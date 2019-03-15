@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
-import PopupWindow from '../popup-window/popup-window'
-import TimeAgo from '../time-ago-clean/time-ago-clean'
+import PopupWindow from '../../containers/popup-window/popup-window'
+import TimeAgo from '../../containers/time-ago-clean/time-ago-clean'
 import MultiColumnItemList from '../multi-column-item-list/multi-column-item-list';
 
 const UpcomingPopupWindow = props => (

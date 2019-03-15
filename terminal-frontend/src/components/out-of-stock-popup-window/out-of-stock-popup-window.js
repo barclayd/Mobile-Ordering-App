@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './style.css';
-import PopupWindow from '../popup-window/popup-window';
+import PopupWindow from '../../containers/popup-window/popup-window';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 

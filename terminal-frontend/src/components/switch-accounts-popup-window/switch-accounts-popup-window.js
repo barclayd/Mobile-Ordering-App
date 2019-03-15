@@ -1,21 +1,21 @@
-import React, {Component} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
-import PopupWindow from '../popup-window/popup-window'
+import PopupWindow from '../../containers/popup-window/popup-window'
 
-class SwitchAccountsPopupWindow extends Component {
-    render () {
+const SwitchAccountsPopupWindow = props => {
+
         return (
             <PopupWindow
                     className="switchAccountsPopup"
                     title="Switch account:"
                     subtitle={<span>Select your username to add to the hotbar</span>}
                     showCloseButton={true}
-                    showFunc={this.props.showFunc}
+                    showFunc={props.showFunc}
             >
                 <div className="staffMembersButtonContainer">
                     {
-                        this.props.staffMembers.map((staffMember) => {
+                        props.staffMembers.map((staffMember) => {
                             return (
                                 <button key={staffMember.id} className="staffMemberButton">
                                     {staffMember.firstName}
@@ -28,8 +28,7 @@ class SwitchAccountsPopupWindow extends Component {
                 </div>
             </PopupWindow>
         )
-    }
-}
+};
 
 SwitchAccountsPopupWindow.propTypes = {
     staffMembers: PropTypes.array,
