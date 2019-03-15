@@ -191,7 +191,7 @@ class Checkout extends Component {
     showApplePayAlert = () => {
         Alert.alert(
             'ApplePay Not Available',
-            'Please try again soon when we hope to have Apple Pay supported. \n Tap OK to Pay with Card instead.',
+            'Please try again soon when we hope to have Apple Pay supported.\n\nTap OK to Pay with Card instead.',
             [
                 {
                     text: 'Cancel',
