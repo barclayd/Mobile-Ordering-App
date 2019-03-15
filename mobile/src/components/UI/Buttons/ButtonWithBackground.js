@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
     button: {
         width: '100%',
         padding: 20,
-        margin: 10,
         borderRadius: 10,
         fontSize: 36,
+        margin: 10
     },
     buttonTextStyle: {
         fontWeight: 'bold',

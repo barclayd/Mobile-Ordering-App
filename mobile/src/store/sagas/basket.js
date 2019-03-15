@@ -20,8 +20,9 @@ export function* updateBasketSaga(action){
             const updatedQuantity = action.drink.quantity;
             const newDrinkObject = {
                 ...oldDrinkObject[0],
-                quantity: updatedQuantity
+                quantity: updatedQuantity + oldDrinkObject[0].quantity
             };
+            console.log(newDrinkObject);
             updatedBasket = action.oldBasketState.filter(drink => drink.name !== action.drink.name).concat(newDrinkObject);
             yield storeBasket(updatedBasket);
             break;
