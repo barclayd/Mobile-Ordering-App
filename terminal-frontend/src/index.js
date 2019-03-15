@@ -6,9 +6,11 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import ordersReducer from './store/reducers/order'
+import {watchOrders} from './store/sagas/index';
 
 const rootReducer = combineReducers({
-
+    orders: ordersReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -16,6 +18,8 @@ const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMiddleware)));
+
+sagaMiddleware.run(watchOrders);
 
 const app = (
     <Provider store={store}>
