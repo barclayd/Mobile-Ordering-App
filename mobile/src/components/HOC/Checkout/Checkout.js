@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, TouchableHighlight} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
-import {ListItem, Card, Button, withBadge, CheckBox} from 'react-native-elements';
+import {ListItem, Card, withBadge} from 'react-native-elements';
 import * as colours from '../../../styles/colourScheme';
 import {connect} from 'react-redux';
 import * as actions from "../../../store/actions/index"
+import ApplePay from '../../../assets/apple-pay-payment-mark.svg';
+import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -267,8 +269,8 @@ class Checkout extends Component {
                             <Animated.View style={{ height: animatedSettingsHeight, opacity: animatedMainContentOpacity }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingBottom: 20 }}>
                                     <Icon name="trash-o" size={32} style={{ color: colours.orange }} onPress={() => this.props.emptyBasket()}/>
-                                    <Text style={styles.orderSummaryTitle} onPress={() => this.setSections(null, 'all')}>Order Summary</Text>
-                                    <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} onPress={()=> this.onEditPress()}/>
+                                    <Text style={styles.orderSummaryTitle} onPress={() => this.setSections(null, 'all')}>Your Basket</Text>
+                                    <Icon name="ellipsis-h" size={32} style={{ color: colours.orange, marginTop: 2}} onPress={()=> this.onEditPress()}/>
                                 </View>
                             </Animated.View>
 
@@ -318,39 +320,50 @@ class Checkout extends Component {
                             />
                             {this.basketItems() > 0 ?
                             <View style={{marginTop: 20}}>
-                                <Button
-                                ViewComponent={require('react-native-linear-gradient').default}
-                                icon={
-                                    <Icon
-                                    name="check-circle"
-                                    size={24}
-                                    color={colours.white}
-                                    style={{
-                                    marginLeft: 20,
-                                    }}
-                                    />
-                                    }
-                                    iconRight
-                                    raised
-                                    onPress={()=>{this.props.submitOrder(this.props.basket, this.props.componentId)}}
-                                    title="King It!"
-                                    linearGradientProps={{
-                                        colors: [colours.orange, colours.midBlue],
-                                        start: { x: 0, y: 0.5 },
-                                        end: { x: 1, y: 0.5 },
-                                    }}
-                                    buttonStyle={{
-                                        paddingLeft: (screenWidth/4),
-                                        paddingRight: (screenWidth/4),
-                                        paddingTop: 20,
-                                        paddingBottom: 20,
-                                        borderRadius: 20
-                                    }}
-                                    titleStyle={{
-                                        fontWeight: 'bold',
-                                        fontSize: 24
-                                    }}
-                                    />
+                                {/*<Button*/}
+                                {/*ViewComponent={require('react-native-linear-gradient').default}*/}
+                                {/*icon={*/}
+                                    {/*<Icon*/}
+                                    {/*name="check-circle"*/}
+                                    {/*size={24}*/}
+                                    {/*color={colours.white}*/}
+                                    {/*style={{*/}
+                                    {/*marginLeft: 20,*/}
+                                    {/*}}*/}
+                                    {/*/>*/}
+                                    {/*}*/}
+                                    {/*iconRight*/}
+                                    {/*raised*/}
+                                    {/*onPress={()=>{this.props.submitOrder(this.props.basket, this.props.componentId)}}*/}
+                                    {/*title="King It!"*/}
+                                    {/*linearGradientProps={{*/}
+                                        {/*colors: [colours.orange, colours.midBlue],*/}
+                                        {/*start: { x: 0, y: 0.5 },*/}
+                                        {/*end: { x: 1, y: 0.5 },*/}
+                                    {/*}}*/}
+                                    {/*buttonStyle={{*/}
+                                        {/*paddingLeft: (screenWidth/4),*/}
+                                        {/*paddingRight: (screenWidth/4),*/}
+                                        {/*paddingTop: 20,*/}
+                                        {/*paddingBottom: 20,*/}
+                                        {/*borderRadius: 20*/}
+                                    {/*}}*/}
+                                    {/*titleStyle={{*/}
+                                        {/*fontWeight: 'bold',*/}
+                                        {/*fontSize: 24*/}
+                                    {/*}}*/}
+                                    {/*/>*/}
+                                    <View style={styles.paymentButtons}>
+                                        <TouchableHighlight>
+                                            <ButtonBackground color={colours.orange} textColor={colours.white}>
+                                                Pay with Card
+                                            </ButtonBackground>
+                                        </TouchableHighlight>
+                                        <TouchableHighlight onPress={() => console.log('Hello')} style={styles.applePayButton}>
+                                           <ApplePay width={Dimensions.get('window').width/4} height={Dimensions.get('window').height/8}/>
+                                        </TouchableHighlight>
+
+                                    </View>
                                     </View>
                                     : null }
                         </View>
@@ -471,6 +484,13 @@ const styles = StyleSheet.create({
         borderBottomWidth: 5,
         borderTopColor: colours.midnightBlack,
         borderTopWidth: 5
+    },
+    applePayButton: {
+    },
+    paymentButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
     }
 });
 
