@@ -100,6 +100,13 @@ class Checkout extends Component {
         });
     };
 
+    onSubmitOrder = () => {
+        this.props.submitOrder(this.props.basket, this.props.componentId);
+        this.setState({
+            showPaymentOverlay: false
+        })
+    };
+
     renderContent = (section, _, isActive) => {
         return (
             <Animatable.View
@@ -322,10 +329,6 @@ class Checkout extends Component {
                                         </View>
                                     </Card>
                                 </View>
-
-                            {/* <View style={{ height: (screenHeight/6), justifyContent: 'center', alignItems: 'center'}}>
-
-                            </View> */}
                             </View>
                         </Animated.View>
                         <View style={{ height: 1000 }}>
@@ -343,6 +346,8 @@ class Checkout extends Component {
                                 visible={this.state.showPaymentOverlay}
                                 basketItems={this.basketItems()}
                                 basketPrice={this.basketPrice()}
+                                onCancel={this.togglePaymentOverlay}
+                                submitOrder={this.onSubmitOrder}
                                 hidePayment={this.togglePaymentOverlay}/>
                             {this.basketItems() > 0 ?
                             <View style={{marginTop: 20}}>
@@ -357,7 +362,10 @@ class Checkout extends Component {
                                         </TouchableHighlight>
                                     </View>
                                     </View>
-                                    : null }
+                                : <View style={styles.emptyBasket}>
+                                    <Text style={styles.emptyBasketHeader}>Your Basket is Empty...</Text>
+                                    <Text style={styles.emptyBasketText}>Explore the thirst quenching drinks on offer in the menus</Text>
+                                </View> }
                         </View>
                     </ScrollView>
                 </Animated.View>
@@ -483,6 +491,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center'
+    },
+    emptyBasketHeader: {
+        textAlign: 'center',
+        color: colours.pureWhite,
+        fontSize: 36,
+        fontWeight: 'bold',
+        margin: 20
+    },
+    emptyBasketText: {
+        textAlign: 'center',
+        fontSize: 24,
+        color: colours.midGrey,
+        margin: 20
     }
 });
 
