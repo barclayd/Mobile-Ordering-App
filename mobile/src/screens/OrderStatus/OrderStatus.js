@@ -6,6 +6,7 @@ import {Navigation} from "react-native-navigation";
 import * as Progress from 'react-native-progress';
 import Modal from 'react-native-modal';
 import ButtonBackground from '../../components/UI/Buttons/ButtonWithBackground';
+import jwt from 'expo-jwt';
 
 
 class OrderStatus extends Component {
@@ -70,9 +71,13 @@ class OrderStatus extends Component {
             userId: this.props.userId,
             collectionId: this.props.collectionId
         };
+        const key = 'zvBT1lQV1RO9fx6f8';
+        const token = jwt.encode({
+            qrData
+        }, key);
         if (this.props.userId && this.props.collectionId) {
             qrCode = <QRCode
-                value={JSON.stringify(qrData)}
+                value={token}
                 size={300}/>
         }
 
