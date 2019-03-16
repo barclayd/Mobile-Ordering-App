@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import * as colours from '../../styles/colourScheme';
 import {Navigation} from "react-native-navigation";
 import * as Progress from 'react-native-progress';
@@ -55,13 +55,13 @@ class OrderStatus extends Component {
 
                 <View style={styles.header}>
                 <Text style={styles.status}>Order Successful</Text>
-                <Text style={styles.success}>Thank You Guy for you order!</Text>
-                <Text style={styles.orderText}>Order Number : {this.props.orderNumber}</Text>
+                <Text style={styles.success}>Thank you for your Order!</Text>
+                <Text style={styles.orderText}>Order Number: {this.props.orderNumber}</Text>
                 <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Status: Pending... </Text>
                 <Progress.Circle size={30} indeterminate={true} color={colours.orange} thickness={15}/>
                 </View>
-                <Text style={styles.orderText}>Estimated Collection Time </Text>
+                <Text style={styles.orderText}>Estimated Collection Time: 10:59pm </Text>
                 </View>
 
                 {/* <View style={styles.box}>

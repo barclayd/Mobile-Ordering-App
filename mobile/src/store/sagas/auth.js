@@ -22,6 +22,7 @@ const authRedirect = (action) => {
 export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("token");
     yield AsyncStorage.removeItem("userId");
+    yield AsyncStorage.removeItem("name");
     yield put(actions.emptyBasketStart());
     yield emptyBasket();
     yield put(actions.emptyBasketSuccess());
@@ -83,20 +84,19 @@ export function* authUserSaga(action) {
                         yield put(actions.authSuccess(res.data.data.login.token, res.data.data.login.userId, res.data.data.login.tokenExpiration, res.data.data.login.name));
                         yield AsyncStorage.setItem("token", res.data.data.login.token);
                         yield AsyncStorage.setItem("userId", res.data.data.login.userId);
-                        yield AsyncStorage.setItem("tokenExpiration", res.data.data.login.tokenExpiration);
                         yield AsyncStorage.setItem("name", res.data.data.login.name);
                         yield authRedirect(action);
                     } else {
                         yield put(actions.authFail());
-                        Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again')
+                        Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again.')
                     }
                 } catch (err) {
                     console.log(err);
                     yield put(actions.authFail());
-                    Alert.alert('Unsuccessful login 🔒', 'Authentication failed. Please try again')
+                    Alert.alert('Unsuccessful login 🔒', 'Authentication failed. Please try again.')
                 }
             } else {
-                Alert.alert('Unsuccessful sign up', 'Account sign up failed. Please try again')
+                Alert.alert('Unsuccessful sign up', 'Account sign up failed. Please try again.')
             }
         } catch (err) {
             console.log(err);
@@ -123,10 +123,11 @@ export function* authUserSaga(action) {
 
             const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.status === 200 && response.status !== 201) {
+                yield AsyncStorage.setItem("name", response.data.data.login.name);
                 yield AsyncStorage.setItem("token", response.data.data.login.token);
                 yield AsyncStorage.setItem("userId", response.data.data.login.userId);
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
-               yield authRedirect(action);
+               yield authRedirect(action, response.data.data.login.name);
             } else {
                 yield put(actions.authFail());
                 Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again')

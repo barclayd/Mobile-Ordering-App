@@ -41,7 +41,7 @@ class componentName extends Component {
     if (this.state.pastOrders) {
       renderPastOrders = this.state.pastOrders.map((order,i) => {
       return (
-          <TouchableOpacity onPress={() => this.toggleOrderOverlay()}>
+          <TouchableOpacity onPress={() => this.toggleOrderOverlay()} key={i}>
           <Card
                 key={i}
                 title={order.transactionId ? `#${order.transactionId.slice(0, 7).toUpperCase()}` : `#${Math.random().toString(36).substring(2, 9).toUpperCase()}` }
