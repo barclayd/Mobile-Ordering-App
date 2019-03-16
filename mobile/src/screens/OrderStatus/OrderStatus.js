@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 import * as colours from '../../styles/colourScheme';
 import {Navigation} from "react-native-navigation";
 import * as Progress from 'react-native-progress';
@@ -11,6 +12,10 @@ class OrderStatus extends Component {
         super(props);
         Navigation.events().bindComponent(this);
     }
+
+    state = {
+      userId: null
+    };
 
     componentWillReceiveProps(nextProps) {
         console.log(nextProps,"nextProps")
@@ -49,6 +54,18 @@ class OrderStatus extends Component {
     }
 
     render() {
+
+        let qrCode = null;
+        const qrData = {
+            userId: this.props.userId,
+            orderNumber: this.props.orderNumber
+        };
+        if (this.props.userId && this.props.orderNumber) {
+            qrCode = <QRCode
+                value={JSON.stringify(qrData)}
+                size={300}/>
+        }
+
         return (
 
             <View style={[styles.container]}>
@@ -62,6 +79,9 @@ class OrderStatus extends Component {
                 <Progress.Circle size={30} indeterminate={true} color={colours.orange} thickness={15}/>
                 </View>
                 <Text style={styles.orderText}>Estimated Collection Time: 10:59pm </Text>
+                </View>
+                <View style={styles.qrCode}>
+                    {qrCode}
                 </View>
 
                 {/* <View style={styles.box}>
@@ -131,6 +151,11 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colours.white,
+    },
+    qrCode: {
+        backgroundColor: colours.pureWhite,
+        alignSelf: 'center',
+        padding: 40
     }
 });
 

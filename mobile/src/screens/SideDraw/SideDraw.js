@@ -36,7 +36,7 @@ class SideDrawer extends Component {
   async componentDidMount() {
       this.setState({
         accountName: await this.getAccountName()
-      })
+      });
   }
 
   logoutHandler = async () => {
