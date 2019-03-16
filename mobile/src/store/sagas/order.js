@@ -9,9 +9,9 @@ import {
 } from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
-const orderRedirect = async (orderId, userId, collectionPoint, date) => {
+const orderRedirect = async (collectionId, userId, collectionPoint, date) => {
     await popToRoot('ViewMenus');
-    await setOrderStatus('ViewMenus', orderId, userId, collectionPoint, date);
+    await setOrderStatus('ViewMenus', collectionId, userId, collectionPoint, date);
 };
 
 export function* submitOrderSaga(action) {
@@ -71,6 +71,7 @@ export function* submitOrderSaga(action) {
                           name
                         }
                         date
+                        collectionId
                    } 
                 }
             `,
@@ -98,10 +99,10 @@ export function* submitOrderSaga(action) {
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
             yield put(actions.emptyBasketSuccess());
-            const orderId = response.data.data.createOrder.transactionId;
+            const collectionId = response.data.data.createOrder.collectionId;
             const collectionPoint = response.data.data.createOrder.collectionPoint;
             const date = response.data.data.createOrder.date;
-            yield orderRedirect(orderId, user, collectionPoint, date);
+            yield orderRedirect(collectionId, user, collectionPoint, date);
         }
     } catch (err) {
         yield put(actions.submitOrderFail(err));

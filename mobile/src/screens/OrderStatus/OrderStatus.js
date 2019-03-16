@@ -68,9 +68,9 @@ class OrderStatus extends Component {
         let qrCode = null;
         const qrData = {
             userId: this.props.userId,
-            orderNumber: this.props.orderNumber
+            collectionId: this.props.collectionId
         };
-        if (this.props.userId && this.props.orderNumber) {
+        if (this.props.userId && this.props.collectionId) {
             qrCode = <QRCode
                 value={JSON.stringify(qrData)}
                 size={300}/>
@@ -83,7 +83,7 @@ class OrderStatus extends Component {
                 <View style={styles.header}>
                 <Text style={styles.status}>Order Successful</Text>
                 <Text style={styles.success}>Thank you for your Order!</Text>
-                <Text style={styles.orderText}>Order Number: {this.props.orderNumber}</Text>
+                <Text style={styles.orderText}>Order Number: {this.props.collectionId}</Text>
                 <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Status: Pending... </Text>
                 <Progress.Circle size={30} indeterminate={true} color={colours.orange} thickness={15}/>
@@ -104,7 +104,7 @@ class OrderStatus extends Component {
                         swipeDirection="down"
                         onBackdropPress={() => this.toggleQRCode()}>
                         <View style={styles.modal}>
-                            <Text style={styles.header}>Order <Text style={{color: colours.orange}}>#{this.props.orderNumber}</Text> </Text>
+                            <Text style={styles.header}>Order <Text style={{color: colours.orange}}>#{this.props.collectionId}</Text> </Text>
                             <View style={{flexDirection: 'row', justifyContent: 'space-around', marginBottom: 40}}>
                                 <Text style={styles.infoText}>Collection: <Text style={{color: colours.orange}}>{this.props.collectionPoint}</Text></Text>
                                 <Text style={styles.infoText}>Order Time: <Text style={{color: colours.orange}}>{new Date(this.props.date).toTimeString().slice(0,5)}</Text></Text>
@@ -183,7 +183,9 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: 'bold',
         marginTop: 20,
-        marginBottom: 10
+        marginBottom: 10,
+        textAlign: 'center',
+        justifyContent: 'center'
     },
     modal: {
         backgroundColor: colours.pureWhite,
