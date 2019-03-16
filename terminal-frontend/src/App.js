@@ -43,6 +43,15 @@ export default class App extends Component {
               name: "VK Orange",
               price: 250,
               quantity: 1,
+              ingredients: [{
+                id: 546,
+                name: "VK Orange",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.FACTORY,
+
+              }]
+
             },
           ],
           status: OrderStatus.AWAITING_COLLECTION
@@ -206,30 +215,95 @@ export default class App extends Component {
               name: "VK Red",
               price: 250,
               quantity: 1,
+              ingredients: [ {
+                id: 222,
+                name: "VK Red",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.FACTORY,
+              }]
             },
             {
               id: 122,
               name: "Jager bomb",
               price: 125,
               quantity: 5,
+              ingredients: [{
+                id: 663,
+                name: "Jagermesiter",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.SHOT,
+                },
+              {
+                id: 197,
+                name: "Red Bull",
+                containsAlcohol: false,
+                allergens: [],
+                amount: IngredientAmounts.FILL,
+              }]
             },
             {
               id: 484,
               name: "Mojito",
               price: 450,
               quantity: 1,
+              ingredients: [{                   
+                
+                id: 48,
+                name: "Lime cordial",
+                containsAlcohol: false,
+                allergens: [],
+                amount: IngredientAmounts.FILL,
+              },
+              {
+                id: 10,
+                name: "White rum",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.DOUBLE_SHOT,
+
+              }]
             },
             {
               id: 1023,
               name: "Bottled water",
               price: 90,
               quantity: 2,
+              ingredients: [{
+                id:1010,
+                name: "Bottled Water",
+                containsAlcohol: false,
+                allergens: [],
+                amount: IngredientAmounts.FACTORY
+              }]
             },
             {
               id: 67,
               name: "Jumba juice cocktail",
               price: 750,
               quantity: 1,
+              ingredients: [{
+                  id: 105,
+                  name: "Slurp juice",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.DOUBLE_SHOT,
+                },
+                {
+                  id: 277,
+                  name: "Tomato soup",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.SHOT,
+                },
+                {
+                  id: 2386,
+                  name: "Diced Lego bricks",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.PINT,
+              }]
             }
           ],
           status: OrderStatus.PENDING
