@@ -140,12 +140,19 @@ const setViewDrinks = async (componentId, menuName) => {
     })
 };
 
-const setOrderStatus = async (componentId, orderNumber) => {
-    await Navigation.push(componentId, {
+const setOrderStatus = async (componentId, collectionId, userId, collectionPoint, date) => {
+    let component = componentId;
+    if (!componentId) {
+        component = 'ViewMenus';
+    }
+    await Navigation.push(component, {
         component: {
             name: screens.OrderStatus,
             passProps: {
-                orderNumber: orderNumber
+                collectionId,
+                userId,
+                collectionPoint,
+                date
             },
             options: {
                 topBar: {
