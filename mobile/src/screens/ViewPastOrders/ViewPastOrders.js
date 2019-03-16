@@ -58,7 +58,7 @@ class componentName extends Component {
                     <View style={styles.subtitleView}>
                       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={styles.subInformationText}>{new Date(order.date).toDateString()}</Text>
-                        <Text style={styles.subInformationText}>{new Date(order.date).toTimeString().slice(0,8)}</Text>
+                        <Text style={styles.subInformationText}>{new Date(order.date).toTimeString().slice(0,5)}</Text>
                         <Text style={styles.subInformationTextPrice}>{order.status}</Text>
                       </View>
                         {order.drinks.map((drink, index) => (

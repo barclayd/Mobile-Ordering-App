@@ -9,9 +9,9 @@ import {
 } from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
-const orderRedirect = async (orderId, userId) => {
+const orderRedirect = async (orderId, userId, collectionPoint, date) => {
     await popToRoot('ViewMenus');
-    await setOrderStatus('ViewMenus', orderId, userId);
+    await setOrderStatus('ViewMenus', orderId, userId, collectionPoint, date);
 };
 
 export function* submitOrderSaga(action) {
@@ -46,7 +46,6 @@ export function* submitOrderSaga(action) {
           drinksList.push(drink._id);
         }
     });
-    console.log(drinksList);
     try {
         let requestBody = {
             query: `
@@ -71,12 +70,13 @@ export function* submitOrderSaga(action) {
                           email
                           name
                         }
+                        date
                    } 
                 }
             `,
             variables: {
                 drinks: drinksList,
-                collectionPoint: "MOBILE APP",
+                collectionPoint: "SU Lounge",
                 status: "PENDING",
                 date: date,
                 userInfo: user ? user : '5c69c7c058574e24c841ddc8'
@@ -99,7 +99,9 @@ export function* submitOrderSaga(action) {
             yield emptyBasket();
             yield put(actions.emptyBasketSuccess());
             const orderId = response.data.data.createOrder.transactionId;
-            yield orderRedirect(orderId, user);
+            const collectionPoint = response.data.data.createOrder.collectionPoint;
+            const date = response.data.data.createOrder.date;
+            yield orderRedirect(orderId, user, collectionPoint, date);
         }
     } catch (err) {
         yield put(actions.submitOrderFail(err));
