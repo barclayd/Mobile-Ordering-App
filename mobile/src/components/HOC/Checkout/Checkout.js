@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
-import {ListItem, Card, Button, withBadge, CheckBox} from 'react-native-elements';
+import {ListItem, Card, withBadge} from 'react-native-elements';
 import * as colours from '../../../styles/colourScheme';
 import {connect} from 'react-redux';
 import * as actions from "../../../store/actions/index"
+import ApplePay from '../../../assets/apple-pay-payment-mark.svg';
+import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
+import Payment from '../../UI/Overlays/Payment';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -18,7 +21,8 @@ class Checkout extends Component {
         activeSections: [],
         multipleSelect: true,
         editVisible: false,
-        emptyBasketChecked: false
+        emptyBasketChecked: false,
+        showPaymentOverlay: false
     };
 
 
@@ -30,7 +34,7 @@ class Checkout extends Component {
         // this.animation = new Animated.ValueXY({x:0, y: 0});
         this._panResponder = PanResponder.create({
             onMoveShouldSetPanResponder: (event, gestureState) => {
-                return (this.state.isScrollEnabled && this.scrollOffset <= 0 && gestureState.dy > 0) || !this.state.isScrollEnabled && gestureState.dy < 0;
+                return (!this.state.showPaymentOverlay && this.state.isScrollEnabled && this.scrollOffset <= 0 && gestureState.dy > 0) || !this.state.isScrollEnabled && gestureState.dy < 0;
             },
             onPanResponderGrant: (event, gestureState) => {
                 this.animation.extractOffset();
@@ -66,6 +70,9 @@ class Checkout extends Component {
         })
     }
 
+    addValue = () => {
+    };
+
     basketItems = () => {
         let totalItems = 0;
         if (this.props.basket) {
@@ -90,18 +97,15 @@ class Checkout extends Component {
         this.setState({
             editVisible : !this.state.editVisible
         });
-
-        console.log("eidt button",this.state.editVisible)
     };
 
-    addValue = () => {
-        console.log("addValue")
-    };
-
-    processOrder = () => {
-        console.log("processOrder");
-        console.log("this.props.basket",this.props.basket)
-        console.log("price",this.basketPrice())
+    onSubmitOrder = (paymentInfo) => {
+        const basketPrice = this.basketPrice();
+        console.log(basketPrice);
+        this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, basketPrice);
+        this.setState({
+            showPaymentOverlay: false
+        })
     };
 
     renderContent = (section, _, isActive) => {
@@ -173,6 +177,15 @@ class Checkout extends Component {
         }
     };
 
+    togglePaymentOverlay = () => {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                showPaymentOverlay: !prevState.showPaymentOverlay
+            }
+        })
+    };
+
     renderHeader = (section, _, isActive) => {
         return (
             <Animatable.View
@@ -184,6 +197,22 @@ class Checkout extends Component {
                     <Text style={styles.headerText}>{section}</Text>
                 </View>
             </Animatable.View>
+        );
+    };
+
+    showApplePayAlert = () => {
+        Alert.alert(
+            'ApplePay Not Available',
+            'Please try again soon when we hope to have Apple Pay supported.\n\nTap OK to Pay with Card instead.',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'OK', onPress: () => this.togglePaymentOverlay()},
+            ],
+            {cancelable: false},
         );
     };
 
@@ -278,23 +307,13 @@ class Checkout extends Component {
 
                             <Animated.View style={{ height: animatedSettingsHeight, opacity: animatedMainContentOpacity }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingBottom: 20 }}>
-                                    <Icon name="close" size={32} style={{ color: colours.orange }} onPress={() => this.props.emptyBasket()}/>
-                                    <Text style={styles.orderSummaryTitle} onPress={() => this.setSections(null, 'all')}>Order Summary</Text>
-                                    <Icon name="ellipsis-v" size={32} style={{ color: colours.orange, marginTop: 2}} onPress={()=> this.onEditPress()}/>
+                                    <Icon name="trash-o" size={32} style={{ color: colours.orange }} onPress={() => this.props.emptyBasket()}/>
+                                    <Text style={styles.orderSummaryTitle} onPress={() => this.setSections(null, 'all')}>Your Basket</Text>
+                                    <Icon name="ellipsis-h" size={32} style={{ color: colours.orange, marginTop: 2}} onPress={()=> this.onEditPress()}/>
                                 </View>
                             </Animated.View>
 
                             <View style={{ height: screenHeight/3, width: screenWidth}}>
-                                {/*<View>*/}
-                                    {/*{this.state.editVisible ? <CheckBox*/}
-                                        {/*right*/}
-                                        {/*title='Empty Basket?'*/}
-                                        {/*checkedIcon='dot-circle-o'*/}
-                                        {/*uncheckedIcon='circle-o'*/}
-                                        {/*checked={this.state.emptyBasketChecked}*/}
-                                        {/*onPress={() => this.setState({checked: !this.state.emptyBasketChecked})}*/}
-                                    {/*/> : null}*/}
-                                {/*</View>*/}
                             <View>
                                     <Card
                                         containerStyle={{backgroundColor: colours.midnightBlack}}>
@@ -311,10 +330,6 @@ class Checkout extends Component {
                                         </View>
                                     </Card>
                                 </View>
-
-                            {/* <View style={{ height: (screenHeight/6), justifyContent: 'center', alignItems: 'center'}}>
-
-                            </View> */}
                             </View>
                         </Animated.View>
                         <View style={{ height: 1000 }}>
@@ -328,43 +343,30 @@ class Checkout extends Component {
                                 duration={400}
                                 onChange={this.setSections}
                             />
+                            <Payment
+                                visible={this.state.showPaymentOverlay}
+                                basketItems={this.basketItems()}
+                                basketPrice={this.basketPrice()}
+                                onCancel={this.togglePaymentOverlay}
+                                submitOrder={this.onSubmitOrder}
+                                hidePayment={this.togglePaymentOverlay}/>
                             {this.basketItems() > 0 ?
                             <View style={{marginTop: 20}}>
-                                <Button
-                                ViewComponent={require('react-native-linear-gradient').default}
-                                icon={
-                                    <Icon
-                                    name="check-circle"
-                                    size={24}
-                                    color={colours.white}
-                                    style={{
-                                    marginLeft: 20,
-                                    }}
-                                    />
-                                    }
-                                    iconRight
-                                    raised
-                                    onPress={()=>{this.props.submitOrder(this.props.basket, this.props.componentId)}}
-                                    title="King It!"
-                                    linearGradientProps={{
-                                        colors: [colours.orange, colours.midBlue],
-                                        start: { x: 0, y: 0.5 },
-                                        end: { x: 1, y: 0.5 },
-                                    }}
-                                    buttonStyle={{
-                                        paddingLeft: (screenWidth/4),
-                                        paddingRight: (screenWidth/4),
-                                        paddingTop: 20,
-                                        paddingBottom: 20,
-                                        borderRadius: 20
-                                    }}
-                                    titleStyle={{
-                                        fontWeight: 'bold',
-                                        fontSize: 24
-                                    }}
-                                    />
+                                    <View style={styles.paymentButtons}>
+                                        <TouchableHighlight>
+                                            <ButtonBackground color={colours.orange} textColor={colours.pureWhite} onPress={() => this.togglePaymentOverlay()}>
+                                                Pay with Card
+                                            </ButtonBackground>
+                                        </TouchableHighlight>
+                                        <TouchableHighlight onPress={() => this.showApplePayAlert()} style={styles.applePayButton}>
+                                           <ApplePay width={Dimensions.get('window').width/4} height={Dimensions.get('window').height/8}/>
+                                        </TouchableHighlight>
                                     </View>
-                                    : null }
+                                    </View>
+                                : <View style={styles.emptyBasket}>
+                                    <Text style={styles.emptyBasketHeader}>Your Basket is Empty...</Text>
+                                    <Text style={styles.emptyBasketText}>Explore the thirst quenching drinks on offer in the menus</Text>
+                                </View> }
                         </View>
                     </ScrollView>
                 </Animated.View>
@@ -483,6 +485,26 @@ const styles = StyleSheet.create({
         borderBottomWidth: 5,
         borderTopColor: colours.midnightBlack,
         borderTopWidth: 5
+    },
+    applePayButton: {
+    },
+    paymentButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+    },
+    emptyBasketHeader: {
+        textAlign: 'center',
+        color: colours.pureWhite,
+        fontSize: 36,
+        fontWeight: 'bold',
+        margin: 20
+    },
+    emptyBasketText: {
+        textAlign: 'center',
+        fontSize: 24,
+        color: colours.midGrey,
+        margin: 20
     }
 });
 
@@ -495,7 +517,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-      submitOrder: (basket, componentId) => dispatch(actions.submitOrder(basket, componentId)),
+      submitOrder: (basket, componentId, paymentInfo, basketPrice) => dispatch(actions.submitOrder(basket, componentId, paymentInfo, basketPrice)),
       emptyBasket: () => dispatch(actions.emptyBasket())
     };
   };

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Card } from "react-native-elements";
-import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/OverlayComponent";
+import OverlayComponent from "../../../components/UI/Overlays/AddDrinks";
 import * as colours from "../../../styles/colourScheme";
 import { connect } from "react-redux";
 import { SimpleStepper } from "react-native-simple-stepper";
@@ -102,7 +102,7 @@ class TabbedCategories extends Component {
 
                       <View>
                         <Text style={styles.price}>£{u.price}</Text>
-                      </View>                      
+                      </View>
                     </View>
 
                     <View style={styles.rowContainer}>
@@ -114,10 +114,10 @@ class TabbedCategories extends Component {
                           x{this.basketItems(u.name)} Pint{" "}
                         </Text>
                       ) : null}
-                      
+
                     </View>
 
-                    
+
 
                     <View style={styles.rowContainer}>
 

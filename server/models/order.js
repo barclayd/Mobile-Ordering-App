@@ -27,6 +27,9 @@ const orderSchema = mongoose.Schema({
     },
     transactionId: {
         type: String,
+    },
+    collectionId: {
+        type: String,
     }
 });
 

@@ -1,20 +1,23 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 import * as colours from '../../styles/colourScheme';
 import {Navigation} from "react-native-navigation";
 import * as Progress from 'react-native-progress';
+import Modal from 'react-native-modal';
+import ButtonBackground from '../../components/UI/Buttons/ButtonWithBackground';
 
 
 class OrderStatus extends Component {
 
     constructor(props) {
         super(props);
-        Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+        Navigation.events().bindComponent(this);
     }
 
-    componentDidMount(){
-        console.log("mounted");
-    }
+    state = {
+        showQRCode: false
+    };
 
     componentWillReceiveProps(nextProps) {
         console.log(nextProps,"nextProps")
@@ -52,34 +55,65 @@ class OrderStatus extends Component {
         }
     }
 
+    toggleQRCode = () => {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                showQRCode: !prevState.showQRCode
+            }
+        })
+    };
+
     render() {
+        let qrCode = null;
+        const qrData = {
+            userId: this.props.userId,
+            collectionId: this.props.collectionId
+        };
+        if (this.props.userId && this.props.collectionId) {
+            qrCode = <QRCode
+                value={JSON.stringify(qrData)}
+                size={300}/>
+        }
+
         return (
 
             <View style={[styles.container]}>
 
                 <View style={styles.header}>
                 <Text style={styles.status}>Order Successful</Text>
-                <Text style={styles.success}>Thank You Guy for you order!</Text>
-                <Text style={styles.orderText}>Order Number : {this.props.orderNumber}</Text>
+                <Text style={styles.success}>Thank you for your Order!</Text>
+                <Text style={styles.orderText}>Order Number: {this.props.collectionId}</Text>
                 <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Status: Pending... </Text>
                 <Progress.Circle size={30} indeterminate={true} color={colours.orange} thickness={15}/>
                 </View>
-                <Text style={styles.orderText}>Estimated Collection Time </Text>
+                <Text style={styles.orderText}>Estimated Collection Time: 10:59pm </Text>
                 </View>
-
-                {/* <View style={styles.box}>
-                <Text style={styles.status}>In Progress...</Text>
+                <View style={styles.button}>
+                    <ButtonBackground
+                        color={colours.orange}
+                        onPress={() => this.toggleQRCode()}
+                        textColor={colours.pureWhite}>
+                        Show QR Code
+                    </ButtonBackground>
                 </View>
-                
-
-                <View style={styles.orderInfo}>
-                    <Text style={styles.text}> Order Number </Text>
-                     
-                <TouchableOpacity>
-                        <Text style={styles.text}> View QR Code </Text>
-                    </TouchableOpacity>
-                </View> */}
+                    <Modal
+                        visible={this.state.showQRCode}
+                        onSwipeComplete={() => this.toggleQRCode()}
+                        swipeDirection="down"
+                        onBackdropPress={() => this.toggleQRCode()}>
+                        <View style={styles.modal}>
+                            <Text style={styles.header}>Order <Text style={{color: colours.orange}}>#{this.props.collectionId}</Text> </Text>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-around', marginBottom: 40}}>
+                                <Text style={styles.infoText}>Collection: <Text style={{color: colours.orange}}>{this.props.collectionPoint}</Text></Text>
+                                <Text style={styles.infoText}>Order Time: <Text style={{color: colours.orange}}>{new Date(this.props.date).toTimeString().slice(0,5)}</Text></Text>
+                            </View>
+                                <View style={styles.qrCode}>
+                                    {qrCode}
+                                </View>
+                        </View>
+                    </Modal>
                 </View>
         );
     }
@@ -114,7 +148,6 @@ const styles = StyleSheet.create({
     success:{
         fontSize: 20,
         fontWeight: '500',
-        color: colours.cream,
         padding: 10,
         color: colours.orange,
         marginBottom: 25,
@@ -136,6 +169,31 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colours.white,
+    },
+    qrCode: {
+        backgroundColor: colours.pureWhite,
+        alignSelf: 'center',
+    },
+    button: {
+        alignSelf: 'center',
+        width: Dimensions.get('window').width/2
+    },
+    header: {
+        color: colours.midnightBlack,
+        fontSize: 32,
+        fontWeight: 'bold',
+        marginTop: 20,
+        marginBottom: 10,
+        textAlign: 'center',
+        justifyContent: 'center'
+    },
+    modal: {
+        backgroundColor: colours.pureWhite,
+        padding: 40,
+    },
+    infoText: {
+        fontSize: 12,
+        color: colours.midGrey
     }
 });
 
