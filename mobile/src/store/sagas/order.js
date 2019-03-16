@@ -89,12 +89,10 @@ export function* submitOrderSaga(action) {
         });
         if (response.data.errors) {
             console.log('error was found');
-            yield put(actions.submitOrderFail());
+            yield put(actions.submitOrderFail(response.data.errors[0].message));
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            console.log('made it');
-            console.log(response.data);
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
@@ -130,7 +128,7 @@ export function* orderHistorySaga(action) {
                 }
             `,
             variables: {
-                userInfo: user ? user : '5c69c7c058574e24c841ddc8'
+                userInfo: user
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
