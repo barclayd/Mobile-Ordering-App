@@ -1,6 +1,7 @@
 import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../../axios-instance';
+import stripe from 'tipsi-stripe'
 import {AsyncStorage} from 'react-native';
 import {
     popToRoot,
@@ -8,26 +9,43 @@ import {
 } from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
-const orderRedirect = async () => {
+const orderRedirect = async (collectionId, userId, collectionPoint, date) => {
     await popToRoot('ViewMenus');
-    await setOrderStatus('ViewMenus', 189);
+    await setOrderStatus('ViewMenus', collectionId, userId, collectionPoint, date);
 };
 
 export function* submitOrderSaga(action) {
-    let date = new Date();
+
+    yield stripe.setOptions({
+        publishableKey: 'pk_test_YTzEkzlEFVjyy6GAez7JqTse'
+    });
+
+    const expMonth = parseInt(action.paymentInfo.expiration.value.substring(0, action.paymentInfo.expiration.value.indexOf("/")));
+    const expYear = parseInt(action.paymentInfo.expiration.value.split('/').pop());
+
+    const payment = {
+        number: action.paymentInfo.number.value,
+        cvc: action.paymentInfo.cvc.value,
+        expMonth,
+        expYear
+    };
+
+    const token = yield stripe.createTokenWithCard(payment);
+    const orderPrice = parseFloat(action.basketPrice) * 100;
+
+    const date = new Date().toISOString();
     const user = yield AsyncStorage.getItem('userId');
     yield put(actions.submitOrderStart());
     let drinksList = [];
     action.order.map(drink => {
       if (drink.quantity > 1)
         for (let i = 0; i < drink.quantity; i++){
-          drinksList.push(drink._id)
+          drinksList.push(drink._id);
         }
         else {
-          drinksList.push(drink._id)
+          drinksList.push(drink._id);
         }
     });
-    console.log(drinksList);
     try {
         let requestBody = {
             query: `
@@ -47,35 +65,44 @@ export function* submitOrderSaga(action) {
                        }
                         collectionPoint
                         status
+                        transactionId
                         userInfo {
                           email
                           name
                         }
+                        date
+                        collectionId
                    } 
                 }
             `,
             variables: {
                 drinks: drinksList,
-                collectionPoint: "MOBILE APP",
+                collectionPoint: "SU Lounge",
                 status: "PENDING",
                 date: date,
                 userInfo: user ? user : '5c69c7c058574e24c841ddc8'
             }
         };
-        const response = yield axios.post('/', JSON.stringify(requestBody));
+        const response = yield axios.post('/', JSON.stringify(requestBody), {
+            headers: {
+                'Payment': token.tokenId,
+                'Checkout': orderPrice
+            }
+        });
         if (response.data.errors) {
             console.log('error was found');
-            yield put(actions.submitOrderFail());
+            yield put(actions.submitOrderFail(response.data.errors[0].message));
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            console.log('made it');
-            console.log(response.data);
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
             yield put(actions.emptyBasketSuccess());
-            yield orderRedirect(action);
+            const collectionId = response.data.data.createOrder.collectionId;
+            const collectionPoint = response.data.data.createOrder.collectionPoint;
+            const date = response.data.data.createOrder.date;
+            yield orderRedirect(collectionId, user, collectionPoint, date);
         }
     } catch (err) {
         yield put(actions.submitOrderFail(err));
@@ -106,7 +133,7 @@ export function* orderHistorySaga(action) {
                 }
             `,
             variables: {
-                userInfo: user ? user : '5c69c7c058574e24c841ddc8'
+                userInfo: user
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));

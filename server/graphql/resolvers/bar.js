@@ -45,7 +45,6 @@ module.exports = {
         const bar = await Bar.findOne({
             barCode: barCode.toUpperCase()
         });
-        console.log(bar);
         // no bar found with given bar code
         if (!bar) {
             throw new Error(`Bar with bar code: ${barCode} does not exist`);
