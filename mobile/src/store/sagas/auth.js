@@ -1,4 +1,4 @@
-import {put, call, delay} from 'redux-saga/effects';
+import {put} from 'redux-saga/effects';
 import {AsyncStorage} from 'react-native';
 import axios from '../../axios-instance';
 import {Alert} from 'react-native';
@@ -20,8 +20,6 @@ const authRedirect = (action) => {
 };
 
 export function* logoutSaga(action) {
-    // call function makes generators more testable
-    yield AsyncStorage.removeItem("tokenExpiration");
     yield AsyncStorage.removeItem("token");
     yield AsyncStorage.removeItem("userId");
     yield put(actions.emptyBasketStart());
@@ -127,8 +125,6 @@ export function* authUserSaga(action) {
             if (response.status === 200 && response.status !== 201) {
                 yield AsyncStorage.setItem("token", response.data.data.login.token);
                 yield AsyncStorage.setItem("userId", response.data.data.login.userId);
-                yield AsyncStorage.setItem("tokenExpiration", response.data.data.login.tokenExpiration);
-                yield AsyncStorage.setItem("name", response.data.data.login.name);
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
                yield authRedirect(action);
             } else {
@@ -137,6 +133,7 @@ export function* authUserSaga(action) {
             }
         } catch (err) {
             console.log(err);
+            yield put(actions.authFail(err));
             Alert.alert('Unsuccessful login 🔒', 'Authentication failed. Please try again')
         }
     }
@@ -147,20 +144,6 @@ export function* authCheckStateSaga(action) {
     if (!token) {
         yield put(actions.logout());
     } else {
-        // const expirationDate = yield new Date(
-        //     AsyncStorage.getItem("tokenExpiration")
-        // );
-        // if (expirationDate <= new Date()) {
-        //     yield put(actions.logout());
-        // } else {
-        //     const userId = yield AsyncStorage.getItem("userId");
-        //     yield put(actions.authSuccess(token, userId));
-        //     yield put(
-        //         actions.checkAuthTimeout(
-        //             (expirationDate.getTime() - new Date().getTime()) / 1000
-        //         )
-        //     );
-        // }
         authRedirect(action);
     }
     yield put(actions.retrieveBasketStart());
