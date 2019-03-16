@@ -63,6 +63,14 @@ export default class App extends Component {
               name: "VK Orange",
               price: 250,
               quantity: 1,
+              ingredients: [{
+                id: 547,
+                name: "VK Orange",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.FACTORY,
+
+              }]
             },
           ],
           status: OrderStatus.AWAITING_COLLECTION
