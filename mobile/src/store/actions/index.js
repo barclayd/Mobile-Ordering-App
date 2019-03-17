@@ -12,7 +12,7 @@ export {
 } from './drinks'
 
 export {
-    submitOrder, submitOrderSuccess, submitOrderStart, submitOrderFail, orderHistory, orderHistoryFailure, orderHistoryStart, orderHistorySuccess
+    submitOrder, submitOrderSuccess, submitOrderStart, submitOrderFail, orderHistory, orderHistoryFailure, orderHistoryStart, orderHistorySuccess, orderStatus, orderStatusFailure, orderStatusSuccess, orderStatusStart
 } from './order'
 
 export {
