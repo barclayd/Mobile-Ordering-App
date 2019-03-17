@@ -3,7 +3,7 @@ import {authUserSaga, logoutSaga, authCheckStateSaga, checkAuthTimeoutSaga, auto
 import {findBarSaga} from './bar';
 import {findDrinksSaga, findDrinkCategoriesSaga} from './drinks';
 import {updateBasketSaga, emptyBasketSaga} from './basket';
-import {submitOrderSaga, orderHistorySaga} from './order';
+import {submitOrderSaga, orderHistorySaga, orderStatusSaga} from './order';
 import * as actionTypes from '../actions/actionTypes';
 
 export function* watchAuth() {
@@ -33,4 +33,5 @@ export function* watchBasket() {
 export function* watchOrder() {
     yield takeLatest(actionTypes.SUBMIT_ORDER, submitOrderSaga);
     yield takeLatest(actionTypes.ORDER_HISTORY, orderHistorySaga);
+    yield takeLatest(actionTypes.RETRIEVE_ORDER_STATUS, orderStatusSaga);
 }
