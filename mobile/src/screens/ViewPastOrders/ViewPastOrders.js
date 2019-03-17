@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import * as colours from './../../styles/colourScheme'
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import {Card, ListItem} from "react-native-elements";
+import ShowOrder from '../../components/UI/Overlays/ShowOrder';
 
 class componentName extends Component {
 
   state = {
-    pastOrders: []
+    pastOrders: [],
+    selectedOrder: null,
+    showOrderOverlay: false
   };
 
   componentDidMount() {
@@ -23,13 +26,23 @@ class componentName extends Component {
     }
   }
 
+  toggleOrderOverlay = () => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        showOrderOverlay: !prevState.showOrderOverlay
+      }
+    })
+  };
+
   render() {
-    const spinner = <ActivityIndicator size="large" color={colours.orange} />;
+    const spinner = this.props.ordersLoading ? <ActivityIndicator size="large" color={colours.orange} /> : null;
     let renderPastOrders = null;
     if (this.state.pastOrders) {
       renderPastOrders = this.state.pastOrders.map((order,i) => {
       return (
-                <Card
+          <TouchableOpacity onPress={() => this.toggleOrderOverlay()} key={i}>
+          <Card
                 key={i}
                 title={order.transactionId ? `#${order.transactionId.slice(0, 7).toUpperCase()}` : `#${Math.random().toString(36).substring(2, 9).toUpperCase()}` }
                 containerStyle={{backgroundColor: colours.lightGrey}}
@@ -45,7 +58,7 @@ class componentName extends Component {
                     <View style={styles.subtitleView}>
                       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={styles.subInformationText}>{new Date(order.date).toDateString()}</Text>
-                        <Text style={styles.subInformationText}>{new Date(order.date).toTimeString().slice(0,8)}</Text>
+                        <Text style={styles.subInformationText}>{new Date(order.date).toTimeString().slice(0,5)}</Text>
                         <Text style={styles.subInformationTextPrice}>{order.status}</Text>
                       </View>
                         {order.drinks.map((drink, index) => (
@@ -54,13 +67,20 @@ class componentName extends Component {
                     </View>
                   }/>
                 </Card>
+          </TouchableOpacity>
       )
       });
 
     return (
           <View style={[styles.container]}>
             <ScrollView>
-            <View>{this.props.ordersLoading ? spinner : renderPastOrders}</View>
+              <View>
+                {spinner}
+                {renderPastOrders}
+              </View>
+              <ShowOrder
+                  visible={this.state.showOrderOverlay}
+                  hideOrder={this.toggleOrderOverlay}/>
             </ScrollView>
           </View>
       );

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Platform
+  Platform, AsyncStorage
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Avatar } from "react-native-elements";
@@ -29,8 +29,15 @@ class SideDrawer extends Component {
   }
 
   state = {
-    pastOrders: []
+    pastOrders: [],
+    accountName: 'Your Account'
   };
+
+  async componentDidMount() {
+      this.setState({
+        accountName: await this.getAccountName()
+      });
+  }
 
   logoutHandler = async () => {
     this.props.onLogout();
@@ -51,7 +58,12 @@ class SideDrawer extends Component {
     await setOrderStatus(null, 124);
   };
 
+  getAccountName = async () => {
+      return await AsyncStorage.getItem("name");
+  };
+
   render() {
+
     return (
       <View
         style={[
@@ -69,7 +81,7 @@ class SideDrawer extends Component {
                 "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
             }}
           />
-          <Text style={styles.text}>Account</Text>
+          <Text style={styles.text}>{this.state.accountName}</Text>
         </View>
         <TouchableOpacity onPress={() => this.logoutHandler()}>
           <View style={styles.drawItem}>
@@ -193,7 +205,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SideDrawer);
+export default connect(null, mapDispatchToProps)(SideDrawer);
