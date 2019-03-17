@@ -140,7 +140,7 @@ const setViewDrinks = async (componentId, menuName) => {
     })
 };
 
-const setOrderStatus = async (componentId, collectionId, userId, collectionPoint, date) => {
+const setOrderStatus = async (componentId, collectionId, userId, collectionPoint, date, orderNumber) => {
     let component = componentId;
     if (!componentId) {
         component = 'ViewMenus';
@@ -152,7 +152,8 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
                 collectionId,
                 userId,
                 collectionPoint,
-                date
+                date,
+                orderNumber
             },
             options: {
                 topBar: {
