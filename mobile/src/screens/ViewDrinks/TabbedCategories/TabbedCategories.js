@@ -23,17 +23,27 @@ class TabbedCategories extends Component {
     itemSelected: "",
     quantity: 0,
     value: 1,
-    cardColour: ""
+    basketAction: false
   };
 
   openOverlay = i => {
     const drinkSelected = this.props.drinks[i];
+    this.props.basket.filter(drinks => {
+      if (drinks.name == drinkSelected.name){
+        this.setState({
+          basketAction: true
+        })
+      }
+      else {
+        this.setState({
+          basketAction: false
+        })
+      }
+    })
     this.setState({
       isVisible: true,
       drinkSelected: drinkSelected,
-      cardColour: "#DCDCDC"
     });
-    console.log("this.state.cardColour", this.state.cardColour);
   };
 
   onBackdropPress = () => {
@@ -49,38 +59,12 @@ class TabbedCategories extends Component {
     });
   };
 
-  _onLongPressButton = (i, u) => {
-    const drinkSelected = this.props.drinks[i];
-    this.setState({
-      itemSelected: u.name,
-      drinkSelected: u
-    });
-    if (this.basketItems(this.props.drinks[i].name) > 0) {
-      this.setState({
-        trashCanVisible: !this.state.trashCanVisible
-      });
-    }
-  };
-
   basketItems = name => {
     let quantity = 0;
     this.props.basket.map(drink => {
       if (drink.name === name) quantity = drink.quantity;
     });
     return quantity;
-  };
-
-  valueChanged = value => {
-    if (value === 0) {
-      return;
-    }
-    const drink = this.state.drinkSelected;
-    const quantity = Number(value.toFixed(2));
-    let drinksObj = {
-      ...drink,
-      quantity
-    };
-    this.props.updateBasket(drinksObj, "update");
   };
 
   render() {
@@ -92,7 +76,6 @@ class TabbedCategories extends Component {
                 <TouchableOpacity
                   key={i}
                   onPress={() => this.openOverlay(i)}
-                  onLongPress={() => this._onLongPressButton(i, u)}
                 >
                   <Card>
                     <View style={styles.rowContainer}>
@@ -119,7 +102,7 @@ class TabbedCategories extends Component {
 
 
 
-                    <View style={styles.rowContainer}>
+                    {/* <View style={styles.endContainer}>
 
                       {this.state.trashCanVisible &&
                       this.props.drinks[i].name === this.state.itemSelected ? (
@@ -139,7 +122,7 @@ class TabbedCategories extends Component {
                           />
                         </View>
                       ) : null}
-                    </View>
+                    </View> */}
                   </Card>
                 </TouchableOpacity>
               );
@@ -150,6 +133,7 @@ class TabbedCategories extends Component {
           drinkDetails={this.state.drinkSelected}
           isVisible={this.state.isVisible}
           onBackdropPress={this.onBackdropPress}
+          basketAction={this.state.basketAction}
         />
       </View>
     );
@@ -203,6 +187,10 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between"
+  },
+  endContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end"
   },
   title: {
     paddingTop: 10,
