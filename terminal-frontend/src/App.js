@@ -118,6 +118,7 @@ export default class App extends Component {
                   containsAlcohol: true,
                   allergens: [],
                   amount: IngredientAmounts.FACTORY,
+                  inStock: true,
                 }
               ]
             },
@@ -133,6 +134,7 @@ export default class App extends Component {
                   containsAlcohol: true,
                   allergens: [],
                   amount: IngredientAmounts.SHOT,
+                  inStock: true,
                 },
                 {
                   id: 13,
@@ -140,6 +142,7 @@ export default class App extends Component {
                   containsAlcohol: false,
                   allergens: [],
                   amount: IngredientAmounts.FILL,
+                  inStock: true,
                 }
               ]
             },
@@ -155,6 +158,7 @@ export default class App extends Component {
                   containsAlcohol: false,
                   allergens: [],
                   amount: IngredientAmounts.FILL,
+                  inStock: true,
                 },
                 {
                   id: 10,
@@ -162,6 +166,7 @@ export default class App extends Component {
                   containsAlcohol: true,
                   allergens: [],
                   amount: IngredientAmounts.DOUBLE_SHOT,
+                  inStock: true,
                 }
               ]
             },
@@ -177,6 +182,7 @@ export default class App extends Component {
                   containsAlcohol: false,
                   allergens: [],
                   amount: IngredientAmounts.FACTORY,
+                  inStcok: true,
                 }
               ]
             },
@@ -192,6 +198,7 @@ export default class App extends Component {
                   containsAlcohol: true,
                   allergens: [],
                   amount: IngredientAmounts.DOUBLE_SHOT,
+                  inStock: true,
                 },
                 {
                   id: 276,
@@ -199,6 +206,7 @@ export default class App extends Component {
                   containsAlcohol: false,
                   allergens: [],
                   amount: IngredientAmounts.SHOT,
+                  inStock: false,
                 },
                 {
                   id: 2384,
@@ -206,6 +214,7 @@ export default class App extends Component {
                   containsAlcohol: false,
                   allergens: [],
                   amount: IngredientAmounts.PINT,
+                  inStock: true,
                 }
               ]
             }
