@@ -11,15 +11,27 @@ export default class OutOfStockPopUpWindow extends React.Component {
 
         this.state = {
             outOfStockIngredients: []
+            //EXAMPLE: outOfStockIngredients: [{id: 0, inStock: true}]
         }
     }
 
     markIngredientOutOfStock = (ingredientID) => {
         this.setState((prevState) => {
-            let newOutOfStockIngredients = this.state.outOfStockIngredients;
-            newOutOfStockIngredients[ingredientID] = !prevState.outOfStockIngredients[ingredientID];
-            return { outOfStockIngredients: newOutOfStockIngredients}
-        }, ()=>{console.log(this.state.outOfStockIngredients)})
+
+            // check the original stock value in case the user has already marked the item in/out of stock
+            let currentStock = prevState.outOfStockIngredients.findIndex(ingredient => ingredient.id === ingredientID);
+            
+            let newOutOfStockIngredients = this.state.outOfStockIngredients; // copy array
+            if (currentStock !== -1) {
+                let oldInStock = prevState.outOfStockIngredients[currentStock].inStock; // find original value
+                newOutOfStockIngredients[currentStock].inStock = !oldInStock; // change stock value
+                
+            } else {
+                newOutOfStockIngredients.push({id: ingredientID, inStock: false}); // add new stock value to array
+            }
+            
+            return { outOfStockIngredients: newOutOfStockIngredients} // Update state for saving to server
+        }, ()=>{ console.log(this.state.outOfStockIngredients) })
     }
 
     buildIngredients = (ingredients) => { // Check item contains more ingredients than just itself
@@ -32,7 +44,7 @@ export default class OutOfStockPopUpWindow extends React.Component {
                                 <li
                                     onClick={ () => { this.markIngredientOutOfStock(ingredientData.id) } }
                                     key={ incrementer }
-                                    className="item"
+                                    className="item outOfStock"
                                 >
                                     { ingredientData.name }
                                 </li>
