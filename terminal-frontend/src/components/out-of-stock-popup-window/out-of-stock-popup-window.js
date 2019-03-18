@@ -73,8 +73,8 @@ export default class OutOfStockPopUpWindow extends React.Component {
                 </button>
 
                 <button className="orderButton" onClick={()=>{
-                    // Close the popup (and restore closePopup state to default)
-                    this.setState({closePopup: true}, ()=>{ this.setState({closePopup: null}) })
+                    // Close the popup (and restore closePopup and outOfStockIngredients states to default)
+                    this.setState({closePopup: true}, ()=>{ this.setState({closePopup: null, outOfStockIngredients: []}) })
                 }}>
                     <span className="icon cancel"><FontAwesomeIcon icon={faBan} /></span>
                     <span className="title">Cancel</span>
