@@ -6,7 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 export default class OutOfStockPopUpWindow extends React.Component {
-    
+    constructor(props) {
+        super(props)
+        this.state = {} // Setup state for reading/writing
+    }
+
     buildChildren = (order) => {
         if (order) return (
             <React.Fragment>
@@ -38,7 +42,10 @@ export default class OutOfStockPopUpWindow extends React.Component {
                     <span className="subtitle">Notify customers</span>
                 </button>
 
-                <button className="orderButton">
+                <button className="orderButton" onClick={()=>{
+                    // Close the popup (and restore closePopup state to default)
+                    this.setState({closePopup: true}, ()=>{ this.setState({closePopup: null}) })
+                }}>
                     <span className="icon cancel"><FontAwesomeIcon icon={faBan} /></span>
                     <span className="title">Cancel</span>
                     <br />
@@ -57,6 +64,7 @@ export default class OutOfStockPopUpWindow extends React.Component {
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
                     buttons={ this.buildButtons() }
+                    closePopup={this.state.closePopup}
             >
                 { this.buildChildren(this.props.order) }
             </PopupWindow>
