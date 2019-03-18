@@ -11,7 +11,8 @@ class AddDrinks extends Component {
   state = {
     value: 1,
     price: null,
-    orderedDrinks: []
+    orderedDrinks: [],
+    verb: false
   };
 
   valueChanged = value => {
@@ -92,7 +93,10 @@ class AddDrinks extends Component {
                   style={styles.buttonStyle}
                   onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price ? this.state.price : this.props.drinkDetails.price, this.state.value)}
                 >
-                  <Text style={styles.textStyle}>Add £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>
+                {this.props.basketAction ? 
+                <Text style={styles.textStyle}>Update £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>
+                :
+                <Text style={styles.textStyle}>Add £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>}
                 </TouchableOpacity>
 
 
