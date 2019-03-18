@@ -6,15 +6,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 export default class OutOfStockPopUpWindow extends React.Component {
-    buildIngredients = (ingredients) => { // Check item contains more ingredients than just itself
+    constructor(props) {
+        super(props)
 
+        this.state = {
+            outOfStockIngredients: []
+        }
+    }
+
+    markIngredientOutOfStock = (ingredientID) => {
+        this.setState((prevState) => {
+            let newOutOfStockIngredients = this.state.outOfStockIngredients;
+            newOutOfStockIngredients[ingredientID] = !prevState.outOfStockIngredients[ingredientID];
+            return { outOfStockIngredients: newOutOfStockIngredients}
+        }, ()=>{console.log(this.state.outOfStockIngredients)})
+    }
+
+    buildIngredients = (ingredients) => { // Check item contains more ingredients than just itself
         if (ingredients.length > 1) {
             return (
                 <ul className="ingredientList">
                     {
                         ingredients.map((ingredientData, incrementer) => {
                             return (
-                                <li key={incrementer} className="item">{ingredientData.name}</li>
+                                <li
+                                    onClick={ () => { this.markIngredientOutOfStock(ingredientData.id) } }
+                                    key={ incrementer }
+                                    className="item"
+                                >
+                                    { ingredientData.name }
+                                </li>
                             )
                         })
                     }
