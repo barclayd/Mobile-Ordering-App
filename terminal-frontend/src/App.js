@@ -14,6 +14,7 @@ import TimeAgo from './components/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./notes.svg";
 import OrderStatus from './OrderStatuses.js';
+import IngredientAmounts from './IngredientAmounts.js';
 import rangeScaling from "./FunctionLib.js";
 import OutOfStockPopUpWindow from './components/out-of-stock-popup-window/out-of-stock-popup-window';
 
@@ -42,6 +43,15 @@ export default class App extends Component {
               name: "VK Orange",
               price: 250,
               quantity: 1,
+              ingredients: [{
+                id: 546,
+                name: "VK Orange",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.FACTORY,
+
+              }]
+
             },
           ],
           status: OrderStatus.AWAITING_COLLECTION
@@ -53,14 +63,22 @@ export default class App extends Component {
               name: "VK Orange",
               price: 250,
               quantity: 1,
+              ingredients: [{
+                id: 547,
+                name: "VK Orange",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.FACTORY,
+
+              }]
             },
           ],
           status: OrderStatus.AWAITING_COLLECTION
         },
-        { id: "EOPL", orderDate: new Date(), customerID: 13, staffMemberID: 4, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KJHS", orderDate: new Date(), customerID: 13, staffMemberID: 2, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KXHS", orderDate: new Date(), customerID: 13, staffMemberID: 10, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KAHS", orderDate: new Date(), customerID: 13, staffMemberID: 1, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, }, ], status: OrderStatus.AWAITING_COLLECTION },
+        { id: "EOPL", orderDate: new Date(), customerID: 13, staffMemberID: 4, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
+        { id: "KJHS", orderDate: new Date(), customerID: 13, staffMemberID: 2, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION }, 
+        { id: "KXHS", orderDate: new Date(), customerID: 13, staffMemberID: 10, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION }, 
+        { id: "KAHS", orderDate: new Date(), customerID: 13, staffMemberID: 1, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
         {
           id: "XHBS",
           orderDate: new Date(),
@@ -93,30 +111,112 @@ export default class App extends Component {
               name: "VK Red",
               price: 250,
               quantity: 1,
+              ingredients: [
+                {
+                  id: 921,
+                  name: "VK Red",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.FACTORY,
+                  inStock: true,
+                }
+              ]
             },
             {
               id: 122,
               name: "Jager bomb",
               price: 125,
               quantity: 5,
+              ingredients: [
+                {
+                  id: 8349,
+                  name: "Jagermeister",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.SHOT,
+                  inStock: true,
+                },
+                {
+                  id: 13,
+                  name: "Redbull",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.FILL,
+                  inStock: true,
+                }
+              ]
             },
             {
               id: 484,
               name: "Mojito",
               price: 125,
               quantity: 1,
+              ingredients: [
+                {
+                  id: 48,
+                  name: "Lime cordial",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.FILL,
+                  inStock: true,
+                },
+                {
+                  id: 10,
+                  name: "White rum",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.DOUBLE_SHOT,
+                  inStock: true,
+                }
+              ]
             },
             {
               id: 1023,
               name: "Bottled water",
               price: 90,
               quantity: 2,
+              ingredients: [
+                {
+                  id: 19,
+                  name: "Bottled water",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.FACTORY,
+                  inStcok: true,
+                }
+              ]
             },
             {
               id: 67,
               name: "Jumba juice cocktail",
               price: 750,
               quantity: 1,
+              ingredients: [
+                {
+                  id: 123,
+                  name: "Slurp juice",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.DOUBLE_SHOT,
+                  inStock: true,
+                },
+                {
+                  id: 276,
+                  name: "Tomato soup",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.SHOT,
+                  inStock: false,
+                },
+                {
+                  id: 2384,
+                  name: "Diced Lego bricks",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.PINT,
+                  inStock: true,
+                }
+              ]
             }
           ],
           notes: "pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!",
@@ -132,30 +232,95 @@ export default class App extends Component {
               name: "VK Red",
               price: 250,
               quantity: 1,
+              ingredients: [ {
+                id: 222,
+                name: "VK Red",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.FACTORY,
+              }]
             },
             {
               id: 122,
               name: "Jager bomb",
               price: 125,
               quantity: 5,
+              ingredients: [{
+                id: 663,
+                name: "Jagermesiter",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.SHOT,
+                },
+              {
+                id: 197,
+                name: "Red Bull",
+                containsAlcohol: false,
+                allergens: [],
+                amount: IngredientAmounts.FILL,
+              }]
             },
             {
               id: 484,
               name: "Mojito",
               price: 450,
               quantity: 1,
+              ingredients: [{                   
+                
+                id: 48,
+                name: "Lime cordial",
+                containsAlcohol: false,
+                allergens: [],
+                amount: IngredientAmounts.FILL,
+              },
+              {
+                id: 10,
+                name: "White rum",
+                containsAlcohol: true,
+                allergens: [],
+                amount: IngredientAmounts.DOUBLE_SHOT,
+
+              }]
             },
             {
               id: 1023,
               name: "Bottled water",
               price: 90,
               quantity: 2,
+              ingredients: [{
+                id:1010,
+                name: "Bottled Water",
+                containsAlcohol: false,
+                allergens: [],
+                amount: IngredientAmounts.FACTORY
+              }]
             },
             {
               id: 67,
               name: "Jumba juice cocktail",
               price: 750,
               quantity: 1,
+              ingredients: [{
+                  id: 105,
+                  name: "Slurp juice",
+                  containsAlcohol: true,
+                  allergens: [],
+                  amount: IngredientAmounts.DOUBLE_SHOT,
+                },
+                {
+                  id: 277,
+                  name: "Tomato soup",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.SHOT,
+                },
+                {
+                  id: 2386,
+                  name: "Diced Lego bricks",
+                  containsAlcohol: false,
+                  allergens: [],
+                  amount: IngredientAmounts.PINT,
+              }]
             }
           ],
           status: OrderStatus.PENDING

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Card } from "react-native-elements";
-import OverlayComponent from "../../../components/UI/Backgrounds/Overlay/OverlayComponent";
+import OverlayComponent from "../../../components/UI/Overlays/AddDrinks";
 import * as colours from "../../../styles/colourScheme";
 import { connect } from "react-redux";
 import { SimpleStepper } from "react-native-simple-stepper";
@@ -105,15 +105,21 @@ class TabbedCategories extends Component {
                       </View>
                     </View>
 
-                    <Text style={styles.description}>{u.nutritionInfo}</Text>
-
                     <View style={styles.rowContainer}>
-
+                      <View style={styles.leftContainer}>
+                      <Text style={styles.description}>{u.nutritionInfo}</Text>
+                      </View>
                       {this.basketItems(u.name) > 0 ? (
                         <Text style={styles.quantity}>
                           x{this.basketItems(u.name)} Pint{" "}
                         </Text>
                       ) : null}
+
+                    </View>
+
+
+
+                    <View style={styles.rowContainer}>
 
                       {this.state.trashCanVisible &&
                       this.props.drinks[i].name === this.state.itemSelected ? (

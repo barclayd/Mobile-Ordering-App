@@ -6,51 +6,64 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Platform
+  Platform, AsyncStorage
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { Avatar } from "react-native-elements";
 import * as colours from "../../styles/colourScheme";
 import {
   setDefaultSettings,
   setWelcomePageRoot,
   setViewPastOrders,
   setViewPastOrdersSettings,
-  setOrderStatus, popToRoot
+  setOrderStatus,
+  popToRoot
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
-import {Navigation} from "react-native-navigation";
+import { Navigation } from "react-native-navigation";
 
 class SideDrawer extends Component {
-
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this);
   }
 
   state = {
-    pastOrders: []
+    pastOrders: [],
+    accountName: 'Your Account'
   };
 
-  logoutHandler = () => {
+  async componentDidMount() {
+      this.setState({
+        accountName: await this.getAccountName()
+      });
+  }
+
+  logoutHandler = async () => {
     this.props.onLogout();
     setDefaultSettings();
-    setWelcomePageRoot();
+    await setWelcomePageRoot();
   };
 
   redirectMenus = async () => {
-    await popToRoot(this.props.componentId);
+    await popToRoot("ViewMenus");
   };
 
   previousOrders = async () => {
     setViewPastOrdersSettings();
-    setViewPastOrders(this.props.componentId,"ViewMenus");
-};
+    setViewPastOrders(this.props.componentId, "ViewMenus");
+  };
 
   orderStatus = async () => {
-    await setOrderStatus(this.props.componentId,124);
+    await setOrderStatus(null, 124);
+  };
+
+  getAccountName = async () => {
+      return await AsyncStorage.getItem("name");
   };
 
   render() {
+
     return (
       <View
         style={[
@@ -61,7 +74,14 @@ class SideDrawer extends Component {
         ]}
       >
         <View style={[styles.drawItem, styles.header]}>
-          <Text style={styles.text}>Account</Text>
+          <Avatar
+            rounded
+            source={{
+              uri:
+                "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+            }}
+          />
+          <Text style={styles.text}>{this.state.accountName}</Text>
         </View>
         <TouchableOpacity onPress={() => this.logoutHandler()}>
           <View style={styles.drawItem}>
@@ -78,10 +98,10 @@ class SideDrawer extends Component {
         <TouchableOpacity onPress={() => this.redirectMenus()}>
           <View style={styles.drawItem}>
             <Icon
-                size={30}
-                color="#fff"
-                name={Platform.OS === "android" ? "md-paper" : "ios-paper"}
-                style={styles.drawItemIcon}
+              size={30}
+              color="#fff"
+              name={Platform.OS === "android" ? "md-paper" : "ios-paper"}
+              style={styles.drawItemIcon}
             />
             <Text style={styles.text}>Menus</Text>
           </View>
@@ -104,7 +124,11 @@ class SideDrawer extends Component {
             <Icon
               size={30}
               color="#fff"
-              name={Platform.OS === "android" ? "md-log-out" : "md-information-circle-outline"}
+              name={
+                Platform.OS === "android"
+                  ? "md-log-out"
+                  : "md-information-circle-outline"
+              }
               style={styles.drawItemIcon}
             />
             <Text style={styles.text}>Order Status</Text>
@@ -150,7 +174,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: colours.cream,
     padding: 20,
-    marginTop: 20,
+    marginTop: 20
   },
   container: {
     paddingTop: 30,
@@ -181,7 +205,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SideDrawer);
+export default connect(null, mapDispatchToProps)(SideDrawer);

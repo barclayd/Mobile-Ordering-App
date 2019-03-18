@@ -1,10 +1,12 @@
 import * as actionTypes from "./actionTypes";
 
-export const submitOrder = (basket, componentId) => {
+export const submitOrder = (basket, componentId, paymentInfo, basketPrice) => {
     return {
         type: actionTypes.SUBMIT_ORDER,
         order: basket,
-        componentId: componentId
+        componentId: componentId,
+        paymentInfo,
+        basketPrice
     };
 };
 
@@ -14,10 +16,11 @@ export const submitOrderStart = () => {
     };
 };
 
-export const submitOrderSuccess = (order) => {
+export const submitOrderSuccess = (order, token) => {
     return {
         type: actionTypes.SUBMIT_ORDER_SUCCESS,
-        order: order
+        order: order,
+        token
     };
 };
 
