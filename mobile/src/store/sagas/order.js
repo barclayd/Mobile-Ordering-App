@@ -163,7 +163,6 @@ export function* orderHistorySaga(action) {
 
 export function* orderStatusSaga(action){
     yield put(actions.orderStatusStart());
-    console.log("order Status id")
     const id = yield AsyncStorage.getItem("orderId");
     try {
         let requestBody = {
@@ -197,7 +196,7 @@ export function* orderStatusSaga(action){
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            // console.log("response",response)
+        // console.log("response",response)
         yield put(actions.orderStatusSuccess(response.data.data))
         }
     } catch (err) {
