@@ -31,7 +31,7 @@ export default class OutOfStockPopUpWindow extends React.Component {
             }
             
             return { outOfStockIngredients: newOutOfStockIngredients} // Update state for saving to server
-        }, ()=>{ console.log(this.state.outOfStockIngredients) })
+        }, ()=>{ console.log("outOfStockIngredients updated: ", this.state.outOfStockIngredients) })
     }
 
     buildIngredients = (ingredients) => { // Check item contains more ingredients than just itself
