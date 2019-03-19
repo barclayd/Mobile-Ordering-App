@@ -56,3 +56,29 @@ export const orderHistoryFailure = error => {
         error: error
     };
 };
+
+export const orderStatus = () => {
+    return {
+        type: actionTypes.RETRIEVE_ORDER_STATUS,
+    };
+};
+
+export const orderStatusStart = () => {
+    return {
+        type: actionTypes.RETRIEVE_ORDER_STATUS_START
+    };
+};
+
+export const orderStatusSuccess = (orderStatus) => {
+    return {
+        type: actionTypes.RETRIEVE_ORDER_STATUS_SUCCESS,
+        orderStatus: orderStatus
+    };
+};
+
+export const orderStatusFailure = error => {
+    return {
+        type: actionTypes.RETRIEVE_ORDER_STATUS_FAIL,
+        error: error
+    };
+};
