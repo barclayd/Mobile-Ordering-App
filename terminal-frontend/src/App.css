@@ -56,6 +56,7 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
   position: fixed;
   top: 0;
   padding-top: 15px;
+  width: 100%;
   z-index: 999;
   background: #211624;
   box-shadow: 0 10px 20px 5px #211624;
@@ -75,7 +76,7 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
   position: absolute;
   top: 11px;
   right: 0;
-  padding-right: 35px; /* Keep account switch button inside page padding */
+  margin-right: 72px; /* Keep account switch button inside page padding */
 }
 #buttonsToolbar button:not(:last-child) { margin-right: 10px } /* Space buttons */
 
