@@ -52,27 +52,32 @@ h1, h2, h3, h4, h5, .orderButton.title, .orderButton.subtitle, button, .orderLis
 }
 button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /* Text-shadow for button React font-awesome icons (text-shadow is unsupported) */
 
+#topBar {
+  position: fixed;
+  top: 0;
+  padding-top: 15px;
+  z-index: 999;
+  background: #211624;
+  box-shadow: 0 10px 20px 5px #211624;
+}
+.App-header { padding-top: 45px; } /* Add space for fixed top bar */
 
 #accountsHotbar {
   /* Only show buttons that can fit onscreen: */
   overflow: hidden;
   max-height: 36px;
-  margin-right: 570px;
+  margin-right: 600px;
 }
-#accountsHotbar button {
-  margin-right: 15px; /* Space account quick-switch buttons */
-}
+#accountsHotbar button { margin-right: 15px } /* Space account quick-switch buttons */
 
 /* Div to keep account switch button pinned to page top-right */
 #buttonsToolbar {
   position: absolute;
-  top: 0;
+  top: 11px;
   right: 0;
-  padding: inherit; /* Keep account switch button inside page padding */
+  padding-right: 35px; /* Keep account switch button inside page padding */
 }
-#buttonsToolbar button:not(:last-child) {
-  margin-right: 10px;
-}
+#buttonsToolbar button:not(:last-child) { margin-right: 10px } /* Space buttons */
 
 
 
