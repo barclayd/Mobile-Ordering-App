@@ -749,31 +749,33 @@ export default class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <div id="accountsHotbar">
-          {
-            this.state.staffMembers.map((staffData) => {
-              let buttonClass = "";
-              if (this.state.selectedStaffMember === staffData.id) buttonClass = "selected";
-              return ( <button key={staffData.id} className={buttonClass}>{staffData.firstName}</button> );
-            })
-          }
-          </div>
-
-          <div id="buttonsToolbar">
-            <button className="large" onClick={() => {
-              this.setState({showPreview: !this.state.showPreview}, () => {
-                if (this.state.showPreview) {
-                  document.getElementsByClassName("qrReader")[0].style.display = "block";
-                  this.scrollToPreview();
-                } else {
-                  document.getElementsByClassName("qrReader")[0].style.display = "none";
-                }
+          <div id="topBar">
+            <div id="accountsHotbar">
+            {
+              this.state.staffMembers.map((staffData) => {
+                let buttonClass = "";
+                if (this.state.selectedStaffMember === staffData.id) buttonClass = "selected";
+                return ( <button key={staffData.id} className={buttonClass}>{staffData.firstName}</button> );
               })
-            }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
+            }
+            </div>
 
-            <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
+            <div id="buttonsToolbar">
+              <button className="large" onClick={() => {
+                this.setState({showPreview: !this.state.showPreview}, () => {
+                  if (this.state.showPreview) {
+                    document.getElementsByClassName("qrReader")[0].style.display = "block";
+                    this.scrollToPreview();
+                  } else {
+                    document.getElementsByClassName("qrReader")[0].style.display = "none";
+                  }
+                })
+              }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
 
-            <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
+              <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
+
+              <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
+            </div>
           </div>
 
           <h1>AWAITING COLLECTION ({ this.state.awaitingOrdersIndexes.length }):</h1>
