@@ -1,8 +1,4 @@
-/* .App {
-  text-align: center;
-} */
-
-html {
+.App, body, html {
   background: #211624;
 }
 
@@ -276,6 +272,8 @@ button.orderButton .icon {
 
   position: absolute;
   left: 7px;
+  font-size: 27px;
+  line-height: 48px;
   
   color: rgba(30,30,30, 0.9)
 }
@@ -284,71 +282,43 @@ button.orderButton .icon::after {
   font-family: sans-serif;
   font-size: 26px;
   position: relative;
-  top: 9px;
   letter-spacing: 2px;
-  left: 1px;
   color: rgba(30,30,30, 0.8);
 }
-button.orderButton .icon.ready { background: #008600; }
-button.orderButton .icon.ready::after {
-  content: "✓";
-  letter-spacing: normal;
-  left: auto;
-  top: auto;
-  font-size: 33px;
-}
-button.orderButton .icon.notReady { background: #862D2D; }
-button.orderButton .icon.notReady::after {
-  content: "✘";
-  letter-spacing: normal;
-  left: auto;
-  top: 4px;
-}
-button.orderButton .icon.notInProgress { background: #862D2D; }
-button.orderButton .icon.notInProgress::after {
-  content: "✘";
-  letter-spacing: normal;
-  left: auto;
-  top: 4px;
-}
-button.orderButton .icon.refund { background: #4286f4; }
+button.orderButton .icon.ready { background: #008600 }
+button.orderButton .icon.ready::after { content: "" }
+button.orderButton .icon.notReady, button.orderButton .icon.notInProgress { background: #862D2D }
+button.orderButton .icon.notReady::after, button.orderButton .icon.notInProgress::after { content: "" }
+
+button.orderButton .icon.refund { background: #4286f4 }
 button.orderButton .icon.refund::after {
   content: "£";
   letter-spacing: normal;
   left: auto;
-  top: 6px;
   font-size: 32px;
 }
 
 button.orderButton .icon.save {
   background: #2b2;
   letter-spacing: normal;
-  line-height: 48px;
-  font-size: 27px;
 }
 button.orderButton .icon.save::after { content: "" }
 
 button.orderButton .icon.cancel {
   background: #b22;
   letter-spacing: normal;
-  line-height: 48px;
-  font-size: 27px;
 }
 button.orderButton .icon.cancel::after { content: "" }
 
 button.orderButton .icon.outOfStock {
   background: #ff9d1c;
   letter-spacing: normal;
-  line-height: 48px;
-  font-size: 27px;
 }
 button.orderButton .icon.outOfStock::after { content: "" }
 
 button.orderButton .icon.complete {
   background: #2bc72b;
   letter-spacing: normal;
-  line-height: 48px;
-  font-size: 27px;
 }
 button.orderButton .icon.complete::after { content: "" }
 
@@ -356,7 +326,6 @@ button.orderButton .icon.delete {
   background: #862D2D;
   letter-spacing: normal;
   line-height: 50px;
-  font-size: 27px;
 }
 button.orderButton .icon.delete::after { content: "" }
 
