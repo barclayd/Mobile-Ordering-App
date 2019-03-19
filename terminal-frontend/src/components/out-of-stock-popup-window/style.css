@@ -1,5 +1,5 @@
 .ingredientList > li {
-    padding-left: 25px;
+    margin-left: 25px;
     font-size: 80%;
 }
 
@@ -11,4 +11,27 @@
 
 .outofStockPopup > div > ul > li {
     margin-bottom: 12px; /* ensures orderButtonsContainer never overlaps orderList items */
+    clear: left; /* Stop left wrap */
+}
+
+.outofStockPopup > div > ul > li > ul > li.outOfStock { position: relative; float: left; clear: left; } /* Auto size li to text size and allow ::before and ::after positioning to be relative */
+.outofStockPopup > div > ul > li > ul > li.outOfStock::before {
+    content: " ";
+    width: 100%;
+    height: 3px;
+    background: white;
+    position: absolute;
+    top: 50%;
+    left: 0;
+}
+.outofStockPopup > div > ul > li > ul > li.outOfStock::after {
+    content: "out of stock";
+    text-transform: uppercase;
+    color: rgb(200, 0, 0);
+    font-size: 75%;
+    
+    white-space: nowrap; /* Auto size width and height without wrapping words */
+    position: absolute;
+    top: 4px;
+    margin-left: 10px;
 }
