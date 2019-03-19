@@ -9,9 +9,9 @@ import {
 } from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
-const orderRedirect = async (collectionId, userId, collectionPoint, date) => {
+const orderRedirect = async (collectionId, userId, collectionPoint, date, orderId) => {
     await popToRoot('ViewMenus');
-    await setOrderStatus('ViewMenus', collectionId, userId, collectionPoint, date);
+    await setOrderStatus('ViewMenus', collectionId, userId, collectionPoint, date, orderId);
 };
 
 export function* submitOrderSaga(action) {
@@ -95,6 +95,10 @@ export function* submitOrderSaga(action) {
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
+            console.log('made it');
+            console.log(response.data);
+            orderId = response.data.data.createOrder._id
+            yield AsyncStorage.setItem("orderId", orderId);
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
@@ -102,7 +106,7 @@ export function* submitOrderSaga(action) {
             const collectionId = response.data.data.createOrder.collectionId;
             const collectionPoint = response.data.data.createOrder.collectionPoint;
             const date = response.data.data.createOrder.date;
-            yield orderRedirect(collectionId, user, collectionPoint, date);
+            yield orderRedirect(collectionId, user, collectionPoint, date, orderId);
         }
     } catch (err) {
         yield put(actions.submitOrderFail(err));
@@ -112,6 +116,7 @@ export function* submitOrderSaga(action) {
 
 export function* orderHistorySaga(action) {
     const user = yield AsyncStorage.getItem('userId');
+    console.log("action",action)
     yield put(actions.orderHistoryStart());
     try {
         let requestBody = {
@@ -149,6 +154,50 @@ export function* orderHistorySaga(action) {
                 );
             }
             yield put(actions.orderHistorySuccess(fetchData));
+        }
+    } catch (err) {
+        console.log(err);
+        yield put(actions.orderHistoryFailure());
+    }
+}
+
+export function* orderStatusSaga(action){
+    yield put(actions.orderStatusStart());
+    const id = yield AsyncStorage.getItem("orderId");
+    try {
+        let requestBody = {
+            query: `
+                query FindOrderById($id: ID!) {
+                    findOrderById(id: $id) {
+                        drinks {
+                            name
+                            category
+                            price
+                        }
+                        collectionPoint
+                        status
+                        date
+                        _id
+                        transactionId
+                        userInfo{
+                            email
+                            name
+                        }
+                   }
+                }
+            `,
+            variables: {
+                id: id ? id : '5c8d3e036d45a435da3d385d'
+            }
+        };
+        const response = yield axios.post('/', JSON.stringify(requestBody));
+        if (response.data.errors) {
+            yield put(actions.orderHistoryFailure());
+            throw Error(response.data.errors[0].message);
+        }
+        if (response.status === 200 && response.status !== 201) {
+        // console.log("response",response)
+        yield put(actions.orderStatusSuccess(response.data.data))
         }
     } catch (err) {
         console.log(err);
