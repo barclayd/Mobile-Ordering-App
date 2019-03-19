@@ -119,6 +119,25 @@ module.exports = {
             console.log(err);
             throw err;
         }
+    },
+    findActiveOrdersByCollectionPointId: async ({id}) => {
+        try {
+            const foundOrders = await Order.find({collectionPoint: id}).populate('userInfo');
+            const returnedDrinks = await drinks(foundOrder.drinks);
+            return {
+                _id: foundOrder._id,
+                drinks: returnedDrinks,
+                collectionPoint: foundOrder.collectionPoint,
+                status: foundOrder.status,
+                orderAssignedTo: foundOrder.orderAssignedTo,
+                date: dateToString(foundOrder._doc.date),
+                userInfo: foundOrder.userInfo,
+                transactionId: foundOrder.transactionId
+            };
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 };
 
