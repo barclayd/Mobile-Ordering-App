@@ -261,7 +261,6 @@ button.orderButton {
   position: relative;
 }
 button.orderButton .icon {
-  background: #868686;
   display: block;
   border-radius: 300px;
   float: left;
@@ -278,18 +277,22 @@ button.orderButton .icon {
   color: rgba(30,30,30, 0.9)
 }
 button.orderButton .icon::after {
-  content: "•••";
   font-family: sans-serif;
   font-size: 26px;
-  position: relative;
   letter-spacing: 2px;
   color: rgba(30,30,30, 0.8);
+  position: relative;
 }
-button.orderButton .icon.ready { background: #008600 }
-button.orderButton .icon.ready::after { content: "" }
-button.orderButton .icon.notReady, button.orderButton .icon.notInProgress { background: #862D2D }
-button.orderButton .icon.notReady::after, button.orderButton .icon.notInProgress::after { content: "" }
 
+button.orderButton .icon.billingAndMore { background: #868686 }
+button.orderButton .icon.billingAndMore::after { content: "•••"; }
+button.orderButton .icon.ready { background: #008600 }
+button.orderButton .icon.notReady, button.orderButton .icon.notInProgress { background: #862D2D }
+button.orderButton .icon.save { background: #2b2 }
+button.orderButton .icon.cancel { background: #b22 }
+button.orderButton .icon.outOfStock { background: #ff9d1c }
+button.orderButton .icon.complete { background: #2bc72b }
+button.orderButton .icon.delete { background: #862D2D; line-height: 50px }
 button.orderButton .icon.refund { background: #4286f4 }
 button.orderButton .icon.refund::after {
   content: "£";
@@ -298,43 +301,12 @@ button.orderButton .icon.refund::after {
   font-size: 32px;
 }
 
-button.orderButton .icon.save {
-  background: #2b2;
-  letter-spacing: normal;
-}
-button.orderButton .icon.save::after { content: "" }
-
-button.orderButton .icon.cancel {
-  background: #b22;
-  letter-spacing: normal;
-}
-button.orderButton .icon.cancel::after { content: "" }
-
-button.orderButton .icon.outOfStock {
-  background: #ff9d1c;
-  letter-spacing: normal;
-}
-button.orderButton .icon.outOfStock::after { content: "" }
-
-button.orderButton .icon.complete {
-  background: #2bc72b;
-  letter-spacing: normal;
-}
-button.orderButton .icon.complete::after { content: "" }
-
-button.orderButton .icon.delete {
-  background: #862D2D;
-  letter-spacing: normal;
-  line-height: 50px;
-}
-button.orderButton .icon.delete::after { content: "" }
-
 button.orderButton .title, button.orderButton .subtitle {
   float: left;
   margin-left: 7px;
 }
 
-button.orderButton .title { color: #E4E4E4; }
+button.orderButton .title { color: #E4E4E4 }
 button.orderButton .subtitle {
   color: #BCBCBC;
   font-size: 15px;
