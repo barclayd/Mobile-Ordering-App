@@ -15,10 +15,34 @@ class AddDrinks extends Component {
     verb: false
   };
 
+  componentWillReceiveProps(nextProps){
+    if (!nextProps.loading){
+      if (nextProps.drinkDetails){
+        console.log("props recieved - basket",nextProps.basket)
+        // if item exists in the basket -> show quantity of item in basket.
+        let drinksList = [];
+        this.props.basket.map(drinks => {
+          drinksList.push(drinks.name)
+        })
+        if (drinksList.includes(nextProps.drinkDetails.name)){
+            nextProps.basket.map(drink => {
+              if (drink.name == nextProps.drinkDetails.name){
+                console.log("drink is in the basket and is selected");
+                this.setState({
+                  value: drink.quantity
+                })
+              }
+            })
+          }
+        }
+      }
+    }
+
   valueChanged = value => {
     if (value === 0) {
       return;
     }
+
     const nextValue = Number(value.toFixed(2));
     let initialPrice = Number(this.props.drinkDetails.price) * nextValue;
     let price = parseFloat(Math.round(initialPrice * 100) / 100).toFixed(2);
