@@ -809,7 +809,7 @@ export default class App extends Component {
                         <span className="subtitle">Mark as un-ready</span>
                       </button>
                       <button onClick={()=>{this.showBilling(orderIndex)}} className="orderButton">
-                        <span className="icon"></span>
+                        <span className="icon billingAndMore"></span>
                         <span className="title">More</span>
                         <br />
                         <span className="subtitle">Billing &amp; more</span>
@@ -853,7 +853,7 @@ export default class App extends Component {
                           <span className="subtitle">Return to pending</span>
                         </button>
                         <button onClick={() => { this.showBilling(orderIndex) }} className="orderButton">
-                          <span className="icon"></span>
+                          <span className="icon billingAndMore"></span>
                           <span className="title">More</span>
                           <br />
                           <span className="subtitle">Billing &amp; more</span>
