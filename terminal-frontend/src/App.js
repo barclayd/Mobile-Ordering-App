@@ -17,6 +17,7 @@ import OrderStatus from './OrderStatuses.js';
 import IngredientAmounts from './IngredientAmounts.js';
 import rangeScaling from "./FunctionLib.js";
 import OutOfStockPopUpWindow from './components/out-of-stock-popup-window/out-of-stock-popup-window';
+import axios from './axios-instance';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (miliseconds)
