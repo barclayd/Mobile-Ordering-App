@@ -43,7 +43,8 @@ export const updateUpdateBasket = (prevStateBasket, updatedDrink) => {
     const updatedQuantity = updatedDrink.quantity;
     const newDrinkObject = {
         ...oldDrinkObject[0],
-        quantity: updatedQuantity + oldDrinkObject[0].quantity
+        quantity: updatedQuantity
+        //  + oldDrinkObject[0].quantity
     };
     return prevStateBasket.filter(drink => drink.name !== updatedDrink.name).concat(newDrinkObject);
 };
