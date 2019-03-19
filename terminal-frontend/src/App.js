@@ -1,5 +1,5 @@
 import { faClock } from '@fortawesome/free-regular-svg-icons';
-import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy, faCheck, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import QrReader from "react-qr-reader";
@@ -803,7 +803,7 @@ export default class App extends Component {
                     <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.staffMemberID) }</span></h5>
                     <div className="orderButtonsContainer" onClick={(e)=>{e.stopPropagation()}}>
                       <button className="orderButton">
-                        <span className="icon notReady"></span>
+                        <span className="icon notReady"><FontAwesomeIcon icon={faUndoAlt} /></span>
                         <span className="title">Not ready</span>
                         <br />
                         <span className="subtitle">Mark as un-ready</span>
@@ -841,13 +841,13 @@ export default class App extends Component {
 
                       <div className="orderButtonsContainer">
                         <button className="orderButton">
-                          <span className="icon ready"></span>
+                          <span className="icon ready"><FontAwesomeIcon icon={faCheck} /></span>
                           <span className="title">Ready</span>
                           <br />
                           <span className="subtitle">Mark as ready</span>
                         </button>
                         <button className="orderButton">
-                          <span className="icon notInProgress"></span>
+                          <span className="icon notInProgress"><FontAwesomeIcon icon={faUndoAlt} /></span>
                           <span className="title">Not in progress</span>
                           <br />
                           <span className="subtitle">Return to pending</span>

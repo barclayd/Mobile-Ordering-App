@@ -10,20 +10,28 @@
 }
 
 .outofStockPopup > div > ul > li {
-    margin-bottom: 12px; /* ensures orderButtonsContainer never overlaps orderList items */
     clear: left; /* Stop left wrap */
+    user-select: none; /* Disable text highlighting */
 }
 
-.outofStockPopup > div > ul > li > ul > li.outOfStock { position: relative; float: left; clear: left; } /* Auto size li to text size and allow ::before and ::after positioning to be relative */
+/* Add spacing between lists of ingredients and drinks */
+.outofStockPopup > div > ul > li, .outofStockPopup > div > ul > li > ul > li:last-child {
+    margin-bottom: 12px;
+}
+
+.outofStockPopup > div > ul > li > ul > li { cursor: pointer; position: relative; float: left; clear: left; } /* Auto size li to text size and allow ::before and ::after positioning to be relative */
+
+/* Add styleable text strike-through */
 .outofStockPopup > div > ul > li > ul > li.outOfStock::before {
     content: " ";
     width: 100%;
     height: 3px;
-    background: white;
+    background: #fff;
     position: absolute;
-    top: 50%;
-    left: 0;
+    top: 54%; /* Vertically strike-through line */
 }
+
+/* Add red out of stock text to items */
 .outofStockPopup > div > ul > li > ul > li.outOfStock::after {
     content: "out of stock";
     text-transform: uppercase;

@@ -40,11 +40,16 @@ export default class OutOfStockPopUpWindow extends React.Component {
                 <ul className="ingredientList">
                     {
                         ingredients.map((ingredientData, incrementer) => {
+                            let itemClass = "item";
+
+                            let currentStock = this.state.outOfStockIngredients.findIndex(ingredient => ingredient.id === ingredientData.id);
+                            if (currentStock !== -1 && !this.state.outOfStockIngredients[currentStock].inStock) { itemClass += " outOfStock" }
+
                             return (
                                 <li
                                     onClick={ () => { this.markIngredientOutOfStock(ingredientData.id) } }
                                     key={ incrementer }
-                                    className="item outOfStock"
+                                    className={ itemClass }
                                 >
                                     { ingredientData.name }
                                 </li>
