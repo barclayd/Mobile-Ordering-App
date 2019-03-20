@@ -12,6 +12,13 @@ module.exports = buildSchema(`
      type Category {
         category: String!
      }
+     
+     type CollectionPoint {
+        _id: ID! 
+        name: String!
+        bar: Bar!
+        collectionPointId: String
+     }
         
     type Drink {
             _id: ID!
@@ -65,6 +72,11 @@ module.exports = buildSchema(`
         role: String!
     }
     
+    input CollectionPointInput {
+        name: String!
+        bar: ID!
+    }
+    
     input OrderInput {
         drinks: [ID!]
         collectionPoint: String!
@@ -72,6 +84,7 @@ module.exports = buildSchema(`
         date: String!
         userInfo: ID!
     }
+    
     
     input BarInput {
         name: String!
@@ -104,7 +117,10 @@ module.exports = buildSchema(`
        findDrinkCategories: [Category!]!
        findOrders: [Order!]!
        findOrdersByUser(userInfo: ID!): [Order!]!
+       findOrdersByCollectionPoint(collectionPoint: ID!): [Order!]!
        findOrderById(id: ID!): Order!
+       findCollectionPoints: [CollectionPoint]
+       findCollectionPointById: CollectionPoint
     }
     
     type RootMutation {
@@ -113,6 +129,7 @@ module.exports = buildSchema(`
         createDrink(drinkInput: DrinkInput): Drink
         createIngredient(ingredientInput: IngredientInput): Ingredient
         createOrder(orderInput: OrderInput): Order
+        createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
     }
     
     schema {

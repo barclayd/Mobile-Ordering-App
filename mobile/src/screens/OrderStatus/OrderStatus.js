@@ -98,8 +98,8 @@ class OrderStatus extends Component {
       qrCode = <QRCode value={token} size={300} />;
     }
 
-    const  drinks = []
-    const finalList = []
+    const  drinks = [];
+    const finalList = [];
 
     let quantities = {}, i, value;
 
@@ -107,19 +107,19 @@ class OrderStatus extends Component {
         let stateDrinks = this.state.orderStatus.findOrderById.drinks;
         stateDrinks.map(drink => {
             drinks.push(drink.name)
-        })
-        
-        let indiDrinks = [...new Set(drinks)];
-        indiDrinks.map(indi => {
-            var count = drinks.reduce(function(n, val) {
-                return n + (val === indi);
-            }, 0);
+        });
 
-            finalList.push({drinkName : indi, quantity: count})
-        })
+      let indiDrinks = [...new Set(drinks)];
+      indiDrinks.map(indi => {
+          var count = drinks.reduce(function(n, val) {
+              return n + (val === indi);
+          }, 0);
+
+          finalList.push({drinkName : indi, quantity: count})
+      });
 
         console.log("finalList",finalList)
-        
+
         // Code to find quantities
         // for (let i = 0; i < stateDrinks.length; i++) {
         //     value = stateDrinks[i].name;
@@ -348,10 +348,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colours.white
-  },
-  qrCode: {
-    backgroundColor: colours.pureWhite,
-    alignSelf: "center"
   },
   button: {
     alignSelf: "center",
