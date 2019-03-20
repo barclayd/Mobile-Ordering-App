@@ -6,8 +6,8 @@ const orderSchema = mongoose.Schema({
         ref:'Drink',
     }],
     collectionPoint: {
-        type: String,
-        required: true,
+        type: mongoose.Schema.ObjectId,
+        ref: 'CollectionPoint'
     },
     status: {
         type: String,
@@ -29,7 +29,7 @@ const orderSchema = mongoose.Schema({
         type: String,
     },
     collectionId: {
-        type: String,
+        type: String
     }
 });
 

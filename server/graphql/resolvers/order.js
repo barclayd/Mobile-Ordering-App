@@ -1,6 +1,7 @@
 const Drink = require('../../models/drink');
 const Order = require('../../models/order');
 const User = require('../../models/user');
+const CollectionPoint = require('../../models/collectionPoint');
 const {dateToString} = require("../../helpers/date");
 const {transformOrder} = require('./merge');
 const {drinks} = require('./mergeResolvers/drinks');
@@ -78,6 +79,36 @@ module.exports = {
                 };
             });
         } catch (err) {
+            throw err;
+        }
+    },
+    findOrdersByCollectionPoint: async ({collectionPoint}) => {
+        try {
+            const foundCollectionPoint = await CollectionPoint.findOne({_id: collectionPoint});
+            if (!foundCollectionPoint) {
+                throw new Error(`Collection Point ${collectionPoint} does not exist`);
+            }
+            console.log(foundCollectionPoint);
+            const foundOrders = await Order.find({collectionPoint}).populate('userInfo');
+            console.log(foundOrders);
+            return foundOrders.reverse().map(async foundOrder => {
+                const modifiedUserInfo = {
+                    ...foundOrder.userInfo._doc,
+                    password: null
+                };
+                const returnedDrinks = await drinks(foundOrder.drinks);
+                return {
+                    _id: foundOrder._id,
+                    drinks: returnedDrinks,
+                    collectionPoint: foundOrder.collectionPoint,
+                    status: foundOrder.status,
+                    orderAssignedTo: foundOrder.orderAssignedTo,
+                    date: dateToString(foundOrder._doc.date),
+                    userInfo: modifiedUserInfo,
+                    transactionId: foundOrder.transactionId
+                };
+            });
+            } catch (err) {
             throw err;
         }
     },
