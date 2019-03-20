@@ -7,7 +7,7 @@ import {ListItem, Card, withBadge} from 'react-native-elements';
 import * as colours from '../../../styles/colourScheme';
 import {connect} from 'react-redux';
 import * as actions from "../../../store/actions/index"
-import ApplePay from '../../../assets/apple-pay-payment-mark.svg';
+import ApplePay from '../../../assets/apple-pay.svg';
 import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
 import Payment from '../../UI/Overlays/Payment';
 const screenHeight = Dimensions.get('window').height;
