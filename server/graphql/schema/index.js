@@ -79,7 +79,7 @@ module.exports = buildSchema(`
     
     input OrderInput {
         drinks: [ID!]
-        collectionPoint: String!
+        collectionPoint: ID!
         status: String!
         date: String!
         userInfo: ID!
