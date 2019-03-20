@@ -38,7 +38,7 @@ module.exports = buildSchema(`
     
     type Order {
         _id: ID!
-        collectionPoint: String!
+        collectionPoint: String
         drinks: [Drink!]
         orderAssignedTo: String
         status: String!
