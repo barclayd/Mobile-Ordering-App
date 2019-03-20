@@ -20,6 +20,7 @@ module.exports = {
             const createdDrink = new Drink({
                 name: args.drinkInput.name,
                 category: args.drinkInput.category,
+                ingredient: args.drinkInput.ingredient,
                 nutritionInfo: args.drinkInput.nutritionInfo,
                 price: args.drinkInput.price
             });
