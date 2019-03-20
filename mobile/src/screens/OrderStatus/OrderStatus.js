@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  ActivityIndicator
+} from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import * as colours from "../../styles/colourScheme";
 import { Navigation } from "react-native-navigation";
@@ -77,10 +84,6 @@ class OrderStatus extends Component {
     });
   };
 
-  quantity = () => {
-
-  }
-
   render() {
     let qrCode = null;
     const qrData = {
@@ -109,13 +112,14 @@ class OrderStatus extends Component {
             drinks.push(drink.name)
         });
 
-      let indiDrinks = [...new Set(drinks)];
-      indiDrinks.map(indi => {
-          var count = drinks.reduce(function(n, val) {
-              return n + (val === indi);
-          }, 0);
+        let indiDrinks = [...new Set(drinks)];
+        indiDrinks.map(indi => {
+            var count = drinks.reduce(function(n, val) {
+                return n + (val === indi);
+            }, 0);
 
-          finalList.push({drinkName : indi, quantity: count})
+
+            finalList.push({drinkName : indi, quantity: count})  
       });
 
         console.log("finalList",finalList)
@@ -129,134 +133,135 @@ class OrderStatus extends Component {
         //         quantities[value]++;
         //     }
         // }
-
-        // console.log("Quantities",Object.keys(quantities));
-        // quantities.map(drink => {
-        //     drinks.push({drinkObj : drink, drink.price})
-        // })
+      // });
     }
 
-
-    // console.log("indiDrinks", indiDrinks)
-
     return (
-    <ScrollView style={styles.scroll}>
-      <View style={[styles.container]}>
-        {/* <Scrollview> */}
-        {this.state.orderStatus.findOrderById ? (
-          <View style={styles.header}>
-            <Text style={styles.status}>Order Successful!</Text>
-            <Text style={styles.success}>
-              Thank You {this.state.orderStatus.findOrderById.userInfo.name}!
-            </Text>
-            <View style={styles.progressCircle}>
-              <Text style={styles.orderText}>Status:</Text>
-              <Text style={styles.orderSubtitle}>
-                {this.state.orderStatus.findOrderById.status}{" "}
+      <ScrollView style={styles.scroll}>
+        <View style={[styles.container]}>
+          {this.state.orderStatus.findOrderById ? (
+            <View style={styles.header}>
+              <Text style={styles.status}>Order Successful!</Text>
+              <Text style={styles.success}>
+                Thank You {this.state.orderStatus.findOrderById.userInfo.name}!
               </Text>
-              <Progress.Circle
-                size={30}
-                indeterminate={true}
-                color={colours.orange}
-                thickness={15}
-              />
-            </View>
-            <View style={styles.progressCircle}>
-              <Text style={styles.orderText}>Order Number :</Text>
-              <Text style={styles.orderSubTitle}>{this.props.orderNumber}</Text>
-            </View>
-            <View style={styles.progressCircle}>
-              <Text style={styles.orderText}>Ordered at :</Text>
-              <Text style={styles.date}>
-                {new Date(this.state.orderStatus.findOrderById.date)
-                  .toTimeString()
-                  .slice(0, 8)}
+              <View style={styles.progressCircle}>
+                <Text style={styles.orderText}>Status:</Text>
+                <Text style={styles.orderSubtitle}>
+                  {this.state.orderStatus.findOrderById.status}{" "}
+                </Text>
+                <Progress.Circle
+                  size={30}
+                  indeterminate={true}
+                  color={colours.orange}
+                  thickness={15}
+                />
+              </View>
+              <View style={styles.progressCircle}>
+                <Text style={styles.orderText}>Order Number :</Text>
+                <Text style={styles.orderSubTitle}>
+                  {this.props.orderNumber}
+                </Text>
+              </View>
+              <View style={styles.progressCircle}>
+                <Text style={styles.orderText}>Ordered at :</Text>
+                <Text style={styles.date}>
+                  {new Date(this.state.orderStatus.findOrderById.date)
+                    .toTimeString()
+                    .slice(0, 8)}
+                </Text>
+                <Text style={styles.date}>
+                  {new Date(
+                    this.state.orderStatus.findOrderById.date
+                  ).toDateString()}
+                </Text>
+              </View>
+              <View style={styles.progressCircle}>
+                <Text style={styles.orderText}>Collection Point:</Text>
+                <Text style={styles.orderSubtitle}>
+                  {this.state.orderStatus.findOrderById.collectionPoint}
+                </Text>
+              </View>
+              <Text style={styles.orderText}>
+                Estimated Collection Time : 10:59pm
               </Text>
-              <Text style={styles.date}>
-                {new Date(
-                  this.state.orderStatus.findOrderById.date
-                ).toDateString()}
-              </Text>
-            </View>
-            <View style={styles.progressCircle}>
-              <Text style={styles.orderText}>Collection Point:</Text>
-              <Text style={styles.orderSubtitle}>
-                {this.state.orderStatus.findOrderById.collectionPoint}
-              </Text>
-            </View>
-            <Text style={styles.orderText}>
-              Estimated Collection Time : 10:59pm
-            </Text>
-            <Text style={[styles.status, styles.padd]}>Order Summary</Text>
-            <View style={styles.recipt}>
-              <Text style={styles.orderText}>Items</Text>
-              <Text style={styles.orderText}>Price</Text>
-            </View>
-            {finalList.map((drinks, i) => {
-              return (
-                // <ScrollView style={styles.scroll}>
-                <View key={i} style={styles.recipt}>
-                  <View>
-                    <Text style={styles.orderText}>{drinks.quantity} x {drinks.drinkName}</Text>
+              <Text style={[styles.status, styles.padd]}>Order Summary</Text>
+              <View style={styles.recipt}>
+                <Text style={styles.orderText}>Items</Text>
+                <Text style={styles.orderText}>Price</Text>
+              </View>
+              {finalList.map((drinks, i) => {
+                return (
+                  // <ScrollView style={styles.scroll}>
+                  <View key={i} style={styles.recipt}>
+                    <View>
+                      <Text style={styles.orderText}>
+                        {drinks.quantity} x {drinks.drinkName}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.orderText}>£HARD.CODE</Text>
+                    </View>
                   </View>
-                  <View>
-                    <Text style={styles.orderText}>£HARD.CODE</Text>
-                  </View>
-                  </View>
-                // </ScrollView>
-              );
-            })}
-          </View>
-        ) : null}
+                  // </ScrollView>
+                );
+              })}
 
-        {/* </View> */}
-        <View style={styles.button}>
-          <ButtonBackground
-            color={colours.orange}
-            onPress={() => this.toggleQRCode()}
-            textColor={colours.pureWhite}
-          >
-            Show QR Code
-          </ButtonBackground>
-        </View>
-        <Modal
-          visible={this.state.showQRCode}
-          onSwipeComplete={() => this.toggleQRCode()}
-          swipeDirection="down"
-          onBackdropPress={() => this.toggleQRCode()}
-        >
-          <View style={styles.modal}>
-            <Text style={styles.header}>
-              Order{" "}
-              <Text style={{ color: colours.orange }}>
-                #{this.props.collectionId}
-              </Text>{" "}
-            </Text>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-around",
-                marginBottom: 40
-              }}
-            >
-              <Text style={styles.infoText}>
-                Collection:{" "}
-                <Text style={{ color: colours.orange }}>
-                  {this.props.collectionPoint}
-                </Text>
-              </Text>
-              <Text style={styles.infoText}>
-                Order Time:{" "}
-                <Text style={{ color: colours.orange }}>
-                  {new Date(this.props.date).toTimeString().slice(0, 5)}
-                </Text>
-              </Text>
+              <View style={styles.button}>
+                <ButtonBackground
+                  color={colours.orange}
+                  onPress={() => this.toggleQRCode()}
+                  textColor={colours.pureWhite}
+                >
+                  Show QR Code
+                </ButtonBackground>
+              </View>
+              <Modal
+                visible={this.state.showQRCode}
+                onSwipeComplete={() => this.toggleQRCode()}
+                swipeDirection="down"
+                onBackdropPress={() => this.toggleQRCode()}
+              >
+                <View style={styles.modal}>
+                  <Text style={styles.header}>
+                    Order{" "}
+                    <Text style={{ color: colours.orange }}>
+                      #{this.props.collectionId}
+                    </Text>{" "}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                      marginBottom: 40
+                    }}
+                  >
+                    <Text style={styles.infoText}>
+                      Collection:{" "}
+                      <Text style={{ color: colours.orange }}>
+                        {this.props.collectionPoint}
+                      </Text>
+                    </Text>
+                    <Text style={styles.infoText}>
+                      Order Time:{" "}
+                      <Text style={{ color: colours.orange }}>
+                        {new Date(this.props.date).toTimeString().slice(0, 5)}
+                      </Text>
+                    </Text>
+                  </View>
+                  <View style={styles.qrCode}>{qrCode}</View>
+                </View>
+              </Modal>
             </View>
-            <View style={styles.qrCode}>{qrCode}</View>
-          </View>
-        </Modal>
-      </View>
-    </ScrollView>
+          ) : (
+            <View style={styles.actContainer}>
+              <ActivityIndicator size="large" color={colours.orange} />
+            </View>
+          )}
+
+          {/* </View> */}
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -275,7 +280,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row"
   },
-  scroll:{
+  scroll: {
     backgroundColor: colours.midnightBlack
   },
   right: {
@@ -335,6 +340,11 @@ const styles = StyleSheet.create({
     backgroundColor: colours.midnightBlack,
     color: colours.white,
     flex: 1
+  },
+  actContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
   },
   qrCode: {
     width: Dimensions.get("window").width,
