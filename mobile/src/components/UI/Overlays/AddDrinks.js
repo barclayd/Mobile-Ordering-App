@@ -18,7 +18,6 @@ class AddDrinks extends Component {
   componentWillReceiveProps(nextProps){
     if (!nextProps.loading){
       if (nextProps.drinkDetails){
-        console.log("props recieved - basket",nextProps.basket)
         // if item exists in the basket -> show quantity of item in basket.
         let drinksList = [];
         this.props.basket.map(drinks => {
@@ -27,7 +26,7 @@ class AddDrinks extends Component {
         if (drinksList.includes(nextProps.drinkDetails.name)){
             nextProps.basket.map(drink => {
               if (drink.name == nextProps.drinkDetails.name){
-                console.log("drink is in the basket and is selected");
+                console.log(drink.name,"has : ",drink.quantity, "quantity");
                 this.setState({
                   value: drink.quantity
                 })
