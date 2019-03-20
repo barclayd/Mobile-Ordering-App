@@ -49,7 +49,7 @@ export function* submitOrderSaga(action) {
     try {
         let requestBody = {
             query: `
-                mutation CreateOrder($drinks: [ID!], $collectionPoint: String!, $status: String!, $date: String!, $userInfo: ID!) {
+                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $status: String!, $date: String!, $userInfo: ID!) {
                     createOrder(orderInput: {
                         drinks: $drinks
                         collectionPoint: $collectionPoint
@@ -77,7 +77,7 @@ export function* submitOrderSaga(action) {
             `,
             variables: {
                 drinks: drinksList,
-                collectionPoint: "SU Lounge",
+                collectionPoint: "5c925624bc63a912ed715315",
                 status: "PENDING",
                 date: date,
                 userInfo: user ? user : '5c69c7c058574e24c841ddc8'
@@ -97,7 +97,7 @@ export function* submitOrderSaga(action) {
         if (response.status === 200 && response.status !== 201) {
             console.log('made it');
             console.log(response.data);
-            orderId = response.data.data.createOrder._id
+            const orderId = response.data.data.createOrder._id;
             yield AsyncStorage.setItem("orderId", orderId);
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
@@ -116,7 +116,7 @@ export function* submitOrderSaga(action) {
 
 export function* orderHistorySaga(action) {
     const user = yield AsyncStorage.getItem('userId');
-    console.log("action",action)
+    console.log("action",action);
     yield put(actions.orderHistoryStart());
     try {
         let requestBody = {
