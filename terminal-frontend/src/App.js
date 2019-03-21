@@ -21,7 +21,7 @@ import rangeScaling from "./FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
 
 // Settings:
-const notificationDuration = 8000; // How long notifications stay on-screen (miliseconds)
+const notificationDuration = 8000; // How long notifications stay on-screen (milliseconds)
 const qrDelay = 200; // How fast to scan for QR codes (more info: https://www.npmjs.com/package/react-qr-reader)
 const validScanCooldown = 3000; // Delay before accepting more QR codes after a valid scan (blocks notification scan)
 const maxCollapsedOrdersToShow = 3; // How many orders show in a collapsed stack before fading to nothing
@@ -633,7 +633,7 @@ class App extends Component {
     this.setState({orderWindowOpen: null})
   };
 
-  // Strict func that takes order ID and corrisponding customer ID from QR to prevent order code theft
+  // Strict func that takes order ID and corresponding customer ID from QR to prevent order code theft
   pickupOrder = (orderID, customerID) => {
     let order = this.state.orders.find(order => order.id === orderID && order.customerID === customerID); // Find order sharing the same ID and customer ID
 
@@ -943,7 +943,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadOrders: (collectionPoint) => dispatch(actions.getOrders(collectionPoint))
+    loadOrders: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint))
   }
 };
 
