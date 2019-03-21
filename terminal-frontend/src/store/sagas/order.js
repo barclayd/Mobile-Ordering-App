@@ -6,22 +6,36 @@ export function* getOrdersSaga(action) {
     yield put(actions.getOrdersStart());
     try {
         let requestBody = {
-            query: `
-                query {
-                    findOrders {
+          query: `
+          query FindOrdersByCollectionPoint($collectionPoint: ID!) {
+                    findOrdersByCollectionPoint(
+                        collectionPoint: $collectionPoint
+                    ) {
+                        _id
+                        collectionId
                         drinks {
-                            _id
-                            name
-                            category
-                            price
+                          _id
+                          name
+                          price
+                          category
+                        }
+                        collectionPoint {
+                          _id
+                          collectionPointId
                         }
                         status
                         date
-                        _id
                         transactionId
+                        userInfo {
+                            email
+                            _id
+                        }
                    }
                 }
-            `
+            `,
+            variables: {
+                collectionPoint: action.collectionPointId,
+            }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
@@ -30,9 +44,9 @@ export function* getOrdersSaga(action) {
         }
         if (response.status === 200 && response.status !== 201) {
             const fetchData = [];
-            for (let key in response.data.data.findOrders) {
+            for (let key in response.data.data.findOrdersByCollectionPoint) {
                 fetchData.push(
-                    response.data.data.findOrders[key],
+                    response.data.data.findOrdersByCollectionPoint[key],
                 );
             }
             yield put(actions.getOrdersSuccess(fetchData));

@@ -585,7 +585,7 @@ class App extends Component {
   };
 
   getStaffMemberFullName = (staffID) => {
-    let staffMember = this.state.staffMembers.find(x => x.id === staffID)
+    let staffMember = this.state.staffMembers.find(x => x.id === staffID);
     return staffMember.firstName + " " + staffMember.surname;
   };
 
@@ -613,7 +613,7 @@ class App extends Component {
       try {
         let qrJSON = JSON.parse(data); // Attempt to parse QR data to see if it contains valid JSON
         if (qrJSON.orderID && new Date() - this.state.lastValidScan > validScanCooldown) { // Check the JSON contains an order ID, then run the pickup function
-          this.pickupOrder(qrJSON.orderID, qrJSON.customerID)
+          this.pickupOrder(qrJSON.orderID, qrJSON.customerID);
           this.setState({
             lastValidScan: new Date()
           });
@@ -635,7 +635,7 @@ class App extends Component {
 
   // Strict func that takes order ID and corrisponding customer ID from QR to prevent order code theft
   pickupOrder = (orderID, customerID) => {
-    let order = this.state.orders.find(order => order.id === orderID && order.customerID === customerID) // Find order sharing the same ID and customer ID
+    let order = this.state.orders.find(order => order.id === orderID && order.customerID === customerID); // Find order sharing the same ID and customer ID
 
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
@@ -650,7 +650,22 @@ class App extends Component {
     }
   };
 
-  // Relaxed version of pickup order, used for bartenders to manaully input just an order ID (not corrisponding customer ID)
+  componentDidMount() {
+    const collectionId = localStorage.getItem('collectionPoint') || '5c925624bc63a912ed715315';
+    this.props.loadOrders(collectionId);
+    this.loadNotificationsJSX();
+    setInterval(this.loadNotificationsJSX, notificationDuration + 1)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.loading) {
+      this.setState({
+        serverOrders: nextProps.serverOrders
+      });
+    }
+  }
+
+  // Relaxed version of pickup order, used for bartenders to manually input just an order ID (not corresponding customer ID)
   pickupOrderInsecure = (orderID) => {
     let order = this.state.orders.find(order => order.id === orderID); // Find order by ID
     if (order) {
@@ -725,12 +740,6 @@ class App extends Component {
     this.setState({notificationsJSX: notificationsJSX})
   };
 
-  componentDidMount() {
-    this.props.loadOrders();
-    this.loadNotificationsJSX();
-    setInterval(this.loadNotificationsJSX, notificationDuration + 1)
-  }
-
   ToggleAwaitingCollapse = (event) => {
     let newStyle = "collapsed";
     let collapsed = true;
@@ -749,6 +758,7 @@ class App extends Component {
   showOutOfStock = () => { this.state.showOutOfStock() };
 
   render() {
+    console.log(this.state.serverOrders);
     return (
       <div className="App">
         <header className="App-header">
@@ -924,10 +934,17 @@ class App extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
   return {
-    loadOrders: () => dispatch(actions.getOrders())
+    serverOrders: state.orders.orders,
+    ordersLoading: state.orders.loading
   }
 };
 
-export default connect(null, mapDispatchToProps)(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    loadOrders: (collectionPoint) => dispatch(actions.getOrders(collectionPoint))
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
