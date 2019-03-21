@@ -1,8 +1,9 @@
 import * as actionTypes from './actionTypes';
 
-export const getOrders = () => {
+export const getOrders = (collectionPointId) => {
     return {
         type: actionTypes.GET_ORDERS,
+        collectionPointId
     };
 };
 
