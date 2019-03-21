@@ -98,7 +98,7 @@ class OrderStatus extends Component {
       key
     );
     if (this.props.userId && this.props.collectionId) {
-      qrCode = <QRCode value={token} size={300} />;
+      qrCode = <QRCode value={qrData} size={300} />;
     }
 
     const  drinks = [];
