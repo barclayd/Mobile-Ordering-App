@@ -45,11 +45,11 @@ module.exports = {
         }
     },
     findCollectionPointById: async ({collectionPointId}) => {
-        // does bar exist with given bar code
+        // does collectionPoint exist with given id
         const collectionPoint = await CollectionPoint.findOne({
             collectionPointId: collectionPointId.toUpperCase()
         });
-        // no bar found with given bar code
+        // no collectionPoint found with given id
         if (!collectionPoint) {
             throw new Error(`Collection Point with collectionPointId: ${collectionPointId} does not exist`);
         }
