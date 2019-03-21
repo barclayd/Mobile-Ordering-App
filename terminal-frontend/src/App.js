@@ -4,19 +4,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import QrReader from "react-qr-reader";
 import './App.css';
-import BillingPopupWindow from './components/billing-popup-window/billing-popup-window';
-import ManualPickupPopupWindow from './components/manual-pickup-popup-window/manual-pickup-popup-window';
+import BillingPopupWindow from './containers/billing-popup-window/billing-popup-window';
+import ManualPickupPopupWindow from './containers/manual-pickup-popup-window/manual-pickup-popup-window';
 import MultiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
-import PickupPopupWindow from './components/pickup-popup-window/pickup-popup-window';
+import PickupPopupWindow from './containers/pickup-popup-window/pickup-popup-window';
 import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
-import TimeAgo from './components/time-ago-clean/time-ago-clean';
+import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./notes.svg";
 import OrderStatus from './OrderStatuses.js';
 import IngredientAmounts from './IngredientAmounts.js';
 import rangeScaling from "./FunctionLib.js";
-import OutOfStockPopUpWindow from './components/out-of-stock-popup-window/out-of-stock-popup-window';
+import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
 import axios from './axios-instance';
 
 // Settings:

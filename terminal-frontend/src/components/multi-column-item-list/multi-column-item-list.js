@@ -7,8 +7,8 @@ const itemsPerOrderListColumn = 4; // How many order items show per column
 
 
 
-export default class MultiColumnItemList extends React.Component {
-    renderListItems = (items) => {
+const MultiColumnItemList = (props) => {
+    const renderListItems = (items) => {
         return items.map((itemData) => {
             return (
                 <li key={itemData.id}><span className="quantity">{itemData.quantity}x</span>{itemData.name}</li>
@@ -16,7 +16,7 @@ export default class MultiColumnItemList extends React.Component {
         })
     }
 
-    renderMultiColumItemList = (items) => {
+    const renderMultiColumItemList = (items) => {
         if (items.length > itemsPerOrderListColumn) {
             const columnCount = Math.floor(items.length / itemsPerOrderListColumn) + 1; // Calculate how many columns are needed
             let columns = []; // Array of arrays of rows
@@ -33,21 +33,21 @@ export default class MultiColumnItemList extends React.Component {
                 i++;
                 return(
                     <ul key={i} className="orderList multiColumn">
-                    { this.renderListItems(columnData) }
+                    { renderListItems(columnData) }
                     </ul>
                 )
             });
 
         } else {
-            return <ul className="orderList">{ this.renderListItems(items) }</ul>
+            return <ul className="orderList">{ renderListItems(items) }</ul>
         }
     }
 
-    render () {
-        return this.renderMultiColumItemList(this.props.orderItems);
-    }
+    return renderMultiColumItemList(props.orderItems);
 }
 
 MultiColumnItemList.propTypes = {
     orderItems: PropTypes.array.isRequired // Items to be rendered
 }
+
+export default MultiColumnItemList;
