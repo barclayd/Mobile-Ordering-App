@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator, AsyncStorage
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import * as colours from "../../styles/colourScheme";
@@ -30,22 +30,19 @@ class OrderStatus extends Component {
     drinks: {}
   };
 
-  componentDidMount() {
-    console.log("mounted");
+  async componentDidMount() {
     this.props.findOrderById(this.props.orderNumber);
+    this.setState({
+      accountName: await this.getAccountName()
+    });
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps, "nextProps");
-    if (!nextProps.loading) {
+      if (!nextProps.loading) {
       this.setState({
         orderStatus: nextProps.orderStatus
       });
     }
-  }
-
-  componentDidUpdate() {
-    console.log("Component did update. State - ", this.state);
   }
 
   navigationButtonPressed({ buttonId }) {
@@ -84,11 +81,15 @@ class OrderStatus extends Component {
     });
   };
 
+  getAccountName = async () => {
+    return await AsyncStorage.getItem("userId");
+  };
+
   render() {
     let qrCode = null;
     const qrData = {
-      userId: this.props.userId,
-      collectionId: this.props.collectionId
+      userId: this.props.userId || this.state.accountName,
+      collectionId: this.props.collectionId || this.props.orderStatus.findOrderById.collectionPoint.collectionPointId
     };
     const key = "zvBT1lQV1RO9fx6f8";
     const token = jwt.encode(
@@ -97,14 +98,13 @@ class OrderStatus extends Component {
       },
       key
     );
-    if (this.props.userId && this.props.collectionId) {
+
+    if ((this.props.userId || this.state.accountName ) && (this.props.collectionId || this.props.orderStatus.findOrderById.collectionPoint.collectionPointId)) {
       qrCode = <QRCode value={token} size={300} />;
     }
 
     const  drinks = [];
     const finalList = [];
-
-    let quantities = {}, i, value;
 
     if (this.state.orderStatus.findOrderById){
         let stateDrinks = this.state.orderStatus.findOrderById.drinks;
@@ -119,21 +119,8 @@ class OrderStatus extends Component {
             }, 0);
 
 
-            finalList.push({drinkName : indi, quantity: count})  
+            finalList.push({drinkName : indi, quantity: count})
       });
-
-        console.log("finalList",finalList)
-
-        // Code to find quantities
-        // for (let i = 0; i < stateDrinks.length; i++) {
-        //     value = stateDrinks[i].name;
-        //     if (typeof quantities[value] === "undefined") {
-        //         quantities[value] = 1;
-        //     } else {
-        //         quantities[value]++;
-        //     }
-        // }
-      // });
     }
 
     return (
@@ -160,7 +147,7 @@ class OrderStatus extends Component {
               <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Order Number :</Text>
                 <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.findOrderById.collectionId}{" "}
+                  {this.state.orderStatus.findOrderById.collectionPoint.collectionPointId}{" "}
                 </Text>
               </View>
               <View style={styles.progressCircle}>
@@ -179,21 +166,22 @@ class OrderStatus extends Component {
               <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Collection Point:</Text>
                 <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.findOrderById.collectionPoint}
+                  {this.state.orderStatus.findOrderById.collectionPoint.name}
+                  {this.state.orderStatus.findOrderById.collectionPoint.collectionPoindId}
                 </Text>
               </View>
               <Text style={styles.orderText}>
                 Estimated Collection Time : 10:59pm
               </Text>
               <Text style={[styles.status, styles.padd]}>Order Summary</Text>
-              <View style={styles.recipt}>
+              <View style={styles.receipt}>
                 <Text style={styles.orderText}>Items</Text>
                 <Text style={styles.orderText}>Price</Text>
               </View>
               {finalList.map((drinks, i) => {
                 return (
                   // <ScrollView style={styles.scroll}>
-                  <View key={i} style={styles.recipt}>
+                  <View key={i} style={styles.receipt}>
                     <View>
                       <Text style={styles.orderSubtitle}>
                         {drinks.quantity} x {drinks.drinkName}
@@ -275,7 +263,7 @@ const styles = StyleSheet.create({
   padd: {
     marginTop: 25
   },
-  recipt: {
+  receipt: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row"
@@ -347,11 +335,8 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   qrCode: {
-    width: Dimensions.get("window").width,
-    color: "white",
-    backgroundColor: "white",
-    marginTop: 25,
-    borderRadius: 5
+    backgroundColor: colours.pureWhite,
+    alignSelf: 'center',
   },
   containerText: {
     height: Dimensions.get("window").height / 6
