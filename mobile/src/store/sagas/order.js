@@ -174,6 +174,7 @@ export function* orderStatusSaga(action){
                             category
                             price
                         }
+                        collectionId
                         collectionPoint
                         status
                         date
