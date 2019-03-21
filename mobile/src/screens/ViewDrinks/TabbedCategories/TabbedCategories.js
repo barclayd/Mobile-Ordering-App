@@ -28,23 +28,28 @@ class TabbedCategories extends Component {
 
   openOverlay = i => {
     const drinkSelected = this.props.drinks[i];
-    this.props.basket.filter(drinks => {
-      if (drinks.name == drinkSelected.name){
-        this.setState({
-          basketAction: true
-        })
-      }
-      else {
-        this.setState({
-          basketAction: false
-        })
-      }
+    basketDrinks = [];
+    this.props.basket.map(drinks => {
+      basketDrinks.push(drinks.name)
     })
-    this.setState({
-      isVisible: true,
-      drinkSelected: drinkSelected,
-    });
-  };
+    if (basketDrinks.includes(drinkSelected.name)){
+      console.log("drink select exists in basket")
+      this.setState({
+        basketAction: true
+      })
+    } else {
+      this.setState({
+        basketAction: false
+      })
+    }
+  this.setState({
+    isVisible: true,
+    drinkSelected: drinkSelected,
+  });
+  }
+
+    
+    
 
   onBackdropPress = () => {
     this.setState({
