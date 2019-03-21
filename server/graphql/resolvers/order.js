@@ -28,6 +28,10 @@ module.exports = {
             if (!user) {
                 throw new Error ('Invalid user account to process order');
             }
+            const collectionPoint = await CollectionPoint.findById(args.orderInput.collectionPoint);
+            if (!collectionPoint) {
+                throw new Error ('Invalid collection point to process order');
+            }
             const generatedTransactionId = uuid();
             const collectionId = randomString.generate({
                 length: 4,
@@ -44,7 +48,7 @@ module.exports = {
             }
             const createdOrder = new Order({
                 drinks: foundDrinks,
-                collectionPoint: args.orderInput.collectionPoint,
+                collectionPoint: collectionPoint,
                 status: args.orderInput.status,
                 orderAssignedTo: args.orderInput.orderAssignedTo,
                 date: dateToString(args.orderInput.date),
@@ -60,7 +64,7 @@ module.exports = {
     },
     findOrdersByUser: async ({userInfo}) => {
         try {
-            const foundOrders = await Order.find({userInfo}).populate('userInfo');
+            const foundOrders = await Order.find({userInfo}).populate('userInfo').populate('collectionPoint');
             return foundOrders.reverse().map(async foundOrder => {
                 const modifiedUserInfo = {
                     ...foundOrder.userInfo._doc,
@@ -89,7 +93,7 @@ module.exports = {
                 throw new Error(`Collection Point ${collectionPoint} does not exist`);
             }
             console.log(foundCollectionPoint);
-            const foundOrders = await Order.find({collectionPoint}).populate('userInfo');
+            const foundOrders = await Order.find({collectionPoint}).populate('userInfo').populate('collectionPoint');
             console.log(foundOrders);
             return foundOrders.reverse().map(async foundOrder => {
                 const modifiedUserInfo = {
@@ -114,7 +118,7 @@ module.exports = {
     },
     findOrders: async () => {
         try {
-            const foundOrders = await Order.find().populate('userInfo');
+            const foundOrders = await Order.find().populate('userInfo').populate('collectionPoint');
             return foundOrders.reverse().map(async foundOrder => {
                 const returnedDrinks = await drinks(foundOrder.drinks);
                 return {
@@ -134,7 +138,7 @@ module.exports = {
     },
     findOrderById: async ({id}) => {
         try {
-            const foundOrder = await Order.findOne({_id: id}).populate('userInfo');
+            const foundOrder = await Order.findOne({_id: id}).populate('userInfo').populate('collectionPoint');
             const returnedDrinks = await drinks(foundOrder.drinks);
             return {
                 _id: foundOrder._id,
