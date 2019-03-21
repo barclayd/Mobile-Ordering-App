@@ -1,38 +1,34 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
 import PopupWindow from '../popup-window/popup-window'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
-export default class OutOfStockPopUpWindow extends React.Component {
-    constructor(props) {
-        super(props)
+class OutOfStockPopUpWindow extends Component {
 
-        this.state = {
-            outOfStockIngredients: []
-            //EXAMPLE: outOfStockIngredients: [{id: 0, inStock: true}]
-        }
-    }
+    state = {
+        outOfStockIngredients: []
+    };
 
     markIngredientOutOfStock = (ingredientID) => {
         this.setState((prevState) => {
 
             // check the original stock value in case the user has already marked the item in/out of stock
             let currentStock = prevState.outOfStockIngredients.findIndex(ingredient => ingredient.id === ingredientID);
-            
+
             let newOutOfStockIngredients = this.state.outOfStockIngredients; // copy array
             if (currentStock !== -1) {
                 let oldInStock = prevState.outOfStockIngredients[currentStock].inStock; // find original value
                 newOutOfStockIngredients[currentStock].inStock = !oldInStock; // change stock value
-                
+
             } else {
                 newOutOfStockIngredients.push({id: ingredientID, inStock: false}); // add new stock value to array
             }
-            
+
             return { outOfStockIngredients: newOutOfStockIngredients} // Update state for saving to server
         }, ()=>{ console.log("outOfStockIngredients updated: ", this.state.outOfStockIngredients) })
-    }
+    };
 
     buildIngredients = (ingredients) => { // Check item contains more ingredients than just itself
         if (ingredients.length > 1) {
@@ -59,7 +55,8 @@ export default class OutOfStockPopUpWindow extends React.Component {
                 </ul>
             )
         }
-    }
+    };
+
     buildChildren = (order) => {
         if (order) return (
             <React.Fragment>
@@ -77,7 +74,7 @@ export default class OutOfStockPopUpWindow extends React.Component {
                 </div>
             </React.Fragment>
         ); else return "";
-    }
+    };
 
     buildButtons = () => {
         return (
@@ -100,7 +97,7 @@ export default class OutOfStockPopUpWindow extends React.Component {
                 </button>
             </div>
         )
-    }
+    };
 
     render () {
        return (
@@ -122,4 +119,6 @@ export default class OutOfStockPopUpWindow extends React.Component {
 OutOfStockPopUpWindow.propTypes = {
     order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
-}
+};
+
+export default OutOfStockPopUpWindow;
