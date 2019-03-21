@@ -6,7 +6,7 @@ import TimeAgo from '../../containers/time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 
 const NotesPopupWindow = (props) => {
-    
+
     // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
     const buildSubtitle = (order) => {
         if (order) return (
@@ -15,11 +15,11 @@ const NotesPopupWindow = (props) => {
                 <TimeAgo date={order.orderDate}/>
             </span>
         ); else return (<span></span>);
-    }
-    
+    };
+
     const buildNotes = (order) => {
         if (order) return (<p className="notesPara">{order.notes}</p>); else return "";
-    }
+    };
 
     return (
         <PopupWindow
@@ -32,11 +32,11 @@ const NotesPopupWindow = (props) => {
             {buildNotes(props.order)}
         </PopupWindow>
     )
-}
+};
 
 NotesPopupWindow.propTypes = {
     order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
-}
+};
 
 export default NotesPopupWindow;
