@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
 import PopupWindow from '../popup-window/popup-window'
@@ -7,10 +7,12 @@ import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt, faGlassCheers } from '@fortawesome/free-solid-svg-icons';
 
-export default class PickupPopupWindow extends React.Component {
-    
-    showOutOfStock = () => { this.state.showOutOfStock() }
-    
+class PickupPopupWindow extends Component {
+
+    showOutOfStock = () => {
+        this.state.showOutOfStock()
+    };
+
     buildButtons = () => {
         return  (
             <div className="popupButtonsContainer">
@@ -40,11 +42,11 @@ export default class PickupPopupWindow extends React.Component {
                 </button>
             </div>
         )
-    }
-    
+    };
+
     buildTitle = (order) => {
         if (order) return "#" + order.id + " pickup"; else return "";
-    }
+    };
 
     // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
     buildSubtitle = (order) => {
@@ -53,8 +55,8 @@ export default class PickupPopupWindow extends React.Component {
                 Ordered <TimeAgo date={order.orderDate}/>, at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")}
             </span>
         ); else return (<span></span>);
-    }
-    
+    };
+
     // Only shows customer notes if some exist
     buildNotes = (customerNotes) => {
         if (customerNotes) return (
@@ -63,7 +65,7 @@ export default class PickupPopupWindow extends React.Component {
                 <p className="indentedPara notesPara">{ customerNotes }</p>
             </React.Fragment>
         ); else return ""
-    }
+    };
 
     buildChildren = (order) => {
         if (order) return (
@@ -80,12 +82,12 @@ export default class PickupPopupWindow extends React.Component {
                             )
                         })}
                     </ul>
-                    
+
                     { this.buildNotes(order.notes) }
                 </div>
             </React.Fragment>
         ); else return "";
-    }
+    };
 
     render () {
         return (
@@ -109,4 +111,6 @@ PickupPopupWindow.propTypes = {
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
     showOutOfStock: PropTypes.func.isRequired, // Function to show out of stock window
     dismissedHandler: PropTypes.func.isRequired, // Function ran when billing popup is closed without action
-}
+};
+
+export default PickupPopupWindow;
