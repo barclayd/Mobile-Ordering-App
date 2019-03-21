@@ -45,7 +45,7 @@ class OrderStatus extends Component {
   }
 
   componentDidUpdate() {
-    console.log("this.state", this.state);
+    console.log("Component did update. State - ", this.state);
   }
 
   navigationButtonPressed({ buttonId }) {
@@ -159,8 +159,8 @@ class OrderStatus extends Component {
               </View>
               <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Order Number :</Text>
-                <Text style={styles.orderSubTitle}>
-                  {this.props.orderNumber}
+                <Text style={styles.orderSubtitle}>
+                  {this.state.orderStatus.findOrderById.collectionId}{" "}
                 </Text>
               </View>
               <View style={styles.progressCircle}>
@@ -195,12 +195,12 @@ class OrderStatus extends Component {
                   // <ScrollView style={styles.scroll}>
                   <View key={i} style={styles.recipt}>
                     <View>
-                      <Text style={styles.orderText}>
+                      <Text style={styles.orderSubtitle}>
                         {drinks.quantity} x {drinks.drinkName}
                       </Text>
                     </View>
                     <View>
-                      <Text style={styles.orderText}>£HARD.CODE</Text>
+                      <Text style={styles.orderSubtitle}>£HARD.CODE</Text>
                     </View>
                   </View>
                   // </ScrollView>
