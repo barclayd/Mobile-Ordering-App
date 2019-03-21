@@ -157,24 +157,37 @@ module.exports = {
         }
     },
     findActiveOrdersByCollectionPointId: async ({id}) => {
-        try {
-            const foundOrders = await Order.find({collectionPoint: id}).populate('userInfo');
-            const returnedDrinks = await drinks(foundOrder.drinks);
-            return {
-                _id: foundOrder._id,
-                drinks: returnedDrinks,
-                collectionPoint: foundOrder.collectionPoint,
-                status: foundOrder.status,
-                orderAssignedTo: foundOrder.orderAssignedTo,
-                date: dateToString(foundOrder._doc.date),
-                userInfo: foundOrder.userInfo,
-                transactionId: foundOrder.transactionId
-            };
-        } catch (err) {
-            console.log(err);
-            throw err;
-        }
-    }
+		try {
+			// Find orders by collection point
+			const foundOrders = await Order.find({collectionPoint: id}).populate('userInfo');
+
+			// Remove orders that aren't active
+			let filteredOrders = foundOrders.filter(function(order, index, arr){
+				return order.status == "AWAITING_COLLECTION" || order.status == "IN_PROGRESS" || order.status == "PENDING";
+			});
+			
+			return filteredOrders.reverse().map(async foundOrder => {
+				const modifiedUserInfo = {
+					...foundOrder.userInfo._doc,
+					password: null
+				};
+				const returnedDrinks = await drinks(foundOrder.drinks);
+				return {
+					_id: foundOrder._id,
+					drinks: returnedDrinks,
+					collectionPoint: foundOrder.collectionPoint,
+					status: foundOrder.status,
+					orderAssignedTo: foundOrder.orderAssignedTo,
+					date: dateToString(foundOrder._doc.date),
+					userInfo: modifiedUserInfo,
+					transactionId: foundOrder.transactionId
+				};
+			});
+		} catch (err) {
+			throw err;
+		}
+	}
+
 };
 
 
