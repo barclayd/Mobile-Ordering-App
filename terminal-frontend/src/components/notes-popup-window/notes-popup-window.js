@@ -5,7 +5,7 @@ import PopupWindow from '../../containers/popup-window/popup-window'
 import TimeAgo from '../../containers/time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 
-const NotesPopupWindow = (props) => {
+const notesPopupWindow = (props) => {
 
     // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
     const buildSubtitle = (order) => {
@@ -34,9 +34,9 @@ const NotesPopupWindow = (props) => {
     )
 };
 
-NotesPopupWindow.propTypes = {
+notesPopupWindow.propTypes = {
     order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
 };
 
-export default NotesPopupWindow;
+export default notesPopupWindow;
