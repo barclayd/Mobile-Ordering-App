@@ -7,23 +7,23 @@ const itemsPerOrderListColumn = 4; // How many order items show per column
 
 
 
-const MultiColumnItemList = (props) => {
+const multiColumnItemList = (props) => {
     const renderListItems = (items) => {
         return items.map((itemData) => {
             return (
                 <li key={itemData.id}><span className="quantity">{itemData.quantity}x</span>{itemData.name}</li>
             );
         })
-    }
+    };
 
-    const renderMultiColumItemList = (items) => {
+    const renderMultiColumnItemList = (items) => {
         if (items.length > itemsPerOrderListColumn) {
             const columnCount = Math.floor(items.length / itemsPerOrderListColumn) + 1; // Calculate how many columns are needed
             let columns = []; // Array of arrays of rows
 
             // Build columns array
             for (let i=0; i < columnCount; i++) {
-                let startIndex = i*itemsPerOrderListColumn
+                let startIndex = i*itemsPerOrderListColumn;
                 columns.push(items.slice(startIndex, startIndex + itemsPerOrderListColumn));
             }
 
@@ -41,13 +41,13 @@ const MultiColumnItemList = (props) => {
         } else {
             return <ul className="orderList">{ renderListItems(items) }</ul>
         }
-    }
+    };
 
-    return renderMultiColumItemList(props.orderItems);
-}
+    return renderMultiColumnItemList(props.orderItems);
+};
 
-MultiColumnItemList.propTypes = {
+multiColumnItemList.propTypes = {
     orderItems: PropTypes.array.isRequired // Items to be rendered
-}
+};
 
-export default MultiColumnItemList;
+export default multiColumnItemList;
