@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator, AsyncStorage
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import * as colours from "../../styles/colourScheme";
@@ -30,22 +30,19 @@ class OrderStatus extends Component {
     drinks: {}
   };
 
-  componentDidMount() {
-    console.log("mounted");
+  async componentDidMount() {
     this.props.findOrderById(this.props.orderNumber);
+    this.setState({
+      accountName: await this.getAccountName()
+    });
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps, "nextProps");
-    if (!nextProps.loading) {
+      if (!nextProps.loading) {
       this.setState({
         orderStatus: nextProps.orderStatus
       });
     }
-  }
-
-  componentDidUpdate() {
-    console.log("this.state", this.state);
   }
 
   navigationButtonPressed({ buttonId }) {
@@ -84,11 +81,15 @@ class OrderStatus extends Component {
     });
   };
 
+  getAccountName = async () => {
+    return await AsyncStorage.getItem("userId");
+  };
+
   render() {
     let qrCode = null;
     const qrData = {
-      userId: this.props.userId,
-      collectionId: this.props.collectionId
+      userId: this.props.userId || this.state.accountName,
+      collectionId: this.props.collectionId || this.props.orderStatus.findOrderById.collectionPoint.collectionPointId
     };
     const key = "zvBT1lQV1RO9fx6f8";
     const token = jwt.encode(
@@ -97,14 +98,13 @@ class OrderStatus extends Component {
       },
       key
     );
-    if (this.props.userId && this.props.collectionId) {
-      qrCode = <QRCode value={qrData} size={300} />;
+
+    if ((this.props.userId || this.state.accountName ) && (this.props.collectionId || this.props.orderStatus.findOrderById.collectionPoint.collectionPointId)) {
+      qrCode = <QRCode value={token} size={300} />;
     }
 
     const  drinks = [];
     const finalList = [];
-
-    let quantities = {}, i, value;
 
     if (this.state.orderStatus.findOrderById){
         let stateDrinks = this.state.orderStatus.findOrderById.drinks;
@@ -121,19 +121,6 @@ class OrderStatus extends Component {
 
             finalList.push({drinkName : indi, quantity: count})
       });
-
-        console.log("finalList",finalList)
-
-        // Code to find quantities
-        // for (let i = 0; i < stateDrinks.length; i++) {
-        //     value = stateDrinks[i].name;
-        //     if (typeof quantities[value] === "undefined") {
-        //         quantities[value] = 1;
-        //     } else {
-        //         quantities[value]++;
-        //     }
-        // }
-      // });
     }
 
     return (
