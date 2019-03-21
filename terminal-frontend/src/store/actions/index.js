@@ -1,3 +1,3 @@
 export {
-    getOrders, getOrdersStart, getOrdersSuccess, getOrdersFail
+    getOrdersByCollectionPoint, getOrdersByCollectionPointStart, getOrdersByCollectionPointSuccess, getOrdersByCollectionPointFail
 } from './order';

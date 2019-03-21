@@ -4,17 +4,17 @@ import {updateObject} from "../utility";
 const initialState = {
     loading: null,
     error: null,
-    orders: [],
+    orders: []
 };
 
-const getOrdersStart = (state, action) => {
+const getOrdersByCollectionPointStart = (state, action) => {
     return updateObject(state, {
         error: null,
         loading: true
     });
 };
 
-const getOrderSuccess = (state, action) => {
+const getOrdersByCollectionPointSuccess = (state, action) => {
     return updateObject(state, {
         orders: action.orders,
         loading: false,
@@ -22,7 +22,7 @@ const getOrderSuccess = (state, action) => {
     });
 };
 
-const getOrdersFailure = (state, action) => {
+const getOrdersByCollectionPointFailure = (state, action) => {
     return updateObject(state, {
         loading: false,
         error: action.error
@@ -31,9 +31,9 @@ const getOrdersFailure = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.GET_ORDERS_START: return getOrdersStart(state, action);
-        case actionTypes.GET_ORDERS_SUCCESS: return getOrderSuccess(state, action);
-        case actionTypes.GET_ORDERS_FAIL: return getOrdersFailure(state, action);
+        case actionTypes.GET_ORDERS_BY_COLLECTION_POINT_START: return getOrdersByCollectionPointStart(state, action);
+        case actionTypes.GET_ORDERS_BY_COLLECTION_POINT_SUCCESS: return getOrdersByCollectionPointSuccess(state, action);
+        case actionTypes.GET_ORDERS_BY_COLLECTION_POINT_FAIL: return getOrdersByCollectionPointFailure(state, action);
         default: return state;
     }
 };

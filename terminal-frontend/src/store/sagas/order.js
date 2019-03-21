@@ -2,8 +2,8 @@ import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../axios-instance';
 
-export function* getOrdersSaga(action) {
-    yield put(actions.getOrdersStart());
+export function* getOrdersByCollectionPointSaga(action) {
+    yield put(actions.getOrdersByCollectionPointStart());
     try {
         let requestBody = {
           query: `
@@ -39,20 +39,20 @@ export function* getOrdersSaga(action) {
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
-            yield put(actions.getOrdersFail(response.data.errors[0].message));
+            yield put(actions.getOrdersByCollectionPointFail(response.data.errors[0].message));
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
             const fetchData = [];
             for (let key in response.data.data.findOrdersByCollectionPoint) {
                 fetchData.push(
-                    response.data.data.findOrdersByCollectionPoint[key],
+                    response.data.data.findOrdersByCollectionPoint[key]
                 );
             }
-            yield put(actions.getOrdersSuccess(fetchData));
+            yield put(actions.getOrdersByCollectionPointSuccess(fetchData));
         }
     } catch (err) {
         console.log(err);
-        yield put(actions.getOrdersFail(err));
+        yield put(actions.getOrdersByCollectionPointFail(err));
     }
 }
