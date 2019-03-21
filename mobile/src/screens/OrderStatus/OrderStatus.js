@@ -119,7 +119,7 @@ class OrderStatus extends Component {
             }, 0);
 
 
-            finalList.push({drinkName : indi, quantity: count})  
+            finalList.push({drinkName : indi, quantity: count})
       });
 
         console.log("finalList",finalList)
@@ -179,21 +179,22 @@ class OrderStatus extends Component {
               <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Collection Point:</Text>
                 <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.findOrderById.collectionPoint}
+                  {this.state.orderStatus.findOrderById.collectionPoint.name}
+                  {this.state.orderStatus.findOrderById.collectionPoint.collectionPoindId}
                 </Text>
               </View>
               <Text style={styles.orderText}>
                 Estimated Collection Time : 10:59pm
               </Text>
               <Text style={[styles.status, styles.padd]}>Order Summary</Text>
-              <View style={styles.recipt}>
+              <View style={styles.receipt}>
                 <Text style={styles.orderText}>Items</Text>
                 <Text style={styles.orderText}>Price</Text>
               </View>
               {finalList.map((drinks, i) => {
                 return (
                   // <ScrollView style={styles.scroll}>
-                  <View key={i} style={styles.recipt}>
+                  <View key={i} style={styles.receipt}>
                     <View>
                       <Text style={styles.orderText}>
                         {drinks.quantity} x {drinks.drinkName}
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
   padd: {
     marginTop: 25
   },
-  recipt: {
+  receipt: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row"
@@ -347,11 +348,8 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   qrCode: {
-    width: Dimensions.get("window").width,
-    color: "white",
-    backgroundColor: "white",
-    marginTop: 25,
-    borderRadius: 5
+    backgroundColor: colours.pureWhite,
+    alignSelf: 'center',
   },
   containerText: {
     height: Dimensions.get("window").height / 6
