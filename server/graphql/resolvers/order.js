@@ -92,9 +92,7 @@ module.exports = {
             if (!foundCollectionPoint) {
                 throw new Error(`Collection Point ${collectionPoint} does not exist`);
             }
-            console.log(foundCollectionPoint);
-            const foundOrders = await Order.find({collectionPoint}).populate('userInfo').populate('collectionPoint');
-            console.log(foundOrders);
+            const foundOrders = await Order.find({$and: [{collectionPoint}, {status: ["AWAITING_COLLECTION", "PENDING", "IN_PROGRESS"]}]}).populate('userInfo').populate('collectionPoint');
             return foundOrders.reverse().map(async foundOrder => {
                 const modifiedUserInfo = {
                     ...foundOrder.userInfo._doc,
@@ -155,39 +153,7 @@ module.exports = {
             console.log(err);
             throw err;
         }
-    },
-    findActiveOrdersByCollectionPointId: async ({id}) => {
-		try {
-			// Find orders by collection point
-			const foundOrders = await Order.find({collectionPoint: id}).populate('userInfo');
-
-			// Remove orders that aren't active
-			let filteredOrders = foundOrders.filter(function(order, index, arr){
-				return order.status == "AWAITING_COLLECTION" || order.status == "IN_PROGRESS" || order.status == "PENDING";
-			});
-			
-			return filteredOrders.reverse().map(async foundOrder => {
-				const modifiedUserInfo = {
-					...foundOrder.userInfo._doc,
-					password: null
-				};
-				const returnedDrinks = await drinks(foundOrder.drinks);
-				return {
-					_id: foundOrder._id,
-					drinks: returnedDrinks,
-					collectionPoint: foundOrder.collectionPoint,
-					status: foundOrder.status,
-					orderAssignedTo: foundOrder.orderAssignedTo,
-					date: dateToString(foundOrder._doc.date),
-					userInfo: modifiedUserInfo,
-					transactionId: foundOrder.transactionId
-				};
-			});
-		} catch (err) {
-			throw err;
-		}
-	}
-
+    }
 };
 
 
