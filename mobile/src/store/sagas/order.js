@@ -49,7 +49,7 @@ export function* submitOrderSaga(action) {
     try {
         let requestBody = {
             query: `
-                mutation CreateOrder($drinks: [ID!], $collectionPoint: String!, $status: String!, $date: String!, $userInfo: ID!) {
+                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $status: String!, $date: String!, $userInfo: ID!) {
                     createOrder(orderInput: {
                         drinks: $drinks
                         collectionPoint: $collectionPoint
@@ -63,7 +63,10 @@ export function* submitOrderSaga(action) {
                           price
                           _id
                        }
-                        collectionPoint
+                        collectionPoint {
+                            name
+                            collectionPointId
+                        }
                         status
                         transactionId
                         userInfo {
@@ -77,7 +80,7 @@ export function* submitOrderSaga(action) {
             `,
             variables: {
                 drinks: drinksList,
-                collectionPoint: "SU Lounge",
+                collectionPoint: "5c925624bc63a912ed715315",
                 status: "PENDING",
                 date: date,
                 userInfo: user ? user : '5c69c7c058574e24c841ddc8'
@@ -97,14 +100,15 @@ export function* submitOrderSaga(action) {
         if (response.status === 200 && response.status !== 201) {
             console.log('made it');
             console.log(response.data);
-            orderId = response.data.data.createOrder._id
+            const orderId = response.data.data.createOrder._id;
             yield AsyncStorage.setItem("orderId", orderId);
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
             yield put(actions.emptyBasketSuccess());
             const collectionId = response.data.data.createOrder.collectionId;
-            const collectionPoint = response.data.data.createOrder.collectionPoint;
+            console.log(response.data.data.createOrder);
+            const collectionPoint = response.data.data.createOrder.collectionPoint.name;
             const date = response.data.data.createOrder.date;
             yield orderRedirect(collectionId, user, collectionPoint, date, orderId);
         }
@@ -116,7 +120,7 @@ export function* submitOrderSaga(action) {
 
 export function* orderHistorySaga(action) {
     const user = yield AsyncStorage.getItem('userId');
-    console.log("action",action)
+    console.log("action",action);
     yield put(actions.orderHistoryStart());
     try {
         let requestBody = {
@@ -129,7 +133,10 @@ export function* orderHistorySaga(action) {
                             category
                             price
                         }
-                        collectionPoint
+                        collectionPoint {
+                            name
+                            collectionPointId
+                        }
                         status
                         date
                         _id
@@ -174,7 +181,10 @@ export function* orderStatusSaga(action){
                             category
                             price
                         }
-                        collectionPoint
+                        collectionPoint {
+                            name
+                            collectionPointId
+                        }
                         status
                         date
                         _id
@@ -192,7 +202,7 @@ export function* orderStatusSaga(action){
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
-            yield put(actions.orderHistoryFailure());
+            yield put(actions.orderHistoryFailure(response.data.errors[0].message));
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
@@ -201,7 +211,7 @@ export function* orderStatusSaga(action){
         }
     } catch (err) {
         console.log(err);
-        yield put(actions.orderHistoryFailure());
+        yield put(actions.orderStatusFailure(err));
     }
 }
 
