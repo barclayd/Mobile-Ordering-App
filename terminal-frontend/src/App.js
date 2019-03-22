@@ -8,12 +8,12 @@ import './App.css';
 import * as actions from '../src/store/actions/index';
 import BillingPopupWindow from './containers/billing-popup-window/billing-popup-window';
 import ManualPickupPopupWindow from './containers/manual-pickup-popup-window/manual-pickup-popup-window';
-import multiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
-import notesPopupWindow from './components/notes-popup-window/notes-popup-window';
+import MultiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
+import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
 import PickupPopupWindow from './containers/pickup-popup-window/pickup-popup-window';
-import switchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
+import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
-import upcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
+import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./notes.svg";
 import OrderStatus from './OrderStatuses.js';
 import IngredientAmounts from './IngredientAmounts.js';
@@ -848,7 +848,7 @@ class App extends Component {
                   return (
                     <div key={orderIndex} className="orderContainer in-progress">
 
-                      <multiColumnItemList orderItems={orderData.items} />
+                      <MultiColumnItemList orderItems={orderData.items} />
 
                       <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
 
@@ -906,10 +906,10 @@ class App extends Component {
 
           <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
           <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
-          <notesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
-          <switchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
+          <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
+          <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
           <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
-          <upcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
+          <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
           <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
 
           { this.state.notificationsJSX }
