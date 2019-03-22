@@ -651,8 +651,10 @@ class App extends Component {
   };
 
   componentDidMount() {
+    // Pull orders from server
     const collectionId = localStorage.getItem('collectionPoint') || '5c925624bc63a912ed715315';
     this.props.loadOrders(collectionId);
+
     this.loadNotificationsJSX();
     setInterval(this.loadNotificationsJSX, notificationDuration + 1)
   }
@@ -758,7 +760,6 @@ class App extends Component {
   showOutOfStock = () => { this.state.showOutOfStock() };
 
   render() {
-    console.log(this.state.serverOrders);
     return (
       <div className="App">
         <header className="App-header">

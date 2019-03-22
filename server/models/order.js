@@ -11,7 +11,7 @@ const orderSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["AWAITING_COLLECTION", "IN_PROGRESS", "PENDING"],
+        enum: ["AWAITING_COLLECTION", "IN_PROGRESS", "PENDING", "AWAITING_USER_DECISION", "COMPLETED", "REFUNDED", "CANCELLED"],
     },
     orderAssignedTo: {
         type: String,
