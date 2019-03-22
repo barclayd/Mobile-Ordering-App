@@ -7,7 +7,7 @@ const itemsPerOrderListColumn = 4; // How many order items show per column
 
 
 
-const multiColumnItemList = (props) => {
+const MultiColumnItemList = (props) => {
     const renderListItems = (items) => {
         return items.map((itemData) => {
             return (
@@ -46,8 +46,8 @@ const multiColumnItemList = (props) => {
     return renderMultiColumnItemList(props.orderItems);
 };
 
-multiColumnItemList.propTypes = {
+MultiColumnItemList.propTypes = {
     orderItems: PropTypes.array.isRequired // Items to be rendered
 };
 
-export default multiColumnItemList;
+export default MultiColumnItemList;

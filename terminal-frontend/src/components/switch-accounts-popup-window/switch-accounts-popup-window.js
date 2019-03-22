@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import './style.css'
 import PopupWindow from '../../containers/popup-window/popup-window'
 
-const switchAccountsPopupWindow = (props) => {
+const SwitchAccountsPopupWindow = (props) => {
 
     return (
         <PopupWindow
@@ -31,9 +31,9 @@ const switchAccountsPopupWindow = (props) => {
     )
 };
 
-switchAccountsPopupWindow.propTypes = {
+SwitchAccountsPopupWindow.propTypes = {
     staffMembers: PropTypes.array,
     showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
 };
 
-export default switchAccountsPopupWindow;
+export default SwitchAccountsPopupWindow;

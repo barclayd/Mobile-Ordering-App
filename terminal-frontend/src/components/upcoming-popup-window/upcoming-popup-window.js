@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import './style.css'
 import PopupWindow from '../../containers/popup-window/popup-window'
 import TimeAgo from '../../containers/time-ago-clean/time-ago-clean'
-import multiColumnItemList from '../multi-column-item-list/multi-column-item-list';
+import MultiColumnItemList from '../multi-column-item-list/multi-column-item-list';
 
-const upcomingPopupWindow = (props) => {
+const UpcomingPopupWindow = (props) => {
     return (
         <PopupWindow
                 className="upcomingOrdersPopup"
@@ -24,7 +24,7 @@ const upcomingPopupWindow = (props) => {
                         return (
                             <div key={orderData.id} className="orderContainer in-progress">
 
-                                <multiColumnItemList orderItems={orderData.items} />
+                                <MultiColumnItemList orderItems={orderData.items} />
 
                                 <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
 
@@ -61,9 +61,9 @@ const upcomingPopupWindow = (props) => {
     )
 };
 
-upcomingPopupWindow.propTypes = {
+UpcomingPopupWindow.propTypes = {
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
     pendingOrders: PropTypes.array.isRequired // Pending orders to be listed
 };
 
-export default upcomingPopupWindow;
+export default UpcomingPopupWindow;
