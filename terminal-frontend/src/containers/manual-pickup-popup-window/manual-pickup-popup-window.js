@@ -35,7 +35,7 @@ class ManualPickupPopupWindow extends Component {
                     });
                     e.preventDefault();
                 }}>
-                    <input autoFocus={true} type="text" placeholder="enter code..." style="text-transform: uppercase" onChange={this.handleChange}/>
+                    <input autoFocus={true} className="manualCode" type="text" placeholder="enter code..." onChange={this.handleChange}/>
                     <br />
                     <button type="submit">Show collection screen</button>
                     <img id="ticketPicture" alt="Ticket preview" src={TicketMockup}/>
