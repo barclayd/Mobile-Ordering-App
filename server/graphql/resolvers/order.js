@@ -153,7 +153,29 @@ module.exports = {
             console.log(err);
             throw err;
         }
-    }
+    },
+    updateOrderStatus: async (args) => {
+        try {
+            const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderID})
+            
+            foundOrder.status = args.orderStatusInput.status;
+            const result = await foundOrder.save()
+
+            // const result = await foundOrder.updateOne(
+            //     // status: args.orderStatusInput.status,
+            //     // orderAssignedTo: args.orderStatusInput.bartenderID
+            //     {"_id": args.orderStatusInput.orderID},
+            //     { $set: { "status": args.orderStatusInput.status } }
+            // )
+            // const result = await foundOrder.updateOne({
+            //     status: args.orderStatusInput.status,
+            //     orderAssignedTo: args.orderStatusInput.bartenderID
+            // })
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    },
 };
 
 

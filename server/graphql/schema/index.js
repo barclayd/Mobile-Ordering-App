@@ -107,6 +107,12 @@ module.exports = buildSchema(`
         allergy: String
         containsAlcohol: Boolean!
     }
+
+    input OrderStatusInput {
+        orderID: ID!
+        status: String!
+        bartenderID: ID
+    }
     
     type RootQuery {
        login(email: String!, password: String!): AuthData!
@@ -121,6 +127,7 @@ module.exports = buildSchema(`
        findOrderById(id: ID!): Order!
        findCollectionPoints: [CollectionPoint]
        findCollectionPointById: CollectionPoint
+       updateOrderStatus(orderStatusInput: OrderStatusInput): Order!
     }
     
     type RootMutation {
