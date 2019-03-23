@@ -13,6 +13,13 @@ module.exports = buildSchema(`
         category: String!
      }
      
+     type BarStaff {
+        _id: ID!
+        firstName: String!
+        lastName: String!
+        bar: Bar!
+     }
+     
      type CollectionPoint {
         _id: ID! 
         name: String!
@@ -63,6 +70,12 @@ module.exports = buildSchema(`
         token: String!
         tokenExpiration: Int!
         name: String!
+    }
+    
+    input BarStaffInput {
+        firstName: String!
+        lastName: String!
+        barId: ID!
     }
     
     input UserInput {
@@ -128,6 +141,7 @@ module.exports = buildSchema(`
        findCollectionPoints: [CollectionPoint]
        findCollectionPointById: CollectionPoint
        updateOrderStatus(orderStatusInput: OrderStatusInput): Order!
+       findBarStaffByBar(id: ID!): [BarStaff]
     }
     
     type RootMutation {
@@ -137,6 +151,7 @@ module.exports = buildSchema(`
         createIngredient(ingredientInput: IngredientInput): Ingredient
         createOrder(orderInput: OrderInput): Order
         createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
+        createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
     }
     
     schema {
