@@ -4,6 +4,7 @@ const drinksResolver = require('./drinks');
 const ingredientsResolver = require('./ingredients');
 const ordersResolver = require('./order');
 const collectionPointResolver = require('./collectionPoint');
+const barStaffResolver = require('./barStaff');
 
 const rootResolver = {
   ...authResolver,
@@ -11,7 +12,8 @@ const rootResolver = {
   ...drinksResolver,
   ...ingredientsResolver,
   ...ordersResolver,
-  ...collectionPointResolver
+  ...collectionPointResolver,
+  ...barStaffResolver
 };
 
 module.exports = rootResolver;
