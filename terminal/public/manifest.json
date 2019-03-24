@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "DrinKing Terminal",
+  "short_name": "DrinKing",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +10,7 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "orientation": "landscape",
+  "background_color": "#f4f7f7",
+  "theme_color": "#f4f7f7"
 }
