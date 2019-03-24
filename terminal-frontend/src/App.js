@@ -14,10 +14,10 @@ import PickupPopupWindow from './containers/pickup-popup-window/pickup-popup-win
 import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
-import NotesIcon from "./notes.svg";
-import OrderStatus from './OrderStatuses.js';
-import IngredientAmounts from './IngredientAmounts.js';
-import rangeScaling from "./FunctionLib.js";
+import NotesIcon from "./assets/notes.svg";
+import OrderStatus from './utility/OrderStatuses.js';
+import IngredientAmounts from './utility/IngredientAmounts.js';
+import {rangeScaling} from "./utility/FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
 
 // Settings:
@@ -698,7 +698,7 @@ class App extends Component {
     }
   };
 
-  getNotificationIconJSX(notificationClass) {
+  static getNotificationIconJSX(notificationClass) {
     switch (notificationClass) {
       case "info":
         return <FontAwesomeIcon icon={faInfo} />;
@@ -722,7 +722,7 @@ class App extends Component {
 
           return (
             <div key={notificationData.id} className="notificationBanner">
-              <span className={"icon " + notificationData.class}>{ this.getNotificationIconJSX(notificationData.class) }</span>
+              <span className={"icon " + notificationData.class}>{ App.getNotificationIconJSX(notificationData.class) }</span>
               <div className="textContainer">
                 <span className="title">{notificationData.title}</span>
                 <br />
@@ -812,7 +812,7 @@ class App extends Component {
                   <div
                       key={orderIndex}
                       onClick={this.ToggleAwaitingCollapse}
-                      className="orderContainer collapseable"
+                      className="orderContainer collapsible"
                       style={{zIndex: orderZIndex, opacity: orderOpacity, width: width + "%"}}
                   >
                     <h2>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h2>

@@ -11,12 +11,10 @@
   padding: 12px 35px;
 }
 
-
-
-/* Heading stylings: */
+/* Heading styling: */
 h1, h2 { text-transform: uppercase; }
 h1 { color: #868686; margin: 45px 0 8px; }
-h2 { margin: 13px 0 32px 0px; color: white; }
+h2 { margin: 13px 0 32px 0; color: white; }
 h3 {
   color: #999999;
   position: absolute;
@@ -33,7 +31,7 @@ h4 {
 }
 h5 {
     margin: 0;
-    
+
     font-size: 15px;
     font-weight: normal;
     color: #8b9799;
@@ -81,15 +79,13 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
 #buttonsToolbar button:not(:last-child) { margin-right: 10px } /* Space buttons */
 
 
-
-
 .qrReader {
   display: none;
   position: relative;
   margin-left: auto;
   margin-right: auto;
   width: 50%;
-  
+
   border-radius: 8px;
   overflow: hidden;
 }
@@ -107,19 +103,15 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
 }
 
 
-
 .notificationsContainer {
   /* Center at screen top */
   position: fixed;
   top: 40px;
-  
   left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  position: fixed;
   width: 600px;
-
   z-index: 9999; /* Always show on top */
 }
 
@@ -138,13 +130,13 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
   overflow: hidden;
   position: relative; /* Allow close button to position absolute relative to banner */
 
-  animation: slidein 0.8s ease-out;
+  animation: slide-in 0.8s ease-out;
 
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+  box-shadow: 1px 1px 5px rgba(0,0,0,.5);
 }
-@keyframes slidein {
+@keyframes slide-in {
   from { margin-top: -100%; }
-  to   { margin-top: 0%; }
+  to   { margin-top: 0; }
 }
 
 .closeButton {
@@ -160,7 +152,7 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
   /* Set hitbox dimensions and X positioning */
   width: 76px;
   height: 48px;
-  padding: 2px 0px;
+  padding: 2px 0;
   /* background: #0f0; used to test hitbox */
 }
 .notificationBanner:not(:last-child) {
@@ -200,7 +192,7 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
   content: "!";
   font-family: sans-serif;
   font-size: 52px;
-  
+
   line-height: 98px; /* center text vertically */
   text-align: center; /* center text horizontally */
 }
@@ -219,10 +211,6 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
 .notificationBanner .icon.warning { background: #ff4800 }
 .notificationBanner .icon.warning::before { border-left-color: #ff4800 }
 
-
-
-
-
 .ordersContainer {
   padding-left: 18px;
 }
@@ -236,7 +224,7 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
 }
 .orderContainer:not(:last-child) { margin-bottom: 7px } /* Add space between orders */
 
-.orderContainer.collapseable { cursor: pointer } /* Show pointer cursor for collapsable feeds */
+.orderContainer.collapsible { cursor: pointer } /* Show pointer cursor for collapsible feeds */
 .ordersContainer.collapsed .orderContainer:not(:first-child) { margin-top: -83px; margin-left: auto; margin-right: auto; } /* Bump collapsed orders under one another, centering them in case their width changes */
 .ordersContainer.collapsed .orderContainer:nth-child(n+4) { display: none } /* Limit how many collapsed orders are rendered (1 less than maxCollapsedOrdersToShow) */
 .ordersContainer.collapsed .orderContainer:not(:first-child) * { visibility: hidden } /* Hide children of a collapsed order item */
@@ -259,7 +247,6 @@ button.orderButton {
   border: none;
   background: #583D5F;
   border-radius: 20px;
-  width: 209px;
   height: auto;
   margin: 7px;
   padding: 11px 20px 11px 54px;
@@ -279,7 +266,7 @@ button.orderButton .icon {
   left: 7px;
   font-size: 27px;
   line-height: 48px;
-  
+
   color: rgba(30,30,30, 0.9)
 }
 button.orderButton .icon::after {
@@ -423,7 +410,7 @@ button.orderButton .subtitle {
 .customerNotesContainer .notes {
   color: #AEAEAE;
   font-size: 19px;
-  font-family: Georgia;
+  font-family: Georgia, serif;
   padding-left: 101px;
 }
 .customerNotesContainer .notesIcon {
