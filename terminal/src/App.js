@@ -15,9 +15,9 @@ import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./assets/notes.svg";
-import OrderStatus from './utility/OrderStatuses.js';
-import IngredientAmounts from './utility/IngredientAmounts.js';
-import {rangeScaling} from "./utility/FunctionLib.js";
+import OrderStatus from './helpers/OrderStatuses.js';
+import IngredientAmounts from './helpers/IngredientAmounts.js';
+import {rangeScaling} from "./helpers/FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
 
 // Settings:
