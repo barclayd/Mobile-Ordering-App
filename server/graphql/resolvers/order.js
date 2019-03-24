@@ -1,6 +1,7 @@
 const Drink = require('../../models/drink');
 const Order = require('../../models/order');
 const User = require('../../models/user');
+const BarStaff = require('../../models/barStaff');
 const CollectionPoint = require('../../models/collectionPoint');
 const {dateToString} = require("../../helpers/date");
 const {transformOrder} = require('./merge');
@@ -154,24 +155,27 @@ module.exports = {
             throw err;
         }
     },
-    updateOrderStatus: async (args) => {
+    updateOrder: async (args) => {
         try {
-            const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderID})
-            
+            const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderId}).populate('orderAssignedTo');
             foundOrder.status = args.orderStatusInput.status;
-            const result = await foundOrder.save()
-
-            // const result = await foundOrder.updateOne(
-            //     // status: args.orderStatusInput.status,
-            //     // orderAssignedTo: args.orderStatusInput.bartenderID
-            //     {"_id": args.orderStatusInput.orderID},
-            //     { $set: { "status": args.orderStatusInput.status } }
-            // )
-            // const result = await foundOrder.updateOne({
-            //     status: args.orderStatusInput.status,
-            //     orderAssignedTo: args.orderStatusInput.bartenderID
-            // })
-            return result;
+            const returnedDrinks = await drinks(foundOrder.drinks);
+            if (args.orderStatusInput.barStaffId) {
+                foundOrder.orderAssignedTo = args.orderStatusInput.barStaffId;
+            }
+            const barStaffMember = await BarStaff.findOne({_id: args.orderStatusInput.barStaffId});
+            await foundOrder.save();
+            return {
+                _id: foundOrder._id,
+                drinks: returnedDrinks,
+                collectionPoint: foundOrder.collectionPoint,
+                collectionId: foundOrder.collectionPoint.collectionId,
+                status: foundOrder.status,
+                orderAssignedTo: barStaffMember,
+                date: dateToString(foundOrder._doc.date),
+                userInfo: foundOrder.userInfo,
+                transactionId: foundOrder.transactionId
+            }
         } catch (err) {
             throw err;
         }

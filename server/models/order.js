@@ -14,8 +14,8 @@ const orderSchema = mongoose.Schema({
         enum: ["AWAITING_COLLECTION", "IN_PROGRESS", "PENDING", "AWAITING_USER_DECISION", "COMPLETED", "REFUNDED", "CANCELLED"],
     },
     orderAssignedTo: {
-        type: String,
-        ref: 'barStaff'
+        type: mongoose.Schema.ObjectId,
+        ref: 'BarStaff'
     },
     date: {
         type: Date,
