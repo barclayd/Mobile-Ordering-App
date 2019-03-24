@@ -141,7 +141,7 @@ module.exports = buildSchema(`
        findCollectionPoints: [CollectionPoint]
        findCollectionPointById: CollectionPoint
        updateOrderStatus(orderStatusInput: OrderStatusInput): Order!
-       findBarStaffByBar(id: ID!): [BarStaff]
+       findBarStaffByBar(barId: ID!): [BarStaff]
     }
     
     type RootMutation {
