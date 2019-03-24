@@ -26,3 +26,33 @@ export const getOrdersByCollectionPointFail = error => {
         error: error
     };
 };
+
+
+export const updateOrder = (orderId, status, barStaffId) => {
+    return {
+        type: actionTypes.UPDATE_ORDER,
+        orderId,
+        status,
+        barStaffId
+    };
+};
+
+export const updateOrderStart = () => {
+    return {
+        type: actionTypes.UPDATE_ORDER_START
+    };
+};
+
+export const updateOrderSuccess = (updatedOrder) => {
+    return {
+        type: actionTypes.UPDATE_ORDER_SUCCESS,
+        updatedOrder
+    };
+};
+
+export const updateOrderFail = error => {
+    return {
+        type: actionTypes.UPDATE_ORDER_FAIL,
+        error: error
+    };
+};
