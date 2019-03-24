@@ -180,6 +180,31 @@ module.exports = {
             throw err;
         }
     },
+    updateOrderAssignedTo: async (args) => {
+        try {
+            const foundOrder = await Order.findOne({_id: args.orderAssignedToInput.orderId}).populate('orderAssignedTo');
+            if (args.orderAssignedToInput.barStaffId) {
+                foundOrder.orderAssignedTo = args.orderAssignedToInput.barStaffId;
+            } else {
+                foundOrder.orderAssignedTo = null;
+            }
+            const barStaffMember = await BarStaff.findOne({_id: args.orderAssignedToInput.barStaffId});
+            await foundOrder.save();
+            return {
+                _id: foundOrder._id,
+                drinks: foundOrder.drinks,
+                collectionPoint: foundOrder.collectionPoint,
+                collectionId: foundOrder.collectionPoint.collectionId,
+                status: foundOrder.status,
+                orderAssignedTo: barStaffMember,
+                date: dateToString(foundOrder._doc.date),
+                userInfo: foundOrder.userInfo,
+                transactionId: foundOrder.transactionId
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
 };
 
 

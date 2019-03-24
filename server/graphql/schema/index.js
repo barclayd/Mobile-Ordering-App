@@ -120,6 +120,11 @@ module.exports = buildSchema(`
         allergy: String
         containsAlcohol: Boolean!
     }
+    
+    input OrderAssignedToInput {
+        orderId: ID!
+        barStaffId: ID
+    }
 
     input OrderStatusInput {
         orderId: ID!
@@ -151,11 +156,17 @@ module.exports = buildSchema(`
         createOrder(orderInput: OrderInput): Order
         createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
         createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
+        updateOrder(orderStatusInput: OrderStatusInput): Order
+        updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
+    }
+    
+    type RootSubscription {
         updateOrder(orderStatusInput: OrderStatusInput): Order!
     }
     
     schema {
         query: RootQuery
         mutation: RootMutation
+        subscription: RootSubscription
     }
 `);
