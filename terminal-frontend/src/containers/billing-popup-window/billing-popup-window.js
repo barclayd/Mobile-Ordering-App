@@ -6,7 +6,7 @@ import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import OrderState from '../../OrderStatuses';
+import OrderState from '../../utility/OrderStatuses';
 
 // SETTINGS:
 const HideStockManagementForAwaitingCollection = false; // Should hide out of stock button for orders awaiting collection?
