@@ -22,6 +22,25 @@ module.exports = {
         } catch (err) {
             throw err;
         }
-    }
+    },
+    findBarStaffByBar: async ({barId}) => {
+        try {
+            const bar = await Bar.findOne({_id: barId});
+            if (!bar) {
+                throw new Error (`Bar with barId: ${barId} does not exist`);
+            }
+            const foundBarStaff = await BarStaff.find({bar: barId});
+            return foundBarStaff.map(barStaff => {
+                return {
+                    _id: barStaff._id,
+                    firstName: barStaff.firstName,
+                    lastName: barStaff.lastName,
+                    bar: bar
+                };
+            });
+        } catch (err) {
+            throw err;
+        }
+    },
 };
 
