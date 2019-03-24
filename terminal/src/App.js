@@ -654,8 +654,8 @@ class App extends Component {
     // Pull orders from server
     const collectionId = localStorage.getItem('collectionPoint') || '5c925624bc63a912ed715315';
     this.props.loadOrders(collectionId);
-
     this.loadNotificationsJSX();
+    this.getUserMedia();
     setInterval(this.loadNotificationsJSX, notificationDuration + 1)
   }
 
@@ -680,6 +680,20 @@ class App extends Component {
       this.addNotification("error", "Order not found", "No order with code " + orderID + " exists!")
     }
   };
+
+  getUserMedia = () => {
+      if (navigator.getUserMedia) {
+        navigator.getUserMedia({video: true}, this.qrReader, this.handleError);
+      }
+  };
+
+  qrReader = () => (
+    <QrReader
+        delay={qrDelay}
+        onError={this.handleError}
+        onScan={this.handleScan}
+    />
+  );
 
   renderCustomerNotes = (orderIndex, notes) => {
     if (notes) {
