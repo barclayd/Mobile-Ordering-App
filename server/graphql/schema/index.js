@@ -47,7 +47,7 @@ module.exports = buildSchema(`
         _id: ID!
         collectionPoint: CollectionPoint
         drinks: [Drink!]
-        orderAssignedTo: String
+        orderAssignedTo: BarStaff
         status: String!
         date: String!
         userInfo: User!
@@ -122,9 +122,9 @@ module.exports = buildSchema(`
     }
 
     input OrderStatusInput {
-        orderID: ID!
+        orderId: ID!
         status: String!
-        bartenderID: ID
+        barStaffId: ID
     }
     
     type RootQuery {
@@ -140,7 +140,6 @@ module.exports = buildSchema(`
        findOrderById(id: ID!): Order!
        findCollectionPoints: [CollectionPoint]
        findCollectionPointById: CollectionPoint
-       updateOrderStatus(orderStatusInput: OrderStatusInput): Order!
        findBarStaffByBar(barId: ID!): [BarStaff]
     }
     
@@ -152,6 +151,7 @@ module.exports = buildSchema(`
         createOrder(orderInput: OrderInput): Order
         createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
         createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
+        updateOrder(orderStatusInput: OrderStatusInput): Order!
     }
     
     schema {
