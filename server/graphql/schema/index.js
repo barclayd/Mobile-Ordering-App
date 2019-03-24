@@ -145,6 +145,7 @@ module.exports = buildSchema(`
        findOrderById(id: ID!): Order!
        findCollectionPoints: [CollectionPoint]
        findCollectionPointById: CollectionPoint
+       findCollectionPointsByBar(barId: ID!): [CollectionPoint]
        findBarStaffByBar(barId: ID!): [BarStaff]
     }
     
