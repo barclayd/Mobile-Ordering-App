@@ -774,8 +774,7 @@ class App extends Component {
   showOutOfStock = () => { this.state.showOutOfStock() };
 
   render() {
-    console.log(this.props.updatedOrder);
-    console.log(this.props.serverOrders);
+    console.log(this.state.serverOrders);
     return (
       <div className="App">
         <header className="App-header">
