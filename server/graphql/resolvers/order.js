@@ -54,7 +54,8 @@ module.exports = {
                 date: dateToString(args.orderInput.date),
                 userInfo: user,
                 collectionId: collectionId,
-                transactionId: generatedTransactionId
+                transactionId: generatedTransactionId,
+                price: args.orderInput.price
             });
             const result = await createdOrder.save();
             return transformOrder(result);
@@ -149,7 +150,8 @@ module.exports = {
                 orderAssignedTo: foundOrder.orderAssignedTo,
                 date: dateToString(foundOrder._doc.date),
                 userInfo: foundOrder.userInfo,
-                transactionId: foundOrder.transactionId
+                transactionId: foundOrder.transactionId,
+                price: foundOrder.price
             };
         } catch (err) {
             console.log(err);

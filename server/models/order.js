@@ -30,6 +30,9 @@ const orderSchema = mongoose.Schema({
     },
     collectionId: {
         type: String
+    },
+    price: {
+        type: Number
     }
 });
 
