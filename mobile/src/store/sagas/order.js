@@ -32,7 +32,6 @@ export function* submitOrderSaga(action) {
 
     const token = yield stripe.createTokenWithCard(payment);
     const orderPrice = parseFloat(action.basketPrice) * 100;
-    console.log("order price",orderPrice)
 
     const date = new Date().toISOString();
     const user = yield AsyncStorage.getItem('userId');

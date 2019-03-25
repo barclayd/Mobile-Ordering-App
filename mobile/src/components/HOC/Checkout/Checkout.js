@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, Picker} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -22,7 +22,8 @@ class Checkout extends Component {
         multipleSelect: true,
         editVisible: false,
         emptyBasketChecked: false,
-        showPaymentOverlay: false
+        showPaymentOverlay: false,
+        collectionPoint: ""
     };
 
 
@@ -343,6 +344,20 @@ class Checkout extends Component {
                                 duration={400}
                                 onChange={this.setSections}
                             />
+                            <View style={{alignItems: "center"}}>
+                            <Picker
+                            itemStyle={{color:'white'}}
+                            selectedValue={this.state.language}
+                            style={{height: 200, width: 100,}}
+                            onValueChange={(itemValue, itemIndex) =>
+                                this.setState({language: itemValue})
+                            }>
+                            <Picker.Item style={{color: 'white'}} label="Bar 1" value="java" />
+                            <Picker.Item style={{color: 'white'}} label="Bar 2" value="js" />
+                            <Picker.Item style={{color: 'white'}} label="Bar 4" value="js" />
+                            <Picker.Item style={{color: 'white'}} label="Bar 5" value="js" />
+                            </Picker>
+                            </View>
                             <Payment
                                 visible={this.state.showPaymentOverlay}
                                 basketItems={this.basketItems()}
