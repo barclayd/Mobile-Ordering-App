@@ -15,7 +15,6 @@ const orderRedirect = async (collectionId, userId, collectionPoint, date, orderI
 };
 
 export function* submitOrderSaga(action) {
-
     yield stripe.setOptions({
         publishableKey: 'pk_test_YTzEkzlEFVjyy6GAez7JqTse'
     });
@@ -35,6 +34,8 @@ export function* submitOrderSaga(action) {
 
     const date = new Date().toISOString();
     const user = yield AsyncStorage.getItem('userId');
+    const collectionId = action.paymentInfo.collectionPoint.id;
+
     yield put(actions.submitOrderStart());
     let drinksList = [];
     action.order.map(drink => {
@@ -82,7 +83,7 @@ export function* submitOrderSaga(action) {
             `,
             variables: {
                 drinks: drinksList,
-                collectionPoint: "5c925624bc63a912ed715315",
+                collectionPoint: collectionId ? collectionId: "5c92565db99ff5134f15e56a",
                 status: "PENDING",
                 date: date,
                 userInfo: user ? user : '5c69c7c058574e24c841ddc8',

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, Picker, Button} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, Button} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -71,8 +71,24 @@ class Checkout extends Component {
         })
     }
 
+    componentDidMount(){
+        this.props.findCollectionPoints()
+    }
+
     addValue = () => {
     };
+
+    collectionPoints = () => {
+        let collectionPoints = [];
+        if (this.props.collectionPoint.collectionPoints){
+            this.props.collectionPoint.collectionPoints.map(
+                cps => {
+                    collectionPoints.push({name: cps.name, id: cps._id})
+                }
+            )
+        }
+        return collectionPoints;
+    }
 
     basketItems = () => {
         let totalItems = 0;
@@ -344,25 +360,12 @@ class Checkout extends Component {
                                 duration={400}
                                 onChange={this.setSections}
                             />
-                            <View style={{alignItems: "center"}}>
-                            <Picker
-                            itemStyle={{color:'white'}}
-                            selectedValue={this.state.language}
-                            style={{height: 200, width: 100,}}
-                            onValueChange={(itemValue, itemIndex) =>
-                                this.setState({language: itemValue})
-                            }>
-                            <Picker.Item style={{color: 'white'}} label="Bar 1" value="java" />
-                            <Picker.Item style={{color: 'white'}} label="Bar 2" value="js" />
-                            <Picker.Item style={{color: 'white'}} label="Bar 4" value="js" />
-                            <Picker.Item style={{color: 'white'}} label="Bar 5" value="js" />
-                            </Picker>
-                            <Button title="collection" onPress={()=> this.props.findCollectionPoints()}/>
-                            </View>
+                                                    
                             <Payment
                                 visible={this.state.showPaymentOverlay}
                                 basketItems={this.basketItems()}
                                 basketPrice={this.basketPrice()}
+                                collectionPoints={this.collectionPoints()}
                                 onCancel={this.togglePaymentOverlay}
                                 submitOrder={this.onSubmitOrder}
                                 hidePayment={this.togglePaymentOverlay}/>
