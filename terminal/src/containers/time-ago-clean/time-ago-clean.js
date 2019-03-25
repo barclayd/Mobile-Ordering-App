@@ -1,20 +1,23 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import TimeAgo from 'react-timeago'
+
+var timeago = require("timeago.js");
 
 // SETTINGS:
 const secondsUntilTimeShown = 60; // Seconds until "just now" is no longer the time. Using 60 sec because of complaints of distracting updates/changes
 
-class TimeAgoClean extends React.Component {
-
+class TimeAgoClean extends Component {
     state = {
-        dateNow: new Date()
+        timeAgo: timeago.format(this.props.date)
     };
 
-    // Trigger a re-render every second
+    // Recalculate timeAgo and rerender if needed
     componentDidMount () {
         this.reRender = setInterval(() => {
-            this.setState({dateNow: new Date()})
+            let newTimeAgo = timeago.format(this.props.date);
+            if ((new Date() - this.props.date) / 1000 > secondsUntilTimeShown && newTimeAgo !== this.state.timeAgo) {
+                this.setState({ timeAgo: newTimeAgo })
+            }
         }, 1000)
     }
 
@@ -23,11 +26,7 @@ class TimeAgoClean extends React.Component {
     }
 
     render () {
-        if ((this.state.dateNow - this.props.date) / 1000 < secondsUntilTimeShown) {
-            return <span>just now</span>;
-        } else {
-            return <TimeAgo date={this.props.date}/>
-        }
+        return this.state.timeAgo
     }
 }
 
