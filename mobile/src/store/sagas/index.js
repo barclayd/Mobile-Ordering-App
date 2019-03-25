@@ -5,6 +5,7 @@ import {findDrinksSaga, findDrinkCategoriesSaga} from './drinks';
 import {updateBasketSaga, emptyBasketSaga} from './basket';
 import {submitOrderSaga, orderHistorySaga, orderStatusSaga} from './order';
 import * as actionTypes from '../actions/actionTypes';
+import { findCollectionPointsSaga } from './collectionPoint';
 
 export function* watchAuth() {
     yield all ([
@@ -34,4 +35,8 @@ export function* watchOrder() {
     yield takeLatest(actionTypes.SUBMIT_ORDER, submitOrderSaga);
     yield takeLatest(actionTypes.ORDER_HISTORY, orderHistorySaga);
     yield takeLatest(actionTypes.RETRIEVE_ORDER_STATUS, orderStatusSaga);
+}
+
+export function* watchCollectionPoint() {
+    yield takeLatest(actionTypes.FIND_COLLECTION_POINTS, findCollectionPointsSaga);
 }

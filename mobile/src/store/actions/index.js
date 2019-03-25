@@ -18,3 +18,7 @@ export {
 export {
     updateBasketStart, updateBasket, updateBasketSuccess, emptyBasketSuccess, emptyBasketStart, emptyBasket, retrieveBasket, retrieveBasketStart, retrieveBasketSuccess, retrieveBasketFail
 } from './basket'
+
+export {
+    findCollectionPoints, findCollectionPointsFail, findCollectionPointsStart, findCollectionPointsSuccess
+} from './collectionPoint'

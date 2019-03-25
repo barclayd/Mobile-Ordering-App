@@ -11,7 +11,7 @@ import ViewPastOrders from './src/screens/ViewPastOrders/ViewPastOrders';
 import {setWelcomePageRoot, setDefaultSettings} from './src/utility/navigation';
 import * as screens from './src/utility/screens';
 import createSagaMiddleware from 'redux-saga';
-import {watchAuth, watchBar, watchDrinks, watchBasket, watchOrder} from './src/store/sagas/index';
+import {watchAuth, watchBar, watchDrinks, watchBasket, watchOrder, watchCollectionPoint} from './src/store/sagas/index';
 import ViewMenus from './src/screens/Menus/Menus';
 import ViewCheckout from './src/components/HOC/Checkout/Checkout';
 const sagaMiddleware = createSagaMiddleware();
@@ -23,6 +23,7 @@ sagaMiddleware.run(watchBar);
 sagaMiddleware.run(watchDrinks);
 sagaMiddleware.run(watchBasket);
 sagaMiddleware.run(watchOrder);
+sagaMiddleware.run(watchCollectionPoint)
 
 // register screens
 Navigation.registerComponentWithRedux(screens.AuthScreen, () => AuthScreen, Provider, store);
