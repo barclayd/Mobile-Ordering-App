@@ -1,6 +1,7 @@
 const Drink = require('../../models/drink');
 const Order = require('../../models/order');
 const User = require('../../models/user');
+const BarStaff = require('../../models/barStaff');
 const CollectionPoint = require('../../models/collectionPoint');
 const {dateToString} = require("../../helpers/date");
 const {transformOrder} = require('./merge');
@@ -93,9 +94,7 @@ module.exports = {
             if (!foundCollectionPoint) {
                 throw new Error(`Collection Point ${collectionPoint} does not exist`);
             }
-            console.log(foundCollectionPoint);
-            const foundOrders = await Order.find({collectionPoint}).populate('userInfo').populate('collectionPoint');
-            console.log(foundOrders);
+            const foundOrders = await Order.find({$and: [{collectionPoint}, {status: ["AWAITING_COLLECTION", "PENDING", "IN_PROGRESS"]}]}).populate('userInfo').populate('collectionPoint');
             return foundOrders.reverse().map(async foundOrder => {
                 const modifiedUserInfo = {
                     ...foundOrder.userInfo._doc,
@@ -155,6 +154,56 @@ module.exports = {
             };
         } catch (err) {
             console.log(err);
+            throw err;
+        }
+    },
+    updateOrder: async (args) => {
+        try {
+            const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderId}).populate('orderAssignedTo');
+            foundOrder.status = args.orderStatusInput.status;
+            const returnedDrinks = await drinks(foundOrder.drinks);
+            if (args.orderStatusInput.barStaffId) {
+                foundOrder.orderAssignedTo = args.orderStatusInput.barStaffId;
+            }
+            const barStaffMember = await BarStaff.findOne({_id: args.orderStatusInput.barStaffId});
+            await foundOrder.save();
+            return {
+                _id: foundOrder._id,
+                drinks: returnedDrinks,
+                collectionPoint: foundOrder.collectionPoint,
+                collectionId: foundOrder.collectionPoint.collectionId,
+                status: foundOrder.status,
+                orderAssignedTo: barStaffMember,
+                date: dateToString(foundOrder._doc.date),
+                userInfo: foundOrder.userInfo,
+                transactionId: foundOrder.transactionId
+            }
+        } catch (err) {
+            throw err;
+        }
+    },
+    updateOrderAssignedTo: async (args) => {
+        try {
+            const foundOrder = await Order.findOne({_id: args.orderAssignedToInput.orderId}).populate('orderAssignedTo');
+            if (args.orderAssignedToInput.barStaffId) {
+                foundOrder.orderAssignedTo = args.orderAssignedToInput.barStaffId;
+            } else {
+                foundOrder.orderAssignedTo = null;
+            }
+            const barStaffMember = await BarStaff.findOne({_id: args.orderAssignedToInput.barStaffId});
+            await foundOrder.save();
+            return {
+                _id: foundOrder._id,
+                drinks: foundOrder.drinks,
+                collectionPoint: foundOrder.collectionPoint,
+                collectionId: foundOrder.collectionPoint.collectionId,
+                status: foundOrder.status,
+                orderAssignedTo: barStaffMember,
+                date: dateToString(foundOrder._doc.date),
+                userInfo: foundOrder.userInfo,
+                transactionId: foundOrder.transactionId
+            }
+        } catch (err) {
             throw err;
         }
     }

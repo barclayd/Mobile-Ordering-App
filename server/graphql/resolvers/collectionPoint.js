@@ -59,6 +59,23 @@ module.exports = {
             bar: collectionPoint.bar,
             collectionPointId: collectionPoint.collectionPointId
         };
+    },
+    findCollectionPointsByBar: async ({barId}) => {
+        // does collectionPoint exist with given id
+        const bar = await Bar.findOne({_id: barId});
+        if (!bar) {
+            throw new Error(`Bar with barId: ${barId} does not exist`);
+        }
+        const collectionPoints = await CollectionPoint.find({bar: barId});
+        // no collectionPoint found with given id
+        return collectionPoints.map(collectionPoint => (
+            {
+                _id: collectionPoint.id,
+                name: collectionPoint.name,
+                bar: bar,
+                collectionPointId: collectionPoint.collectionPointId
+            }
+        ));
     }
 };
 

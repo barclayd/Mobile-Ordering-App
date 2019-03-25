@@ -13,6 +13,13 @@ module.exports = buildSchema(`
         category: String!
      }
      
+     type BarStaff {
+        _id: ID!
+        firstName: String!
+        lastName: String!
+        bar: Bar!
+     }
+     
      type CollectionPoint {
         _id: ID! 
         name: String!
@@ -40,7 +47,7 @@ module.exports = buildSchema(`
         _id: ID!
         collectionPoint: CollectionPoint
         drinks: [Drink!]
-        orderAssignedTo: String
+        orderAssignedTo: BarStaff
         status: String!
         date: String!
         userInfo: User!
@@ -64,6 +71,12 @@ module.exports = buildSchema(`
         token: String!
         tokenExpiration: Int!
         name: String!
+    }
+    
+    input BarStaffInput {
+        firstName: String!
+        lastName: String!
+        barId: ID!
     }
     
     input UserInput {
@@ -110,6 +123,17 @@ module.exports = buildSchema(`
         containsAlcohol: Boolean!
     }
     
+    input OrderAssignedToInput {
+        orderId: ID!
+        barStaffId: ID
+    }
+
+    input OrderStatusInput {
+        orderId: ID!
+        status: String!
+        barStaffId: ID
+    }
+    
     type RootQuery {
        login(email: String!, password: String!): AuthData!
        findBar(barCode: String!): Bar!
@@ -123,6 +147,8 @@ module.exports = buildSchema(`
        findOrderById(id: ID!): Order!
        findCollectionPoints: [CollectionPoint]
        findCollectionPointById: CollectionPoint
+       findCollectionPointsByBar(barId: ID!): [CollectionPoint]
+       findBarStaffByBar(barId: ID!): [BarStaff]
     }
     
     type RootMutation {
@@ -132,10 +158,18 @@ module.exports = buildSchema(`
         createIngredient(ingredientInput: IngredientInput): Ingredient
         createOrder(orderInput: OrderInput): Order
         createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
+        createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
+        updateOrder(orderStatusInput: OrderStatusInput): Order
+        updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
+    }
+    
+    type RootSubscription {
+        updateOrder(orderStatusInput: OrderStatusInput): Order!
     }
     
     schema {
         query: RootQuery
         mutation: RootMutation
+        subscription: RootSubscription
     }
 `);

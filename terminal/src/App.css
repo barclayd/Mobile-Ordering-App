@@ -1,0 +1,420 @@
+.App, body, html {
+  background: #211624;
+}
+
+.App {
+  color: white;
+  min-height: 100vh;
+}
+
+.App-header {
+  padding: 12px 35px;
+}
+
+/* Heading styling: */
+h1, h2 { text-transform: uppercase; }
+h1 { color: #868686; margin: 45px 0 8px; }
+h2 { margin: 13px 0 32px 0; color: white; }
+h3 {
+  color: #999999;
+  position: absolute;
+  top: 9px;
+  right: 17px;
+  margin: 0;
+  font-size: 20px;
+}
+h4 {
+  color: #868686;
+  text-align: center;
+  font-size: 20px;
+  margin-top: 9px;
+}
+h5 {
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: normal;
+    color: #8b9799;
+
+    position: absolute;
+    bottom: 15px;
+    left: 19px;
+}
+h5 .bartenderName {
+  font-weight: bold;
+}
+
+/* IMPROVE READABILITY WITH DROP SHADOWS: */
+h1, h2, h3, h4, h5, .orderButton.title, .orderButton.subtitle, button, .orderList {
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.25);
+}
+button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /* Text-shadow for button React font-awesome icons (text-shadow is unsupported) */
+
+#topBar {
+  position: fixed;
+  top: 0;
+  padding-top: 15px;
+  width: 100%;
+  z-index: 999;
+  background: #211624;
+  box-shadow: 0 10px 20px 5px #211624;
+}
+.App-header { padding-top: 45px; } /* Add space for fixed top bar */
+
+#accountsHotbar {
+  /* Only show buttons that can fit onscreen: */
+  overflow: hidden;
+  max-height: 36px;
+  margin-right: 600px;
+}
+#accountsHotbar button { margin-right: 15px } /* Space account quick-switch buttons */
+
+/* Div to keep account switch button pinned to page top-right */
+#buttonsToolbar {
+  position: absolute;
+  top: 11px;
+  right: 0;
+  margin-right: 72px; /* Keep account switch button inside page padding */
+}
+#buttonsToolbar button:not(:last-child) { margin-right: 10px } /* Space buttons */
+
+
+.qrReader {
+  display: none;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+
+  border-radius: 8px;
+  overflow: hidden;
+}
+.qrReader p {
+  font-family: "Lucida Console", Monaco, monospace;
+  position: absolute;
+  top: 65px;
+  left: 0;
+  margin: 0 80px 0 80px; /* Using margin rather than left prevents text overflowing outside the red border */
+  font-size: 24px;
+  text-shadow: 1px 1px 5px#000;
+  padding: 4px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+
+.notificationsContainer {
+  /* Center at screen top */
+  position: fixed;
+  top: 40px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  z-index: 9999; /* Always show on top */
+}
+
+.notificationBanner {
+  display: block;
+  width: 100%;
+  height: 100px;
+  border-radius: 30px;
+  background: rgba(255,255,255, 0.75);
+
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+
+  overflow: hidden;
+  position: relative; /* Allow close button to position absolute relative to banner */
+
+  animation: slide-in 0.8s ease-out;
+
+  box-shadow: 1px 1px 5px rgba(0,0,0,.5);
+}
+@keyframes slide-in {
+  from { margin-top: -100%; }
+  to   { margin-top: 0; }
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  color: #797979;
+  cursor: pointer;
+  font-size: 23px;
+  text-align: center;
+
+  /* Set hitbox dimensions and X positioning */
+  width: 76px;
+  height: 48px;
+  padding: 2px 0;
+  /* background: #0f0; used to test hitbox */
+}
+.notificationBanner:not(:last-child) {
+  margin-bottom: 12px;
+}
+.notificationBanner .textContainer {
+  display: inline-block;
+  margin-left: 68px;
+}
+.notificationBanner .title {
+  color: #000;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 26px;
+  margin-top: 20px;
+}
+.notificationBanner .description {
+  color: #333;
+  font-size: 17px;
+  font-weight: normal;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Same as body */
+  margin-top: 1px;
+}
+.notificationBanner .title, .notificationBanner .description {
+  float: left;
+  margin-left: 7px;
+}
+.notificationBanner .icon {
+  background: #911;
+  display: block;
+  float: left;
+
+  width: 80px;
+  height: 100%;
+  opacity: 0.8;
+
+  content: "!";
+  font-family: sans-serif;
+  font-size: 52px;
+
+  line-height: 98px; /* center text vertically */
+  text-align: center; /* center text horizontally */
+}
+.notificationBanner .icon::before {
+  content: "";
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 50px solid #911;
+  position: absolute;
+  left: 80px;
+}
+.notificationBanner .icon.success { background: #191 }
+.notificationBanner .icon.success::before { border-left-color: #191 }
+.notificationBanner .icon.info { background: #119 }
+.notificationBanner .icon.info::before { border-left-color: #119 }
+.notificationBanner .icon.warning { background: #ff4800 }
+.notificationBanner .icon.warning::before { border-left-color: #ff4800 }
+
+.ordersContainer {
+  padding-left: 18px;
+}
+.orderContainer {
+  background: #3F2B44;
+  border-radius: 16px;
+  border: 2px solid #000000;
+  position: relative;
+  padding-left: 12px;
+  box-sizing: border-box;
+}
+.orderContainer:not(:last-child) { margin-bottom: 7px } /* Add space between orders */
+
+.orderContainer.collapsible { cursor: pointer } /* Show pointer cursor for collapsible feeds */
+.ordersContainer.collapsed .orderContainer:not(:first-child) { margin-top: -83px; margin-left: auto; margin-right: auto; } /* Bump collapsed orders under one another, centering them in case their width changes */
+.ordersContainer.collapsed .orderContainer:nth-child(n+4) { display: none } /* Limit how many collapsed orders are rendered (1 less than maxCollapsedOrdersToShow) */
+.ordersContainer.collapsed .orderContainer:not(:first-child) * { visibility: hidden } /* Hide children of a collapsed order item */
+.ordersContainer:not(.collapsed) .orderContainer { width: 100% !important } /* Disable inline CSS that forces item width */
+
+.orderContainer.in-progress {
+  min-height: 150px;
+}
+
+.orderButtonsContainer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+
+
+
+button.orderButton {
+  border: none;
+  background: #583D5F;
+  border-radius: 20px;
+  height: auto;
+  margin: 7px;
+  padding: 11px 20px 11px 54px;
+  width: auto;
+  position: relative;
+}
+button.orderButton .icon {
+  display: block;
+  border-radius: 300px;
+  float: left;
+
+  width: 47px;
+  height: 47px;
+  margin-top: -3px;
+
+  position: absolute;
+  left: 7px;
+  font-size: 27px;
+  line-height: 48px;
+
+  color: rgba(30,30,30, 0.9)
+}
+button.orderButton .icon::after {
+  font-family: sans-serif;
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: rgba(30,30,30, 0.8);
+  position: relative;
+}
+
+button.orderButton .icon.billingAndMore { background: #868686 }
+button.orderButton .icon.billingAndMore::after { content: "•••"; }
+button.orderButton .icon.ready { background: #008600 }
+button.orderButton .icon.notReady, button.orderButton .icon.notInProgress { background: #862D2D }
+button.orderButton .icon.save { background: #2b2 }
+button.orderButton .icon.cancel { background: #b22 }
+button.orderButton .icon.outOfStock { background: #ff9d1c }
+button.orderButton .icon.complete { background: #2bc72b }
+button.orderButton .icon.delete { background: #862D2D; line-height: 50px }
+button.orderButton .icon.refund { background: #4286f4 }
+button.orderButton .icon.refund::after {
+  content: "£";
+  letter-spacing: normal;
+  left: auto;
+  font-size: 32px;
+}
+
+button.orderButton .title, button.orderButton .subtitle {
+  float: left;
+  margin-left: 7px;
+}
+
+button.orderButton .title { color: #E4E4E4 }
+button.orderButton .subtitle {
+  color: #BCBCBC;
+  font-size: 15px;
+  font-weight: normal;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Same as body */
+}
+
+
+
+.orderList {
+  list-style-type: none;
+  margin-top: 0;
+  padding: 0;
+  margin-bottom: 80px; /* ensures orderButtonsContainer never overlaps orderList items */
+}
+.orderList > li {
+  font-size: 28px;
+  color: #eee;
+}
+.orderList > li > .quantity {
+  width: 68px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.orderList.multiColumn {
+  margin-right: 50px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+
+
+
+.pendingOrderButtons {
+  text-align: center;
+  margin-top: 36px;
+}
+
+.pendingOrderButton:not(:last-child) { margin-right: 85px; }
+.pendingOrderButton {
+  width: 280px;
+  height: 240px;
+  vertical-align: top;
+  padding: 24px;
+  text-align: center;
+  background: #694972;
+}
+.pendingOrderButton:hover { background: #73517c; }
+
+.pendingOrderButton .title { font-size: 26px; }
+.pendingOrderButton .subtitle {
+  color: #d4d4d4;
+  font-weight: normal;
+  font-size: 17px;
+}
+
+.pendingOrderButton .icon {
+  box-sizing: border-box;
+  border: 4px solid #333;
+  display: block;
+  border-radius: 300px;
+
+  /* center */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 13px;
+
+  width: 100px;
+  height: 100px;
+  line-height: 94px; /* vertically center text */
+
+  color: #232323;
+}
+
+.pendingOrderButton .icon.next {
+  font-size: 60px;
+  background: #008659;
+}
+
+.pendingOrderButton .icon.history {
+  font-size: 54px;
+  background: #FFCC66;
+}
+
+
+.customerNotesContainer:hover {
+  background: #694972;
+}
+.customerNotesContainer {
+  position: absolute;
+  bottom: 80px;
+  right: 46px;
+  width: 411px;
+  height: 90px;
+  padding: 0 10px;
+
+  border-radius: 10px;
+  transition-duration: 150ms;
+  cursor: pointer;
+}
+.customerNotesContainer .header {
+  color: #fff;
+  text-transform: uppercase;
+  margin: 0;
+  font-size: 28px;
+}
+.customerNotesContainer .notes {
+  color: #AEAEAE;
+  font-size: 19px;
+  font-family: Georgia, serif;
+  padding-left: 101px;
+}
+.customerNotesContainer .notesIcon {
+  float: left;
+  height: 100%;
+  margin-right: 23px;
+}
