@@ -102,7 +102,7 @@ export function* updateOrderSaga(action) {
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            yield put(actions.updateOrderSuccess(response.data.data.updateOrder));
+            yield put(actions.updateOrderSuccess(response.data.data.updateOrder, action.orderId));
         }
     } catch (err) {
         console.log(err);

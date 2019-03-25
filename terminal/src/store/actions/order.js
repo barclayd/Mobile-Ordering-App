@@ -43,10 +43,11 @@ export const updateOrderStart = () => {
     };
 };
 
-export const updateOrderSuccess = (updatedOrder) => {
+export const updateOrderSuccess = (updatedOrder, orderId) => {
     return {
         type: actionTypes.UPDATE_ORDER_SUCCESS,
-        updatedOrder
+        updatedOrder,
+        orderId
     };
 };
 
