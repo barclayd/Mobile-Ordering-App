@@ -654,6 +654,7 @@ class App extends Component {
     // Pull orders from server
     const collectionId = localStorage.getItem('collectionPoint') || '5c925624bc63a912ed715315';
     this.props.loadOrders(collectionId);
+    this.props.updateOrder("5c926ed1ef257f1c9da2b41d", "REFUNDED", "5c97adb88cab340a0995dd27");
     this.loadNotificationsJSX();
     this.getUserMedia();
     setInterval(this.loadNotificationsJSX, notificationDuration + 1)
@@ -774,6 +775,7 @@ class App extends Component {
   showOutOfStock = () => { this.state.showOutOfStock() };
 
   render() {
+    console.log(this.props.updatedOrder);
     return (
       <div className="App">
         <header className="App-header">
@@ -952,13 +954,15 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     serverOrders: state.orders.orders,
+    updatedOrder: state.orders.updatedOrder,
     ordersLoading: state.orders.loading
   }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadOrders: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint))
+    loadOrders: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint)),
+    updateOrder: (orderId, status, barStaffId) => dispatch(actions.updateOrder(orderId, status, barStaffId))
   }
 };
 

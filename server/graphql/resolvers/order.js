@@ -157,7 +157,7 @@ module.exports = {
     },
     updateOrder: async (args) => {
         try {
-            const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderId}).populate('orderAssignedTo');
+            const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderId}).populate('orderAssignedTo').populate('userInfo');
             foundOrder.status = args.orderStatusInput.status;
             const returnedDrinks = await drinks(foundOrder.drinks);
             if (args.orderStatusInput.barStaffId) {
@@ -182,7 +182,7 @@ module.exports = {
     },
     updateOrderAssignedTo: async (args) => {
         try {
-            const foundOrder = await Order.findOne({_id: args.orderAssignedToInput.orderId}).populate('orderAssignedTo');
+            const foundOrder = await Order.findOne({_id: args.orderAssignedToInput.orderId}).populate('orderAssignedTo').populate('userInfo');
             if (args.orderAssignedToInput.barStaffId) {
                 foundOrder.orderAssignedTo = args.orderAssignedToInput.barStaffId;
             } else {
