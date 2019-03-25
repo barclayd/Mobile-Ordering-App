@@ -8,14 +8,14 @@ import {Platform} from "react-native";
 import {setMainApp, setMainAppSettings} from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
-const authRedirect = (action) => {
+const authRedirect = (action, barName) => {
     Promise.all([
         IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
         IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
     ])
         .then(sources => {
             setMainAppSettings(sources[0], sources[1]);
-            setMainApp(action.componentId);
+            setMainApp(action.componentId, barName);
         });
 };
 
@@ -23,6 +23,8 @@ export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("token");
     yield AsyncStorage.removeItem("userId");
     yield AsyncStorage.removeItem("name");
+    yield AsyncStorage.removeItem("barName");
+    yield AsyncStorage.removeItem("barCode");
     yield put(actions.emptyBasketStart());
     yield emptyBasket();
     yield put(actions.emptyBasketSuccess());
@@ -70,6 +72,10 @@ export function* authUserSaga(action) {
                         token
                         tokenExpiration
                         name
+                        lastVisitedBar {
+                            name
+                            barCode
+                        }
                     }
                 }
             `,
@@ -85,7 +91,9 @@ export function* authUserSaga(action) {
                         yield AsyncStorage.setItem("token", res.data.data.login.token);
                         yield AsyncStorage.setItem("userId", res.data.data.login.userId);
                         yield AsyncStorage.setItem("name", res.data.data.login.name);
-                        yield authRedirect(action);
+                        yield AsyncStorage.setItem("barName", response.data.data.login.lastVisitedBar.name);
+                        yield AsyncStorage.setItem("barCode", response.data.data.login.lastVisitedBar.barCode);
+                        yield authRedirect(action, response.data.data.login.lastVisitedBar.name);
                     } else {
                         yield put(actions.authFail());
                         Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again.')
@@ -112,6 +120,10 @@ export function* authUserSaga(action) {
                         token
                         tokenExpiration
                         name
+                        lastVisitedBar {
+                            name
+                            barCode
+                        }
                     }
                 }
             `,
@@ -123,9 +135,12 @@ export function* authUserSaga(action) {
 
             const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.status === 200 && response.status !== 201) {
+                console.log(response.data.data.login);
                 yield AsyncStorage.setItem("name", response.data.data.login.name);
                 yield AsyncStorage.setItem("token", response.data.data.login.token);
                 yield AsyncStorage.setItem("userId", response.data.data.login.userId);
+                yield AsyncStorage.setItem("barName", response.data.data.login.lastVisitedBar.name);
+                yield AsyncStorage.setItem("barCode", response.data.data.login.lastVisitedBar.barCode);
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
                yield authRedirect(action, response.data.data.login.name);
             } else {
@@ -142,10 +157,11 @@ export function* authUserSaga(action) {
 
 export function* authCheckStateSaga(action) {
     const token = yield AsyncStorage.getItem("token");
+    const barName = yield AsyncStorage.getItem("barName");
     if (!token) {
         yield put(actions.logout());
     } else {
-        authRedirect(action);
+        authRedirect(action, barName);
     }
     yield put(actions.retrieveBasketStart());
     const basket = yield AsyncStorage.getItem("basket");
@@ -170,7 +186,9 @@ export function* checkAuthTimeoutSaga(action) {
 
 export function* autoSignInSaga(action) {
     const token = yield AsyncStorage.getItem("token");
-    if (token) {
-        yield authRedirect(action);
+    const barName = yield AsyncStorage.getItem("barName");
+    const barCode = yield AsyncStorage.getItem("barCode");
+    if (token && (barName !== undefined) && (barCode !== undefined)) {
+        yield authRedirect(action, barName);
     }
 }
