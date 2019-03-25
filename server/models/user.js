@@ -18,6 +18,10 @@ const userSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    lastVisitedBar: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Bar'
     }
 });
 

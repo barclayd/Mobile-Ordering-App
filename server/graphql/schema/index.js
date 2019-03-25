@@ -3,10 +3,11 @@ const {buildSchema} = require('graphql');
 module.exports = buildSchema(`
 
      type User {
-            _id: ID!
-            email: String!
-            password: String
-            name: String!
+        _id: ID!
+        email: String!
+        password: String
+        name: String!
+        lastVisitedBar: Bar
         }
         
      type Category {
@@ -21,19 +22,19 @@ module.exports = buildSchema(`
      }
         
     type Drink {
-            _id: ID!
-            name: String!
-            category: String!
-            nutritionInfo: String!
-            price: String!
+        _id: ID!
+        name: String!
+        category: String!
+        nutritionInfo: String!
+        price: String!
     }
     
     type Ingredient {
-            _id: ID!
-            name: String!
-            amount: String!
-            allergy: String
-            containsAlcohol: Boolean!
+        _id: ID!
+        name: String!
+        amount: String!
+        allergy: String
+        containsAlcohol: Boolean!
     }
     
     type Order {
@@ -64,6 +65,7 @@ module.exports = buildSchema(`
         token: String!
         tokenExpiration: Int!
         name: String!
+        lastVisitedBar: Bar
     }
     
     input UserInput {
@@ -132,6 +134,7 @@ module.exports = buildSchema(`
         createIngredient(ingredientInput: IngredientInput): Ingredient
         createOrder(orderInput: OrderInput): Order
         createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
+        updateLastVisitedBar(userId: ID!, barId: ID): User!
     }
     
     schema {
