@@ -32,6 +32,7 @@ export function* submitOrderSaga(action) {
 
     const token = yield stripe.createTokenWithCard(payment);
     const orderPrice = parseFloat(action.basketPrice) * 100;
+    console.log("order price",orderPrice)
 
     const date = new Date().toISOString();
     const user = yield AsyncStorage.getItem('userId');
@@ -49,13 +50,14 @@ export function* submitOrderSaga(action) {
     try {
         let requestBody = {
             query: `
-                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $status: String!, $date: String!, $userInfo: ID!) {
+                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID!) {
                     createOrder(orderInput: {
                         drinks: $drinks
                         collectionPoint: $collectionPoint
                         status: $status
                         date: $date
                         userInfo: $userInfo
+                        price: $price
                     }) {
                         _id
                         drinks {
@@ -67,6 +69,7 @@ export function* submitOrderSaga(action) {
                             name
                             collectionPointId
                         }
+                        price
                         status
                         transactionId
                         userInfo {
@@ -83,7 +86,8 @@ export function* submitOrderSaga(action) {
                 collectionPoint: "5c925624bc63a912ed715315",
                 status: "PENDING",
                 date: date,
-                userInfo: user ? user : '5c69c7c058574e24c841ddc8'
+                userInfo: user ? user : '5c69c7c058574e24c841ddc8',
+                price: orderPrice
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody), {
@@ -185,6 +189,7 @@ export function* orderStatusSaga(action){
                             name
                             collectionPointId
                         }
+                        price
                         status
                         date
                         _id
@@ -197,7 +202,7 @@ export function* orderStatusSaga(action){
                 }
             `,
             variables: {
-                id: id ? id : '5c8d3e036d45a435da3d385d'
+                id: id ? id : '5c9680a7e76095a316b3687b'
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));

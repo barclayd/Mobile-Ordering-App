@@ -103,23 +103,22 @@ class OrderStatus extends Component {
       qrCode = <QRCode value={token} size={300} />;
     }
 
-    const  drinks = [];
+    const  drinkNames = [];
     const finalList = [];
+    let orderPrice = 0;
 
     if (this.state.orderStatus.findOrderById){
         let stateDrinks = this.state.orderStatus.findOrderById.drinks;
-        stateDrinks.map(drink => {
-            drinks.push(drink.name)
-        });
-
-        let indiDrinks = [...new Set(drinks)];
+        stateDrinks.map(drinks => {
+          orderPrice += parseFloat(drinks.price)
+          drinkNames.push(drinks.name)
+        })
+        let indiDrinks = [...new Set(drinkNames)];
         indiDrinks.map(indi => {
-            var count = drinks.reduce(function(n, val) {
+            var count = drinkNames.reduce(function(n, val) {
                 return n + (val === indi);
             }, 0);
-
-
-            finalList.push({drinkName : indi, quantity: count})
+            finalList.push({drinkName:indi, quantity:count})
       });
     }
 
@@ -174,13 +173,10 @@ class OrderStatus extends Component {
                 Estimated Collection Time : 10:59pm
               </Text>
               <Text style={[styles.status, styles.padd]}>Order Summary</Text>
-              <View style={styles.receipt}>
-                <Text style={styles.orderText}>Items</Text>
-                <Text style={styles.orderText}>Price</Text>
-              </View>
+          
               {finalList.map((drinks, i) => {
                 return (
-                  // <ScrollView style={styles.scroll}>
+
                   <View key={i} style={styles.receipt}>
                     <View>
                       <Text style={styles.orderSubtitle}>
@@ -191,9 +187,13 @@ class OrderStatus extends Component {
                       <Text style={styles.orderSubtitle}>£HARD.CODE</Text>
                     </View>
                   </View>
-                  // </ScrollView>
                 );
               })}
+
+              <View style={styles.receipt}>
+                <Text style={styles.orderText}>Sub Total</Text>
+                <Text style={styles.orderText}>£{orderPrice}</Text>
+              </View>
 
               <View style={styles.button}>
                 <ButtonBackground

@@ -45,7 +45,8 @@ module.exports = buildSchema(`
         date: String!
         userInfo: User!
         transactionId: String,
-        collectionId: String
+        collectionId: String,
+        price: Float!
     }
         
      type Bar {
@@ -83,6 +84,7 @@ module.exports = buildSchema(`
         status: String!
         date: String!
         userInfo: ID!
+        price: Float!
     }
     
     
