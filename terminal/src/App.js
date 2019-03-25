@@ -32,10 +32,10 @@ class App extends Component {
     super(props);
 
     this.state = {
-      orders: [
+      sampleOrders: [
         {
           id: "ALVR",
-          orderDate: new Date(),
+          date: new Date(),
           customerID: 42,
           staffMemberID: 4,
           notes: "hi",
@@ -59,7 +59,7 @@ class App extends Component {
           status: OrderStatus.AWAITING_COLLECTION
         },
         {
-          id: "KHVD", orderDate: new Date(), customerID: 13, staffMemberID: 6, items: [
+          id: "KHVD", date: new Date(), customerID: 13, staffMemberID: 6, items: [
             {
               id: 1,
               name: "VK Orange",
@@ -77,13 +77,13 @@ class App extends Component {
           ],
           status: OrderStatus.AWAITING_COLLECTION
         },
-        { id: "EOPL", orderDate: new Date(), customerID: 13, staffMemberID: 4, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KJHS", orderDate: new Date(), customerID: 13, staffMemberID: 2, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KXHS", orderDate: new Date(), customerID: 13, staffMemberID: 10, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KAHS", orderDate: new Date(), customerID: 13, staffMemberID: 1, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
+        { id: "EOPL", date: new Date(), customerID: 13, staffMemberID: 4, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
+        { id: "KJHS", date: new Date(), customerID: 13, staffMemberID: 2, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
+        { id: "KXHS", date: new Date(), customerID: 13, staffMemberID: 10, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
+        { id: "KAHS", date: new Date(), customerID: 13, staffMemberID: 1, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
         {
           id: "XHBS",
-          orderDate: new Date(),
+          date: new Date(),
           customerID: 93,
           staffMemberID: 0,
           items: [
@@ -104,7 +104,7 @@ class App extends Component {
         },
         {
           id: "ZBNU",
-          orderDate: new Date(),
+          date: new Date(),
           customerID: 93,
           staffMemberID: 1,
           items: [
@@ -226,7 +226,7 @@ class App extends Component {
         },
         {
           id: "ACBS",
-          orderDate: new Date(),
+          date: new Date(),
           customerID: 93,
           items: [
             {
@@ -329,7 +329,7 @@ class App extends Component {
         },
         {
           id: "PPLC",
-          orderDate: new Date(),
+          date: new Date(),
           customerID: 93,
           items: [
             {
@@ -367,7 +367,7 @@ class App extends Component {
         },
         {
           id: "AHBS",
-          orderDate: new Date(),
+          date: new Date(),
           customerID: 93,
           items: [
             {
@@ -381,7 +381,7 @@ class App extends Component {
         },
         {
           id: "LJPN",
-          orderDate: new Date(),
+          date: new Date(),
           customerID: 93,
           items: [
             {
@@ -395,7 +395,7 @@ class App extends Component {
         },
         {
           id: "GVAQ",
-          orderDate: new Date(),
+          date: new Date(),
           customerID: 92,
           items: [
             {
@@ -524,9 +524,6 @@ class App extends Component {
       lastNotificationID: 0,
 
       selectedStaffMember: 1,
-      awaitingOrdersIndexes: [],
-      inProgressOrdersIndexes: [],
-      pendingOrders: [],
 
       lastValidScan: 0,
       qrResult: "empty",
@@ -535,9 +532,18 @@ class App extends Component {
       awaitingOrdersCollapsed: true,
     };
 
+    // this.loadOrdersIntoStateIndexArrays(this.state.sampleOrders);
+
+    this.previewDiv = React.createRef();
+  }
+
+  loadOrdersIntoStateIndexArrays = (orders) => {
     let awaitingOrdersIndexes=[], inProgressOrdersIndexes=[], pendingOrders=[];
-    for (let orderIndex in this.state.orders) {
-      let order = this.state.orders[orderIndex];
+
+    for(let orderIndex = 0; orderIndex < orders.length; orderIndex += 1) {
+      let order = orders[orderIndex];
+      order.date = new Date(order.date); // Convert order dates from strings to date objects
+      
       switch (order.status) {
         case OrderStatus.AWAITING_COLLECTION:
           awaitingOrdersIndexes.push(orderIndex);
@@ -550,11 +556,11 @@ class App extends Component {
       }
     }
 
-    this.state.awaitingOrdersIndexes = awaitingOrdersIndexes;
-    this.state.inProgressOrdersIndexes = inProgressOrdersIndexes;
-    this.state.pendingOrders = pendingOrders;
-
-    this.previewDiv = React.createRef();
+    this.setState({
+      awaitingOrdersIndexes: awaitingOrdersIndexes,
+      inProgressOrdersIndexes: inProgressOrdersIndexes,
+      pendingOrders: pendingOrders
+    })
   }
 
   addNotification = (iconClassName, title, description) => {
@@ -591,7 +597,7 @@ class App extends Component {
 
   // Takes an order index to get an order object to set orderForPopup state obj
   setOrderForPopup = (orderIndex, callback) => {
-    this.setState({orderForPopup: this.state.orders[orderIndex]}, callback());
+    this.setState({orderForPopup: this.state.serverOrders[orderIndex]}, callback());
   };
 
   // Displays billing popup for order by order index
@@ -635,7 +641,7 @@ class App extends Component {
 
   // Strict func that takes order ID and corresponding customer ID from QR to prevent order code theft
   pickupOrder = (orderID, customerID) => {
-    let order = this.state.orders.find(order => order.id === orderID && order.customerID === customerID); // Find order sharing the same ID and customer ID
+    let order = this.state.serverOrders.find(order => order.id === orderID && order.customerID === customerID); // Find order sharing the same ID and customer ID
 
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
@@ -663,13 +669,16 @@ class App extends Component {
     if (!nextProps.loading) {
       this.setState({
         serverOrders: nextProps.serverOrders
+      }, ()=> {
+        if (this.state.serverOrders.length === 0) return;
+        this.loadOrdersIntoStateIndexArrays(this.state.serverOrders); // Load orders into arrays once loaded
       });
     }
   }
 
   // Relaxed version of pickup order, used for bartenders to manually input just an order ID (not corresponding customer ID)
   pickupOrderInsecure = (orderID) => {
-    let order = this.state.orders.find(order => order.id === orderID); // Find order by ID
+    let order = this.state.serverOrders.find(order => order.id === orderID); // Find order by ID
     if (order) {
       if (order.status === OrderStatus.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order}, this.state.showPickup) // Show billing popup
@@ -774,117 +783,79 @@ class App extends Component {
   showOutOfStock = () => { this.state.showOutOfStock() };
 
   render() {
-    console.log(this.state.serverOrders);
+    if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
+      return "Loading orders..."
 
-    return (
-      <div className="App">
-        <header className="App-header">
-          <div id="topBar">
-            <div id="accountsHotbar">
-            {
-              this.state.staffMembers.map((staffData) => {
-                let buttonClass = "";
-                if (this.state.selectedStaffMember === staffData.id) buttonClass = "selected";
-                return ( <button key={staffData.id} className={buttonClass}>{staffData.firstName}</button> );
-              })
-            }
-            </div>
+    } else if (!this.state.awaitingOrdersIndexes) {
+      return "Processing orders..."
 
-            <div id="buttonsToolbar">
-              <button className="large" onClick={() => {
-                this.setState({showPreview: !this.state.showPreview}, () => {
-                  if (this.state.showPreview) {
-                    document.getElementsByClassName("qrReader")[0].style.display = "block";
-                    this.scrollToPreview();
-                  } else {
-                    document.getElementsByClassName("qrReader")[0].style.display = "none";
-                  }
+    } else {
+      console.log(this.state.serverOrders)
+      return (
+        <div className="App">
+          <header className="App-header">
+            <div id="topBar">
+              <div id="accountsHotbar">
+              {
+                this.state.staffMembers.map((staffData) => {
+                  let buttonClass = "";
+                  if (this.state.selectedStaffMember === staffData.id) buttonClass = "selected";
+                  return ( <button key={staffData.id} className={buttonClass}>{staffData.firstName}</button> );
                 })
-              }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
+              }
+              </div>
 
-              <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
+              <div id="buttonsToolbar">
+                <button className="large" onClick={() => {
+                  this.setState({showPreview: !this.state.showPreview}, () => {
+                    if (this.state.showPreview) {
+                      document.getElementsByClassName("qrReader")[0].style.display = "block";
+                      this.scrollToPreview();
+                    } else {
+                      document.getElementsByClassName("qrReader")[0].style.display = "none";
+                    }
+                  })
+                }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
 
-              <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
+                <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
+
+                <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
+              </div>
             </div>
-          </div>
 
-          <h1>AWAITING COLLECTION ({ this.state.awaitingOrdersIndexes.length }):</h1>
-          <div className={"ordersContainer " + this.state.awaitingOrdersClass}>
-            {
-              this.state.awaitingOrdersIndexes.map((orderIndex, incrementer) => {
-                const orderData = this.state.orders[orderIndex];
-                const orderZIndex = this.state.awaitingOrdersIndexes.length - incrementer;
+            <h1>AWAITING COLLECTION ({ this.state.awaitingOrdersIndexes.length }):</h1>
+            <div className={"ordersContainer " + this.state.awaitingOrdersClass}>
+              {
+                this.state.awaitingOrdersIndexes.map((orderIndex, incrementer) => {
+                  const orderData = this.state.serverOrders[orderIndex];
+                  const orderZIndex = this.state.awaitingOrdersIndexes.length - incrementer;
 
-                // Calculate styles
-                let orderOpacity = 1; // Order opacity (lowered when collapsed and far down)
-                let width = 100; // Width as percentage
-                if (incrementer !== 0) {
-                  if (this.state.awaitingOrdersCollapsed)
-                    orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
-                    width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
-                }
-
-                return (
-                  <div
-                      key={orderIndex}
-                      onClick={this.ToggleAwaitingCollapse}
-                      className="orderContainer collapsible"
-                      style={{zIndex: orderZIndex, opacity: orderOpacity, width: width + "%"}}
-                  >
-                    <h2>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h2>
-                    <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.staffMemberID) }</span></h5>
-                    <div className="orderButtonsContainer" onClick={(e)=>{e.stopPropagation()}}>
-                      <button className="orderButton">
-                        <span className="icon notReady"><FontAwesomeIcon icon={faUndoAlt} /></span>
-                        <span className="title">Not ready</span>
-                        <br />
-                        <span className="subtitle">Mark as un-ready</span>
-                      </button>
-                      <button onClick={()=>{this.showBilling(orderIndex)}} className="orderButton">
-                        <span className="icon billingAndMore"></span>
-                        <span className="title">More</span>
-                        <br />
-                        <span className="subtitle">Billing &amp; more</span>
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            }
-          </div>
-
-          <h1>YOUR IN-PROGRESS ({this.state.inProgressOrdersIndexes.length}):</h1>
-          <div className="ordersContainer">
-            {
-                this.state.inProgressOrdersIndexes.map((orderIndex) => {
-                  const orderData = this.state.orders[orderIndex];
-
-                  // Only show pending orders belonging to the current staff member
-                  if (orderData.staffMemberID !== this.state.selectedStaffMember) return null;
+                  // Calculate styles
+                  let orderOpacity = 1; // Order opacity (lowered when collapsed and far down)
+                  let width = 100; // Width as percentage
+                  if (incrementer !== 0) {
+                    if (this.state.awaitingOrdersCollapsed)
+                      orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
+                      width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
+                  }
 
                   return (
-                    <div key={orderIndex} className="orderContainer in-progress">
-
-                      <MultiColumnItemList orderItems={orderData.items} />
-
-                      <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
-
-                      { this.renderCustomerNotes(orderIndex, orderData.notes) }
-
-                      <div className="orderButtonsContainer">
-                        <button className="orderButton" onClick={() => this.props.updateOrder("5c9684a1e76095a316b3687c", "CANCELLED", "5c97adb88cab340a0995dd27")}>
-                          <span className="icon ready"><FontAwesomeIcon icon={faCheck} /></span>
-                          <span className="title">Ready</span>
-                          <br />
-                          <span className="subtitle">Mark as ready</span>
-                        </button>
+                    <div
+                        key={orderIndex}
+                        onClick={this.ToggleAwaitingCollapse}
+                        className="orderContainer collapsible"
+                        style={{zIndex: orderZIndex, opacity: orderOpacity, width: width + "%"}}
+                    >
+                      <h2>#{orderData.id} - <TimeAgo date={orderData.date}/></h2>
+                      <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.staffMemberID) }</span></h5>
+                      <div className="orderButtonsContainer" onClick={(e)=>{e.stopPropagation()}}>
                         <button className="orderButton">
-                          <span className="icon notInProgress"><FontAwesomeIcon icon={faUndoAlt} /></span>
-                          <span className="title">Not in progress</span>
+                          <span className="icon notReady"><FontAwesomeIcon icon={faUndoAlt} /></span>
+                          <span className="title">Not ready</span>
                           <br />
-                          <span className="subtitle">Return to pending</span>
+                          <span className="subtitle">Mark as un-ready</span>
                         </button>
-                        <button onClick={() => { this.showBilling(orderIndex) }} className="orderButton">
+                        <button onClick={()=>{this.showBilling(orderIndex)}} className="orderButton">
                           <span className="icon billingAndMore"></span>
                           <span className="title">More</span>
                           <br />
@@ -895,59 +866,104 @@ class App extends Component {
                   );
                 })
               }
-          </div>
+            </div>
 
-          <div className="pendingOrderButtons">
-            <button className="pendingOrderButton">
-              <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
-              <span className="title">Take next order</span>
-              <br />
-              <span className="subtitle">
-                Adds next order to your ({
-                  this.state.staffMembers.find(x => x.id === this.state.selectedStaffMember).firstName
-                }) in-progress feed
-              </span>
-            </button>
+            <h1>YOUR IN-PROGRESS:</h1>
+            <div className="ordersContainer">
+              {
+                  this.state.inProgressOrdersIndexes.map((orderIndex) => {
+                    const orderData = this.state.serverOrders[orderIndex];
+                    console.log(orderData)
+                    // Only show pending orders belonging to the current staff member
+                    if (orderData.staffMemberID !== this.state.selectedStaffMember) return null;
 
-            <button onClick={this.state.showUpcoming} className="pendingOrderButton">
-              <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
-              <span className="title">View upcoming</span>
-              <br />
-              <span className="subtitle">
-                Display a feed of pending orders
-              </span>
-            </button>
-          </div>
+                    return (
+                      <div key={orderIndex} className="orderContainer in-progress">
 
-          <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
+                        <MultiColumnItemList orderItems={orderData.drinks} />
 
-          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
-          <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
-          <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
-          <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
-          <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
-          <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
-          <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
+                        <h3>#{orderData.id} - <TimeAgo date={orderData.date}/></h3>
 
-          { this.state.notificationsJSX }
+                        { this.renderCustomerNotes(orderIndex, orderData.notes) }
 
-          {
-            this.state.disableScanner ? null :
-              <div ref={this.previewDiv} className="qrReader">
-                <QrReader
-                    delay={qrDelay}
-                    onError={this.handleError}
-                    onScan={this.handleScan}
-                />
-                <p>
-                  QR content:<br />
-                  {this.state.qrResult}
-                </p>
-              </div>
-          }
-        </header>
-      </div>
-    );
+                        <div className="orderButtonsContainer">
+                          <button className="orderButton">
+                            <span className="icon ready"><FontAwesomeIcon icon={faCheck} /></span>
+                            <span className="title">Ready</span>
+                            <br />
+                            <span className="subtitle">Mark as ready</span>
+                          </button>
+                          <button className="orderButton">
+                            <span className="icon notInProgress"><FontAwesomeIcon icon={faUndoAlt} /></span>
+                            <span className="title">Not in progress</span>
+                            <br />
+                            <span className="subtitle">Return to pending</span>
+                          </button>
+                          <button onClick={() => { this.showBilling(orderIndex) }} className="orderButton">
+                            <span className="icon billingAndMore"></span>
+                            <span className="title">More</span>
+                            <br />
+                            <span className="subtitle">Billing &amp; more</span>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })
+                }
+            </div>
+
+            <div className="pendingOrderButtons">
+              <button className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9684a1e76095a316b3687c", "IN_PROGRESS", "5c97adb88cab340a0995dd27")}}>
+                <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
+                <span className="title">Take next order</span>
+                <br />
+                <span className="subtitle">
+                  Adds next order to your ({
+                    this.state.staffMembers.find(x => x.id === this.state.selectedStaffMember).firstName
+                  }) in-progress feed
+                </span>
+              </button>
+
+              <button onClick={this.state.showUpcoming} className="pendingOrderButton">
+                <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
+                <span className="title">View upcoming</span>
+                <br />
+                <span className="subtitle">
+                  Display a feed of pending orders
+                </span>
+              </button>
+            </div>
+
+            <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
+
+            <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
+            <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
+            <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
+            <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
+            <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
+            <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
+            <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
+
+            { this.state.notificationsJSX }
+
+            {
+              this.state.disableScanner ? null :
+                <div ref={this.previewDiv} className="qrReader">
+                  <QrReader
+                      delay={qrDelay}
+                      onError={this.handleError}
+                      onScan={this.handleScan}
+                  />
+                  <p>
+                    QR content:<br />
+                    {this.state.qrResult}
+                  </p>
+                </div>
+            }
+          </header>
+        </div>
+      );
+    }
   }
 }
 

@@ -15,8 +15,8 @@ module.exports = buildSchema(`
      
      type BarStaff {
         _id: ID!
-        firstName: String!
-        lastName: String!
+        firstName: String
+        lastName: String
         bar: Bar!
      }
      

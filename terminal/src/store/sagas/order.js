@@ -30,6 +30,11 @@ export function* getOrdersByCollectionPointSaga(action) {
                             email
                             _id
                         }
+                        orderAssignedTo {
+                            _id: ID
+                            firstName
+                            lastName
+                        }
                    }
                 }
             `,
