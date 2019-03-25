@@ -1,4 +1,5 @@
 const authResolver = require('./auth');
+const userResolver = require('./user');
 const barResolver = require('./bar');
 const drinksResolver = require('./drinks');
 const ingredientsResolver = require('./ingredients');
@@ -13,7 +14,8 @@ const rootResolver = {
   ...ingredientsResolver,
   ...ordersResolver,
   ...collectionPointResolver,
-  ...barStaffResolver
+  ...barStaffResolver,
+  ...userResolver
 };
 
 module.exports = rootResolver;
