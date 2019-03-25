@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, Picker} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, Picker, Button} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -357,6 +357,7 @@ class Checkout extends Component {
                             <Picker.Item style={{color: 'white'}} label="Bar 4" value="js" />
                             <Picker.Item style={{color: 'white'}} label="Bar 5" value="js" />
                             </Picker>
+                            <Button title="collection" onPress={()=> this.props.findCollectionPoints()}/>
                             </View>
                             <Payment
                                 visible={this.state.showPaymentOverlay}
@@ -526,14 +527,16 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         basket: state.basket.basket,
-        basketCategories: state.basket.categories
+        basketCategories: state.basket.categories,
+        collectionPoint: state.collectionPoint
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
       submitOrder: (basket, componentId, paymentInfo, basketPrice) => dispatch(actions.submitOrder(basket, componentId, paymentInfo, basketPrice)),
-      emptyBasket: () => dispatch(actions.emptyBasket())
+      emptyBasket: () => dispatch(actions.emptyBasket()),
+      findCollectionPoints: () => dispatch(actions.findCollectionPoints())
     };
   };
 

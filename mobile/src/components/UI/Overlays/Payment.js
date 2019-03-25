@@ -3,9 +3,25 @@ import {Text, StyleSheet, View, Dimensions} from 'react-native';
 import {Card, Overlay} from 'react-native-elements';
 import { CreditCardInput } from "react-native-credit-card-input";
 import ButtonBackground from '../Buttons/ButtonWithBackground';
+// import RNPickerSelect from 'react-native-picker-select';
 import * as colours from '../../../styles/colourScheme';
 
 const screenHeight = Dimensions.get('window').height;
+
+const sports = [
+    {
+      label: 'Football',
+      value: 'football',
+    },
+    {
+      label: 'Baseball',
+      value: 'baseball',
+    },
+    {
+      label: 'Hockey',
+      value: 'hockey',
+    },
+  ];
 
 class MobilePayments extends Component {
 
@@ -41,6 +57,12 @@ class MobilePayments extends Component {
     };
 
     render() {
+        const placeholder = {
+            label: 'Select a collection point',
+            value: null,
+            color: 'white'
+        };
+
         return (
             <Overlay
                 animationType="slide"
@@ -73,6 +95,31 @@ class MobilePayments extends Component {
                             </Text>
                         </View>
                     </Card>
+
+                    {/* insert colelctoin point front end code here */}
+
+                    <Text>useNativeAndroidPickerStyle (default)</Text>
+                        {/* <RNPickerSelect
+                        placeholder={placeholder}
+                        items={sports}
+                        onValueChange={value => {
+                            this.setState({
+                            favSport0: value,
+                            });
+                        }}
+                        // onUpArrow={() => {
+                        //     this.inputRefs.firstTextInput.focus();
+                        // }}
+                        // onDownArrow={() => {
+                        //     this.inputRefs.favSport1.togglePicker();
+                        // }}
+                        style={pickerSelectStyles}
+                        value={this.state.favSport0}
+                        ref={el => {
+                            this.inputRefs.favSport0 = el;
+                        }}
+                        /> */}
+
                     <View style={[{height: screenHeight / 3}, styles.buttons]}>
                         <View style={styles.buttonStyle}>
                             <ButtonBackground
