@@ -5,7 +5,8 @@ const initialState = {
     loading: null,
     error: null,
     orders: [],
-    updatingOrder: null
+    updatingOrderLoading: null,
+    updatedOrder: null
 };
 
 const getOrdersByCollectionPointStart = (state, action) => {
@@ -32,19 +33,21 @@ const getOrdersByCollectionPointFailure = (state, action) => {
 
 const updateOrderStart = (state, action) => {
     return updateObject(state, {
-        updatingOrder: true,
+        updatingOrderLoading: true,
+
     });
 };
 
 const updateOrderSuccess = (state, action) => {
     return updateObject(state, {
         updatedOrder: action.updatedOrder,
+        updatingOrderLoading: false
     });
 };
 
 const updateOrderFailure = (state, action) => {
     return updateObject(state, {
-        updatingOrder: false,
+        updatingOrderLoading: false,
         error: action.error
     });
 };
