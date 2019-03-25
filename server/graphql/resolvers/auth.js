@@ -43,7 +43,7 @@ module.exports = {
     },
     login: async ({email, password}) => {
         // does user exist
-        const user = await User.findOne({email: email});
+        const user = await User.findOne({email: email}).populate('lastVisitedBar');
         // no user found
         if (!user) {
             throw new Error('Authentication failed');
