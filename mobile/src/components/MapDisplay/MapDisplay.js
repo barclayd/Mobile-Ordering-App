@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import * as actions from '../../store/actions/index';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
 
-
 class MapDisplay extends Component {
-
-    async componentDidMount() {
-        await this.getLocationHandler();
-    }
 
     state = {
         focusedLocation: {
@@ -17,6 +14,19 @@ class MapDisplay extends Component {
             longitudeDelta: Dimensions.get('window').width / Dimensions.get('window').height * 0.122
         }
     };
+
+    async componentDidMount() {
+        await this.getLocationHandler();
+        this.props.findAllBars();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.loadingBars) {
+            this.setState({
+                bars: nextProps.bars
+            });
+        }
+    }
 
     getLocationHandler = () => {
         navigator.geolocation.getCurrentPosition(pos => {
@@ -82,4 +92,17 @@ const styles = StyleSheet.create({
     }
 });
 
-export default MapDisplay;
+const mapStateToProps = state => {
+    return {
+        bars: state.bar.bars,
+        loadingBars: state.bar.findAllBarsLoading
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        findAllBars: () => dispatch(actions.findAllBars())
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapDisplay);

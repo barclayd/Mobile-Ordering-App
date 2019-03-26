@@ -1,7 +1,7 @@
 const Bar = require('../../models/bar');
 
 module.exports = {
-    bars: async () => {
+    findAllBars: async () => {
         try {
             const bars = await Bar.find();
             return bars.map(bar => {

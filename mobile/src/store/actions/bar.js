@@ -85,3 +85,29 @@ export const updateLastVisitedBarFail = (err) => {
         error: err
     }
 };
+
+export const findAllBars = () => {
+    return {
+        type: actionTypes.FIND_ALL_BARS
+    }
+};
+
+export const findAllBarsStart = () => {
+    return {
+        type: actionTypes.FIND_ALL_BARS_START
+    }
+};
+
+export const findAllBarsSuccess = (bars) => {
+    return {
+        type: actionTypes.FIND_ALL_BARS_SUCCESS,
+        bars
+    }
+};
+
+export const findAllBarsFail = (err) => {
+    return {
+        type: actionTypes.FIND_ALL_BARS_FAIL,
+        err
+    }
+};

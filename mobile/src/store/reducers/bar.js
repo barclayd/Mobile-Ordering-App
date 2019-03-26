@@ -12,7 +12,10 @@ const initialState = {
     barCode: null,
     updatingLastVisitedBar: false,
     errorUpdatingLastVisitedBar: false,
-    lastVisitedBar: null
+    lastVisitedBar: null,
+    findAllBarsLoading: false,
+    bars: [],
+    findAllBarsError: null
 };
 
 const findBarStart = (state, action) => {
@@ -67,6 +70,27 @@ const updateLastVisitedBarFail = (state, action) => {
     });
 };
 
+const findAllBarsStart = (state, action) => {
+    return updateObject(state, {
+        findAllBarsLoading: true
+    });
+};
+
+const findAllBarsSuccess = (state, action) => {
+    return updateObject(state, {
+        findAllBarsError: false,
+        findAllBarsLoading: false,
+        bars: action.bars
+    });
+};
+
+const findAllBarsFail = (state, action) => {
+    return updateObject(state, {
+        findAllBarsLoading: false,
+        findAllBarsError: action.err,
+    });
+};
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FIND_BAR_START: return findBarStart(state, action);
@@ -75,6 +99,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.UPDATE_LAST_VISITED_BAR_START: return updateLastVisitedBarStart(state, action);
         case actionTypes.UPDATE_LAST_VISITED_BAR_SUCCESS: return updateLastVisitedBarSuccess(state, action);
         case actionTypes.UPDATE_LAST_VISITED_BAR_FAIL: return updateLastVisitedBarFail(state, action);
+        case actionTypes.FIND_ALL_BARS_START: return findAllBarsStart(state, action);
+        case actionTypes.FIND_ALL_BARS_SUCCESS: return findAllBarsSuccess(state, action);
+        case actionTypes.FIND_ALL_BARS_FAIL: return findAllBarsFail(state, action);
         default: return state;
     }
 };
