@@ -5,7 +5,7 @@ import {Alert} from 'react-native';
 import * as actions from '../actions/index';
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import {Platform} from "react-native";
-import {setMainApp, setMainAppSettings} from "../../utility/navigation";
+import {setMainApp, setMainAppSettings, pop} from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
 const authRedirect = (action, barName) => {
@@ -24,7 +24,9 @@ export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("userId");
     yield AsyncStorage.removeItem("name");
     yield AsyncStorage.removeItem("barName");
+    yield AsyncStorage.removeItem("barId");
     yield AsyncStorage.removeItem("barCode");
+    yield AsyncStorage.removeItem("orderId");
     yield put(actions.emptyBasketStart());
     yield emptyBasket();
     yield put(actions.emptyBasketSuccess());
@@ -74,7 +76,7 @@ export function* authUserSaga(action) {
                         name
                         lastVisitedBar {
                             name
-                            barCode
+                            _id
                         }
                     }
                 }
@@ -91,16 +93,15 @@ export function* authUserSaga(action) {
                         yield AsyncStorage.setItem("token", res.data.data.login.token);
                         yield AsyncStorage.setItem("userId", res.data.data.login.userId);
                         yield AsyncStorage.setItem("name", res.data.data.login.name);
-                        yield AsyncStorage.setItem("barName", response.data.data.login.lastVisitedBar.name);
-                        yield AsyncStorage.setItem("barCode", response.data.data.login.lastVisitedBar.barCode);
-                        yield authRedirect(action, response.data.data.login.lastVisitedBar.name);
+                        // return back to previous page
+                        yield pop(action.componentId);
                     } else {
                         yield put(actions.authFail());
                         Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again.')
                     }
                 } catch (err) {
                     console.log(err);
-                    yield put(actions.authFail());
+                    yield put(actions.authFail(err));
                     Alert.alert('Unsuccessful login 🔒', 'Authentication failed. Please try again.')
                 }
             } else {
@@ -121,8 +122,8 @@ export function* authUserSaga(action) {
                         tokenExpiration
                         name
                         lastVisitedBar {
+                            _id
                             name
-                            barCode
                         }
                     }
                 }
@@ -139,10 +140,18 @@ export function* authUserSaga(action) {
                 yield AsyncStorage.setItem("name", response.data.data.login.name);
                 yield AsyncStorage.setItem("token", response.data.data.login.token);
                 yield AsyncStorage.setItem("userId", response.data.data.login.userId);
-                yield AsyncStorage.setItem("barName", response.data.data.login.lastVisitedBar.name);
-                yield AsyncStorage.setItem("barCode", response.data.data.login.lastVisitedBar.barCode);
+                console.log(response.data.data.login.lastVisitedBar);
+                if (response.data.data.login.lastVisitedBar) {
+                    yield AsyncStorage.setItem("barName", response.data.data.login.lastVisitedBar.name);
+                    yield AsyncStorage.setItem("barId", response.data.data.login.lastVisitedBar._id);
+                }
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
-               yield authRedirect(action, response.data.data.login.name);
+                if (response.data.data.login.lastVisitedBar) {
+                    yield authRedirect(action, response.data.data.login.lastVisitedBar.name);
+                } else {
+                    // return back to previous page
+                    yield pop(action.componentId);
+                }
             } else {
                 yield put(actions.authFail());
                 Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again')
@@ -187,8 +196,8 @@ export function* checkAuthTimeoutSaga(action) {
 export function* autoSignInSaga(action) {
     const token = yield AsyncStorage.getItem("token");
     const barName = yield AsyncStorage.getItem("barName");
-    const barCode = yield AsyncStorage.getItem("barCode");
-    if (token && (barName !== undefined) && (barCode !== undefined)) {
+    const barId = yield AsyncStorage.getItem("barId");
+    if (token && (barName !== undefined) && (barId !== undefined)) {
         yield authRedirect(action, barName);
     }
 }
