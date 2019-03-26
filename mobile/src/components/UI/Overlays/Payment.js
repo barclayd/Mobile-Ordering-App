@@ -5,7 +5,6 @@ import { CreditCardInput } from "react-native-credit-card-input";
 import ButtonBackground from '../Buttons/ButtonWithBackground';
 import RNPickerSelect from 'react-native-picker-select';
 import * as colours from '../../../styles/colourScheme';
-import Icon from "react-native-vector-icons/FontAwesome";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -68,8 +67,8 @@ class MobilePayments extends Component {
         return (
             <Overlay
                 animationType="slide"
-                height={(screenHeight / 3) * 2.5}
-                width={screenWidth / 1.1}
+                height={(screenHeight / 3) * 2.85}
+                width={screenWidth}
                 overlayBackgroundColor={colours.midnightBlack}
                 overlayStyle={styles.overlayBorder}
                 onBackdropPress={this.props.hidePayment}
