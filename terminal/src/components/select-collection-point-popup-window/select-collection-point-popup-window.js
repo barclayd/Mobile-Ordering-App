@@ -31,7 +31,7 @@ class SelectCollectionPointPopUpWindow extends Component {
                                         }} 
                                         className="button collectionPointButton">
 
-                                    
+                                    <img src="https://lefooding.com/media/W1siZiIsIjIwMTYvMDcvMTgvMTRfMzJfMjZfNTk0X2Jhcl9oYXJyeXNfbmV3X3lvcmtfYmFyX3BhcmlzLmpwZyJdLFsicCIsInRodW1iIiwiNjcyeDYwMCJdXQ/bar-harrys-new-york-bar-paris.jpg?sha=3a132a68"/>
                                     <span className="title">{collectionPointData.name}</span>
                                     <br/>
                                     <span className="description">{collectionPointData.description}</span>
