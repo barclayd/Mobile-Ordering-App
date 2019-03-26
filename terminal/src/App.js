@@ -620,7 +620,7 @@ class App extends Component {
   };
 
   changeCollectionPoint = (collectionPointID) => {
-    this.state.collectionPointID = collectionPointID;
+    this.setState({collectionPointID: collectionPointID});
   }
 
   // Displays billing popup for order by order index
