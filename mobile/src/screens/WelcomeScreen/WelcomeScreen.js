@@ -116,7 +116,7 @@ class WelcomeScreen extends Component {
                         <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
                         <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
                         </>
-                        ) : null}
+                    ) : <Text style={styles.h4}>Welcome back, <Text style={{color: colours.orange}}>{this.props.name}</Text></Text>}
                 </View>
             </WelcomeBackground>
                 </KeyboardAvoidingView>
@@ -151,6 +151,10 @@ const styles = StyleSheet.create({
         color: colours.midGrey,
         top: ((Dimensions.get('window').height / 5.5) * 2)
     },
+    h4:{
+        color: colours.midGrey,
+        fontSize: 18
+    },
     button: {
         fontSize: 36,
         fontFamily: 'Helvetica Neue',
@@ -183,6 +187,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center'
     },
+    welcomeBackText: {
+        width: (Dimensions.get("window").width) / 2,
+        height: (Dimensions.get("window").height) / 11,
+        borderWidth: 1,
+        color: colours.lightGrey,
+        fontSize: 16,
+        alignSelf: 'flex-start',
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
     btn: {
         width: (Dimensions.get("window").width) / 5,
         height: (Dimensions.get("window").height) / 11,
@@ -205,7 +219,8 @@ const mapStateToProps = state => {
     return {
         barLoading: state.bar.loading,
         barError: state.bar.error,
-        userId: state.auth.userId
+        userId: state.auth.userId,
+        name: state.auth.name
     }
 };
 
