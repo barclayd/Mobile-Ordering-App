@@ -4,7 +4,7 @@ export {
 
 
 export {
-    findBarStart, findBarSuccess, findBarFail, removeBar, removeBarFail, findBar, removeBarStart, removeBarSuccess
+    findBarStart, findBarSuccess, findBarFail, removeBar, removeBarFail, findBar, removeBarStart, removeBarSuccess, updateLastVisitedBar, updateLastVisitedBarStart, updateLastVisitedBarFail, updateLastVisitedBarSuccess
 } from './bar'
 
 export {

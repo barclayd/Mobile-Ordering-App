@@ -83,10 +83,10 @@ export function* submitOrderSaga(action) {
             `,
             variables: {
                 drinks: drinksList,
-                collectionPoint: collectionId ? collectionId: "5c92565db99ff5134f15e56a",
+                collectionPoint: collectionId,
                 status: "PENDING",
                 date: date,
-                userInfo: user ? user : '5c69c7c058574e24c841ddc8',
+                userInfo: user,
                 price: orderPrice
             }
         };
@@ -97,13 +97,10 @@ export function* submitOrderSaga(action) {
             }
         });
         if (response.data.errors) {
-            console.log('error was found');
             yield put(actions.submitOrderFail(response.data.errors[0].message));
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            console.log('made it');
-            console.log(response.data);
             const orderId = response.data.data.createOrder._id;
             yield AsyncStorage.setItem("orderId", orderId);
             yield put(actions.submitOrderSuccess(response.data));
@@ -111,7 +108,6 @@ export function* submitOrderSaga(action) {
             yield emptyBasket();
             yield put(actions.emptyBasketSuccess());
             const collectionId = response.data.data.createOrder.collectionId;
-            console.log(response.data.data.createOrder);
             const collectionPoint = response.data.data.createOrder.collectionPoint.name;
             const date = response.data.data.createOrder.date;
             yield orderRedirect(collectionId, user, collectionPoint, date, orderId);
@@ -124,7 +120,6 @@ export function* submitOrderSaga(action) {
 
 export function* orderHistorySaga(action) {
     const user = yield AsyncStorage.getItem('userId');
-    console.log("action",action);
     yield put(actions.orderHistoryStart());
     try {
         let requestBody = {

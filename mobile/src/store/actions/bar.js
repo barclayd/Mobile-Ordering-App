@@ -56,3 +56,32 @@ export const removeBar = () => {
         type: actionTypes.REMOVE_BAR,
     }
 };
+
+export const updateLastVisitedBar = (userId, barId) => {
+    return {
+        type: actionTypes.UPDATE_LAST_VISITED_BAR,
+        userId,
+        barId
+    }
+};
+
+export const updateLastVisitedBarStart = () => {
+    return {
+        type: actionTypes.UPDATE_LAST_VISITED_BAR_START
+    }
+};
+
+export const updateLastVisitedBarSuccess = (barName, barId) => {
+    return {
+        type: actionTypes.UPDATE_LAST_VISITED_BAR_SUCCESS,
+        barName,
+        barId
+    }
+};
+
+export const updateLastVisitedBarFail = (err) => {
+    return {
+        type: actionTypes.UPDATE_LAST_VISITED_BAR_FAIL,
+        error: err
+    }
+};

@@ -1,10 +1,11 @@
 import {put} from 'redux-saga/effects';
 import axios from '../../axios-instance';
 import * as actions from '../actions/index';
+import {AsyncStorage} from "react-native";
 
 export function* findCollectionPointsSaga(action){
-    console.log("collection point saga")
     yield put(actions.findCollectionPointsStart());
+    const barId = yield AsyncStorage.getItem("barId");
     try {
         let requestBody = {
             query: `
@@ -21,7 +22,7 @@ export function* findCollectionPointsSaga(action){
                 }
             `,
             variables: {
-                barId: '5c6ab350180f855c65fce6ef'
+                barId: barId
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
@@ -30,8 +31,7 @@ export function* findCollectionPointsSaga(action){
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-        console.log("response",response)
-        yield put(actions.findCollectionPointsSuccess(response.data.data))
+            yield put(actions.findCollectionPointsSuccess(response.data.data))
         }
     } catch (err) {
         console.log(err);
