@@ -12,6 +12,7 @@ import MultiColumnItemList from './components/multi-column-item-list/multi-colum
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
 import PickupPopupWindow from './containers/pickup-popup-window/pickup-popup-window';
 import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
+import SelectCollectionPointPopupWindow from './containers/select-collection-point-popup-window/select-collection-point-popup-window';
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./assets/notes.svg";
@@ -521,6 +522,24 @@ class App extends Component {
         }
       ],
 
+      collectionPoints: [
+        {
+          id: 1,
+          name: "Downstairs",
+          description: "Outside WHSmiths, usually dead."
+        },
+        {
+          id: 2,
+          name: "Upstairs",
+          description: "Small minibar."
+        },
+        {
+          id: 3,
+          name: "Main floor",
+          description: "Wide bar."
+        }
+      ],
+
       lastNotificationID: 0,
 
       selectedStaffMember: 1,
@@ -599,6 +618,10 @@ class App extends Component {
   setOrderForPopup = (orderIndex, callback) => {
     this.setState({orderForPopup: this.state.serverOrders[orderIndex]}, callback());
   };
+
+  changeCollectionPoint = (collectionPointID) => {
+    this.state.collectionPointID = collectionPointID;
+  }
 
   // Displays billing popup for order by order index
   showBilling = (orderIndex) => {
@@ -944,7 +967,7 @@ class App extends Component {
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
-
+            <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPoint={this.changeCollectionPoint} />
             { this.state.notificationsJSX }
 
             {
