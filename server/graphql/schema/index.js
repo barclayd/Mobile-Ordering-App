@@ -163,11 +163,11 @@ module.exports = buildSchema(`
         createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
         updateOrder(orderStatusInput: OrderStatusInput): Order
         updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
+        updateLastVisitedBar(userId: ID!, barId: ID): User!
     }
     
     type RootSubscription {
         updateOrder(orderStatusInput: OrderStatusInput): Order!
-        updateLastVisitedBar(userId: ID!, barId: ID): User!
     }
     
     schema {

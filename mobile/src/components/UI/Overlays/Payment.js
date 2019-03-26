@@ -57,7 +57,7 @@ class MobilePayments extends Component {
 
 
 
-        const collectionPoints = []
+        const collectionPoints = [];
 
         if (this.props.collectionPoints){
             this.props.collectionPoints.map(points => {
@@ -68,7 +68,7 @@ class MobilePayments extends Component {
         return (
             <Overlay
                 animationType="slide"
-                height={(screenHeight / 3) * 2}
+                height={(screenHeight / 3) * 2.5}
                 width={screenWidth / 1.1}
                 overlayBackgroundColor={colours.midnightBlack}
                 overlayStyle={styles.overlayBorder}
@@ -84,7 +84,7 @@ class MobilePayments extends Component {
                         labelStyle={{color: colours.pureWhite}}
                         inputStyle={{color: colours.orange}}
                         allowScroll/>
-                    
+
                     <View style={styles.picker}>
                     <View>
                     <Text style={styles.collectionPoint}>COLLECTION POINT</Text>

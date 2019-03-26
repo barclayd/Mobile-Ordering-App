@@ -328,6 +328,10 @@ const popToRoot = async (componentId) => {
     await Navigation.popToRoot(componentId);
 };
 
+const pop = async (componentId) => {
+    await Navigation.pop(componentId);
+};
+
 export {
-    setOrderStatus, popToRoot ,setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
+    setOrderStatus, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
 }

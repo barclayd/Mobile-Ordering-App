@@ -1,7 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Navigation} from "react-native-navigation";
-import {View, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {
+    View,
+    TextInput,
+    Text,
+    StyleSheet,
+    Dimensions,
+    TouchableOpacity,
+    KeyboardAvoidingView
+} from 'react-native';
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import validate from '../../utility/validation';
@@ -15,7 +23,7 @@ let submittedCode;
 
 class WelcomeScreen extends Component {
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.onTryAutoSignIn(this.props.componentId);
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
@@ -66,7 +74,6 @@ class WelcomeScreen extends Component {
     };
 
     render() {
-
         return (
             <DismissKeyboard>
                 <KeyboardAvoidingView
@@ -104,8 +111,12 @@ class WelcomeScreen extends Component {
                     {this.props.barError && submittedCode === this.state.controls.barCode.value ? <Text style={styles.h3}>Bar code <Text style={{color: colours.warningRed}}>{submittedCode}</Text> could not be found. Please try again</Text> : null}
                 </View>
                 <View style={styles.loginButtonContainer}>
+                    {this.props.userId === undefined || this.props.userId === null ? (
+                        <>
                         <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
                         <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
+                        </>
+                        ) : null}
                 </View>
             </WelcomeBackground>
                 </KeyboardAvoidingView>
@@ -193,7 +204,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         barLoading: state.bar.loading,
-        barError: state.bar.error
+        barError: state.bar.error,
+        userId: state.auth.userId
     }
 };
 
