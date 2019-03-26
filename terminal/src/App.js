@@ -12,6 +12,7 @@ import MultiColumnItemList from './components/multi-column-item-list/multi-colum
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
 import PickupPopupWindow from './containers/pickup-popup-window/pickup-popup-window';
 import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
+import SelectCollectionPointPopupWindow from './containers/select-collection-point-popup-window/select-collection-point-popup-window';
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./assets/notes.svg";
@@ -961,7 +962,7 @@ class App extends Component {
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
-
+            <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPoint={this.changeCollectionPoint} />
             { this.state.notificationsJSX }
 
             {
