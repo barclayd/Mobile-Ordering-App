@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, Button} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -118,7 +118,6 @@ class Checkout extends Component {
 
     onSubmitOrder = (paymentInfo) => {
         const basketPrice = this.basketPrice();
-        console.log(basketPrice);
         this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, basketPrice);
         this.setState({
             showPaymentOverlay: false
@@ -360,7 +359,7 @@ class Checkout extends Component {
                                 duration={400}
                                 onChange={this.setSections}
                             />
-                                                    
+
                             <Payment
                                 visible={this.state.showPaymentOverlay}
                                 basketItems={this.basketItems()}
