@@ -23,7 +23,7 @@ sagaMiddleware.run(watchBar);
 sagaMiddleware.run(watchDrinks);
 sagaMiddleware.run(watchBasket);
 sagaMiddleware.run(watchOrder);
-sagaMiddleware.run(watchCollectionPoint)
+sagaMiddleware.run(watchCollectionPoint);
 
 // register screens
 Navigation.registerComponentWithRedux(screens.AuthScreen, () => AuthScreen, Provider, store);
