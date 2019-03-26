@@ -72,6 +72,12 @@ class TabbedCategories extends Component {
     return quantity;
   };
 
+  priceValidation = price => {
+    let valPrice = parseFloat(Math.round(price * 100) / 100).toFixed(2);
+    return valPrice
+  }
+  
+
   render() {
     return (
       <View>
@@ -89,7 +95,7 @@ class TabbedCategories extends Component {
                       </View>
 
                       <View>
-                        <Text style={styles.price}>£{u.price}</Text>
+                        <Text style={styles.price}>£{this.priceValidation(u.price)}</Text>
                       </View>
                     </View>
 
