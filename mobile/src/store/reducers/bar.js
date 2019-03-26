@@ -10,6 +10,9 @@ const initialState = {
     longitude: null,
     type: null,
     barCode: null,
+    updatingLastVisitedBar: false,
+    errorUpdatingLastVisitedBar: false,
+    lastVisitedBar: null
 };
 
 const findBarStart = (state, action) => {
@@ -39,11 +42,39 @@ const findBarFail = (state, action) => {
     });
 };
 
+const updateLastVisitedBarStart = (state, action) => {
+    return updateObject(state, {
+        updatingLastVisitedBar: true
+    });
+};
+
+const updateLastVisitedBarSuccess = (state, action) => {
+    const lastVisitedBar = {
+        barName: action.barName,
+        barId: action.barId
+    };
+    return updateObject(state, {
+        updatingLastVisitedBar: false,
+        errorUpdatingLastVisitedBar: false,
+        lastVisitedBar: lastVisitedBar
+    });
+};
+
+const updateLastVisitedBarFail = (state, action) => {
+    return updateObject(state, {
+        updatingLastVisitedBar: false,
+        errorUpdatingLastVisitedBar: action.err,
+    });
+};
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FIND_BAR_START: return findBarStart(state, action);
         case actionTypes.FIND_BAR_SUCCESS: return findBarSuccess(state, action);
         case actionTypes.FIND_BAR_FAIL: return findBarFail(state, action);
+        case actionTypes.UPDATE_LAST_VISITED_BAR_START: return updateLastVisitedBarStart(state, action);
+        case actionTypes.UPDATE_LAST_VISITED_BAR_SUCCESS: return updateLastVisitedBarSuccess(state, action);
+        case actionTypes.UPDATE_LAST_VISITED_BAR_FAIL: return updateLastVisitedBarFail(state, action);
         default: return state;
     }
 };
