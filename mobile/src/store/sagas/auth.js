@@ -93,16 +93,15 @@ export function* authUserSaga(action) {
                         yield AsyncStorage.setItem("token", res.data.data.login.token);
                         yield AsyncStorage.setItem("userId", res.data.data.login.userId);
                         yield AsyncStorage.setItem("name", res.data.data.login.name);
-                        yield AsyncStorage.setItem("barName", response.data.data.login.lastVisitedBar.name);
-                        yield AsyncStorage.setItem("barId", response.data.data.login.lastVisitedBar._id);
-                        yield authRedirect(action, response.data.data.login.lastVisitedBar.name);
+                        // return back to previous page
+                        yield pop(action.componentId);
                     } else {
                         yield put(actions.authFail());
                         Alert.alert('Unsuccessful login 🔒', 'Login failed. Please try again.')
                     }
                 } catch (err) {
                     console.log(err);
-                    yield put(actions.authFail());
+                    yield put(actions.authFail(err));
                     Alert.alert('Unsuccessful login 🔒', 'Authentication failed. Please try again.')
                 }
             } else {
