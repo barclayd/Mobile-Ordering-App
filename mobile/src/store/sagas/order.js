@@ -103,6 +103,7 @@ export function* submitOrderSaga(action) {
         if (response.status === 200 && response.status !== 201) {
             const orderId = response.data.data.createOrder._id;
             yield AsyncStorage.setItem("orderId", orderId);
+            // set processing modal...
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
