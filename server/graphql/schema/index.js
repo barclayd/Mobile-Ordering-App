@@ -12,6 +12,20 @@ module.exports = buildSchema(`
      type Category {
         category: String!
      }
+     
+     type BarStaff {
+        _id: ID!
+        firstName: String
+        lastName: String
+        bar: Bar!
+     }
+     
+     type CollectionPoint {
+        _id: ID! 
+        name: String!
+        bar: Bar!
+        collectionPointId: String
+     }
         
     type Drink {
             _id: ID!
@@ -31,9 +45,9 @@ module.exports = buildSchema(`
     
     type Order {
         _id: ID!
-        collectionPoint: String!
+        collectionPoint: CollectionPoint
         drinks: [Drink!]
-        orderAssignedTo: String
+        orderAssignedTo: BarStaff
         status: String!
         date: String!
         userInfo: User!
@@ -58,6 +72,12 @@ module.exports = buildSchema(`
         name: String!
     }
     
+    input BarStaffInput {
+        firstName: String!
+        lastName: String!
+        barId: ID!
+    }
+    
     input UserInput {
         email: String!
         password: String!
@@ -65,13 +85,19 @@ module.exports = buildSchema(`
         role: String!
     }
     
+    input CollectionPointInput {
+        name: String!
+        bar: ID!
+    }
+    
     input OrderInput {
         drinks: [ID!]
-        collectionPoint: String!
+        collectionPoint: ID!
         status: String!
         date: String!
         userInfo: ID!
     }
+    
     
     input BarInput {
         name: String!
@@ -95,6 +121,17 @@ module.exports = buildSchema(`
         containsAlcohol: Boolean!
     }
     
+    input OrderAssignedToInput {
+        orderId: ID!
+        barStaffId: ID
+    }
+
+    input OrderStatusInput {
+        orderId: ID!
+        status: String!
+        barStaffId: ID
+    }
+    
     type RootQuery {
        login(email: String!, password: String!): AuthData!
        findBar(barCode: String!): Bar!
@@ -104,6 +141,12 @@ module.exports = buildSchema(`
        findDrinkCategories: [Category!]!
        findOrders: [Order!]!
        findOrdersByUser(userInfo: ID!): [Order!]!
+       findOrdersByCollectionPoint(collectionPoint: ID!): [Order!]!
+       findOrderById(id: ID!): Order!
+       findCollectionPoints: [CollectionPoint]
+       findCollectionPointById: CollectionPoint
+       findCollectionPointsByBar(barId: ID!): [CollectionPoint]
+       findBarStaffByBar(barId: ID!): [BarStaff]
     }
     
     type RootMutation {
@@ -112,10 +155,19 @@ module.exports = buildSchema(`
         createDrink(drinkInput: DrinkInput): Drink
         createIngredient(ingredientInput: IngredientInput): Ingredient
         createOrder(orderInput: OrderInput): Order
+        createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
+        createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
+        updateOrder(orderStatusInput: OrderStatusInput): Order
+        updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
+    }
+    
+    type RootSubscription {
+        updateOrder(orderStatusInput: OrderStatusInput): Order!
     }
     
     schema {
         query: RootQuery
         mutation: RootMutation
+        subscription: RootSubscription
     }
 `);
