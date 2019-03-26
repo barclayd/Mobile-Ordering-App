@@ -23,3 +23,7 @@
     font-weight: normal;
     text-align: left;
   }
+  .collectionPointButton img {
+    width: 100%;
+    height: auto;
+  }
