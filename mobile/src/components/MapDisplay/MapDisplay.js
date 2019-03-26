@@ -5,6 +5,10 @@ import MapView from 'react-native-maps';
 
 class MapDisplay extends Component {
 
+    async componentDidMount() {
+        await this.getLocationHandler();
+    }
+
     state = {
         focusedLocation: {
             latitude: 51.4816,
@@ -12,6 +16,23 @@ class MapDisplay extends Component {
             latitudeDelta: 0.0122,
             longitudeDelta: Dimensions.get('window').width / Dimensions.get('window').height * 0.122
         }
+    };
+
+    getLocationHandler = () => {
+        navigator.geolocation.getCurrentPosition(pos => {
+            this.map.animateToRegion({
+                ...this.state.focusedLocation,
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude
+            });
+            this.setState(prevState => {
+                return {
+                    ...prevState.focusedLocation,
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude
+                }
+            });
+        });
     };
 
     pickLocationHandler = event => {
