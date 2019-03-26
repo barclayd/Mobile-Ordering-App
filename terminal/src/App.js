@@ -619,6 +619,10 @@ class App extends Component {
     this.setState({orderForPopup: this.state.serverOrders[orderIndex]}, callback());
   };
 
+  changeCollectionPoint = (collectionPointID) => {
+    this.state.collectionPointID = collectionPointID;
+  }
+
   // Displays billing popup for order by order index
   showBilling = (orderIndex) => {
     this.setOrderForPopup(orderIndex, () => { this.state.showBilling() });
