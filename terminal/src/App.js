@@ -542,6 +542,7 @@ class App extends Component {
 
       lastNotificationID: 0,
 
+      selectedStaffMemberID: "5c97adae8cab340a0995dd25",
       selectedStaffMember: 1,
 
       lastValidScan: 0,
@@ -899,14 +900,14 @@ class App extends Component {
                     const orderData = this.state.serverOrders[orderIndex];
                     console.log(orderData)
                     // Only show pending orders belonging to the current staff member
-                    if (orderData.staffMemberID !== this.state.selectedStaffMember) return null;
+                    if (orderData.orderAssignedTo._id !== this.state.selectedStaffMemberID) return null;
 
                     return (
                       <div key={orderIndex} className="orderContainer in-progress">
 
                         <MultiColumnItemList orderItems={orderData.drinks} />
 
-                        <h3>#{orderData.id} - <TimeAgo date={orderData.date}/></h3>
+                        <h3>#{orderData.collectionId} - <TimeAgo date={orderData.date}/></h3>
 
                         { this.renderCustomerNotes(orderIndex, orderData.notes) }
 
