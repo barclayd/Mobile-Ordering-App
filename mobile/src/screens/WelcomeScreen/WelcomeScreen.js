@@ -15,7 +15,6 @@ import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackgrou
 import validate from '../../utility/validation';
 import MapDisplay from '../../components/MapDisplay/MapDisplay';
 import {setLoginSettings, setLoginScreen} from '../../utility/navigation';
-import {DismissKeyboard} from '../../components/Utilities/DismissKeyboard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Swiper from 'react-native-swiper';
 import * as colours from '../../styles/colourScheme';
@@ -76,20 +75,22 @@ class WelcomeScreen extends Component {
     };
 
     render() {
+
+        const drinKing =
+            <>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.welcome}>Drin</Text><Text style={styles.king}>King</Text>
+                </View>
+                <View style={styles.rowContainer}>
+                     <Text style={styles.h2}>Simplifying your bar experience</Text>
+                </View>
+            </>;
+
         return (
-            <DismissKeyboard>
                 <KeyboardAvoidingView
                     behavior="padding"
                     style={styles.inputContainer}>
             <WelcomeBackground colour1={colours.orange}>
-                <View style={styles.rowContainer}>
-                    <Text style={styles.welcome}>Drin</Text><Text style={styles.king}>King</Text>
-                </View>
-
-                <View style={styles.rowContainer}>
-                    <Text style={styles.h2}>Simplifying your bar experience</Text>
-                </View>
-
                 <Swiper
                     dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
                     activeDot={<View style={{backgroundColor: colours.pureWhite, width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
@@ -100,6 +101,7 @@ class WelcomeScreen extends Component {
                     loop={false}
                     onIndexChanged={() => console.log('swiped')}>
                     <View style={styles.columnContainer}>
+                        {drinKing}
                         <View style={styles.rowContainer}>
                     <TextInput
                         placeholder='Enter a bar code...'
@@ -131,13 +133,15 @@ class WelcomeScreen extends Component {
                             ) : <Text style={styles.h4}>Welcome back, <Text style={{color: colours.orange}}>{this.props.name}</Text></Text>}
                         </View>
                 </View>
+                    <View>
+                        {drinKing}
                     <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>
                         <MapDisplay />
+                    </View>
                     </View>
                 </Swiper>
             </WelcomeBackground>
                 </KeyboardAvoidingView>
-            </DismissKeyboard>
         );
     }
 }
