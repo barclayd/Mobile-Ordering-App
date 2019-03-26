@@ -139,6 +139,7 @@ module.exports = buildSchema(`
     type RootQuery {
        login(email: String!, password: String!): AuthData!
        findBar(barCode: String!): Bar!
+       findAllBars: [Bar]
        findDrinks(category: String!): [Drink!]!
        drinks: [Drink!]!
        findIngredients(name: String!): [Ingredient!]!
