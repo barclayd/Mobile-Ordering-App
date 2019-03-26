@@ -521,6 +521,24 @@ class App extends Component {
         }
       ],
 
+      collectionPoints: [
+        {
+          id: 1,
+          name: "Downstairs",
+          description: "Outside WHSmiths, usually dead."
+        },
+        {
+          id: 2,
+          name: "Upstairs",
+          description: "Small minibar."
+        },
+        {
+          id: 3,
+          name: "Main floor",
+          description: "Wide bar."
+        }
+      ],
+
       lastNotificationID: 0,
 
       selectedStaffMember: 1,
