@@ -13,9 +13,11 @@ import {
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import validate from '../../utility/validation';
+import MapDisplay from '../../components/MapDisplay/MapDisplay';
 import {setLoginSettings, setLoginScreen} from '../../utility/navigation';
 import {DismissKeyboard} from '../../components/Utilities/DismissKeyboard';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Swiper from 'react-native-swiper';
 import * as colours from '../../styles/colourScheme';
 import * as actions from '../../store/actions/index';
 
@@ -79,7 +81,7 @@ class WelcomeScreen extends Component {
                 <KeyboardAvoidingView
                     behavior="padding"
                     style={styles.inputContainer}>
-            <WelcomeBackground colour1={colours.orange} >
+            <WelcomeBackground colour1={colours.orange}>
                 <View style={styles.rowContainer}>
                     <Text style={styles.welcome}>Drin</Text><Text style={styles.king}>King</Text>
                 </View>
@@ -88,7 +90,17 @@ class WelcomeScreen extends Component {
                     <Text style={styles.h2}>Simplifying your bar experience</Text>
                 </View>
 
-                <View style={styles.rowContainer}>
+                <Swiper
+                    dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
+                    activeDot={<View style={{backgroundColor: colours.pureWhite, width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
+                    paginationStyle={{
+                        bottom: 40
+                    }}
+                    scrollEnabled
+                    loop={false}
+                    onIndexChanged={() => console.log('swiped')}>
+                    <View style={styles.columnContainer}>
+                        <View style={styles.rowContainer}>
                     <TextInput
                         placeholder='Enter a bar code...'
                         value={this.state.controls.barCode.value}
@@ -107,17 +119,22 @@ class WelcomeScreen extends Component {
                     </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.rowContainer}>
-                    {this.props.barError && submittedCode === this.state.controls.barCode.value ? <Text style={styles.h3}>Bar code <Text style={{color: colours.warningRed}}>{submittedCode}</Text> could not be found. Please try again</Text> : null}
+                        <View style={styles.rowContainer}>
+                            {this.props.barError && submittedCode === this.state.controls.barCode.value ? <Text style={styles.h3}>Bar code <Text style={{color: colours.warningRed}}>{submittedCode}</Text> could not be found. Please try again</Text> : null}
+                        </View>
+                        <View style={styles.loginButtonContainer}>
+                            {this.props.userId === undefined || this.props.userId === null ? (
+                                <>
+                                    <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
+                                    <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
+                                </>
+                            ) : <Text style={styles.h4}>Welcome back, <Text style={{color: colours.orange}}>{this.props.name}</Text></Text>}
+                        </View>
                 </View>
-                <View style={styles.loginButtonContainer}>
-                    {this.props.userId === undefined || this.props.userId === null ? (
-                        <>
-                        <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
-                        <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
-                        </>
-                    ) : <Text style={styles.h4}>Welcome back, <Text style={{color: colours.orange}}>{this.props.name}</Text></Text>}
-                </View>
+                    <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>
+                        <MapDisplay />
+                    </View>
+                </Swiper>
             </WelcomeBackground>
                 </KeyboardAvoidingView>
             </DismissKeyboard>
@@ -138,6 +155,10 @@ const styles = StyleSheet.create({
       },
     inputContainer: {
         flex: 1,
+    },
+    columnContainer: {
+      flexDirection: 'column',
+      justifyContent: 'center',
     },
     rowContainer: {
       flexDirection: 'row',
@@ -212,6 +233,10 @@ const styles = StyleSheet.create({
         top: ((Dimensions.get('window').height / 6) * 3),
         flexDirection: 'row',
         justifyContent: 'space-evenly',
+    },
+    buttonText: {
+        color: colours.white,
+        fontSize: 36
     }
 });
 
