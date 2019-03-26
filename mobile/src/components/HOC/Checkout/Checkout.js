@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, Button, ActivityIndicator} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -10,6 +10,8 @@ import * as actions from "../../../store/actions/index"
 import ApplePay from '../../../assets/apple-pay.svg';
 import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
 import Payment from '../../UI/Overlays/Payment';
+import OrderPending from "../../UI/Overlays/orderPending"
+
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -23,7 +25,8 @@ class Checkout extends Component {
         editVisible: false,
         emptyBasketChecked: false,
         showPaymentOverlay: false,
-        collectionPoint: ""
+        collectionPoint: "",
+        orderPending: false
     };
 
 
@@ -120,7 +123,8 @@ class Checkout extends Component {
         const basketPrice = this.basketPrice();
         this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, basketPrice);
         this.setState({
-            showPaymentOverlay: false
+            showPaymentOverlay: false,
+            orderPending: true,
         })
     };
 
@@ -349,6 +353,15 @@ class Checkout extends Component {
                             </View>
                         </Animated.View>
                         <View style={{ height: 1000 }}>
+                        {this.state.orderPending ?
+                        <View>
+                        <ActivityIndicator size="large" color={colours.orange} />
+                        <View style={styles.emptyBasket}>
+                                <Text style={styles.emptyBasketHeader}>Your Order is Processing....</Text>
+                                <Text style={styles.emptyBasketText}>Navigating to order status</Text>
+                        </View>
+                        </View>
+                        : 
                             <Accordion
                                 activeSections={activeSections}
                                 sections={this.props.basketCategories}
@@ -359,7 +372,8 @@ class Checkout extends Component {
                                 duration={400}
                                 onChange={this.setSections}
                             />
-
+                        }
+                                                    
                             <Payment
                                 visible={this.state.showPaymentOverlay}
                                 basketItems={this.basketItems()}
@@ -368,6 +382,7 @@ class Checkout extends Component {
                                 onCancel={this.togglePaymentOverlay}
                                 submitOrder={this.onSubmitOrder}
                                 hidePayment={this.togglePaymentOverlay}/>
+
                             {this.basketItems() > 0 ?
                             <View style={{marginTop: 20}}>
                                     <View style={styles.paymentButtons}>
