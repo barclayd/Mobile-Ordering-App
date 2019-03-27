@@ -64,6 +64,16 @@ class MapDisplay extends Component {
     };
 
     render() {
+
+        const barMarkers = this.props.bars.map(bar => {
+            let markerCoordinates = {
+                ...this.state.focusedLocation,
+                latitude: bar.latitude,
+                longitude: bar.longitude
+            };
+            return <MapView.Marker coordinate={markerCoordinates}/>
+        });
+        console.log(this.props.bars);
         return (
             <View style={styles.container}>
                 <MapView
@@ -71,7 +81,9 @@ class MapDisplay extends Component {
                     initialRegion={this.state.focusedLocation}
                     onPress={this.pickLocationHandler}
                     ref={ref => this.map = ref}
-                />
+                >
+                    {this.props.bars.length > 0 ? barMarkers : null}
+                </MapView>
             </View>
         )
     }
