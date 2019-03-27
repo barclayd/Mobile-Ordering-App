@@ -487,40 +487,7 @@ class App extends Component {
       ],
 
       // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
-      notifications: [
-        {
-          id: -1,
-          class: "error",
-          title: "Scan error",
-          description: "Customer QR has been tampered with!",
-          date: new Date(),
-          isDismissed: false
-        },
-        {
-          id: -2,
-          class: "success",
-          title: "Order completed",
-          description: "You finished order #AHIF",
-          date: new Date(),
-          isDismissed: false
-        },
-        {
-          id: -3,
-          class: "info",
-          title: "New order",
-          description: "You now have 1 pending order",
-          date: new Date(),
-          isDismissed: false
-        },
-        {
-          id: -4,
-          class: "warning",
-          title: "Collection not ready",
-          description: "Customer's order is not ready for collection",
-          date: new Date(),
-          isDismissed: false
-        }
-      ],
+      notifications: [],
 
       collectionPoints: [
         {
@@ -947,7 +914,7 @@ class App extends Component {
                     let newNotifications = this.state.notifications;
                     newNotifications[counter].isDismissed = true;
                     this.setState({notifications: newNotifications})
-                  }, 2000)
+                  }, notificationDuration)
 
                   return (
                     <div key={counter} className="notificationBanner">
