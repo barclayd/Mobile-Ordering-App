@@ -4,6 +4,8 @@ import * as actions from '../../store/actions/index';
 import * as colours from '../../styles/colourScheme';
 import {Dimensions, StyleSheet, View, Text} from 'react-native';
 import MapView, {Marker, Callout} from 'react-native-maps';
+import {Card} from 'react-native-elements';
+import ButtonWithBackground from '../UI/Buttons/ButtonWithBackground';
 
 class MapDisplay extends Component {
 
@@ -18,7 +20,7 @@ class MapDisplay extends Component {
     };
 
     async componentDidMount() {
-        await this.getLocationHandler();
+        // await this.getLocationHandler();
         this.props.findAllBars();
     }
 
@@ -90,12 +92,22 @@ class MapDisplay extends Component {
                 longitude: bar.longitude
             };
             return <Marker identifier={bar.barCode} key={index} style={styles.marker} coordinate={markerCoordinates} image={require('../../assets/logo-small.png')} onPress={(event) =>this.handleMarkerPress(event)}>
-                    <Callout style={styles.callout}
-                        onPress={() => this.handleCalloutPress()}>
+                    <Callout style={styles.callout}>
                             <View>
                                 <Text style={styles.calloutHeader}>{bar.name}</Text>
-                                <Text>{bar.description}</Text>
+                            {/*    <Text>{bar.description}</Text>*/}
                             </View>
+                        <Card
+                            containerStyle={styles.cardContainer}
+                            imageStyle={styles.image}
+                            image={{uri: 'https://i.ibb.co/3Yjbqrv/taf.jpg'}}>
+                            <Text style={{marginBottom: 10}}>
+                                {bar.description}
+                            </Text>
+                            <ButtonWithBackground style={styles.selectButton} onPress={() => this.handleCalloutPress()} textColor={colours.pureWhite} color={colours.midBlue}>
+                                View {bar.name}
+                            </ButtonWithBackground>
+                        </Card>
                 </Callout>
             </Marker>
         });
@@ -131,7 +143,19 @@ const styles = StyleSheet.create({
     },
     calloutHeader: {
         fontWeight: 'bold',
+        fontSize: 22,
         color: colours.orange,
+    },
+    image: {
+        width: 'auto',
+        height: 150
+    },
+    cardContainer: {
+        width: 200,
+        justifyContent: 'flex-start',
+    },
+    selectButton: {
+        marginRight: 20
     }
 });
 
