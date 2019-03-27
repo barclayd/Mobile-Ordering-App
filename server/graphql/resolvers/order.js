@@ -106,6 +106,7 @@ module.exports = {
                     collectionPoint: foundOrder.collectionPoint,
                     status: foundOrder.status,
                     orderAssignedTo: foundOrder.orderAssignedTo,
+                    collectionId: foundOrder.collectionId,
                     date: dateToString(foundOrder._doc.date),
                     userInfo: modifiedUserInfo,
                     transactionId: foundOrder.transactionId
