@@ -192,6 +192,7 @@ class App extends Component {
     // Pull orders from server
     const collectionId = localStorage.getItem('collectionPoint') || '5c925636bc63a912ed715316';
     this.props.findBarStaff("5c6aafda90d4735a4e22f711");
+    this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || "5c97adae8cab340a0995dd25"});
     this.props.loadOrders(collectionId);
     this.getUserMedia();
   }
@@ -291,6 +292,7 @@ class App extends Component {
 
   switchAccounts = (staffID) => {
     this.setState({selectedStaffMemberID: staffID})
+    localStorage.setItem("selectedStaffMemberID", staffID)
   }
 
   render() {
