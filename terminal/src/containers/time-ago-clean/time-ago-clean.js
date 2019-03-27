@@ -15,6 +15,7 @@ class TimeAgoClean extends Component {
     componentDidMount () {
         this.reRender = setInterval(() => {
             let newTimeAgo = timeago.format(this.props.date);
+            
             if ((new Date() - this.props.date) / 1000 > secondsUntilTimeShown && newTimeAgo !== this.state.timeAgo) {
                 this.setState({ timeAgo: newTimeAgo })
             }
