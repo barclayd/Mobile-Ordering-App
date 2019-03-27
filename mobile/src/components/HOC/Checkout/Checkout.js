@@ -383,7 +383,7 @@ class Checkout extends Component {
                                     </View>
                                 : this.props.orderInProgress ?
                                     <View>
-                                        <Text style={styles.emptyBasketHeader}>Order is being processed</Text>
+                                        <Text style={styles.emptyBasketHeader}>Your Order is being Processed...</Text>
                                         <ActivityIndicator size={"large"} color={colours.orange}/>
                                     </View>
                                     :

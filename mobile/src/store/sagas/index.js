@@ -1,6 +1,6 @@
 import {takeEvery, takeLatest, all} from 'redux-saga/effects';
 import {authUserSaga, logoutSaga, authCheckStateSaga, checkAuthTimeoutSaga, autoSignInSaga} from "./auth";
-import {findBarSaga, updateLastVisitedBarSaga} from './bar';
+import {findBarSaga, updateLastVisitedBarSaga, findAllBarsSaga} from './bar';
 import {findDrinksSaga, findDrinkCategoriesSaga} from './drinks';
 import {updateBasketSaga, emptyBasketSaga} from './basket';
 import {submitOrderSaga, orderHistorySaga, orderStatusSaga} from './order';
@@ -20,6 +20,7 @@ export function* watchAuth() {
 export function* watchBar() {
     yield takeLatest(actionTypes.FIND_BAR, findBarSaga);
     yield takeLatest(actionTypes.UPDATE_LAST_VISITED_BAR, updateLastVisitedBarSaga);
+    yield takeLatest(actionTypes.FIND_ALL_BARS, findAllBarsSaga);
 }
 
 export function* watchDrinks() {

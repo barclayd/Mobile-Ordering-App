@@ -14,11 +14,11 @@ const setDefaultSettings = () => {
             openGestureMode: 'bezel',
             left: {
                 visible: false,
-                enabled: true
+                enabled: false
             },
             right: {
                 visible: false,
-                enabled: true
+                enabled: false
             }
         }
     });
@@ -297,6 +297,7 @@ const setViewPastOrdersSettings = () => {
 
 const setLoginSettings = () => {
     Navigation.setDefaultOptions({
+        openGestureMode: 'bezel',
         topBar: {
             visible: true,
             barStyle: 'black'
