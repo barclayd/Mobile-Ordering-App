@@ -121,12 +121,13 @@ const setMainApp = async (componentId, barName) => {
     });
 };
 
-const setViewDrinks = async (componentId, menuName) => {
+const setViewDrinks = async (componentId, menuName, menuId) => {
     await Navigation.push(componentId, {
         component: {
             name: screens.ViewDrinksScreen,
             passProps: {
-                authState: menuName
+                authState: menuName,
+                menuId
             },
             options: {
                 topBar: {

@@ -57,7 +57,7 @@ class ViewMenus extends Component {
     }
   }
 
-  navigateToViewDrinks = () => {
+  navigateToViewDrinks = (menuId) => {
     Promise.all([
       IonicIcon.getImageSource(
         Platform.OS === "android" ? "md-menu" : "ios-menu",
@@ -73,7 +73,7 @@ class ViewMenus extends Component {
       )
     ]).then(sources => {
       setViewDrinksSettings(sources[2]);
-      setViewDrinks(this.props.componentId, "View Drinks");
+      setViewDrinks(this.props.componentId, "View Drinks", menuId);
     });
   };
 
@@ -95,7 +95,7 @@ class ViewMenus extends Component {
                 return (
                   <TouchableOpacity
                     key={rowData}
-                    onPress={() => this.navigateToViewDrinks()}
+                    onPress={() => this.navigateToViewDrinks(rowData._id)}
                   >
                       <Image
                         style={styles.image}

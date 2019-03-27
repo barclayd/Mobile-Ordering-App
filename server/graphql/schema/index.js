@@ -163,6 +163,7 @@ module.exports = buildSchema(`
        drinks: [Drink!]!
        findIngredients(name: String!): [Ingredient!]!
        findDrinkCategories: [Category!]!
+       findDrinkCategoriesByMenu(menuId: ID!): [Category]
        findOrders: [Order!]!
        findAllMenus: [Menu]
        findOrdersByUser(userInfo: ID!): [Order!]!
