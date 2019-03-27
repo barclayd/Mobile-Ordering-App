@@ -9,15 +9,16 @@ class MapDisplay extends Component {
 
     state = {
         focusedLocation: {
-            latitude: 51.4816,
-            longitude: -3.1791,
-            latitudeDelta: 0.0122,
-            longitudeDelta: Dimensions.get('window').width / Dimensions.get('window').height * 0.122
-        }
+            latitude: 51.4866609,
+            longitude: -3.182559,
+            latitudeDelta: 0.015,
+            longitudeDelta: Dimensions.get('window').width / Dimensions.get('window').height * 0.015
+        },
+        chosenMarker: null
     };
 
     async componentDidMount() {
-        // await this.getLocationHandler();
+        await this.getLocationHandler();
         this.props.findAllBars();
     }
 
@@ -46,22 +47,38 @@ class MapDisplay extends Component {
         });
     };
 
+    handleMarkerPress = (event) => {
+        const markerId = event.nativeEvent.id;
+        console.log(markerId);
+        this.setState({
+            chosenMarker: markerId
+        })
+    };
+
+    handleCalloutPress = () => {
+      if (this.state.chosenMarker) {
+          this.props.findBar(this.state.chosenMarker, this.props.componentId);
+      }
+    };
+
     pickLocationHandler = event => {
-        const coords = event.nativeEvent.coordinate;
-        this.map.animateToRegion({
-            ...this.state.focusedLocation,
-            latitude: coords.latitude,
-            longitude: coords.longitude
-        });
-        this.setState(prevState => {
-            return {
-                focusedLocation: {
-                    ...prevState.focusedLocation,
-                    latitude: coords.latitude,
-                    longitude: coords.longitude
+        if (event.nativeEvent.coordinate) {
+            const coords = event.nativeEvent.coordinate;
+            this.map.animateToRegion({
+                ...this.state.focusedLocation,
+                latitude: coords.latitude,
+                longitude: coords.longitude
+            });
+            this.setState(prevState => {
+                return {
+                    focusedLocation: {
+                        ...prevState.focusedLocation,
+                        latitude: coords.latitude,
+                        longitude: coords.longitude
+                    }
                 }
-            }
-        });
+            });
+        }
     };
 
     render() {
@@ -72,12 +89,13 @@ class MapDisplay extends Component {
                 latitude: bar.latitude,
                 longitude: bar.longitude
             };
-            return <Marker key={index} style={styles.marker} coordinate={markerCoordinates} image={require('../../assets/logo-small.png')}>
-                    <Callout style={styles.callout}>
-                    <View>
-                        <Text style={styles.calloutHeader}>{bar.name}</Text>
-                        <Text>{bar.description}</Text>
-                    </View>
+            return <Marker identifier={bar.barCode} key={index} style={styles.marker} coordinate={markerCoordinates} image={require('../../assets/logo-small.png')} onPress={(event) =>this.handleMarkerPress(event)}>
+                    <Callout style={styles.callout}
+                        onPress={() => this.handleCalloutPress()}>
+                            <View>
+                                <Text style={styles.calloutHeader}>{bar.name}</Text>
+                                <Text>{bar.description}</Text>
+                            </View>
                 </Callout>
             </Marker>
         });
@@ -86,9 +104,7 @@ class MapDisplay extends Component {
                 <MapView
                     style={styles.map}
                     initialRegion={this.state.focusedLocation}
-                    onPress={this.pickLocationHandler}
-                    ref={ref => this.map = ref}
-                >
+                    ref={ref => this.map = ref}>
                     {this.props.bars.length > 0 ? barMarkers : null}
                 </MapView>
             </View>
@@ -128,7 +144,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        findAllBars: () => dispatch(actions.findAllBars())
+        findAllBars: () => dispatch(actions.findAllBars()),
+        findBar: (barCode, componentId) => dispatch(actions.findBar(barCode, componentId))
     }
 };
 

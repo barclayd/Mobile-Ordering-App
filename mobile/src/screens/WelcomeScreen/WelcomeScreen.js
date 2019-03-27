@@ -98,8 +98,7 @@ class WelcomeScreen extends Component {
                             paginationStyle={{
                                 bottom: 40
                             }}
-                            loop={false}
-                            onIndexChanged={() => console.log('swiped')}>
+                            loop={false}>
                             <View style={styles.columnContainer}>
                                 <View style={styles.rowContainer}>
                                     <TextInput
@@ -133,7 +132,7 @@ class WelcomeScreen extends Component {
                                 </View>
                             </View>
                             <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>
-                                <MapDisplay />
+                                <MapDisplay componentId={this.props.componentId}/>
                             </View>
                         </Swiper>
                     </WelcomeBackground>
