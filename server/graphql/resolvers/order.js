@@ -170,7 +170,7 @@ module.exports = {
                 _id: foundOrder._id,
                 drinks: returnedDrinks,
                 collectionPoint: foundOrder.collectionPoint,
-                collectionId: foundOrder.collectionPoint.collectionId,
+                collectionId: foundOrder.collectionId,
                 status: foundOrder.status,
                 orderAssignedTo: barStaffMember,
                 date: dateToString(foundOrder._doc.date),
