@@ -45,7 +45,7 @@ class PickupPopupWindow extends Component {
     };
 
     buildTitle = (order) => {
-        if (order) return "#" + order.id + " pickup"; else return "";
+        if (order) return "#" + order.collectionId + " pickup"; else return "";
     };
 
     // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens

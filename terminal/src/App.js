@@ -218,7 +218,7 @@ class App extends Component {
 
   // Relaxed version of pickup order, used for bartenders to manually input just an order ID (not corresponding customer ID)
   pickupOrderInsecure = (orderID) => {
-    let order = this.state.serverOrders.find(order => order.id === orderID); // Find order by ID
+    let order = this.state.serverOrders.find(order => order.collectionId === orderID); // Find order by ID
     if (order) {
       if (order.status === OrderStatus.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order}, this.state.showPickup) // Show billing popup
