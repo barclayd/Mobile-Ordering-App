@@ -204,7 +204,7 @@ class App extends Component {
     // only update chart if the data has changed
     if (!this.props.loading && !areArraysEqual) {
       this.loadOrdersIntoStateIndexArrays(newServerOrders); // Load orders into arrays
-      
+
       this.setState({
         serverOrders: newServerOrders,
         barStaff: this.props.barStaff
