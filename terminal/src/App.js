@@ -20,6 +20,7 @@ import OrderStatus from './helpers/OrderStatuses.js';
 import IngredientAmounts from './helpers/IngredientAmounts.js';
 import {rangeScaling} from "./helpers/FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
+import {rebuildDrinksForOrderWithQuantities} from './helpers/FunctionLib.js';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (milliseconds)
@@ -653,10 +654,11 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    let areArraysEqual = JSON.stringify(rebuildDrinksForOrderWithQuantities(this.props.serverOrders)) === JSON.stringify(prevState.serverOrders)
     // only update chart if the data has changed
-    if (!this.props.loading && this.props.serverOrders !== prevState.serverOrders) {
+    if (!this.props.loading && !areArraysEqual) {
       this.setState({
-        serverOrders: this.props.serverOrders
+        serverOrders: rebuildDrinksForOrderWithQuantities(this.props.serverOrders)
       }, ()=> {
         if (this.state.serverOrders.length === 0) return;
         this.loadOrdersIntoStateIndexArrays(this.state.serverOrders); // Load orders into arrays once loaded
@@ -906,18 +908,18 @@ class App extends Component {
 
             <div className="notificationsContainer">
               {
-                this.state.notifications.map((notificationData, counter) => {
+                this.state.notifications.map((notificationData, index) => {
                   // Check the notification hasn't expired or been dismissed:
                   if ((new Date() - notificationData.date) > notificationDuration || notificationData.isDismissed) return null;
 
                   setTimeout(()=> {
                     let newNotifications = this.state.notifications;
-                    newNotifications[counter].isDismissed = true;
+                    newNotifications[index].isDismissed = true;
                     this.setState({notifications: newNotifications})
                   }, notificationDuration)
 
                   return (
-                    <div key={counter} className="notificationBanner">
+                    <div key={index} className="notificationBanner">
                       <span className={"icon " + notificationData.class}>{ App.getNotificationIconJSX(notificationData.class) }</span>
                       <div className="textContainer">
                         <span className="title">{notificationData.title}</span>
@@ -926,7 +928,7 @@ class App extends Component {
                       </div>
                       <div className="closeButton noselect" onClick={()=> {
                         let newNotifications = this.state.notifications;
-                        newNotifications[counter].isDismissed = true;
+                        newNotifications[index].isDismissed = true;
                         this.setState({notifications: newNotifications})
                       }}>&#x2716;</div>
                     </div>

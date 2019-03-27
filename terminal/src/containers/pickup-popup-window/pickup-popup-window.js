@@ -14,7 +14,7 @@ class PickupPopupWindow extends Component {
     };
 
     buildButtons = () => {
-        return  (
+        return (
             <div className="popupButtonsContainer">
                 <button className="orderButton">
                     <span className="icon complete"><FontAwesomeIcon icon={faGlassCheers} /></span>
@@ -52,7 +52,7 @@ class PickupPopupWindow extends Component {
     buildSubtitle = (order) => {
         if (order) return (
             <span>
-                Ordered <TimeAgo date={order.orderDate}/>, at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")}
+                Ordered <TimeAgo date={order.date}/>, at {DateTime.fromJSDate(order.date).toFormat("h:mma")}
             </span>
         ); else return (<span></span>);
     };
@@ -73,9 +73,9 @@ class PickupPopupWindow extends Component {
                 <h1>DRINKS:</h1>
                 <div className="indentedContent">
                     <ul className="orderList">
-                        {order.items.map((itemData) => {
+                        {order.drinks.map((itemData, counter) => {
                             return (
-                                <li key={itemData.id}>
+                                <li key={counter}>
                                     <span className="quantity">{itemData.quantity}</span>
                                     <span className="item">{itemData.name}</span>
                                 </li>
