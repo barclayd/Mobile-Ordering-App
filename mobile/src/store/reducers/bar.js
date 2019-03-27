@@ -15,7 +15,8 @@ const initialState = {
     lastVisitedBar: null,
     findAllBarsLoading: false,
     bars: [],
-    findAllBarsError: null
+    findAllBarsError: null,
+    menus: []
 };
 
 const findBarStart = (state, action) => {
@@ -33,6 +34,7 @@ const findBarSuccess = (state, action) => {
         barCode: action.barCode,
         latitude: action.latitude,
         longitude: action.longitude,
+        menus: action.menus,
         loading: false,
         error: false
     });
