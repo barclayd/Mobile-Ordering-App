@@ -28,9 +28,10 @@ export const findDrinksFail = error => {
     };
 };
 
-export const findDrinkCategories = () => {
+export const findDrinkCategories = (menuId) => {
     return {
-        type: actionTypes.FIND_DRINK_CATEGORIES
+        type: actionTypes.FIND_DRINK_CATEGORIES,
+        menuId
     };
 };
 
