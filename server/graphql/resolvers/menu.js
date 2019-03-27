@@ -5,9 +5,11 @@ module.exports = {
     findAllMenus: async () => {
         try {
             const menus = await Menu.find();
-            return menus.map(menu => {
+            return menus.map(async menu => {
+                const returnedDrinks = await drinks(menu.drinks);
                 return {
-                    ...menu._doc
+                    ...menu._doc,
+                    drinks: returnedDrinks
                 };
             });
         } catch (err) {
