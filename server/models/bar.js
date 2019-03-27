@@ -27,7 +27,11 @@ const barSchema = mongoose.Schema({
     },
     image: {
         type: String
-    }
+    },
+    menus: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Menu'
+    }]
 });
 
 module.exports = mongoose.model('Bar', barSchema);
