@@ -65,6 +65,7 @@ module.exports = buildSchema(`
         description: String!
         latitude: Float!
         longitude: Float!
+        image: String
      }
         
     type AuthData {
@@ -109,6 +110,7 @@ module.exports = buildSchema(`
         description: String!
         latitude: Float!
         longitude: Float!
+        image: String!
     }
 
     input DrinkInput {

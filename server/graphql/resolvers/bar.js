@@ -30,6 +30,7 @@ module.exports = {
                 description: args.barInput.description,
                 latitude: args.barInput.latitude,
                 longitude: args.barInput.longitude,
+                image: args.barInput.image
             });
             const result = await createdBar.save();
             return {
@@ -56,7 +57,8 @@ module.exports = {
             type: bar.type,
             description: bar.description,
             latitude: bar.latitude,
-            longitude: bar.longitude
+            longitude: bar.longitude,
+            image: bar.image
         };
     }
 };

@@ -100,7 +100,7 @@ class MapDisplay extends Component {
                         <Card
                             containerStyle={styles.cardContainer}
                             imageStyle={styles.image}
-                            image={{uri: 'https://i.ibb.co/3Yjbqrv/taf.jpg'}}>
+                            image={{uri: bar.image}}>
                             <Text style={{marginBottom: 10}}>
                                 {bar.description}
                             </Text>
