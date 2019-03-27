@@ -37,15 +37,15 @@ export function* findBarSaga(action) {
             if (userId) {
                 yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
             }
-                Promise.all([
-                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
-                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
-                ])
-                    .then(sources => {
-                        setMainAppSettings(sources[0], sources[1]);
-                        setMainApp(action.componentId, response.data.data.findBar.name);
-                    });
-            }
+            Promise.all([
+                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
+                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
+            ])
+                .then(sources => {
+                    setMainAppSettings(sources[0], sources[1]);
+                    setMainApp(action.componentId, response.data.data.findBar.name);
+                });
+        }
     } catch (err) {
         console.log(err);
         yield put(actions.findBarFail(err));
@@ -89,5 +89,45 @@ export function* updateLastVisitedBarSaga(action) {
     } catch (err) {
         console.log(err);
         yield put(actions.updateLastVisitedBarFail(err));
+    }
+}
+
+export function* findAllBarsSaga(action) {
+    yield put(actions.findAllBarsStart());
+    try {
+        const requestBody = {
+            query: `
+                query {
+                    findAllBars {
+                        _id
+                        name
+                        barCode
+                        latitude
+                        longitude
+                        description
+                        type
+                        image
+                    }
+                }
+            `
+        };
+
+        const response = yield axios.post('/', JSON.stringify(requestBody));
+        if (response.data.errors) {
+            yield put(actions.findAllBarsFail(response.data.errors[0].message));
+            throw Error(response.data.errors[0].message);
+        }
+        if (response.status === 200 && response.status !== 201) {
+            const fetchData = [];
+            for (let key in response.data.data.findAllBars) {
+                fetchData.push({
+                    ...response.data.data.findAllBars[key]
+                });
+            }
+            yield put(actions.findAllBarsSuccess(fetchData));
+        }
+    } catch (err) {
+        console.log(err);
+        yield put(actions.findAllBarsFail(err));
     }
 }

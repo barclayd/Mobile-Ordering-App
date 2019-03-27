@@ -1,7 +1,7 @@
 const Bar = require('../../models/bar');
 
 module.exports = {
-    bars: async () => {
+    findAllBars: async () => {
         try {
             const bars = await Bar.find();
             return bars.map(bar => {
@@ -30,6 +30,7 @@ module.exports = {
                 description: args.barInput.description,
                 latitude: args.barInput.latitude,
                 longitude: args.barInput.longitude,
+                image: args.barInput.image
             });
             const result = await createdBar.save();
             return {
@@ -56,7 +57,8 @@ module.exports = {
             type: bar.type,
             description: bar.description,
             latitude: bar.latitude,
-            longitude: bar.longitude
+            longitude: bar.longitude,
+            image: bar.image
         };
     }
 };

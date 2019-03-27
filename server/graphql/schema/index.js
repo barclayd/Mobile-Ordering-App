@@ -65,6 +65,7 @@ module.exports = buildSchema(`
         description: String!
         latitude: Float!
         longitude: Float!
+        image: String
      }
         
     type AuthData {
@@ -109,6 +110,7 @@ module.exports = buildSchema(`
         description: String!
         latitude: Float!
         longitude: Float!
+        image: String!
     }
 
     input DrinkInput {
@@ -139,6 +141,7 @@ module.exports = buildSchema(`
     type RootQuery {
        login(email: String!, password: String!): AuthData!
        findBar(barCode: String!): Bar!
+       findAllBars: [Bar]
        findDrinks(category: String!): [Drink!]!
        drinks: [Drink!]!
        findIngredients(name: String!): [Ingredient!]!

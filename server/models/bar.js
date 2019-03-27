@@ -24,6 +24,9 @@ const barSchema = mongoose.Schema({
     longitude: {
         type: Number,
         required: true
+    },
+    image: {
+        type: String
     }
 });
 
