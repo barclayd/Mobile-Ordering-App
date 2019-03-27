@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
-import {Dimensions, StyleSheet, View} from 'react-native';
-import MapView from 'react-native-maps';
+import * as colours from '../../styles/colourScheme';
+import {Dimensions, StyleSheet, View, Text} from 'react-native';
+import MapView, {Marker, Callout} from 'react-native-maps';
 
 class MapDisplay extends Component {
 
@@ -16,7 +17,7 @@ class MapDisplay extends Component {
     };
 
     async componentDidMount() {
-        await this.getLocationHandler();
+        // await this.getLocationHandler();
         this.props.findAllBars();
     }
 
@@ -65,15 +66,21 @@ class MapDisplay extends Component {
 
     render() {
 
-        const barMarkers = this.props.bars.map(bar => {
+        const barMarkers = this.props.bars.map((bar, index) => {
             let markerCoordinates = {
                 ...this.state.focusedLocation,
                 latitude: bar.latitude,
                 longitude: bar.longitude
             };
-            return <MapView.Marker coordinate={markerCoordinates}/>
+            return <Marker key={index} style={styles.marker} coordinate={markerCoordinates} image={require('../../assets/logo-small.png')}>
+                    <Callout style={styles.callout}>
+                    <View>
+                        <Text style={styles.calloutHeader}>{bar.name}</Text>
+                        <Text>{bar.description}</Text>
+                    </View>
+                </Callout>
+            </Marker>
         });
-        console.log(this.props.bars);
         return (
             <View style={styles.container}>
                 <MapView
@@ -101,6 +108,14 @@ const styles = StyleSheet.create({
     landscapeMap: {
         width: '100%',
         height: 200
+    },
+    callout: {
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    calloutHeader: {
+        fontWeight: 'bold',
+        color: colours.orange,
     }
 });
 
