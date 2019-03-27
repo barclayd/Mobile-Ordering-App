@@ -65,8 +65,7 @@ export function* getOrdersByCollectionPointSaga(action) {
 export function* updateOrderSaga(action) {
     yield put(actions.updateOrderStart());
     try {
-        let requestBody
-        
+        let requestBody;
         if (action.barStaffId) {
             requestBody = {
                 query: `
@@ -112,10 +111,11 @@ export function* updateOrderSaga(action) {
         } else {
             requestBody = {
                 query: `
-                    mutation UpdateOrder($orderId: ID!, $status: String!) {
+                    mutation UpdateOrder($orderId: ID!, $status: String!, $barStaffId: ID!) {
                         updateOrder(orderStatusInput: {
                             orderId: $orderId
                             status: $status
+                            barStaffId: $barStaffId
                         }) {
                             _id
                             collectionId
