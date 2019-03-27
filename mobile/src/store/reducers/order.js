@@ -6,27 +6,28 @@ const initialState = {
     error: null,
     order: [],
     pastOrders: [],
-    orderStatus: []
+    orderStatus: [],
+    orderInProgress: false
 };
 
 const submitOrderStart = (state, action) => {
     return updateObject(state, {
         error: null,
-        loading: true
+        orderInProgress: true
     });
 };
 
 const submitOrderSuccess = (state, action) => {
     return updateObject(state, {
         order: action.order.data,
-        loading: false,
+        orderInProgress: false,
         error: false,
     });
 };
 
 const submitOrderFail = (state, action) => {
     return updateObject(state, {
-        loading: false,
+        orderInProgress: false,
         error: action.error
     });
 };
