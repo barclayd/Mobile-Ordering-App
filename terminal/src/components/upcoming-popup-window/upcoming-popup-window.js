@@ -26,7 +26,7 @@ const UpcomingPopupWindow = (props) => {
 
                                 <MultiColumnItemList orderItems={orderData.drinks} />
 
-                                <h3>#{orderData.id} - <TimeAgo date={orderData.date}/></h3>
+                                <h3>#{orderData.collectionId} - <TimeAgo date={orderData.date}/></h3>
 
                                 {/*
                                     { this.renderCustomerNotes(orderData.notes) }

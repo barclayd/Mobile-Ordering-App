@@ -19,8 +19,8 @@ class BillingPopupWindow extends Component {
 
     calcTotal = (order) => {
         if (order) {
-            return order.items.reduce((accumulator, item) => {
-                return accumulator + item.price;
+            return order.drinks.reduce((accumulator, item) => {
+                return accumulator + parseFloat(item.price);
             },0)
         } else {
             return 0;
@@ -28,14 +28,14 @@ class BillingPopupWindow extends Component {
     };
 
     buildTitle = (order) => {
-        if (order) return "#" + order.id + " options"; else return "";
+        if (order) return "#" + order.collectionId + " options"; else return "";
     };
 
     // Time formatting with Luxon: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
     buildSubtitle = (order) => {
         if (order) return (
             <span>
-                Ordered <TimeAgo date={order.orderDate}/>, at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")}
+                Ordered <TimeAgo date={order.date}/>, at {DateTime.fromJSDate(order.date).toFormat("h:mma")}
             </span>
         ); else return (<span></span>);
     };
@@ -46,9 +46,9 @@ class BillingPopupWindow extends Component {
                 <h1>DRINKS:</h1>
                 <div className="indentedContent">
                     <ul className="orderList">
-                        {order.items.map((itemData) => {
+                        { order.drinks.map((itemData, counter) => {
                             return (
-                                <li key={itemData.id}>
+                                <li key={counter}>
                                     <span className="quantity">{itemData.quantity}x</span>
                                     <span className="item">{itemData.name}</span>
                                     <span className="price">£{itemData.price}</span>
