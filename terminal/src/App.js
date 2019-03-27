@@ -363,10 +363,10 @@ class App extends Component {
             <div id="topBar">
               <div id="accountsHotbar">
               {
-                this.state.barStaff.map((staffData, counter) => {
+                this.state.barStaff.map((staffData) => {
                   let buttonClass = "";
                   if (this.state.selectedStaffMemberID === staffData._id) buttonClass = "selected";
-                  return ( <button key={counter} className={buttonClass}>{staffData.firstName}</button> );
+                  return ( <button key={staffData._id} className={buttonClass}>{staffData.firstName}</button> );
                 })
               }
               </div>
@@ -505,7 +505,7 @@ class App extends Component {
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
-            <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} barStaff={this.state.barStaff} />
+            <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} />
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
