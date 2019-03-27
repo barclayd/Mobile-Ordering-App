@@ -1,9 +1,9 @@
 .App, body, html {
+  color: white;
   background: #211624;
 }
 
 .App {
-  color: white;
   min-height: 100vh;
 }
 
