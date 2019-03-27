@@ -54,7 +54,10 @@ class MobilePayments extends Component {
             color: 'gray',
         };
 
-        const collectionPoints = []
+
+
+        const collectionPoints = [];
+
         if (this.props.collectionPoints){
             this.props.collectionPoints.map(points => {
                 collectionPoints.push({label: points.name, value: points.name, id: points.id})
@@ -64,8 +67,8 @@ class MobilePayments extends Component {
         return (
             <Overlay
                 animationType="slide"
-                height={(screenHeight / 5.5) * 4}
-                width={screenWidth / 1.1}
+                height={(screenHeight / 3) * 2.65}
+                width={screenWidth / 1.05}
                 overlayBackgroundColor={colours.midnightBlack}
                 overlayStyle={styles.overlayBorder}
                 onBackdropPress={this.props.hidePayment}
