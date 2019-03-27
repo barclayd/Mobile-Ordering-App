@@ -10,12 +10,14 @@ export const rangeScaling = (value, xMin, xMax, yMin, yMax) => {
 
 
 // Function takes an array of orders and removes duplicate drinks in each order, adding a quantity field
-export const rebuildDrinksForOrderWithQuantities = (ordersArray) => {
-    ordersArray.forEach((order, index) => {
+export const rebuildDateAndDrinksForOrderWithQuantities = (ordersArray) => {
+    let newOrdersArray = JSON.parse(JSON.stringify(ordersArray)); // Deep-copy array
+    newOrdersArray.forEach((order, index) => {
+        order.date = new Date(order.date); // Convert order dates from strings to date objects
         order.drinks = rebuildDrinksWithQuantities(order.drinks)
     });
 
-    return ordersArray;
+    return newOrdersArray;
 }
 
 
@@ -26,17 +28,11 @@ export const rebuildDrinksWithQuantities = (drinksArrayObj) => {
 
     // Loop through each drink in drinksArrayObj
     drinksArrayObj.forEach((drink, index) => {
-        // If the drink has not yet been found in this loop, add it to newDrinksArrayObj and set the quantity to 1
+        // If the drink has not yet been found in this loop, add it to newDrinksArrayObj and calculate the quantity
         if (!duplicateDrinks[drink._id]) {
             duplicateDrinks[drink._id] = true;
-            drink.quantity = 1;
+            drink.quantity = drinksArrayObj.filter((val) => { return val._id === drink._id }).length;
             newDrinksArrayObj.push(drink);
-
-        // If the drink has already been added to newDrinksArrayObj, find it and increase the quantity by 1
-        } else {
-            newDrinksArrayObj.find((newDrink) => {
-                return newDrink._id === drink._id;
-            }).quantity += 1
         }
     });
 
