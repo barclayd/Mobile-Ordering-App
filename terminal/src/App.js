@@ -11,7 +11,7 @@ import ManualPickupPopupWindow from './containers/manual-pickup-popup-window/man
 import MultiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
 import PickupPopupWindow from './containers/pickup-popup-window/pickup-popup-window';
-import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
+import SwitchAccountsPopupWindow from './containers/switch-accounts-popup-window/switch-accounts-popup-window';
 import SelectCollectionPointPopupWindow from './containers/select-collection-point-popup-window/select-collection-point-popup-window';
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
@@ -347,6 +347,10 @@ class App extends Component {
 
   showOutOfStock = () => { this.state.showOutOfStock() };
 
+  switchAccounts = (staffID) => {
+    this.setState({selectedStaffMemberID: staffID})
+  }
+
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
       return "Loading orders..."
@@ -362,7 +366,7 @@ class App extends Component {
                 this.state.barStaff.map((staffData) => {
                   let buttonClass = "";
                   if (this.state.selectedStaffMemberID === staffData._id) buttonClass = "selected";
-                  return ( <button key={staffData._id} className={buttonClass}>{staffData.firstName}</button> );
+                  return ( <button key={staffData._id} onClick={()=>{this.switchAccounts(staffData._id)}} className={buttonClass}>{staffData.firstName}</button> );
                 })
               }
               </div>
@@ -508,7 +512,7 @@ class App extends Component {
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
-            <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} />
+            <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} switchAccountsFunc={this.switchAccounts} />
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
