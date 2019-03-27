@@ -34,401 +34,6 @@ class App extends Component {
     super(props);
 
     this.state = {
-      sampleOrders: [
-        {
-          id: "ALVR",
-          date: new Date(),
-          customerID: 42,
-          staffMemberID: 4,
-          notes: "hi",
-          items: [
-            {
-              id: 1,
-              name: "VK Orange",
-              price: 250,
-              quantity: 1,
-              ingredients: [{
-                id: 546,
-                name: "VK Orange",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.FACTORY,
-
-              }]
-
-            },
-          ],
-          status: OrderStatus.AWAITING_COLLECTION
-        },
-        {
-          id: "KHVD", date: new Date(), customerID: 13, staffMemberID: 6, items: [
-            {
-              id: 1,
-              name: "VK Orange",
-              price: 250,
-              quantity: 1,
-              ingredients: [{
-                id: 547,
-                name: "VK Orange",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.FACTORY,
-
-              }]
-            },
-          ],
-          status: OrderStatus.AWAITING_COLLECTION
-        },
-        { id: "EOPL", date: new Date(), customerID: 13, staffMemberID: 4, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KJHS", date: new Date(), customerID: 13, staffMemberID: 2, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KXHS", date: new Date(), customerID: 13, staffMemberID: 10, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KAHS", date: new Date(), customerID: 13, staffMemberID: 1, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        {
-          id: "XHBS",
-          date: new Date(),
-          customerID: 93,
-          staffMemberID: 0,
-          items: [
-            {
-              id: 1,
-              name: "VK Orange",
-              price: 250,
-              quantity: 1,
-            },
-            {
-              id: 19,
-              name: "VK Green",
-              price: 250,
-              quantity: 2,
-            }
-          ],
-          status: OrderStatus.IN_PROGRESS
-        },
-        {
-          id: "ZBNU",
-          date: new Date(),
-          customerID: 93,
-          staffMemberID: 1,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-              ingredients: [
-                {
-                  id: 921,
-                  name: "VK Red",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.FACTORY,
-                  inStock: true,
-                }
-              ]
-            },
-            {
-              id: 122,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 5,
-              ingredients: [
-                {
-                  id: 8349,
-                  name: "Jagermeister",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.SHOT,
-                  inStock: true,
-                },
-                {
-                  id: 13,
-                  name: "Redbull",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.FILL,
-                  inStock: true,
-                }
-              ]
-            },
-            {
-              id: 484,
-              name: "Mojito",
-              price: 125,
-              quantity: 1,
-              ingredients: [
-                {
-                  id: 48,
-                  name: "Lime cordial",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.FILL,
-                  inStock: true,
-                },
-                {
-                  id: 10,
-                  name: "White rum",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.DOUBLE_SHOT,
-                  inStock: true,
-                }
-              ]
-            },
-            {
-              id: 1023,
-              name: "Bottled water",
-              price: 90,
-              quantity: 2,
-              ingredients: [
-                {
-                  id: 19,
-                  name: "Bottled water",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.FACTORY,
-                  inStcok: true,
-                }
-              ]
-            },
-            {
-              id: 67,
-              name: "Jumba juice cocktail",
-              price: 750,
-              quantity: 1,
-              ingredients: [
-                {
-                  id: 123,
-                  name: "Slurp juice",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.DOUBLE_SHOT,
-                  inStock: true,
-                },
-                {
-                  id: 276,
-                  name: "Tomato soup",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.SHOT,
-                  inStock: false,
-                },
-                {
-                  id: 2384,
-                  name: "Diced Lego bricks",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.PINT,
-                  inStock: true,
-                }
-              ]
-            }
-          ],
-          notes: "pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!",
-          status: OrderStatus.IN_PROGRESS
-        },
-        {
-          id: "ACBS",
-          date: new Date(),
-          customerID: 93,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-              ingredients: [ {
-                id: 222,
-                name: "VK Red",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.FACTORY,
-              }]
-            },
-            {
-              id: 122,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 5,
-              ingredients: [{
-                id: 663,
-                name: "Jagermesiter",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.SHOT,
-                },
-              {
-                id: 197,
-                name: "Red Bull",
-                containsAlcohol: false,
-                allergens: [],
-                amount: IngredientAmounts.FILL,
-              }]
-            },
-            {
-              id: 484,
-              name: "Mojito",
-              price: 450,
-              quantity: 1,
-              ingredients: [{
-
-                id: 48,
-                name: "Lime cordial",
-                containsAlcohol: false,
-                allergens: [],
-                amount: IngredientAmounts.FILL,
-              },
-              {
-                id: 10,
-                name: "White rum",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.DOUBLE_SHOT,
-
-              }]
-            },
-            {
-              id: 1023,
-              name: "Bottled water",
-              price: 90,
-              quantity: 2,
-              ingredients: [{
-                id:1010,
-                name: "Bottled Water",
-                containsAlcohol: false,
-                allergens: [],
-                amount: IngredientAmounts.FACTORY
-              }]
-            },
-            {
-              id: 67,
-              name: "Jumba juice cocktail",
-              price: 750,
-              quantity: 1,
-              ingredients: [{
-                  id: 105,
-                  name: "Slurp juice",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.DOUBLE_SHOT,
-                },
-                {
-                  id: 277,
-                  name: "Tomato soup",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.SHOT,
-                },
-                {
-                  id: 2386,
-                  name: "Diced Lego bricks",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.PINT,
-              }]
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-        {
-          id: "PPLC",
-          date: new Date(),
-          customerID: 93,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-            },
-            {
-              id: 122,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 5,
-            },
-            {
-              id: 484,
-              name: "Mojito",
-              price: 750,
-              quantity: 1,
-            },
-            {
-              id: 1023,
-              name: "Bottled water",
-              price: 90,
-              quantity: 2,
-            },
-            {
-              id: 67,
-              name: "Jumba juice cocktail",
-              price: 750,
-              quantity: 1,
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-        {
-          id: "AHBS",
-          date: new Date(),
-          customerID: 93,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-        {
-          id: "LJPN",
-          date: new Date(),
-          customerID: 93,
-          items: [
-            {
-              id: 672,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 4,
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-        {
-          id: "GVAQ",
-          date: new Date(),
-          customerID: 92,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-            },
-            {
-              id: 122,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 5,
-            },
-            {
-              id: 484,
-              name: "Mojito",
-              price: 250,
-              quantity: 1,
-            },
-            {
-              id: 1023,
-              name: "Bottled water",
-              price: 90,
-              quantity: 2,
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-      ],
-
       staffMembers: [
         {
           id: 0,
@@ -511,7 +116,6 @@ class App extends Component {
       lastNotificationID: 0,
 
       selectedStaffMemberID: "5c97adae8cab340a0995dd25",
-      selectedStaffMember: 1,
 
       lastValidScan: 0,
       qrResult: "empty",
@@ -658,7 +262,8 @@ class App extends Component {
     // only update chart if the data has changed
     if (!this.props.loading && !areArraysEqual) {
       this.setState({
-        serverOrders: rebuildDrinksForOrderWithQuantities(this.props.serverOrders)
+        serverOrders: rebuildDrinksForOrderWithQuantities(this.props.serverOrders),
+        barStaff: this.props.barStaff
       }, ()=> {
         if (this.state.serverOrders.length === 0) return;
         this.loadOrdersIntoStateIndexArrays(this.state.serverOrders); // Load orders into arrays once loaded
@@ -751,17 +356,17 @@ class App extends Component {
       return "Processing orders..."
 
     } else {
-      console.log(this.state.serverOrders)
+      console.log(this.state.barStaff)
       return (
         <div className="App">
           <header className="App-header">
             <div id="topBar">
               <div id="accountsHotbar">
               {
-                this.state.staffMembers.map((staffData) => {
+                this.state.barStaff.map((staffData, counter) => {
                   let buttonClass = "";
-                  if (this.state.selectedStaffMember === staffData.id) buttonClass = "selected";
-                  return ( <button key={staffData.id} className={buttonClass}>{staffData.firstName}</button> );
+                  if (this.state.selectedStaffMemberID === staffData._id) buttonClass = "selected";
+                  return ( <button key={counter} className={buttonClass}>{staffData.firstName}</button> );
                 })
               }
               </div>
@@ -880,7 +485,7 @@ class App extends Component {
                 <br />
                 <span className="subtitle">
                   Adds next order to your ({
-                    this.state.staffMembers.find(x => x.id === this.state.selectedStaffMember).firstName
+                    this.state.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
                   }) in-progress feed
                 </span>
               </button>
@@ -900,7 +505,7 @@ class App extends Component {
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
-            <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
+            <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} barStaff={this.state.barStaff} />
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
