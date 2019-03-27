@@ -106,6 +106,7 @@ export function* findAllBarsSaga(action) {
                         longitude
                         description
                         type
+                        image
                     }
                 }
             `
