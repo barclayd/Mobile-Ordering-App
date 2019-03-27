@@ -16,9 +16,9 @@ const SwitchAccountsPopupWindow = (props) => {
         >
             <div className="staffMembersButtonContainer">
                 {
-                    props.staffMembers.map((staffMember) => {
+                    props.barStaff.map((staffMember) => {
                         return (
-                            <button key={staffMember.id} className="staffMemberButton">
+                            <button key={staffMember._id} className="staffMemberButton">
                                 {staffMember.firstName}
                                 <br/>
                                 {staffMember.surname}
@@ -32,7 +32,7 @@ const SwitchAccountsPopupWindow = (props) => {
 };
 
 SwitchAccountsPopupWindow.propTypes = {
-    staffMembers: PropTypes.array,
+    barStaff: PropTypes.array,
     showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
 };
 
