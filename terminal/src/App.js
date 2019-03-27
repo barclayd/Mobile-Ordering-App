@@ -33,64 +33,6 @@ class App extends Component {
     super(props);
 
     this.state = {
-      staffMembers: [
-        {
-          id: 0,
-          firstName: "Ben",
-          surname: "Davies"
-        },
-        {
-          id: 1,
-          firstName: "Jess",
-          surname: "Chessell"
-        },
-        {
-          id: 2,
-          firstName: "Markus",
-          surname: "Jones"
-        },
-        {
-          id: 3,
-          firstName: "James",
-          surname: "Smith"
-        },
-        {
-          id: 4,
-          firstName: "Joe",
-          surname: "Bourton"
-        },
-        {
-          id: 5,
-          firstName: "Taylor",
-          surname: "Stephens"
-        },
-        {
-          id: 6,
-          firstName: "Austin",
-          surname: "Wheeler"
-        },
-        {
-          id: 7,
-          firstName: "Oscar",
-          surname: "Isaac"
-        },
-        {
-          id: 8,
-          firstName: "Fenton",
-          surname: "Reed"
-        },
-        {
-          id: 9,
-          firstName: "Ronnie",
-          surname: "Pickering"
-        },
-        {
-          id: 10,
-          firstName: "Franco",
-          surname: "Begbie"
-        }
-      ],
-
       // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
       notifications: [],
 
