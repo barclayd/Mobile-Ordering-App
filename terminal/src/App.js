@@ -20,6 +20,7 @@ import OrderStatus from './helpers/OrderStatuses.js';
 import {rangeScaling} from "./helpers/FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
 import {rebuildDateAndDrinksForOrderWithQuantities} from './helpers/FunctionLib.js';
+import LoadingIcon from './assets/loading-icon.gif';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (milliseconds)
@@ -294,10 +295,19 @@ class App extends Component {
     this.setState({selectedStaffMemberID: staffID})
     localStorage.setItem("selectedStaffMemberID", staffID)
   }
+  
+  buildLoadingScreen = (message) => {
+    return (
+      <div className="loadingScreen">
+          <img src={LoadingIcon} alt="Loading icon"/>
+          <span className="loadingMessage">{message}</span>
+      </div>
+    )
+  }
 
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
-      return "Loading orders..."
+      return this.buildLoadingScreen("Loading orders...")
       
     } else {
       
