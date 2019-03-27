@@ -15,6 +15,7 @@ module.exports = buildSchema(`
      }
      
      type Menu {
+        _id: ID!
         name: String!
         drinks: [Drink]
         description: String!
@@ -73,6 +74,7 @@ module.exports = buildSchema(`
         latitude: Float!
         longitude: Float!
         image: String
+        menus: [Menu]
      }
         
     type AuthData {
@@ -162,6 +164,7 @@ module.exports = buildSchema(`
        findIngredients(name: String!): [Ingredient!]!
        findDrinkCategories: [Category!]!
        findOrders: [Order!]!
+       findAllMenus: [Menu]
        findOrdersByUser(userInfo: ID!): [Order!]!
        findOrdersByCollectionPoint(collectionPoint: ID!): [Order!]!
        findOrderById(id: ID!): Order!
