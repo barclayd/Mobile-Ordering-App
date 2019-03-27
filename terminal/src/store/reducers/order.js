@@ -37,18 +37,17 @@ const updateOrderStart = (state, action) => {
 
     });
 };
-
 const updateOrderSuccess = (state, action) => {
     const index = state.orders.map(order => order._id).indexOf(action.orderId);
     const updateOrderArray = cloneArray(state.orders);
     updateOrderArray[index] = action.updatedOrder;
+    
     return updateObject(state, {
         updatedOrder: action.updatedOrder,
         orders: updateOrderArray,
         updatingOrderLoading: false
     });
 };
-
 const updateOrderFailure = (state, action) => {
     return updateObject(state, {
         updatingOrderLoading: false,

@@ -65,47 +65,92 @@ export function* getOrdersByCollectionPointSaga(action) {
 export function* updateOrderSaga(action) {
     yield put(actions.updateOrderStart());
     try {
-        let requestBody = {
-            query: `
-          mutation UpdateOrder($orderId: ID!, $status: String!, $barStaffId: ID!) {
-                    updateOrder(orderStatusInput: {
+        let requestBody
+        
+        if (action.barStaffId) {
+            requestBody = {
+                query: `
+                    mutation UpdateOrder($orderId: ID!, $status: String!, $barStaffId: ID!) {
+                        updateOrder(orderStatusInput: {
                             orderId: $orderId
                             status: $status
                             barStaffId: $barStaffId
                         }) {
-                        _id
-                        collectionId
-                        drinks {
-                          _id
-                          name
-                          price
-                          category
-                        }
-                        collectionPoint {
-                          _id
-                          collectionPointId
-                        }
-                        status
-                        date
-                        transactionId
-                        userInfo {
-                            email
                             _id
-                        }
-                        orderAssignedTo {
+                            collectionId
+                            drinks {
                             _id
-                            firstName
-                            lastName
+                            name
+                            price
+                            category
+                            }
+                            collectionPoint {
+                            _id
+                            collectionPointId
+                            }
+                            status
+                            date
+                            transactionId
+                            userInfo {
+                                email
+                                _id
+                            }
+                            orderAssignedTo {
+                                _id
+                                firstName
+                                lastName
+                            }
                         }
-                   }
+                    }
+                `,
+                variables: {
+                    orderId: action.orderId,
+                    status: action.status,
+                    barStaffId: action.barStaffId
                 }
-            `,
-            variables: {
-                orderId: action.orderId,
-                status: action.status,
-                barStaffId: action.barStaffId
-            }
-        };
+            };
+        } else {
+            requestBody = {
+                query: `
+                    mutation UpdateOrder($orderId: ID!, $status: String!) {
+                        updateOrder(orderStatusInput: {
+                            orderId: $orderId
+                            status: $status
+                        }) {
+                            _id
+                            collectionId
+                            drinks {
+                            _id
+                            name
+                            price
+                            category
+                            }
+                            collectionPoint {
+                            _id
+                            collectionPointId
+                            }
+                            status
+                            date
+                            transactionId
+                            userInfo {
+                                email
+                                _id
+                            }
+                            orderAssignedTo {
+                                _id
+                                firstName
+                                lastName
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    orderId: action.orderId,
+                    status: action.status,
+                    barStaffId: action.barStaffId
+                }
+            };
+        }
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
             yield put(actions.updateOrderFail(response.data.errors[0].message));

@@ -25,7 +25,6 @@ const UpcomingPopupWindow = (props) => {
                             <div key={counter} className="orderContainer in-progress">
 
                                 <MultiColumnItemList orderItems={orderData.drinks} />
-
                                 <h3>#{orderData.collectionId} - <TimeAgo date={orderData.date}/></h3>
 
                                 {/*
