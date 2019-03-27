@@ -14,6 +14,13 @@ module.exports = buildSchema(`
         category: String!
      }
      
+     type Menu {
+        name: String!
+        drinks: [Drink]
+        description: String!
+        image: String
+     }
+     
      type BarStaff {
         _id: ID!
         firstName: String!
@@ -89,6 +96,13 @@ module.exports = buildSchema(`
         role: String!
     }
     
+    input MenuInput {
+        name: String!
+        drinks: [ID!]
+        description: String!
+        image: String
+    }
+    
     input CollectionPointInput {
         name: String!
         bar: ID!
@@ -110,7 +124,8 @@ module.exports = buildSchema(`
         description: String!
         latitude: Float!
         longitude: Float!
-        image: String!
+        image: String
+        menus: [ID!]
     }
 
     input DrinkInput {
@@ -164,6 +179,7 @@ module.exports = buildSchema(`
         createOrder(orderInput: OrderInput): Order
         createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
         createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
+        createMenu(menuInput: MenuInput): Menu
         updateOrder(orderStatusInput: OrderStatusInput): Order
         updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
         updateLastVisitedBar(userId: ID!, barId: ID): User!
