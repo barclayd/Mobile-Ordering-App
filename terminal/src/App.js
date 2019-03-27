@@ -73,7 +73,7 @@ class App extends Component {
 
     for(let orderIndex = 0; orderIndex < orders.length; orderIndex += 1) {
       let order = orders[orderIndex];
-      
+
       switch (order.status) {
         case OrderStatus.AWAITING_COLLECTION:
           awaitingOrdersIndexes.push(orderIndex);
@@ -91,7 +91,7 @@ class App extends Component {
       inProgressOrdersIndexes: inProgressOrdersIndexes,
       pendingOrders: pendingOrders
     })
-  }
+  };
 
   addNotification = (iconClassName, title, description) => {
     // Increment notification key/id
@@ -130,7 +130,7 @@ class App extends Component {
 
   changeCollectionPoint = (collectionPointID) => {
     this.setState({collectionPointID: collectionPointID});
-  }
+  };
 
   // Displays billing popup for order by order index
   showBilling = (orderIndex) => {
@@ -200,12 +200,12 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props.serverOrders.length === 0) return;
     let newServerOrders = rebuildDateAndDrinksForOrderWithQuantities(this.props.serverOrders);
-    let areArraysEqual = JSON.stringify(newServerOrders) === JSON.stringify(prevState.serverOrders)
-    
+    let areArraysEqual = JSON.stringify(newServerOrders) === JSON.stringify(prevState.serverOrders);
+
     // only update chart if the data has changed
     if (!this.props.loading && !areArraysEqual) {
       this.loadOrdersIntoStateIndexArrays(newServerOrders); // Load orders into arrays
-      
+
       this.setState({
         serverOrders: newServerOrders,
         barStaff: this.props.barStaff
@@ -280,8 +280,7 @@ class App extends Component {
       newStyle = "";
       collapsed = false;
     }
-
-    this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed})
+    this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed});
   };
 
   scrollToPreview = () => {
@@ -291,16 +290,16 @@ class App extends Component {
   showOutOfStock = () => { this.state.showOutOfStock() };
 
   switchAccounts = (staffID) => {
-    this.setState({selectedStaffMemberID: staffID})
-    localStorage.setItem("selectedStaffMemberID", staffID)
-  }
+    this.setState({selectedStaffMemberID: staffID});
+    localStorage.setItem("selectedStaffMemberID", staffID);
+  };
 
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
       return "Loading orders..."
-      
+
     } else {
-      
+
       return (
         <div className="App">
           <header className="App-header">
@@ -386,7 +385,7 @@ class App extends Component {
               {
                   this.state.inProgressOrdersIndexes.map((orderIndex) => {
                     const orderData = this.state.serverOrders[orderIndex];
-                    
+
                     // Only show pending orders belonging to the current staff member
                     if (orderData.orderAssignedTo._id !== this.state.selectedStaffMemberID) return null;
 
@@ -400,17 +399,13 @@ class App extends Component {
                         { this.renderCustomerNotes(orderIndex, orderData.notes) }
 
                         <div className="orderButtonsContainer">
-                          <button className="orderButton" onClick={()=> {
-                            this.props.updateOrder(orderData._id, "AWAITING_COLLECTION") // Update order to state to awaiting collection but dont change the assigned bartender
-                          }}>
+                          <button className="orderButton" onClick={() => this.props.updateOrder(orderData._id, "AWAITING_COLLECTION", this.state.selectedStaffMemberID)}>
                             <span className="icon ready"><FontAwesomeIcon icon={faCheck} /></span>
                             <span className="title">Ready</span>
                             <br />
                             <span className="subtitle">Mark as ready</span>
                           </button>
-                          <button className="orderButton" onClick={()=> {
-                            this.props.updateOrder(orderData._id, "PENDING") // Return order to pending but dont change the assigned bartender
-                          }}>
+                          <button className="orderButton" onClick={()=> {this.props.updateOrder(orderData._id, "PENDING", this.state.selectedStaffMemberID)}}>
                             <span className="icon notInProgress"><FontAwesomeIcon icon={faUndoAlt} /></span>
                             <span className="title">Not in progress</span>
                             <br />
@@ -430,7 +425,7 @@ class App extends Component {
             </div>
 
             <div className="pendingOrderButtons">
-              <button className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9a3db2f094bd60737aa062", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
+              <button className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9bc6f75def1d0a9eb73848", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
                 <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
                 <span className="title">Take next order</span>
                 <br />
@@ -472,7 +467,7 @@ class App extends Component {
                     let newNotifications = this.state.notifications;
                     newNotifications[index].isDismissed = true;
                     this.setState({notifications: newNotifications})
-                  }, notificationDuration)
+                  }, notificationDuration);
 
                   return (
                     <div key={index} className="notificationBanner">
