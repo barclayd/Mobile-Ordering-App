@@ -603,9 +603,6 @@ class App extends Component {
         return {
           notifications: [...prevState.notifications, newNotification]
         }
-      }, () => {
-        // Re-render notifications
-        this.loadNotificationsJSX()
       })
     })
   };
@@ -685,21 +682,22 @@ class App extends Component {
     const collectionId = localStorage.getItem('collectionPoint') || '5c925636bc63a912ed715316';
     this.props.findBarStaff("5c6aafda90d4735a4e22f711");
     this.props.loadOrders(collectionId);
-    this.loadNotificationsJSX();
     this.getUserMedia();
-    setInterval(this.loadNotificationsJSX, notificationDuration + 1)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
+  componentDidUpdate(prevProps, prevState) {
+    // only update chart if the data has changed
+    if (!this.props.loading && this.props.serverOrders !== prevState.serverOrders) {
       this.setState({
-        serverOrders: nextProps.serverOrders
+        serverOrders: this.props.serverOrders
       }, ()=> {
         if (this.state.serverOrders.length === 0) return;
         this.loadOrdersIntoStateIndexArrays(this.state.serverOrders); // Load orders into arrays once loaded
       });
     }
   }
+
+
 
   // Relaxed version of pickup order, used for bartenders to manually input just an order ID (not corresponding customer ID)
   pickupOrderInsecure = (orderID) => {
@@ -758,37 +756,6 @@ class App extends Component {
         return <FontAwesomeIcon icon={faExclamation} />;
     }
   }
-
-  // Function to load feed of active un-dismissed notifications as JSX into state for rendering
-  loadNotificationsJSX = () => {
-    const notificationsJSX = (
-      <div className="notificationsContainer">
-        {
-        this.state.notifications.map((notificationData) => {
-          // Check the notification hasn't expired or been dismissed:
-          if ((new Date() - notificationData.date) > notificationDuration || notificationData.isDismissed) return null;
-
-          return (
-            <div key={notificationData.id} className="notificationBanner">
-              <span className={"icon " + notificationData.class}>{ App.getNotificationIconJSX(notificationData.class) }</span>
-              <div className="textContainer">
-                <span className="title">{notificationData.title}</span>
-                <br />
-                <span className="description">{notificationData.description}</span>
-              </div>
-              <div className="closeButton noselect" onClick={()=> {
-                notificationData.isDismissed = true;
-                this.loadNotificationsJSX()
-              }}>&#x2716;</div>
-            </div>
-          )
-        })
-      }
-      </div>
-    );
-
-    this.setState({notificationsJSX: notificationsJSX})
-  };
 
   ToggleAwaitingCollapse = (event) => {
     let newStyle = "collapsed";
@@ -898,7 +865,7 @@ class App extends Component {
               {
                   this.state.inProgressOrdersIndexes.map((orderIndex) => {
                     const orderData = this.state.serverOrders[orderIndex];
-                    console.log(orderData)
+                    
                     // Only show pending orders belonging to the current staff member
                     if (orderData.orderAssignedTo._id !== this.state.selectedStaffMemberID) return null;
 
@@ -969,7 +936,38 @@ class App extends Component {
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
             <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPoint={this.changeCollectionPoint} />
-            { this.state.notificationsJSX }
+
+            <div className="notificationsContainer">
+              {
+                this.state.notifications.map((notificationData, counter) => {
+                  // Check the notification hasn't expired or been dismissed:
+                  if ((new Date() - notificationData.date) > notificationDuration || notificationData.isDismissed) return null;
+
+                  setTimeout(()=> {
+                    let newNotifications = this.state.notifications;
+                    newNotifications[counter].isDismissed = true;
+                    this.setState({notifications: newNotifications})
+                  }, 2000)
+
+                  return (
+                    <div key={counter} className="notificationBanner">
+                      <span className={"icon " + notificationData.class}>{ App.getNotificationIconJSX(notificationData.class) }</span>
+                      <div className="textContainer">
+                        <span className="title">{notificationData.title}</span>
+                        <br />
+                        <span className="description">{notificationData.description}</span>
+                      </div>
+                      <div className="closeButton noselect" onClick={()=> {
+                        let newNotifications = this.state.notifications;
+                        newNotifications[counter].isDismissed = true;
+                        this.setState({notifications: newNotifications})
+                      }}>&#x2716;</div>
+                    </div>
+                  )
+                })
+              }
+            </div>
+
 
             {
               this.state.disableScanner ? null :
