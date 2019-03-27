@@ -5,27 +5,29 @@ const initialState = {
     loading: null,
     error: null,
     order: [],
-    pastOrders: []
+    pastOrders: [],
+    orderStatus: [],
+    orderInProgress: false
 };
 
 const submitOrderStart = (state, action) => {
     return updateObject(state, {
         error: null,
-        loading: true
+        orderInProgress: true
     });
 };
 
 const submitOrderSuccess = (state, action) => {
     return updateObject(state, {
         order: action.order.data,
-        loading: false,
+        orderInProgress: false,
         error: false,
     });
 };
 
 const submitOrderFail = (state, action) => {
     return updateObject(state, {
-        loading: false,
+        orderInProgress: false,
         error: action.error
     });
 };
@@ -52,6 +54,28 @@ const orderHistoryFailure = (state, action) => {
     });
 };
 
+const orderStatusStart = (state, action) => {
+    return updateObject(state, {
+        error: null,
+        loading: true
+    });
+};
+
+const orderStatusSuccess = (state, action) => {
+    return updateObject(state, {
+        orderStatus: action.orderStatus,
+        loading: false,
+        error: false,
+    });
+};
+
+const orderStatusFailure = (state, action) => {
+    return updateObject(state, {
+        loading: false,
+        error: action.error
+    });
+};
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SUBMIT_ORDER_START: return submitOrderStart(state, action);
@@ -60,6 +84,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.ORDER_HISTORY_START: return orderHistoryStart(state, action);
         case actionTypes.ORDER_HISTORY_SUCCESS: return orderHistorySuccess(state, action);
         case actionTypes.ORDER_HISTORY_FAIL: return orderHistoryFailure(state, action);
+        case actionTypes.RETRIEVE_ORDER_STATUS_START: return orderStatusStart(state, action);
+        case actionTypes.RETRIEVE_ORDER_STATUS_SUCCESS: return orderStatusSuccess(state, action);
+        case actionTypes.RETRIEVE_ORDER_STATUS_FAIL: return orderStatusFailure(state, action);
         default: return state;
     }
 };
