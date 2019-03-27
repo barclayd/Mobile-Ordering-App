@@ -367,11 +367,10 @@ class App extends Component {
                     >
                       <h2>#{orderData.collectionId} - <TimeAgo date={orderData.date}/></h2>
                       <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.orderAssignedTo._id) }</span></h5>
-                      <div className="orderButtonsContainer" onClick={(e)=>{
-                        e.stopPropagation();
-                        this.props.updateOrder(orderData._id, "IN_PROGRESS", this.state.selectedStaffMemberID); // Update order to state to pending and assign to current bartender
-                      }}>
-                        <button className="orderButton">
+                      <div className="orderButtonsContainer" onClick={(e)=>{ e.stopPropagation(); }}>
+                        <button className="orderButton" onClick={()=>{
+                          this.props.updateOrder(orderData._id, "IN_PROGRESS", this.state.selectedStaffMemberID); // Update order to state to pending and assign to current bartender
+                        }}>
                           <span className="icon notReady"><FontAwesomeIcon icon={faUndoAlt} /></span>
                           <span className="title">Not ready</span>
                           <br />
