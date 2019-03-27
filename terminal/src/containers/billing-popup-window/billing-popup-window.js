@@ -6,7 +6,7 @@ import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import OrderState from '../../helpers/OrderStatuses';
+import {OrderStatuses} from '../../helpers/schemaHelper';
 
 // SETTINGS:
 const HideStockManagementForAwaitingCollection = false; // Should hide out of stock button for orders awaiting collection?
@@ -67,7 +67,7 @@ class BillingPopupWindow extends Component {
 
     // Function to hide stock button if the order is awaiting collection (if user setting permits)
     renderOutOfStockButton = (order) => {
-        if (!HideStockManagementForAwaitingCollection || order.status !== OrderState.AWAITING_COLLECTION) {
+        if (!HideStockManagementForAwaitingCollection || order.status !== OrderStatuses.AWAITING_COLLECTION) {
             return (
                 <button onClick={this.props.showOutOfStock} className="orderButton">
                     <span className="icon outOfStock"><FontAwesomeIcon icon={faArchive} /></span>
