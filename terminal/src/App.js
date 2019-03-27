@@ -304,6 +304,45 @@ class App extends Component {
     )
   }
 
+  // Only show the "Your in-progress" header when you have orders to make
+  buildInProgressOrderHeader = () => {
+    if (this.state.inProgressOrdersIndexes.length > 0) {
+      return <h1>Your in-progress:</h1>
+    }
+  }
+
+  // Func to build JSX to only display "view upcoming" and "take next order" buttons when there's pending orders avaliable
+  buildPendingOrdersArea = () => {
+    if (this.state.pendingOrders.length == 0) {
+      return <h4>0 pending orders - you're all caught up!</h4>
+    } else {
+      let orderPlural = this.state.pendingOrders.length == 1 ? "order" : "orders"
+      return <>
+        <div className="pendingOrderButtons">
+          <button className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9bc6f75def1d0a9eb73848", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
+            <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
+            <span className="title">Take next order</span>
+            <br />
+            <span className="subtitle">
+              Adds next order to your ({
+                this.state.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
+              }) in-progress feed
+            </span>
+          </button>
+          <button onClick={this.state.showUpcoming} className="pendingOrderButton">
+            <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
+            <span className="title">View upcoming</span>
+            <br />
+            <span className="subtitle">
+              Display a feed of pending orders
+            </span>
+          </button>
+        </div>
+        <h4>{this.state.pendingOrders.length} {orderPlural} currently pending...</h4>
+      </>
+    }
+  }
+
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
       return this.buildLoadingScreen("Loading orders...")
@@ -342,7 +381,7 @@ class App extends Component {
               </div>
             </div>
 
-            <h1>AWAITING COLLECTION ({ this.state.awaitingOrdersIndexes.length }):</h1>
+            <h1>Awaiting collection ({ this.state.awaitingOrdersIndexes.length }):</h1>
             <div className={"ordersContainer " + this.state.awaitingOrdersClass}>
               {
                 this.state.awaitingOrdersIndexes.map((orderIndex, incrementer) => {
@@ -389,7 +428,7 @@ class App extends Component {
               }
             </div>
 
-            <h1>YOUR IN-PROGRESS:</h1>
+            { this.buildInProgressOrderHeader() }
             <div className="ordersContainer">
               {
                   this.state.inProgressOrdersIndexes.map((orderIndex) => {
@@ -433,29 +472,7 @@ class App extends Component {
                 }
             </div>
 
-            <div className="pendingOrderButtons">
-              <button className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9bc6f75def1d0a9eb73848", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
-                <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
-                <span className="title">Take next order</span>
-                <br />
-                <span className="subtitle">
-                  Adds next order to your ({
-                    this.state.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
-                  }) in-progress feed
-                </span>
-              </button>
-
-              <button onClick={this.state.showUpcoming} className="pendingOrderButton">
-                <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
-                <span className="title">View upcoming</span>
-                <br />
-                <span className="subtitle">
-                  Display a feed of pending orders
-                </span>
-              </button>
-            </div>
-
-            <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
+            { this.buildPendingOrdersArea() }
 
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
