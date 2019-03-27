@@ -306,17 +306,26 @@ class App extends Component {
 
   // Only show the "Your in-progress" header when you have orders to make
   buildInProgressOrderHeader = () => {
-    if (this.state.inProgressOrdersIndexes.length > 0) {
+    if (this.state.inProgressOrdersIndexes.length === 0) return;
+    
+    // Use a reducer to calculate how many orders the currently logged in user owns from the in-progress array
+    let myInProgressOrdersTotal = this.state.inProgressOrdersIndexes.reduce((accumulator, orderIndex) => {
+      let order = this.state.serverOrders[orderIndex];
+      if (order.orderAssignedTo && order.orderAssignedTo._id === this.state.selectedStaffMemberID) return accumulator + 1; else return accumulator;
+    }, 0)
+
+    // Check they own more than 0
+    if (myInProgressOrdersTotal > 0) {
       return <h1>Your in-progress:</h1>
     }
   }
 
   // Func to build JSX to only display "view upcoming" and "take next order" buttons when there's pending orders avaliable
   buildPendingOrdersArea = () => {
-    if (this.state.pendingOrders.length == 0) {
+    if (this.state.pendingOrders.length === 0) {
       return <h4>0 pending orders - you're all caught up!</h4>
     } else {
-      let orderPlural = this.state.pendingOrders.length == 1 ? "order" : "orders"
+      let orderPlural = this.state.pendingOrders.length === 1 ? "order" : "orders"
       return <>
         <div className="pendingOrderButtons">
           <button className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9bc6f75def1d0a9eb73848", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
