@@ -16,7 +16,7 @@ import SelectCollectionPointPopupWindow from './containers/select-collection-poi
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./assets/notes.svg";
-import OrderStatus from './helpers/OrderStatuses.js';
+import {OrderStatuses} from './helpers/schemaHelper.js';
 import {rangeScaling} from "./helpers/FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
 import {rebuildDateAndDrinksForOrderWithQuantities} from './helpers/FunctionLib.js';
@@ -33,41 +33,41 @@ class App extends Component {
   constructor (props) {
     super(props);
 
-    this.state = {
-      // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
-      notifications: [],
-
-      collectionPoints: [
-        {
-          id: 1,
-          name: "Downstairs",
-          description: "Outside WHSmiths, usually dead."
-        },
-        {
-          id: 2,
-          name: "Upstairs",
-          description: "Small minibar."
-        },
-        {
-          id: 3,
-          name: "Main floor",
-          description: "Wide bar."
-        }
-      ],
-
-      lastNotificationID: 0,
-
-      selectedStaffMemberID: "5c97adae8cab340a0995dd25",
-
-      lastValidScan: 0,
-      qrResult: "empty",
-
-      awaitingOrdersClass: "collapsed",
-      awaitingOrdersCollapsed: true,
-    };
-
     this.previewDiv = React.createRef();
   }
+
+  state = {
+    // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
+    notifications: [],
+
+    collectionPoints: [
+      {
+        id: 1,
+        name: "Downstairs",
+        description: "Outside WHSmiths, usually dead."
+      },
+      {
+        id: 2,
+        name: "Upstairs",
+        description: "Small minibar."
+      },
+      {
+        id: 3,
+        name: "Main floor",
+        description: "Wide bar."
+      }
+    ],
+
+    lastNotificationID: 0,
+
+    selectedStaffMemberID: "5c97adae8cab340a0995dd25",
+
+    lastValidScan: 0,
+    qrResult: "empty",
+
+    awaitingOrdersClass: "collapsed",
+    awaitingOrdersCollapsed: true,
+  };
 
   loadOrdersIntoStateIndexArrays = (orders) => {
     let awaitingOrdersIndexes=[], inProgressOrdersIndexes=[], pendingOrders=[];
@@ -76,10 +76,10 @@ class App extends Component {
       let order = orders[orderIndex];
 
       switch (order.status) {
-        case OrderStatus.AWAITING_COLLECTION:
+        case OrderStatuses.AWAITING_COLLECTION:
           awaitingOrdersIndexes.push(orderIndex);
           break;
-        case OrderStatus.IN_PROGRESS:
+        case OrderStatuses.IN_PROGRESS:
           inProgressOrdersIndexes.push(orderIndex);
           break;
         default:
@@ -120,7 +120,7 @@ class App extends Component {
 
   getStaffMemberFullName = (staffID) => {
     let staffMember = this.state.barStaff.find(x => x._id === staffID);
-    if (!staffMember) return "unknown"
+    if (!staffMember) return "unknown";
     return staffMember.firstName + " " + staffMember.lastName;
   };
 
@@ -178,7 +178,7 @@ class App extends Component {
 
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
-      if (order.status === OrderStatus.AWAITING_COLLECTION) {
+      if (order.status === OrderStatuses.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order, orderWindowOpen: true}, this.state.showPickup) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
@@ -220,7 +220,7 @@ class App extends Component {
   pickupOrderInsecure = (orderID) => {
     let order = this.state.serverOrders.find(order => order.collectionId === orderID); // Find order by ID
     if (order) {
-      if (order.status === OrderStatus.AWAITING_COLLECTION) {
+      if (order.status === OrderStatuses.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order}, this.state.showPickup) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
@@ -291,10 +291,10 @@ class App extends Component {
   showOutOfStock = () => { this.state.showOutOfStock() };
 
   switchAccounts = (staffID) => {
-    this.setState({selectedStaffMemberID: staffID})
+    this.setState({selectedStaffMemberID: staffID});
     localStorage.setItem("selectedStaffMemberID", staffID)
-  }
-  
+  };
+
   buildLoadingScreen = (message) => {
     return (
       <div className="loadingScreen">
@@ -302,7 +302,7 @@ class App extends Component {
           <span className="loadingMessage">{message}</span>
       </div>
     )
-  }
+  };
 
   // Only show the "Your in-progress" header when you have orders to make
   buildInProgressOrderHeader = () => {
@@ -318,7 +318,7 @@ class App extends Component {
     if (myInProgressOrdersTotal > 0) {
       return <h1>Your in-progress:</h1>
     }
-  }
+  };
 
   // Func to build JSX to only display "view upcoming" and "take next order" buttons when there's pending orders avaliable
   buildPendingOrdersArea = () => {
@@ -350,7 +350,7 @@ class App extends Component {
         <h4>{this.state.pendingOrders.length} {orderPlural} currently pending...</h4>
       </>
     }
-  }
+  };
 
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
@@ -405,7 +405,7 @@ class App extends Component {
                       orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
                       width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
                   }
-                  console.log(orderData)
+                  console.log(orderData);
                   return (
                     <div
                         key={orderIndex}
