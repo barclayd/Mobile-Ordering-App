@@ -31,7 +31,13 @@ const setWelcomePageRoot = async () => {
                 left: {
                     component: {
                         name: screens.SideDrawer,
-                        id: 'SideDrawer'
+                        id: 'SideDrawer',
+                        options:{
+                            statusBar: {
+                                visible: true,
+                                style: 'light'
+                            }
+                        }
                     },
                 },
                 center: {
@@ -55,7 +61,14 @@ const setWelcomePageRoot = async () => {
                     component: {
                         name: screens.Settings,
                         id: 'Settings',
+                        options:{
+                            statusBar: {
+                                visible: true,
+                                style: 'light'
+                            }
+                        }
                     },
+                    
                 },
             },
         }
@@ -115,29 +128,14 @@ const setMainApp = async (componentId, barName) => {
                     title: {
                         text: barName ? barName : 'The Taf'
                     }
+                },
+                statusBar: {
+                    visible: true,
+                    style: 'light'
                 }
             }
         }
     });
-};
-
-const setViewDrinks = async (componentId, menuName) => {
-    await Navigation.push(componentId, {
-        component: {
-            name: screens.ViewDrinksScreen,
-            passProps: {
-                authState: menuName
-            },
-            options: {
-                topBar: {
-                    visible: true,
-                    title: {
-                        text: menuName,
-                    }
-                }
-            }
-        }
-    })
 };
 
 const setOrderStatus = async (componentId, collectionId, userId, collectionPoint, date, orderNumber) => {
@@ -169,6 +167,10 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
                         fontSize: 12,
                         fontFamily: 'HelveticaNeue-Italic',
                     }
+                },
+                statusBar: {
+                    visible: true,
+                    style: 'light'
                 }
             }
         }
@@ -200,6 +202,9 @@ const setViewBasket = async (componentId, basketName, fullScreenMode) => {
                     title: {
                         text: basketName,
                     }
+                },statusBar: {
+                    visible: true,
+                    style: 'light'
                 }
             }
         }
@@ -220,6 +225,29 @@ const setViewBasketSettings = (image) => {
         ]
     }
     });
+};
+
+const setViewDrinks = async (componentId, menuName) => {
+    await Navigation.push(componentId, {
+        component: {
+            name: screens.ViewDrinksScreen,
+            passProps: {
+                authState: menuName
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: menuName,
+                    }
+                },
+                statusBar: {
+                    visible: true,
+                    style: 'light'
+                }
+            }
+        }
+    })
 };
 
 const setViewDrinksSettings = (image) => {
@@ -252,8 +280,12 @@ const setViewPastOrders = (componentId, menuName) => {
                         text: 'Order History',
                         color: colours.white,
                         largeTitle: true
-                    },
+                    }
+                },statusBar: {
+                    visible: true,
+                    style: 'light'
                 }
+
             }
         }
     })
@@ -319,6 +351,10 @@ const setLoginScreen = async (componentId, authType) => {
                     title: {
                         text: authText,
                     }
+                },
+                statusBar: {
+                    visible: true,
+                    style: 'light'
                 }
             }
         }
