@@ -19,6 +19,19 @@ export function* findBarSaga(action) {
                         barCode
                         latitude
                         longitude
+                        menus {
+                            _id
+                            name
+                            image
+                            description
+                            drinks {
+                                name
+                                category
+                                nutritionInfo
+                                price
+                                _id
+                            }
+                        }
                     }
                 }
             `,
@@ -32,10 +45,21 @@ export function* findBarSaga(action) {
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            yield put(actions.findBarSuccess(response.data.data.findBar.name, response.data.data.findBar.type, response.data.data.findBar.description, response.data.data.findBar.barCode, response.data.data.findBar.latitude, response.data.data.findBar.longitude));
+            const fetchedMenusData = [];
+            for (let key in response.data.data.findBar.menus) {
+                fetchedMenusData.push({
+                    ...response.data.data.findBar.menus[key]
+                });
+            }
+            yield put(actions.findBarSuccess(response.data.data.findBar.name, response.data.data.findBar.type, response.data.data.findBar.description, response.data.data.findBar.barCode, response.data.data.findBar.latitude, response.data.data.findBar.longitude, fetchedMenusData));
             const userId = yield AsyncStorage.getItem("userId");
             if (userId) {
                 yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
+            }
+            const barId =  yield AsyncStorage.getItem("barId");
+            if (!barId) {
+                AsyncStorage.setItem("barId", response.data.data.findBar._id);
+                AsyncStorage.setItem("barName", response.data.data.findBar.name);
             }
             Promise.all([
                 IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
@@ -111,7 +135,6 @@ export function* findAllBarsSaga(action) {
                 }
             `
         };
-
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
             yield put(actions.findAllBarsFail(response.data.errors[0].message));

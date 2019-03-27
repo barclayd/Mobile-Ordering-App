@@ -6,14 +6,15 @@ export const findBarStart = () => {
     };
 };
 
-export const findBarSuccess = (name, type, description, barCode, latitude, longitude  ) => {
+export const findBarSuccess = (name, type, description, barCode, latitude, longitude, menus) => {
     return {
         type: actionTypes.FIND_BAR_SUCCESS,
         name: name,
         barCode: barCode,
         description: description,
         latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        menus
     };
 };
 

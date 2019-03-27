@@ -9,13 +9,13 @@ import {
   TouchableOpacity,
   Platform
 } from "react-native";
+import {connect} from 'react-redux';
 import {setViewDrinksSettings, setViewDrinks} from "../../utility/navigation";
 import * as colours from "../../styles/colourScheme";
 import * as fontWeight from "../../styles/fontStyles";
 import { Navigation } from "react-native-navigation";
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
-import beers from "../../assets/beers.jpg";
 import logo from "../../assets/taflogo.png";
 import Checkout from "../../components/HOC/Checkout/Checkout";
 
@@ -89,8 +89,9 @@ class ViewMenus extends Component {
             <FlatList
               horizontal
               ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-              data={this.state.categories}
+              data={this.props.menus}
               renderItem={({ item: rowData }) => {
+                console.log(rowData);
                 return (
                   <TouchableOpacity
                     key={rowData}
@@ -98,9 +99,10 @@ class ViewMenus extends Component {
                   >
                       <Image
                         style={styles.image}
-                        source={beers}
+                        source={{uri: rowData.image}}
                       />
-                      <Text style={styles.menuName}>{rowData}</Text>
+                      <Text style={styles.menuName}>{rowData.name}</Text>
+                      <Text style={styles.menuDescription}>{rowData.description}</Text>
                   </TouchableOpacity>
                 );
               }}
@@ -119,7 +121,7 @@ class ViewMenus extends Component {
 
 const styles = StyleSheet.create({
   view: {
-    height: (Dimensions.get("window").height * 3) / 4,
+    height: (Dimensions.get("window").height * 3),
     justifyContent: "center",
     alignItems: "center",
     paddingTop: 5
@@ -129,6 +131,11 @@ const styles = StyleSheet.create({
     fontWeight: fontWeight.bold,
     color: colours.midnightBlack,
     fontSize: 32
+  },
+  menuDescription: {
+    textAlign: "center",
+    color: colours.midnightBlack,
+    fontSize: 16
   },
   logoHeader: {
     height: Dimensions.get("window").height / 4,
@@ -155,8 +162,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width / 1.1
   },
   image: {
-    width: Dimensions.get("window").width / 1.5,
-    height: Dimensions.get("window").height / 3,
+    width: 'auto',
+    height: Dimensions.get("window").height / 6,
     marginTop: 20,
   },
   card: {
@@ -167,4 +174,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ViewMenus;
+const mapStateToProps = state => {
+  return {
+    menus: state.bar.menus
+  }
+};
+
+export default connect(mapStateToProps)(ViewMenus);
