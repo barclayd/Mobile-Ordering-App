@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, ActivityIndicator, AsyncStorage} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -10,6 +10,7 @@ import * as actions from "../../../store/actions/index"
 import ApplePay from '../../../assets/apple-pay.svg';
 import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
 import Payment from '../../UI/Overlays/Payment';
+import {setLoginScreen, setLoginSettings} from "../../../utility/navigation";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -88,7 +89,7 @@ class Checkout extends Component {
             )
         }
         return collectionPoints;
-    }
+    };
 
     basketItems = () => {
         let totalItems = 0;
@@ -193,7 +194,12 @@ class Checkout extends Component {
         }
     };
 
-    togglePaymentOverlay = () => {
+    togglePaymentOverlay = async () => {
+        const userId = await AsyncStorage.getItem('userId');
+        if (!userId) {
+            // setLoginSettings();
+            // setLoginScreen(this.props.componentId, 'Login');
+        }
         this.setState(prevState => {
             return {
                 ...prevState,

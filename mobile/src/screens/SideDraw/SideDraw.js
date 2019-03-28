@@ -9,6 +9,7 @@ import {
   Platform, AsyncStorage
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import IconFa from "react-native-vector-icons/FontAwesome";
 import { Avatar } from "react-native-elements";
 import * as colours from "../../styles/colourScheme";
 import {
@@ -17,6 +18,7 @@ import {
   setViewPastOrders,
   setViewPastOrdersSettings,
   setOrderStatus,
+    setSwitchBars,
   popToRoot
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
@@ -56,6 +58,10 @@ class SideDrawer extends Component {
 
   orderStatus = async () => {
     await setOrderStatus(null, 124);
+  };
+
+  switchBar = async () => {
+    await setSwitchBars(null);
   };
 
   getAccountName = async () => {
@@ -132,6 +138,22 @@ class SideDrawer extends Component {
               style={styles.drawItemIcon}
             />
             <Text style={styles.text}>Active Order</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => this.switchBar()}>
+          <View style={styles.drawItem}>
+            <IconFa
+                size={30}
+                color="#fff"
+                name={
+                  Platform.OS === "android"
+                      ? "exchange"
+                      : "exchange"
+                }
+                style={styles.drawItemIcon}
+            />
+            <Text style={styles.text}>Switch Bar</Text>
           </View>
         </TouchableOpacity>
 

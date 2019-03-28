@@ -39,9 +39,7 @@ class ViewDrinks extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
-      console.log(nextProps.menus);
       const selectedMenu = nextProps.menus.filter(menu => menu._id === this.props.menuId);
-      console.log(selectedMenu[0].drinks);
       this.setState({
         categories: nextProps.drinkCategories,
         drinks: selectedMenu[0].drinks
