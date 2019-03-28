@@ -68,6 +68,9 @@ class ViewDrinks extends Component {
                   <ScrollableTabView
                       style={{ marginTop: 20 }}
                       initialPage={0}
+                      tabBarUnderlineStyle={{backgroundColor: colours.orange}}
+                      tabBarActiveTextColor={colours.orange}
+                      tabBarTextStyle={{fontWeight: "600",fontSize: 16}}
                       renderTabBar={() => <ScrollableTabBar />}
                   >
                     {this.state.categories.length > 0
