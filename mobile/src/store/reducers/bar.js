@@ -97,6 +97,13 @@ const findAllBarsFail = (state, action) => {
     });
 };
 
+const logout = (state, action) => {
+    return updateObject(state, {
+        ...initialState,
+        bars: state.bars,
+    })
+};
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FIND_BAR_START: return findBarStart(state, action);
@@ -108,7 +115,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FIND_ALL_BARS_START: return findAllBarsStart(state, action);
         case actionTypes.FIND_ALL_BARS_SUCCESS: return findAllBarsSuccess(state, action);
         case actionTypes.FIND_ALL_BARS_FAIL: return findAllBarsFail(state, action);
-        case actionTypes.AUTH_LOGOUT: return state = initialState;
+        case actionTypes.AUTH_LOGOUT: return logout(state, action);
         default: return state;
     }
 };

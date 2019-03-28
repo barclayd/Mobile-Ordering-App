@@ -31,7 +31,12 @@ class OrderStatus extends Component {
   };
 
   async componentDidMount() {
-    this.props.findOrderById(this.props.orderNumber);
+    const orderNumber = await this.getOrderDetails();
+    if (this.props.orderNumber) {
+      this.props.findOrderById(this.props.orderNumber);
+    } else {
+      this.props.findOrderById(orderNumber);
+    }
     this.setState({
       accountName: await this.getAccountName()
     });
@@ -82,10 +87,15 @@ class OrderStatus extends Component {
   };
 
   getAccountName = async () => {
-    return await AsyncStorage.getItem("userId");
+    return await AsyncStorage.getItem("name");
+  };
+
+  getOrderDetails = async () => {
+    return await AsyncStorage.getItem("orderId");
   };
 
   render() {
+    console.log(this.props.orderStatus);
     let qrCode = null;
     const qrData = {
       userId: this.props.userId || this.state.accountName,
@@ -107,34 +117,34 @@ class OrderStatus extends Component {
     const finalList = [];
     let orderPrice = 0;
 
-    if (this.state.orderStatus.findOrderById){
-        let stateDrinks = this.state.orderStatus.findOrderById.drinks;
+    if (this.state.orderStatus.drinks){
+        let stateDrinks = this.state.orderStatus.drinks;
         stateDrinks.map(drinks => {
-          orderPrice += parseFloat(drinks.price)
+          orderPrice += parseFloat(drinks.price);
           drinkNames.push(drinks.name)
-        })
-        let indiDrinks = [...new Set(drinkNames)];
-        indiDrinks.map(indi => {
-            var count = drinkNames.reduce(function(n, val) {
+        });
+        let individualDrinks = [...new Set(drinkNames)];
+        individualDrinks.map(indi => {
+            const count = drinkNames.reduce((n, val) => {
                 return n + (val === indi);
             }, 0);
-            finalList.push({drinkName:indi, quantity:count})
+            finalList.push({drinkName:indi, quantity:count});
       });
     }
 
     return (
       <ScrollView style={styles.scroll}>
         <View style={[styles.container]}>
-          {this.state.orderStatus.findOrderById ? (
+          {this.state.orderStatus.transactionId ? (
             <View style={styles.header}>
               <Text style={styles.status}>Order Successful!</Text>
               <Text style={styles.success}>
-                Thank You {this.state.orderStatus.findOrderById.userInfo.name}!
+                Thank You {this.state.accountName}!
               </Text>
               <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Status:</Text>
                 <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.findOrderById.status}{" "}
+                  {this.state.orderStatus.status}{" "}
                 </Text>
                 <Progress.Circle
                   size={30}
@@ -146,34 +156,34 @@ class OrderStatus extends Component {
               <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Order Number :</Text>
                 <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.findOrderById.collectionPoint.collectionPointId}{" "}
+                  {this.state.orderStatus.collectionPoint.name}{" "}
                 </Text>
               </View>
               <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Ordered at :</Text>
                 <Text style={styles.date}>
-                  {new Date(this.state.orderStatus.findOrderById.date)
+                  {new Date(this.state.orderStatus.date)
                     .toTimeString()
                     .slice(0, 8)}
                 </Text>
                 <Text style={styles.date}>
                   {new Date(
-                    this.state.orderStatus.findOrderById.date
+                    this.state.orderStatus.date
                   ).toDateString()}
                 </Text>
               </View>
               <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Collection Point:</Text>
                 <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.findOrderById.collectionPoint.name}
-                  {this.state.orderStatus.findOrderById.collectionPoint.collectionPoindId}
+                  {this.state.orderStatus.collectionPoint.name}
+                  {this.state.orderStatus.collectionPoint.collectionPoindId}
                 </Text>
               </View>
               <Text style={styles.orderText}>
                 Estimated Collection Time : 10:59pm
               </Text>
               <Text style={[styles.status, styles.padd]}>Order Summary</Text>
-          
+
               {finalList.map((drinks, i) => {
                 return (
 
@@ -184,7 +194,7 @@ class OrderStatus extends Component {
                       </Text>
                     </View>
                     <View>
-                      <Text style={styles.orderSubtitle}>£HARD.CODE</Text>
+                      <Text style={styles.orderSubtitle}>{drinks.price}</Text>
                     </View>
                   </View>
                 );
@@ -214,7 +224,7 @@ class OrderStatus extends Component {
                   <Text style={styles.header}>
                     Order{" "}
                     <Text style={{ color: colours.orange }}>
-                      #{this.props.collectionId}
+                      #{this.state.orderStatus.collectionId ? this.state.orderStatus.collectionId : this.props.collectionId}
                     </Text>{" "}
                   </Text>
                   <View
@@ -227,13 +237,13 @@ class OrderStatus extends Component {
                     <Text style={styles.infoText}>
                       Collection:{" "}
                       <Text style={{ color: colours.orange }}>
-                        {this.props.collectionPoint}
+                        {this.props.orderStatus.collectionPoint.name}
                       </Text>
                     </Text>
                     <Text style={styles.infoText}>
                       Order Time:{" "}
                       <Text style={{ color: colours.orange }}>
-                        {new Date(this.props.date).toTimeString().slice(0, 5)}
+                        {new Date(this.props.orderStatus.date).toTimeString().slice(0, 5)}
                       </Text>
                     </Text>
                   </View>
@@ -246,8 +256,6 @@ class OrderStatus extends Component {
               <ActivityIndicator size="large" color={colours.orange} />
             </View>
           )}
-
-          {/* </View> */}
         </View>
       </ScrollView>
     );
@@ -369,7 +377,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    orderStatus: state.order.orderStatus
+    orderStatus: state.order.orderStatus,
+    loading: state.order.loading
   };
 };
 
