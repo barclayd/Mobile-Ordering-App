@@ -70,7 +70,7 @@ const setWelcomePageRoot = async () => {
                             }
                         }
                     },
-                    
+
                 },
             },
         }
@@ -131,7 +131,7 @@ const setMainApp = async (componentId, barName, barCode) => {
                 topBar: {
                     visible: true,
                     title: {
-                        text: barName ? barName : DrinKing
+                        text: barName ? barName : 'DrinKing'
                     }
                 }
             }
