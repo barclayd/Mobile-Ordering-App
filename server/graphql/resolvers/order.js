@@ -16,7 +16,7 @@ module.exports = {
             let drinksIdCheck = false;
             let foundDrinks = [];
             for (let i in args.orderInput.drinks) {
-                const searchedDrinks = await Drink.findOne({_id: args.orderInput.drinks[i]});
+                const searchedDrinks = await Drink.findById(args.orderInput.drinks[i]);
                 if (searchedDrinks) {
                     foundDrinks.push(searchedDrinks);
                     drinksIdCheck = true;
@@ -89,7 +89,7 @@ module.exports = {
     },
     findOrdersByCollectionPoint: async ({collectionPoint}) => {
         try {
-            const foundCollectionPoint = await CollectionPoint.findOne({_id: collectionPoint});
+            const foundCollectionPoint = await CollectionPoint.findById(collectionPoint);
             if (!foundCollectionPoint) {
                 throw new Error(`Collection Point ${collectionPoint} does not exist`);
             }
@@ -138,7 +138,7 @@ module.exports = {
     },
     findOrderById: async ({id}) => {
         try {
-            const foundOrder = await Order.findOne({_id: id}).populate('userInfo').populate('collectionPoint');
+            const foundOrder = await Order.findById(id).populate('userInfo').populate('collectionPoint');
             const returnedDrinks = await drinks(foundOrder.drinks);
             return {
                 _id: foundOrder._id,
@@ -158,13 +158,13 @@ module.exports = {
     },
     updateOrder: async (args) => {
         try {
-            const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderId}).populate('orderAssignedTo').populate('userInfo');
+            const foundOrder = await Order.findById(args.orderStatusInput.orderId).populate('orderAssignedTo').populate('userInfo');
             foundOrder.status = args.orderStatusInput.status;
             const returnedDrinks = await drinks(foundOrder.drinks);
             if (args.orderStatusInput.barStaffId) {
                 foundOrder.orderAssignedTo = args.orderStatusInput.barStaffId;
             }
-            const barStaffMember = await BarStaff.findOne({_id: args.orderStatusInput.barStaffId});
+            const barStaffMember = await BarStaff.findById(args.orderStatusInput.barStaffId);
             await foundOrder.save();
             return {
                 _id: foundOrder._id,
@@ -183,13 +183,13 @@ module.exports = {
     },
     updateOrderAssignedTo: async (args) => {
         try {
-            const foundOrder = await Order.findOne({_id: args.orderAssignedToInput.orderId}).populate('orderAssignedTo').populate('userInfo');
+            const foundOrder = await Order.findById(args.orderAssignedToInput.orderId).populate('orderAssignedTo').populate('userInfo');
             if (args.orderAssignedToInput.barStaffId) {
                 foundOrder.orderAssignedTo = args.orderAssignedToInput.barStaffId;
             } else {
                 foundOrder.orderAssignedTo = null;
             }
-            const barStaffMember = await BarStaff.findOne({_id: args.orderAssignedToInput.barStaffId});
+            const barStaffMember = await BarStaff.findById(args.orderAssignedToInput.barStaffId);
             await foundOrder.save();
             return {
                 _id: foundOrder._id,
