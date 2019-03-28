@@ -7,8 +7,10 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  TextInput
 } from "react-native";
+import validate from '../../utility/validation';
 import * as colours from "./../../styles/colourScheme";
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
@@ -20,7 +22,18 @@ class componentName extends Component {
   state = {
     pastOrders: [],
     selectedOrder: null,
-    showOrderOverlay: false
+    showOrderOverlay: false,
+    arrayHolder: [],
+    currentDate: new Date(),
+    input: {
+      orderId : {
+        value: null,
+        valid: false,
+        validationRules: {
+          minLength: 7
+      }
+      }
+    }
   };
 
   componentDidMount() {
@@ -30,7 +43,8 @@ class componentName extends Component {
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
       this.setState({
-        pastOrders: nextProps.pastOrders
+        pastOrders: nextProps.pastOrders,
+        arrayHolder: nextProps.pastOrders
       });
     }
   }
@@ -97,6 +111,32 @@ class componentName extends Component {
       </Text>;
     });
   };
+
+  inputUpdateHandler = (key, value) => {
+    
+    this.setState(prevState => {
+      return {
+          input: {
+              ...prevState.input,
+              [key]: {
+                  ...prevState.input[key],
+                  value: value,
+                  valid: validate(value, prevState.input[key].validationRules)
+              }
+          }
+      }
+   });
+
+    const newData = this.state.arrayHolder.filter((order) => {
+    const itemData = order.transactionId.slice(0, 7).toLowerCase();
+    const text = value.toLowerCase();
+      return itemData.indexOf(text) > -1; 
+    });
+    this.setState({ 
+      pastOrders: newData 
+    });  
+
+};
 
   render() {
     const spinner = this.props.ordersLoading ? (
@@ -210,28 +250,6 @@ class componentName extends Component {
                     {this.state.showOrderOverlay &&
                     this.state.selectedOrder._id === order._id ? (
                       <View>
-
-                        {/* <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "flex-start"
-                          }}
-                        >
-                          <Text
-                            style={{
-                              color: colours.midnightBlack,
-                              fontWeight: "bold"
-                            }}
-                          >
-                            Collection Point:{" "}
-                            <Text style={{ color: colours.warningRed }}>
-                              {`The Taf: ${
-                                this.state.selectedOrder.collectionPoint.name
-                              }`}
-                            </Text>
-                          </Text>
-                        </View> */}
-
                         <View style={styles.qrCode}>{this.qrcode()}</View>
                       </View>
                     ) : null}
@@ -245,6 +263,22 @@ class componentName extends Component {
 
       return (
         <View style={[styles.container]}>
+        <View>
+              <TextInput placeholder='Filter by Order Id...' value=
+              {this.state.input.orderId.value}
+              style=
+              {[
+                styles.input,
+                {
+                  borderColor: colours.white
+                }
+              ]}
+              placeholderTextColor={colours.white}
+              maxLength={7}
+              autoCorrect={false}
+              selectionColor={colours.orange}
+              onChangeText={val => this.inputUpdateHandler("orderId", val)}/>
+            </View>
           <ScrollView>
             <View>
               {spinner}
@@ -300,7 +334,18 @@ const styles = StyleSheet.create({
   qrCode: {
     backgroundColor: colours.pureWhite,
     alignSelf: "center"
-  }
+  },
+  input: {
+    width: (Dimensions.get("window").width) / 1.09,
+    top: 0,
+    height: (Dimensions.get("window").height) / 14  ,
+    borderWidth: 1,
+    color: colours.cream,
+    fontSize: 16,
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    textAlign: "center"
+},
 });
 
 const mapDispatchToProps = dispatch => {
