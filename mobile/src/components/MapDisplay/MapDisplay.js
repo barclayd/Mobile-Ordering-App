@@ -59,7 +59,8 @@ class MapDisplay extends Component {
 
     handleCalloutPress = () => {
       if (this.state.chosenMarker) {
-          this.props.findBar(this.state.chosenMarker, this.props.componentId);
+          console.log(this.props);
+          this.props.findBar(this.state.chosenMarker, this.props.componentId, null, this.props.redirect);
       }
     };
 
@@ -169,7 +170,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         findAllBars: () => dispatch(actions.findAllBars()),
-        findBar: (barCode, componentId) => dispatch(actions.findBar(barCode, componentId))
+        findBar: (barCode, componentId, autoLogin, redirect) => dispatch(actions.findBar(barCode, componentId, autoLogin, redirect))
     }
 };
 

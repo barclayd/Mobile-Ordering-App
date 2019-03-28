@@ -6,14 +6,17 @@ export const findBarStart = () => {
     };
 };
 
-export const findBarSuccess = (name, type, description, barCode, latitude, longitude  ) => {
+export const findBarSuccess = (name, type, description, barCode, latitude, longitude, image, logo, menus) => {
     return {
         type: actionTypes.FIND_BAR_SUCCESS,
         name: name,
         barCode: barCode,
         description: description,
         latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        image,
+        logo,
+        menus
     };
 };
 
@@ -24,11 +27,13 @@ export const findBarFail = error => {
     };
 };
 
-export const findBar = (barCode, componentId) => {
+export const findBar = (barCode, componentId, autoLogin, redirect) => {
     return {
         type: actionTypes.FIND_BAR,
         barCode: barCode,
-        componentId: componentId
+        componentId: componentId,
+        autoLogin,
+        redirect
     }
 };
 

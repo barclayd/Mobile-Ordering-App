@@ -72,12 +72,17 @@ export function* findDrinkCategoriesSaga(action) {
     try {
         const requestBody = {
             query: `
-            query findDrinkCategories {
-                findDrinkCategories {
+            query FindDrinkCategoriesByMenu ($menuId: ID!) {
+                findDrinkCategoriesByMenu(
+                    menuId: $menuId
+                 ){
                     category
                 }
             }
-            `
+            `,
+            variables: {
+                menuId: action.menuId
+            }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
@@ -85,9 +90,9 @@ export function* findDrinkCategoriesSaga(action) {
         }
         if (response.status === 200 && response.status !== 201) {
             const fetchData = [];
-            for (let key in response.data.data.findDrinkCategories) {
+            for (let key in response.data.data.findDrinkCategoriesByMenu) {
                 fetchData.push(
-                    response.data.data.findDrinkCategories[key].category,
+                    response.data.data.findDrinkCategoriesByMenu[key].category,
                 );
             }
             yield put(actions.findDrinkCategoriesSuccess(fetchData));

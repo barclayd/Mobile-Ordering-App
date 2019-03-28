@@ -8,6 +8,8 @@ const initialState = {
     description: null,
     latitude: null,
     longitude: null,
+    image: null,
+    logo: null,
     type: null,
     barCode: null,
     updatingLastVisitedBar: false,
@@ -15,7 +17,8 @@ const initialState = {
     lastVisitedBar: null,
     findAllBarsLoading: false,
     bars: [],
-    findAllBarsError: null
+    findAllBarsError: null,
+    menus: []
 };
 
 const findBarStart = (state, action) => {
@@ -33,6 +36,9 @@ const findBarSuccess = (state, action) => {
         barCode: action.barCode,
         latitude: action.latitude,
         longitude: action.longitude,
+        image: action.image,
+        logo: action.logo,
+        menus: action.menus,
         loading: false,
         error: false
     });
@@ -91,6 +97,13 @@ const findAllBarsFail = (state, action) => {
     });
 };
 
+const logout = (state, action) => {
+    return updateObject(state, {
+        ...initialState,
+        bars: state.bars,
+    })
+};
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FIND_BAR_START: return findBarStart(state, action);
@@ -102,6 +115,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FIND_ALL_BARS_START: return findAllBarsStart(state, action);
         case actionTypes.FIND_ALL_BARS_SUCCESS: return findAllBarsSuccess(state, action);
         case actionTypes.FIND_ALL_BARS_FAIL: return findAllBarsFail(state, action);
+        case actionTypes.AUTH_LOGOUT: return logout(state, action);
         default: return state;
     }
 };

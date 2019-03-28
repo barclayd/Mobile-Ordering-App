@@ -2,6 +2,8 @@ import {Navigation} from "react-native-navigation";
 import * as colours from "../styles/colourScheme";
 import * as screens from './screens';
 
+import {AsyncStorage} from 'react-native';
+
 const setDefaultSettings = () => {
     Navigation.setDefaultOptions({
         topBar: {
@@ -68,7 +70,7 @@ const setWelcomePageRoot = async () => {
                             }
                         }
                     },
-                    
+
                 },
             },
         }
@@ -112,11 +114,14 @@ const setMainAppSettings = (image1, image2) => {
     });
 };
 
-const setMainApp = async (componentId, barName) => {
+const setMainApp = async (componentId, barName, barCode) => {
     await Navigation.setStackRoot(componentId, {
         component: {
             name: screens.ViewMenus,
             id: 'ViewMenus',
+            passProps: {
+                barCode: barCode
+            },
             options: {
                 animations: {
                     setStackRoot: {
@@ -126,10 +131,25 @@ const setMainApp = async (componentId, barName) => {
                 topBar: {
                     visible: true,
                     title: {
-                        text: barName ? barName : 'The Taf'
+                        text: barName ? barName : 'DrinKing'
                     }
                 },
-                statusBar: {
+            }
+        }
+    });
+};
+
+const setViewDrinks = async (componentId, menuName, menuId) => {
+    await Navigation.push(componentId, {
+        component: {
+            name: screens.ViewDrinksScreen,
+            passProps: {
+                authState: menuName,
+                menuId
+            },
+            options: {
+                topBar: {
+>>>>>>> feature/252_dynamic_menus
                     visible: true,
                     style: 'light'
                 }
@@ -145,7 +165,7 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
     }
     await Navigation.push(component, {
         component: {
-            name: screens.OrderStatus,
+            name: screens.ActiveOrder,
             passProps: {
                 collectionId,
                 userId,
@@ -157,7 +177,7 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
                 topBar: {
                     visible: true,
                     title: {
-                        text: 'Order Status',
+                        text: 'Active Order',
                         color: colours.white,
                         largeTitle: true
                     },
@@ -171,6 +191,28 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
                 statusBar: {
                     visible: true,
                     style: 'light'
+                }
+            }
+        }
+    })
+};
+
+const setSwitchBars = async (componentId) => {
+    let component = componentId;
+    if (!componentId) {
+        component = 'ViewMenus';
+    }
+    await Navigation.push(component, {
+        component: {
+            name: screens.SwitchBar,
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: 'Switch Bars',
+                        color: colours.white,
+                        largeTitle: true
+                    }
                 }
             }
         }
@@ -370,5 +412,5 @@ const pop = async (componentId) => {
 };
 
 export {
-    setOrderStatus, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
+    setOrderStatus, setSwitchBars, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
 }

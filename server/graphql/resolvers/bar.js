@@ -30,7 +30,9 @@ module.exports = {
                 description: args.barInput.description,
                 latitude: args.barInput.latitude,
                 longitude: args.barInput.longitude,
-                image: args.barInput.image
+                image: args.barInput.image,
+                logo: args.barInput.logo,
+                menus: args.barInput.menus
             });
             const result = await createdBar.save();
             return {
@@ -45,6 +47,11 @@ module.exports = {
         // does bar exist with given bar code
         const bar = await Bar.findOne({
             barCode: barCode.toUpperCase()
+        }).populate({
+            path: 'menus',
+            populate: {
+                path: 'drinks'
+            }
         });
         // no bar found with given bar code
         if (!bar) {
@@ -58,7 +65,9 @@ module.exports = {
             description: bar.description,
             latitude: bar.latitude,
             longitude: bar.longitude,
-            image: bar.image
+            image: bar.image,
+            logo: bar.logo,
+            menus: bar.menus
         };
     }
 };
