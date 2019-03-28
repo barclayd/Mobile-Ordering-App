@@ -274,6 +274,17 @@ class App extends Component {
     }
   }
 
+  // Runs an inteligent queuing algorithm to pull the top order, and similar top orders at once into the current staff member's in-progress feed
+  TakeNextOrdersFromQueue = () => {
+    let mostRecentOrderID = this.state.pendingOrders[this.state.pendingOrders.length-1]._id;
+    let ordersToTake = [mostRecentOrderID];
+    console.log(this.state.pendingOrders)
+
+    for (let i = 0, len = ordersToTake.length; i < len; i++) {
+      this.props.updateOrder(ordersToTake[i], "IN_PROGRESS", this.state.selectedStaffMemberID)
+    }
+  }
+
   ToggleAwaitingCollapse = (event) => {
     let newStyle = "collapsed";
     let collapsed = true;
@@ -382,7 +393,7 @@ class App extends Component {
                       orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
                       width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
                   }
-                  console.log(orderData);
+                  
                   return (
                     <div
                         key={orderIndex}
@@ -470,7 +481,7 @@ class App extends Component {
 
 
             <div className="pendingOrderButtons">
-              <button disabled={this.state.pendingOrders.length===0} className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9bc6f75def1d0a9eb73848", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
+              <button disabled={this.state.pendingOrders.length===0} className="pendingOrderButton" onClick={this.TakeNextOrdersFromQueue}>
                 <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
                 <span className="title">Take next order</span>
                 <br />
