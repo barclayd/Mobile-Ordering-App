@@ -138,6 +138,7 @@ export function* orderHistorySaga(action) {
                             collectionPointId
                         }
                         status
+                        collectionId
                         date
                         _id
                         transactionId
