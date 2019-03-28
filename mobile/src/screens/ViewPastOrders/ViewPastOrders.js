@@ -6,17 +6,16 @@ import {
   Dimensions,
   ScrollView,
   ActivityIndicator,
-  TouchableOpacity,
-  AsyncStorage
+  TouchableOpacity
 } from "react-native";
 import * as colours from "./../../styles/colourScheme";
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import { Card, ListItem } from "react-native-elements";
-import jwt from "expo-jwt";
+import SimpleCrypto from "simple-crypto-js";
 import QRCode from "react-native-qrcode-svg";
 
-class componentName extends Component {
+class ViewPastOrders extends Component {
   state = {
     pastOrders: [],
     selectedOrder: null,
@@ -50,31 +49,14 @@ class componentName extends Component {
     console.log("view past orders state", this.state);
   }
 
-  qrcode = () => {
-    userId = AsyncStorage.getItem("userId");
-    if (this.state.selectedOrder && userId) {
-      console.log("hitting function");
-      let qrCode = null;
-      const qrData = {
-        userId: this.state.accountName,
-        collectionId: this.state.selectedOrder.collectionPoint.collectionPointId
-      };
-      console.log("qr code", qrData);
-      const key = "zvBT1lQV1RO9fx6f8";
-      const token = jwt.encode(
-        {
-          qrData
-        },
-        key
-      );
+  qrCode = () => {
 
-      if (
-        userId &&
-        this.state.selectedOrder.collectionPoint.collectionPointId
-      ) {
-        console.log("rendering token");
-        return <QRCode value={token} size={300} />;
-      }
+    const key = "zvBT1lQV1RO9fx6f8";
+    const crypto = new SimpleCrypto(key);
+    const token = crypto.encrypt(this.state.selectedOrder.collectionId);
+
+    if (this.props.collectionId) {
+      return <QRCode value={token} size={300} />;
     }
   };
 
@@ -84,17 +66,17 @@ class componentName extends Component {
     order.drinks.map(drink => {
       drinksList.push(drink.name);
     });
-    let indiDrinks = [...new Set(drinksList)];
-    indiDrinks.map(indi => {
-      var count = drinksList.reduce(function(n, val) {
-        return n + (val === indi);
+    let individualDrinks = [...new Set(drinksList)];
+    individualDrinks.map(drink => {
+      const count = drinksList.reduce((n, val) => {
+        return n + (val === drink);
       }, 0);
-      finalList.push({ name: indi, quantity: count });
+      finalList.push({ name: drink, quantity: count });
     });
     return finalList.map(drink => {
-      <Text key={index} style={styles.subInformationDrinksText}>
+      return <Text key={index} style={styles.subInformationDrinksText}>
         {drink.quantity} x{drink.name}
-      </Text>;
+        </Text>;
     });
   };
 
@@ -232,7 +214,7 @@ class componentName extends Component {
                           </Text>
                         </View> */}
 
-                        <View style={styles.qrCode}>{this.qrcode()}</View>
+                        <View style={styles.qrCode}>{this.qrCode()}</View>
                       </View>
                     ) : null}
                   </View>
@@ -316,7 +298,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentName);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewPastOrders);
