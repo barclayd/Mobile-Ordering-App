@@ -31,6 +31,7 @@ module.exports = {
                 latitude: args.barInput.latitude,
                 longitude: args.barInput.longitude,
                 image: args.barInput.image,
+                logo: args.barInput.logo,
                 menus: args.barInput.menus
             });
             const result = await createdBar.save();
@@ -65,6 +66,7 @@ module.exports = {
             latitude: bar.latitude,
             longitude: bar.longitude,
             image: bar.image,
+            logo: bar.logo,
             menus: bar.menus
         };
     }

@@ -9,6 +9,7 @@ const initialState = {
     latitude: null,
     longitude: null,
     image: null,
+    logo: null,
     type: null,
     barCode: null,
     updatingLastVisitedBar: false,
@@ -36,6 +37,7 @@ const findBarSuccess = (state, action) => {
         latitude: action.latitude,
         longitude: action.longitude,
         image: action.image,
+        logo: action.logo,
         menus: action.menus,
         loading: false,
         error: false

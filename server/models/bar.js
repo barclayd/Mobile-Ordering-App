@@ -28,6 +28,9 @@ const barSchema = mongoose.Schema({
     image: {
         type: String
     },
+    logo: {
+        type: String
+    },
     menus: [{
         type: mongoose.Schema.ObjectId,
         ref: 'Menu'

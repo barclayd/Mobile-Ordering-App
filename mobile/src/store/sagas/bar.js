@@ -20,6 +20,7 @@ export function* findBarSaga(action) {
                         latitude
                         longitude
                         image
+                        logo
                         menus {
                             _id
                             name
@@ -52,7 +53,7 @@ export function* findBarSaga(action) {
                     ...response.data.data.findBar.menus[key]
                 });
             }
-            yield put(actions.findBarSuccess(response.data.data.findBar.name, response.data.data.findBar.type, response.data.data.findBar.description, response.data.data.findBar.barCode, response.data.data.findBar.latitude, response.data.data.findBar.longitude, response.data.data.findBar.image, fetchedMenusData));
+            yield put(actions.findBarSuccess(response.data.data.findBar.name, response.data.data.findBar.type, response.data.data.findBar.description, response.data.data.findBar.barCode, response.data.data.findBar.latitude, response.data.data.findBar.longitude, response.data.data.findBar.image, response.data.data.findBar.logo,  fetchedMenusData));
             const userId = yield AsyncStorage.getItem("userId");
             if (userId) {
                 yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
@@ -132,6 +133,7 @@ export function* findAllBarsSaga(action) {
                         description
                         type
                         image
+                        logo
                     }
                 }
             `

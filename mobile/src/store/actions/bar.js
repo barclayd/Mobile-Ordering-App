@@ -6,7 +6,7 @@ export const findBarStart = () => {
     };
 };
 
-export const findBarSuccess = (name, type, description, barCode, latitude, longitude, image, menus) => {
+export const findBarSuccess = (name, type, description, barCode, latitude, longitude, image, logo, menus) => {
     return {
         type: actionTypes.FIND_BAR_SUCCESS,
         name: name,
@@ -15,6 +15,7 @@ export const findBarSuccess = (name, type, description, barCode, latitude, longi
         latitude: latitude,
         longitude: longitude,
         image,
+        logo,
         menus
     };
 };

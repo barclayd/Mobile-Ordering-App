@@ -82,7 +82,7 @@ class ViewMenus extends Component {
       <View style={styles.background}>
         <View style={{flex: .85}}>
         <View style={styles.logoHeader}>
-          <Image style={styles.logo} resizeMode={"contain"} source={{uri: this.props.currentBar.image}} />
+          <Image style={styles.logo} resizeMode={"contain"} source={{uri: this.props.currentBar.logo ? this.props.currentBar.logo : this.props.currentBar.image}} />
         </View>
           <View style={styles.view}>
             <FlatList
