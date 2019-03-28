@@ -179,6 +179,28 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
     })
 };
 
+const setSwitchBars = async (componentId) => {
+    let component = componentId;
+    if (!componentId) {
+        component = 'ViewMenus';
+    }
+    await Navigation.push(component, {
+        component: {
+            name: screens.SwitchBar,
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: 'Switch Bars',
+                        color: colours.white,
+                        largeTitle: true
+                    }
+                }
+            }
+        }
+    })
+};
+
 const setViewBasket = async (componentId, basketName, fullScreenMode) => {
     await Navigation.push(componentId, {
         component: {
@@ -338,5 +360,5 @@ const pop = async (componentId) => {
 };
 
 export {
-    setOrderStatus, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
+    setOrderStatus, setSwitchBars, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
 }

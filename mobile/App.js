@@ -8,6 +8,7 @@ import Settings from './src/screens/Settings/Settings';
 import WelcomeScreen from './src/screens/WelcomeScreen/WelcomeScreen';
 import ActiveOrder from './src/screens/ActiveOrder/ActiveOrder';
 import ViewPastOrders from './src/screens/ViewPastOrders/ViewPastOrders';
+import SwitchBar from './src/screens/SwitchBar/SwitchBar';
 import {setWelcomePageRoot, setDefaultSettings} from './src/utility/navigation';
 import * as screens from './src/utility/screens';
 import createSagaMiddleware from 'redux-saga';
@@ -35,6 +36,8 @@ Navigation.registerComponentWithRedux(screens.ViewMenus, () => ViewMenus, Provid
 Navigation.registerComponentWithRedux(screens.ViewCheckout, () => ViewCheckout, Provider, store);
 Navigation.registerComponentWithRedux(screens.ActiveOrder, () => ActiveOrder, Provider, store);
 Navigation.registerComponentWithRedux(screens.ViewPastOrders, () => ViewPastOrders, Provider, store);
+Navigation.registerComponentWithRedux(screens.SwitchBar, () => SwitchBar, Provider, store);
+
 
 Navigation.events().registerAppLaunchedListener(async () => {
   setDefaultSettings();

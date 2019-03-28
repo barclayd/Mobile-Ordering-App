@@ -7,3 +7,4 @@ export const ViewMenus = 'drinks-app.ViewMenus';
 export const ViewCheckout = 'drinks-app.ViewCheckout';
 export const ActiveOrder = 'drinks-app.ActiveOrder';
 export const ViewPastOrders = 'drinks-app.ViewPastOrders';
+export const SwitchBar = 'drinks-app.SwitchBar';
