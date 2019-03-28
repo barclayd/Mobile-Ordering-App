@@ -1,11 +1,9 @@
 const Drink = require('../../models/drink');
 const Order = require('../../models/order');
 const User = require('../../models/user');
-const BarStaff = require('../../models/barStaff');
 const CollectionPoint = require('../../models/collectionPoint');
 const {dateToString} = require("../../helpers/date");
 const {transformOrder} = require('./merge');
-const {drinks} = require('./mergeResolvers/drinks');
 const {processPayment} = require('../../helpers/stripe');
 const uuid = require('uuid/v4');
 const randomString = require('randomstring');
@@ -13,40 +11,37 @@ const randomString = require('randomstring');
 module.exports = {
     createOrder: async (args, req) => {
         try {
-            let drinksIdCheck = false;
+            // Find user
+            const user = await User.findById(args.orderInput.userInfo);
+            if (!user) throw new Error ('Invalid user account to process order');
+            
+            // Find collection point
+            const collectionPoint = await CollectionPoint.findById(args.orderInput.collectionPoint);
+            if (!collectionPoint) throw new Error ('Invalid collection point to process order');
+            
+            // Find drinks
             let foundDrinks = [];
             for (let i in args.orderInput.drinks) {
-                const searchedDrinks = await Drink.findById(args.orderInput.drinks[i]);
-                if (searchedDrinks) {
-                    foundDrinks.push(searchedDrinks);
-                    drinksIdCheck = true;
-                }
+                const drink = await Drink.findById(args.orderInput.drinks[i]);
+                if (!drink) throw new Error ('Drink with invalid ID entered');
+                
+                foundDrinks.push(drink);
             }
-            if (!drinksIdCheck) {
-                throw new Error ('Drink with invalid ID entered');
-            }
-            const user = await User.findById(args.orderInput.userInfo);
-            if (!user) {
-                throw new Error ('Invalid user account to process order');
-            }
-            const collectionPoint = await CollectionPoint.findById(args.orderInput.collectionPoint);
-            if (!collectionPoint) {
-                throw new Error ('Invalid collection point to process order');
-            }
-            const generatedTransactionId = uuid();
+
+            // Generate a nice collection code
             const collectionId = randomString.generate({
                 length: 4,
                 charset: 'readable',
                 capitalization: 'uppercase'
             });
+
+            // Process payment with Stripe
             const token = await req.get('Payment');
             const orderPrice = await req.get('Checkout');
-            // process payment with stripe
             const userPayment = await processPayment(token, parseInt(orderPrice), collectionId, 'gbp');
-            if (!userPayment) {
-                // userPayment failed
-                throw new Error ('Attempt to process user payment failed.');
-            }
+            if (!userPayment) throw new Error ('Attempt to process user payment failed.');
+
+            // Build order object
             const createdOrder = new Order({
                 drinks: foundDrinks,
                 collectionPoint: collectionPoint,
@@ -55,8 +50,10 @@ module.exports = {
                 date: dateToString(args.orderInput.date),
                 userInfo: user,
                 collectionId: collectionId,
-                transactionId: generatedTransactionId
+                transactionId: uuid()
             });
+
+            // Save to server
             const result = await createdOrder.save();
             return transformOrder(result);
         } catch (err) {
@@ -65,23 +62,15 @@ module.exports = {
     },
     findOrdersByUser: async ({userInfo}) => {
         try {
-            const foundOrders = await Order.find({userInfo}).populate('userInfo').populate('collectionPoint');
+            const foundOrders = await Order.find({userInfo})
+                    .populate('userInfo collectionPoint drinks')
+                    .populate({
+                        path: 'userInfo',
+                        select: '-password' // Explicitly exclude password field
+                    });
             return foundOrders.reverse().map(async foundOrder => {
-                const modifiedUserInfo = {
-                    ...foundOrder.userInfo._doc,
-                    password: null
-                };
-                const returnedDrinks = await drinks(foundOrder.drinks);
-                return {
-                    _id: foundOrder._id,
-                    drinks: returnedDrinks,
-                    collectionPoint: foundOrder.collectionPoint,
-                    status: foundOrder.status,
-                    orderAssignedTo: foundOrder.orderAssignedTo,
-                    date: dateToString(foundOrder._doc.date),
-                    userInfo: modifiedUserInfo,
-                    transactionId: foundOrder.transactionId
-                };
+                foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
+                return foundOrder;
             });
         } catch (err) {
             throw err;
@@ -93,44 +82,26 @@ module.exports = {
             if (!foundCollectionPoint) {
                 throw new Error(`Collection Point ${collectionPoint} does not exist`);
             }
-            const foundOrders = await Order.find({$and: [{collectionPoint}, {status: ["AWAITING_COLLECTION", "PENDING", "IN_PROGRESS"]}]}).populate('userInfo').populate('collectionPoint');
+            const foundOrders = await Order.find({$and: [{collectionPoint}, {status: ["AWAITING_COLLECTION", "PENDING", "IN_PROGRESS"]}]})
+                    .populate('collectionPoint drinks')
+                    .populate({
+                        path: 'userInfo',
+                        select: '-password' // Explicitly exclude password field
+                    });
             return foundOrders.reverse().map(async foundOrder => {
-                const modifiedUserInfo = {
-                    ...foundOrder.userInfo._doc,
-                    password: null
-                };
-                const returnedDrinks = await drinks(foundOrder.drinks);
-                return {
-                    _id: foundOrder._id,
-                    drinks: returnedDrinks,
-                    collectionPoint: foundOrder.collectionPoint,
-                    status: foundOrder.status,
-                    orderAssignedTo: foundOrder.orderAssignedTo,
-                    collectionId: foundOrder.collectionId,
-                    date: dateToString(foundOrder._doc.date),
-                    userInfo: modifiedUserInfo,
-                    transactionId: foundOrder.transactionId
-                };
+                foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
+                return foundOrder;
             });
-            } catch (err) {
+        } catch (err) {
             throw err;
         }
     },
     findOrders: async () => {
         try {
-            const foundOrders = await Order.find().populate('userInfo').populate('collectionPoint');
+            const foundOrders = await Order.find().populate('userInfo collectionPoint drinks');
             return foundOrders.reverse().map(async foundOrder => {
-                const returnedDrinks = await drinks(foundOrder.drinks);
-                return {
-                    ...foundOrder._doc,
-                    drinks: returnedDrinks,
-                    collectionPoint: foundOrder.collectionPoint,
-                    status: foundOrder.status,
-                    orderAssignedTo: foundOrder.orderAssignedTo,
-                    date: dateToString(foundOrder.date),
-                    userInfo: foundOrder.userInfo,
-                    transactionId: foundOrder.transactionId
-                };
+                foundOrder.date = dateToString(foundOrder.date); // Convert date to string
+                return foundOrder;
             });
         } catch (err) {
             throw err;
@@ -138,19 +109,9 @@ module.exports = {
     },
     findOrderById: async ({id}) => {
         try {
-            const foundOrder = await Order.findById(id).populate('userInfo').populate('collectionPoint');
-            const returnedDrinks = await drinks(foundOrder.drinks);
-            return {
-                _id: foundOrder._id,
-                drinks: returnedDrinks,
-                collectionPoint: foundOrder.collectionPoint,
-                collectionId: foundOrder.collectionPoint.collectionId,
-                status: foundOrder.status,
-                orderAssignedTo: foundOrder.orderAssignedTo,
-                date: dateToString(foundOrder._doc.date),
-                userInfo: foundOrder.userInfo,
-                transactionId: foundOrder.transactionId
-            };
+            const foundOrder = await Order.findById(id).populate('userInfo collectionPoint drinks');
+            foundOrder.date = dateToString(foundOrder.date); // Convert date to string
+            return foundOrder;
         } catch (err) {
             console.log(err);
             throw err;
@@ -158,55 +119,37 @@ module.exports = {
     },
     updateOrder: async (args) => {
         try {
-            const foundOrder = await Order.findById(args.orderStatusInput.orderId).populate('orderAssignedTo').populate('userInfo');
+            // Find order and deep populate
+            const foundOrder = await Order.findById(args.orderStatusInput.orderId).populate('orderAssignedTo drinks userInfo');
+            
+            // Update order and save
             foundOrder.status = args.orderStatusInput.status;
-            const returnedDrinks = await drinks(foundOrder.drinks);
             if (args.orderStatusInput.barStaffId) {
                 foundOrder.orderAssignedTo = args.orderStatusInput.barStaffId;
             }
-            const barStaffMember = await BarStaff.findById(args.orderStatusInput.barStaffId);
             await foundOrder.save();
-            return {
-                _id: foundOrder._id,
-                drinks: returnedDrinks,
-                collectionPoint: foundOrder.collectionPoint,
-                collectionId: foundOrder.collectionId,
-                status: foundOrder.status,
-                orderAssignedTo: barStaffMember,
-                date: dateToString(foundOrder._doc.date),
-                userInfo: foundOrder.userInfo,
-                transactionId: foundOrder.transactionId
-            }
+            
+            foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
+            return foundOrder;
         } catch (err) {
             throw err;
         }
     },
     updateOrderAssignedTo: async (args) => {
         try {
-            const foundOrder = await Order.findById(args.orderAssignedToInput.orderId).populate('orderAssignedTo').populate('userInfo');
+            // Find order and reassign bartender
+            const foundOrder = await Order.findById(args.orderAssignedToInput.orderId).populate('orderAssignedTo userInfo');
             if (args.orderAssignedToInput.barStaffId) {
                 foundOrder.orderAssignedTo = args.orderAssignedToInput.barStaffId;
             } else {
-                foundOrder.orderAssignedTo = null;
+                foundOrder.orderAssignedTo = null; // Unassign bartender
             }
-            const barStaffMember = await BarStaff.findById(args.orderAssignedToInput.barStaffId);
             await foundOrder.save();
-            return {
-                _id: foundOrder._id,
-                drinks: foundOrder.drinks,
-                collectionPoint: foundOrder.collectionPoint,
-                collectionId: foundOrder.collectionPoint.collectionId,
-                status: foundOrder.status,
-                orderAssignedTo: barStaffMember,
-                date: dateToString(foundOrder._doc.date),
-                userInfo: foundOrder.userInfo,
-                transactionId: foundOrder.transactionId
-            }
+
+            foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
+            return foundOrder
         } catch (err) {
             throw err;
         }
     }
 };
-
-
-
