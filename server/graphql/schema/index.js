@@ -74,6 +74,7 @@ module.exports = buildSchema(`
         latitude: Float!
         longitude: Float!
         image: String
+        logo: String
         menus: [Menu]
      }
         
@@ -127,6 +128,7 @@ module.exports = buildSchema(`
         latitude: Float!
         longitude: Float!
         image: String
+        logo: String
         menus: [ID!]
     }
 
