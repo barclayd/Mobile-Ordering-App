@@ -7,7 +7,7 @@ import {
   Dimensions,
   FlatList,
   TouchableOpacity,
-  Platform
+  Platform, AsyncStorage
 } from "react-native";
 import {connect} from 'react-redux';
 import {setViewDrinksSettings, setViewDrinks} from "../../utility/navigation";
@@ -34,6 +34,16 @@ class ViewMenus extends Component {
     if (!this.props.menus.length > 0) {
       this.props.loadBar(this.props.barCode, this.props.componentId, true);
     }
+  }
+
+  componentDidAppear() {
+    Navigation.mergeOptions(this.props.componentId, {
+      topBar: {
+        title: {
+          text: this.props.currentBar.name
+        }
+      }
+    });
   }
 
   navigationButtonPressed({ buttonId }) {
@@ -83,7 +93,12 @@ class ViewMenus extends Component {
     });
   };
 
+  getBarName = async () => {
+    return await AsyncStorage.getItem("barName");
+  };
+
   render() {
+    console.log(this.props);
     return (
       <Checkout componentId={this.props.componentId}>
       <View style={styles.background}>
@@ -181,14 +196,15 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadBar: (barCode, componentId, autoLogin) => dispatch(actions.findBar(barCode, componentId, autoLogin))
+    loadBar: (barCode, componentId, autoLogin) => dispatch(actions.findBar(barCode, componentId, autoLogin)),
   }
 };
 
 const mapStateToProps = state => {
   return {
     menus: state.bar.menus,
-    currentBar: state.bar
+    currentBar: state.bar,
+    loading: state.bar.loading
   }
 };
 
