@@ -48,10 +48,15 @@ button {
   color: #FFFFFF;
 
   cursor: pointer;
+
+  transition: background-color 0.2s ease;
 }
-button:hover {
+button:hover, button.orderButton:hover {
   border-color: #222222;
   background: #694972;
+}
+button:active, button.orderButton:active {
+  opacity: 0.7;
 }
 button:disabled {
   cursor: not-allowed;
