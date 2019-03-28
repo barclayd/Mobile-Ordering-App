@@ -88,6 +88,12 @@ class SwitchBar extends Component {
     };
 
     render() {
+
+        const drinKingText =
+            <View style={{top: (Dimensions.get("window").height) / 11}}>
+            <Text style={styles.header}>Browse the map for nearby Dri<Text style={{color: colours.orange}}>Kings</Text></Text>
+            </View>;
+
         return (
             <ScrollView style={styles.scroll}>
                 <View style={[styles.container]}>
@@ -116,7 +122,7 @@ class SwitchBar extends Component {
                                 </View>
                             </View>
                             <View style={styles.rowContainer}>
-                                {this.props.barError && submittedCode === this.state.controls.barCode.value ? <Text style={styles.h3}>Bar code <Text style={{color: colours.warningRed}}>{submittedCode}</Text> could not be found. Please try again</Text> : null}
+                                {this.props.barError && submittedCode === this.state.controls.barCode.value ? <Text style={styles.h3}>Bar code <Text style={{color: colours.warningRed}}>{submittedCode}</Text> could not be found. Please try again</Text> : drinKingText}
                             </View>
                         </View>
                     </View>
@@ -160,6 +166,10 @@ const styles = StyleSheet.create({
     rowContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
+    },
+    h3:{
+        color: colours.midGrey,
+        top: (Dimensions.get("window").height) / 11
     },
     button: {
         fontSize: 36,
@@ -206,12 +216,12 @@ const styles = StyleSheet.create({
     },
     header: {
         textAlign: 'center',
-        fontSize: 24,
+        fontSize: 20,
         color: colours.lightGrey,
-        margin: 10
+        marginTop: 10
     },
     mapView: {
-        marginTop: 20
+        marginTop: (Dimensions.get("window").height) / 25
     }
 });
 
