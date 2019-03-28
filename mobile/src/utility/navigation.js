@@ -151,7 +151,7 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
     }
     await Navigation.push(component, {
         component: {
-            name: screens.OrderStatus,
+            name: screens.ActiveOrder,
             passProps: {
                 collectionId,
                 userId,
@@ -163,7 +163,7 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
                 topBar: {
                     visible: true,
                     title: {
-                        text: 'Order Status',
+                        text: 'Active Order',
                         color: colours.white,
                         largeTitle: true
                     },

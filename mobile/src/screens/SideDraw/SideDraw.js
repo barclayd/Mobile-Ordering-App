@@ -131,7 +131,7 @@ class SideDrawer extends Component {
               }
               style={styles.drawItemIcon}
             />
-            <Text style={styles.text}>Order Status</Text>
+            <Text style={styles.text}>Active Order</Text>
           </View>
         </TouchableOpacity>
 
