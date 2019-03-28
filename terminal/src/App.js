@@ -304,19 +304,18 @@ class App extends Component {
     )
   };
 
-  // Only show the "Your in-progress" header when you have orders to make
-  buildInProgressOrderHeader = () => {
-    if (this.state.inProgressOrdersIndexes.length === 0) return;
-    
+  // Shows "this is where your orders will be" tip if you have no orders
+  buildInProgressTips = () => {
+
     // Use a reducer to calculate how many orders the currently logged in user owns from the in-progress array
     let myInProgressOrdersTotal = this.state.inProgressOrdersIndexes.reduce((accumulator, orderIndex) => {
       let order = this.state.serverOrders[orderIndex];
       if (order.orderAssignedTo && order.orderAssignedTo._id === this.state.selectedStaffMemberID) return accumulator + 1; else return accumulator;
     }, 0)
 
-    // Check they own more than 0
-    if (myInProgressOrdersTotal > 0) {
-      return <h1>Your in-progress:</h1>
+    // Check they own 0
+    if (myInProgressOrdersTotal === 0) {
+      return <div className="orderContainer in-progress tip-prompt">Your orders will appear here</div>
     }
   };
 
@@ -437,8 +436,9 @@ class App extends Component {
               }
             </div>
 
-            { this.buildInProgressOrderHeader() }
+            <h1>Your in-progress:</h1>
             <div className="ordersContainer">
+              { this.buildInProgressTips() }
               {
                   this.state.inProgressOrdersIndexes.map((orderIndex) => {
                     const orderData = this.state.serverOrders[orderIndex];
