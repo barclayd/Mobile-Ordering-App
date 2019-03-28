@@ -16,11 +16,10 @@ import SelectCollectionPointPopupWindow from './containers/select-collection-poi
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./assets/notes.svg";
-import {OrderStatuses} from './helpers/schemaHelper.js';
+import OrderStatus from './helpers/OrderStatuses.js';
 import {rangeScaling} from "./helpers/FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
 import {rebuildDateAndDrinksForOrderWithQuantities} from './helpers/FunctionLib.js';
-import LoadingIcon from './assets/loading-icon.gif';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (milliseconds)
@@ -33,53 +32,54 @@ class App extends Component {
   constructor (props) {
     super(props);
 
+    this.state = {
+      // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
+      notifications: [],
+
+
+      collectionPoints: [
+        {
+          id: 1,
+          name: "Downstairs",
+          description: "Outside WHSmiths, usually dead."
+        },
+        {
+          id: 2,
+          name: "Upstairs",
+          description: "Small minibar."
+        },
+        {
+          id: 3,
+          name: "Main floor",
+          description: "Wide bar."
+        }
+      ],
+
+      lastNotificationID: 0,
+
+      selectedStaffMemberID: "5c97adae8cab340a0995dd25",
+
+      lastValidScan: 0,
+      qrResult: "empty",
+
+      awaitingOrdersClass: "collapsed",
+      awaitingOrdersCollapsed: true,
+    };
+
     this.previewDiv = React.createRef();
   }
-
-  state = {
-    // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
-    notifications: [],
-
-    collectionPoints: [
-      {
-        id: 1,
-        name: "Downstairs",
-        description: "Outside WHSmiths, usually dead."
-      },
-      {
-        id: 2,
-        name: "Upstairs",
-        description: "Small minibar."
-      },
-      {
-        id: 3,
-        name: "Main floor",
-        description: "Wide bar."
-      }
-    ],
-
-    lastNotificationID: 0,
-
-    selectedStaffMemberID: "5c97adae8cab340a0995dd25",
-
-    lastValidScan: 0,
-    qrResult: "empty",
-
-    awaitingOrdersClass: "collapsed",
-    awaitingOrdersCollapsed: true,
-  };
 
   loadOrdersIntoStateIndexArrays = (orders) => {
     let awaitingOrdersIndexes=[], inProgressOrdersIndexes=[], pendingOrders=[];
 
     for(let orderIndex = 0; orderIndex < orders.length; orderIndex += 1) {
       let order = orders[orderIndex];
-
+      
       switch (order.status) {
-        case OrderStatuses.AWAITING_COLLECTION:
+        case OrderStatus.AWAITING_COLLECTION:
           awaitingOrdersIndexes.push(orderIndex);
           break;
-        case OrderStatuses.IN_PROGRESS:
+        case OrderStatus.IN_PROGRESS:
           inProgressOrdersIndexes.push(orderIndex);
           break;
         default:
@@ -92,7 +92,7 @@ class App extends Component {
       inProgressOrdersIndexes: inProgressOrdersIndexes,
       pendingOrders: pendingOrders
     })
-  };
+  }
 
   addNotification = (iconClassName, title, description) => {
     // Increment notification key/id
@@ -120,7 +120,7 @@ class App extends Component {
 
   getStaffMemberFullName = (staffID) => {
     let staffMember = this.state.barStaff.find(x => x._id === staffID);
-    if (!staffMember) return "unknown";
+    if (!staffMember) return "unknown"
     return staffMember.firstName + " " + staffMember.lastName;
   };
 
@@ -131,7 +131,7 @@ class App extends Component {
 
   changeCollectionPoint = (collectionPointID) => {
     this.setState({collectionPointID: collectionPointID});
-  };
+  }
 
   // Displays billing popup for order by order index
   showBilling = (orderIndex) => {
@@ -178,7 +178,7 @@ class App extends Component {
 
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
-      if (order.status === OrderStatuses.AWAITING_COLLECTION) {
+      if (order.status === OrderStatus.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order, orderWindowOpen: true}, this.state.showPickup) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
@@ -201,12 +201,12 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props.serverOrders.length === 0) return;
     let newServerOrders = rebuildDateAndDrinksForOrderWithQuantities(this.props.serverOrders);
-    let areArraysEqual = JSON.stringify(newServerOrders) === JSON.stringify(prevState.serverOrders);
-
+    let areArraysEqual = JSON.stringify(newServerOrders) === JSON.stringify(prevState.serverOrders)
+    
     // only update chart if the data has changed
     if (!this.props.loading && !areArraysEqual) {
       this.loadOrdersIntoStateIndexArrays(newServerOrders); // Load orders into arrays
-
+      
       this.setState({
         serverOrders: newServerOrders,
         barStaff: this.props.barStaff
@@ -218,9 +218,9 @@ class App extends Component {
 
   // Relaxed version of pickup order, used for bartenders to manually input just an order ID (not corresponding customer ID)
   pickupOrderInsecure = (orderID) => {
-    let order = this.state.serverOrders.find(order => order.collectionId === orderID); // Find order by ID
+    let order = this.state.serverOrders.find(order => order.id === orderID); // Find order by ID
     if (order) {
-      if (order.status === OrderStatuses.AWAITING_COLLECTION) {
+      if (order.status === OrderStatus.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order}, this.state.showPickup) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
@@ -281,7 +281,8 @@ class App extends Component {
       newStyle = "";
       collapsed = false;
     }
-    this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed});
+
+    this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed})
   };
 
   scrollToPreview = () => {
@@ -290,74 +291,19 @@ class App extends Component {
 
   showOutOfStock = () => { this.state.showOutOfStock() };
 
+  bartender = ()
+
   switchAccounts = (staffID) => {
-    this.setState({selectedStaffMemberID: staffID});
+    this.setState({selectedStaffMemberID: staffID})
     localStorage.setItem("selectedStaffMemberID", staffID)
-  };
-
-  buildLoadingScreen = (message) => {
-    return (
-      <div className="loadingScreen">
-          <img src={LoadingIcon} alt="Loading icon"/>
-          <span className="loadingMessage">{message}</span>
-      </div>
-    )
-  };
-
-  // Only show the "Your in-progress" header when you have orders to make
-  buildInProgressOrderHeader = () => {
-    if (this.state.inProgressOrdersIndexes.length === 0) return;
-    
-    // Use a reducer to calculate how many orders the currently logged in user owns from the in-progress array
-    let myInProgressOrdersTotal = this.state.inProgressOrdersIndexes.reduce((accumulator, orderIndex) => {
-      let order = this.state.serverOrders[orderIndex];
-      if (order.orderAssignedTo && order.orderAssignedTo._id === this.state.selectedStaffMemberID) return accumulator + 1; else return accumulator;
-    }, 0)
-
-    // Check they own more than 0
-    if (myInProgressOrdersTotal > 0) {
-      return <h1>Your in-progress:</h1>
-    }
-  };
-
-  // Func to build JSX to only display "view upcoming" and "take next order" buttons when there's pending orders avaliable
-  buildPendingOrdersArea = () => {
-    if (this.state.pendingOrders.length === 0) {
-      return <h4>0 pending orders - you're all caught up!</h4>
-    } else {
-      let orderPlural = this.state.pendingOrders.length === 1 ? "order" : "orders"
-      return <>
-        <div className="pendingOrderButtons">
-          <button className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9bc6f75def1d0a9eb73848", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
-            <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
-            <span className="title">Take next order</span>
-            <br />
-            <span className="subtitle">
-              Adds next order to your ({
-                this.state.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
-              }) in-progress feed
-            </span>
-          </button>
-          <button onClick={this.state.showUpcoming} className="pendingOrderButton">
-            <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
-            <span className="title">View upcoming</span>
-            <br />
-            <span className="subtitle">
-              Display a feed of pending orders
-            </span>
-          </button>
-        </div>
-        <h4>{this.state.pendingOrders.length} {orderPlural} currently pending...</h4>
-      </>
-    }
-  };
+  }
 
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
-      return this.buildLoadingScreen("Loading orders...")
-
+      return "Loading orders..."
+      
     } else {
-
+      
       return (
         <div className="App">
           <header className="App-header">
@@ -386,11 +332,11 @@ class App extends Component {
 
                 <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
 
-                <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
+                <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> More accounts</button>
               </div>
             </div>
 
-            <h1>Awaiting collection ({ this.state.awaitingOrdersIndexes.length }):</h1>
+            <h1>AWAITING COLLECTION ({ this.state.awaitingOrdersIndexes.length }):</h1>
             <div className={"ordersContainer " + this.state.awaitingOrdersClass}>
               {
                 this.state.awaitingOrdersIndexes.map((orderIndex, incrementer) => {
@@ -405,7 +351,7 @@ class App extends Component {
                       orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
                       width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
                   }
-                  console.log(orderData);
+                  console.log(orderData)
                   return (
                     <div
                         key={orderIndex}
@@ -415,10 +361,11 @@ class App extends Component {
                     >
                       <h2>#{orderData.collectionId} - <TimeAgo date={orderData.date}/></h2>
                       <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.orderAssignedTo._id) }</span></h5>
-                      <div className="orderButtonsContainer" onClick={(e)=>{ e.stopPropagation(); }}>
-                        <button className="orderButton" onClick={()=>{
-                          this.props.updateOrder(orderData._id, "IN_PROGRESS", this.state.selectedStaffMemberID); // Update order to state to pending and assign to current bartender
-                        }}>
+                      <div className="orderButtonsContainer" onClick={(e)=>{
+                        e.stopPropagation();
+                        this.props.updateOrder(orderData._id, "IN_PROGRESS", this.state.selectedStaffMemberID); // Update order to state to pending and assign to current bartender
+                      }}>
+                        <button className="orderButton">
                           <span className="icon notReady"><FontAwesomeIcon icon={faUndoAlt} /></span>
                           <span className="title">Not ready</span>
                           <br />
@@ -437,12 +384,12 @@ class App extends Component {
               }
             </div>
 
-            { this.buildInProgressOrderHeader() }
+            <h1>YOUR IN-PROGRESS:</h1>
             <div className="ordersContainer">
               {
                   this.state.inProgressOrdersIndexes.map((orderIndex) => {
                     const orderData = this.state.serverOrders[orderIndex];
-
+                    
                     // Only show pending orders belonging to the current staff member
                     if (orderData.orderAssignedTo._id !== this.state.selectedStaffMemberID) return null;
 
@@ -456,13 +403,17 @@ class App extends Component {
                         { this.renderCustomerNotes(orderIndex, orderData.notes) }
 
                         <div className="orderButtonsContainer">
-                          <button className="orderButton" onClick={() => this.props.updateOrder(orderData._id, "AWAITING_COLLECTION", this.state.selectedStaffMemberID)}>
+                          <button className="orderButton" onClick={()=> {
+                            this.props.updateOrder(orderData._id, "AWAITING_COLLECTION") // Update order to state to awaiting collection but dont change the assigned bartender
+                          }}>
                             <span className="icon ready"><FontAwesomeIcon icon={faCheck} /></span>
                             <span className="title">Ready</span>
                             <br />
                             <span className="subtitle">Mark as ready</span>
                           </button>
-                          <button className="orderButton" onClick={()=> {this.props.updateOrder(orderData._id, "PENDING", this.state.selectedStaffMemberID)}}>
+                          <button className="orderButton" onClick={()=> {
+                            this.props.updateOrder(orderData._id, "PENDING") // Return order to pending but dont change the assigned bartender
+                          }}>
                             <span className="icon notInProgress"><FontAwesomeIcon icon={faUndoAlt} /></span>
                             <span className="title">Not in progress</span>
                             <br />
@@ -481,7 +432,29 @@ class App extends Component {
                 }
             </div>
 
-            { this.buildPendingOrdersArea() }
+            <div className="pendingOrderButtons">
+              <button className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9a3db2f094bd60737aa062", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
+                <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
+                <span className="title">Take next order</span>
+                <br />
+                <span className="subtitle">
+                  Adds next order to your ({
+                    this.state.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
+                  }) in-progress feed
+                </span>
+              </button>
+
+              <button onClick={this.state.showUpcoming} className="pendingOrderButton">
+                <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
+                <span className="title">View upcoming</span>
+                <br />
+                <span className="subtitle">
+                  Display a feed of pending orders
+                </span>
+              </button>
+            </div>
+
+            <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
 
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
@@ -502,7 +475,7 @@ class App extends Component {
                     let newNotifications = this.state.notifications;
                     newNotifications[index].isDismissed = true;
                     this.setState({notifications: newNotifications})
-                  }, notificationDuration);
+                  }, notificationDuration)
 
                   return (
                     <div key={index} className="notificationBanner">
