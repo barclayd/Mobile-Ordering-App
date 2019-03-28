@@ -49,7 +49,7 @@ button {
 
   cursor: pointer;
 
-  transition: background-color 0.2s ease;
+  transition: background-color 0.15s ease;
 }
 button:hover, button.orderButton:hover {
   border-color: #222222;
