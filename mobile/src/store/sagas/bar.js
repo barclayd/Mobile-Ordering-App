@@ -1,7 +1,7 @@
 import {put} from 'redux-saga/effects';
 import {AsyncStorage, Platform} from 'react-native';
 import IonicIcon from "react-native-vector-icons/Ionicons";
-import {setMainApp, setMainAppSettings} from "../../utility/navigation";
+import {setMainApp, setMainAppSettings, pop, popToRoot} from "../../utility/navigation";
 import axios from '../../axios-instance';
 import * as actions from '../actions/index';
 
@@ -54,7 +54,7 @@ export function* findBarSaga(action) {
                 });
             }
             yield put(actions.findBarSuccess(response.data.data.findBar.name, response.data.data.findBar.type, response.data.data.findBar.description, response.data.data.findBar.barCode, response.data.data.findBar.latitude, response.data.data.findBar.longitude, response.data.data.findBar.image, response.data.data.findBar.logo,  fetchedMenusData));
-            if (!action.autoLogin) {
+            if (!action.autoLogin && !action.redirect) {
                 const userId = yield AsyncStorage.getItem("userId");
                 if (userId) {
                     yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
@@ -72,6 +72,15 @@ export function* findBarSaga(action) {
                         setMainAppSettings(sources[0], sources[1]);
                         setMainApp(action.componentId, response.data.data.findBar.name);
                     });
+            }
+            if (action.redirect) {
+                const userId = yield AsyncStorage.getItem("userId");
+                if (userId) {
+                    yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
+                }
+                AsyncStorage.setItem("barId", response.data.data.findBar._id);
+                AsyncStorage.setItem("barName", response.data.data.findBar.name);
+                yield popToRoot(action.componentId);
             }
         }
     } catch (err) {

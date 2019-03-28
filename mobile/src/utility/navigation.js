@@ -2,6 +2,8 @@ import {Navigation} from "react-native-navigation";
 import * as colours from "../styles/colourScheme";
 import * as screens from './screens';
 
+import {AsyncStorage} from 'react-native';
+
 const setDefaultSettings = () => {
     Navigation.setDefaultOptions({
         topBar: {
@@ -116,7 +118,7 @@ const setMainApp = async (componentId, barName, barCode) => {
                 topBar: {
                     visible: true,
                     title: {
-                        text: barName ? barName : 'The Taf'
+                        text: barName ? barName : DrinKing
                     }
                 }
             }
