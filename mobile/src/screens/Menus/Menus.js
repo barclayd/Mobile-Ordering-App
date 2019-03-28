@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import {setViewDrinksSettings, setViewDrinks} from "../../utility/navigation";
 import * as colours from "../../styles/colourScheme";
 import * as fontWeight from "../../styles/fontStyles";
+import * as actions from '../../store/actions/index';
 import { Navigation } from "react-native-navigation";
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -27,6 +28,12 @@ class ViewMenus extends Component {
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+  }
+
+  componentDidMount() {
+    if (!this.props.menus.length > 0) {
+      this.props.loadBar(this.props.barCode, this.props.componentId, true);
+    }
   }
 
   navigationButtonPressed({ buttonId }) {
@@ -82,7 +89,7 @@ class ViewMenus extends Component {
       <View style={styles.background}>
         <View style={{flex: .85}}>
         <View style={styles.logoHeader}>
-          <Image style={styles.logo} resizeMode={"contain"} source={{uri: this.props.currentBar.logo ? this.props.currentBar.logo : this.props.currentBar.image}} />
+          {this.props.currentBar.logo ? <Image style={styles.logo} resizeMode={"contain"} source={{uri: this.props.currentBar.logo}}/> : null}
         </View>
           <View style={styles.view}>
             <FlatList
@@ -90,7 +97,6 @@ class ViewMenus extends Component {
               ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
               data={this.props.menus}
               renderItem={({ item: rowData }) => {
-                console.log(rowData);
                 return (
                   <TouchableOpacity
                     key={rowData}
@@ -173,6 +179,12 @@ const styles = StyleSheet.create({
   }
 });
 
+const mapDispatchToProps = dispatch => {
+  return {
+    loadBar: (barCode, componentId, autoLogin) => dispatch(actions.findBar(barCode, componentId, autoLogin))
+  }
+};
+
 const mapStateToProps = state => {
   return {
     menus: state.bar.menus,
@@ -180,4 +192,4 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(ViewMenus);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewMenus);

@@ -99,11 +99,14 @@ const setMainAppSettings = (image1, image2) => {
     });
 };
 
-const setMainApp = async (componentId, barName) => {
+const setMainApp = async (componentId, barName, barCode) => {
     await Navigation.setStackRoot(componentId, {
         component: {
             name: screens.ViewMenus,
             id: 'ViewMenus',
+            passProps: {
+                barCode: barCode
+            },
             options: {
                 animations: {
                     setStackRoot: {

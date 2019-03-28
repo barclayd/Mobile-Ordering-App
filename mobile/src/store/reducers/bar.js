@@ -108,6 +108,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FIND_ALL_BARS_START: return findAllBarsStart(state, action);
         case actionTypes.FIND_ALL_BARS_SUCCESS: return findAllBarsSuccess(state, action);
         case actionTypes.FIND_ALL_BARS_FAIL: return findAllBarsFail(state, action);
+        case actionTypes.AUTH_LOGOUT: return state = initialState;
         default: return state;
     }
 };

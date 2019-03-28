@@ -4,7 +4,6 @@ const User = require('../../models/user');
 module.exports = {
     updateLastVisitedBar: async ({userId, barId}) => {
         try {
-            console.log('made it here');
             let foundBar = null;
             const user = await User.findOne({_id: userId});
             if (!user) {

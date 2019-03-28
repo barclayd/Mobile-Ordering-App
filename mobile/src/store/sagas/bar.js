@@ -54,23 +54,25 @@ export function* findBarSaga(action) {
                 });
             }
             yield put(actions.findBarSuccess(response.data.data.findBar.name, response.data.data.findBar.type, response.data.data.findBar.description, response.data.data.findBar.barCode, response.data.data.findBar.latitude, response.data.data.findBar.longitude, response.data.data.findBar.image, response.data.data.findBar.logo,  fetchedMenusData));
-            const userId = yield AsyncStorage.getItem("userId");
-            if (userId) {
-                yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
+            if (!action.autoLogin) {
+                const userId = yield AsyncStorage.getItem("userId");
+                if (userId) {
+                    yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
+                }
+                const barId =  yield AsyncStorage.getItem("barId");
+                if (!barId) {
+                    AsyncStorage.setItem("barId", response.data.data.findBar._id);
+                    AsyncStorage.setItem("barName", response.data.data.findBar.name);
+                }
+                Promise.all([
+                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
+                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
+                ])
+                    .then(sources => {
+                        setMainAppSettings(sources[0], sources[1]);
+                        setMainApp(action.componentId, response.data.data.findBar.name);
+                    });
             }
-            const barId =  yield AsyncStorage.getItem("barId");
-            if (!barId) {
-                AsyncStorage.setItem("barId", response.data.data.findBar._id);
-                AsyncStorage.setItem("barName", response.data.data.findBar.name);
-            }
-            Promise.all([
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
-            ])
-                .then(sources => {
-                    setMainAppSettings(sources[0], sources[1]);
-                    setMainApp(action.componentId, response.data.data.findBar.name);
-                });
         }
     } catch (err) {
         console.log(err);

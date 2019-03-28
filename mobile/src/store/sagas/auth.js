@@ -8,14 +8,14 @@ import {Platform} from "react-native";
 import {setMainApp, setMainAppSettings, pop} from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
-const authRedirect = (action, barName) => {
+const authRedirect = (action, barName, barCode) => {
     Promise.all([
         IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
         IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
     ])
         .then(sources => {
             setMainAppSettings(sources[0], sources[1]);
-            setMainApp(action.componentId, barName);
+            setMainApp(action.componentId, barName, barCode);
         });
 };
 
@@ -77,6 +77,7 @@ export function* authUserSaga(action) {
                         lastVisitedBar {
                             name
                             _id
+                            barCode
                         }
                     }
                 }
@@ -124,6 +125,7 @@ export function* authUserSaga(action) {
                         lastVisitedBar {
                             _id
                             name
+                            barCode
                         }
                     }
                 }
@@ -144,10 +146,11 @@ export function* authUserSaga(action) {
                 if (response.data.data.login.lastVisitedBar) {
                     yield AsyncStorage.setItem("barName", response.data.data.login.lastVisitedBar.name);
                     yield AsyncStorage.setItem("barId", response.data.data.login.lastVisitedBar._id);
+                    yield AsyncStorage.setItem("barCode", response.data.data.login.lastVisitedBar.barCode);
                 }
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
                 if (response.data.data.login.lastVisitedBar) {
-                    yield authRedirect(action, response.data.data.login.lastVisitedBar.name);
+                    yield authRedirect(action, response.data.data.login.lastVisitedBar.name, response.data.data.login.lastVisitedBar.barCode);
                 } else {
                     // return back to previous page
                     yield pop(action.componentId);
@@ -167,10 +170,14 @@ export function* authUserSaga(action) {
 export function* authCheckStateSaga(action) {
     const token = yield AsyncStorage.getItem("token");
     const barName = yield AsyncStorage.getItem("barName");
-    if (!token) {
-        yield put(actions.logout());
-    } else {
-        authRedirect(action, barName);
+    const barCode = yield AsyncStorage.getItem("barCode");
+    // if (!token) {
+    //     yield put(actions.logout());
+    // } else {
+    //     authRedirect(action, barName, barCode);
+    // }
+    if (token) {
+        authRedirect(action, barName, barCode);
     }
     yield put(actions.retrieveBasketStart());
     const basket = yield AsyncStorage.getItem("basket");
@@ -197,7 +204,8 @@ export function* autoSignInSaga(action) {
     const token = yield AsyncStorage.getItem("token");
     const barName = yield AsyncStorage.getItem("barName");
     const barId = yield AsyncStorage.getItem("barId");
+    const barCode = yield AsyncStorage.getItem("barCode");
     if (token && (barName !== undefined) && (barId !== undefined)) {
-        yield authRedirect(action, barName);
+        yield authRedirect(action, barName, barCode);
     }
 }
