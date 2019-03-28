@@ -42,7 +42,6 @@ module.exports = {
     findDrinkCategoriesByMenu: async ({menuId}) => {
         try {
             const menu = await Menu.findOne({_id: menuId}).populate('drinks');
-            console.log(menu.drinks);
             // const returnedDrinks = await drinks(menu.drinks);
             const categories = [];
             menu.drinks.map(drink => {

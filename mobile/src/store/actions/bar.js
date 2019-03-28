@@ -27,11 +27,12 @@ export const findBarFail = error => {
     };
 };
 
-export const findBar = (barCode, componentId) => {
+export const findBar = (barCode, componentId, autoLogin) => {
     return {
         type: actionTypes.FIND_BAR,
         barCode: barCode,
-        componentId: componentId
+        componentId: componentId,
+        autoLogin
     }
 };
 
