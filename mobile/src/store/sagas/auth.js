@@ -26,6 +26,7 @@ export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("barName");
     yield AsyncStorage.removeItem("barId");
     yield AsyncStorage.removeItem("barCode");
+    yield AsyncStorage.removeItem("lastOrder");
     yield AsyncStorage.removeItem("orderId");
     yield put(actions.emptyBasketStart());
     yield emptyBasket();

@@ -17,7 +17,7 @@ import Modal from "react-native-modal";
 import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
 import jwt from "expo-jwt";
 
-class OrderStatus extends Component {
+class ActiveOrder extends Component {
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this);
@@ -121,7 +121,7 @@ class OrderStatus extends Component {
         let stateDrinks = this.state.orderStatus.drinks;
         stateDrinks.map(drinks => {
           orderPrice += parseFloat(drinks.price);
-          drinkNames.push(drinks.name)
+          drinkNames.push(drinks.name);
         });
         let individualDrinks = [...new Set(drinkNames)];
         individualDrinks.map(indi => {
@@ -154,9 +154,9 @@ class OrderStatus extends Component {
                 />
               </View>
               <View style={styles.progressCircle}>
-                <Text style={styles.orderText}>Order Number :</Text>
+                <Text style={styles.orderText}>Collection Code :</Text>
                 <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.collectionPoint.name}{" "}
+                  #{this.state.orderStatus.collectionId}{" "}
                 </Text>
               </View>
               <View style={styles.progressCircle}>
@@ -215,7 +215,8 @@ class OrderStatus extends Component {
                 </ButtonBackground>
               </View>
               <Modal
-                visible={this.state.showQRCode}
+                isVisible={this.state.showQRCode}
+                backdropOpacity={0.85}
                 onSwipeComplete={() => this.toggleQRCode()}
                 swipeDirection="down"
                 onBackdropPress={() => this.toggleQRCode()}
@@ -391,4 +392,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(OrderStatus);
+)(ActiveOrder);
