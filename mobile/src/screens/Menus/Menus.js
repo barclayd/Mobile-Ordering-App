@@ -16,7 +16,6 @@ import * as fontWeight from "../../styles/fontStyles";
 import { Navigation } from "react-native-navigation";
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
-import logo from "../../assets/taflogo.png";
 import Checkout from "../../components/HOC/Checkout/Checkout";
 
 class ViewMenus extends Component {
@@ -83,7 +82,7 @@ class ViewMenus extends Component {
       <View style={styles.background}>
         <View style={{flex: .85}}>
         <View style={styles.logoHeader}>
-          <Image style={styles.logo} resizeMode={"contain"} source={logo} />
+          <Image style={styles.logo} resizeMode={"contain"} source={{uri: this.props.currentBar.image}} />
         </View>
           <View style={styles.view}>
             <FlatList
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 'auto',
-    height: Dimensions.get("window").height / 6,
+    height: Dimensions.get("window").height / 4,
     marginTop: 20,
   },
   card: {
@@ -176,7 +175,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    menus: state.bar.menus
+    menus: state.bar.menus,
+    currentBar: state.bar
   }
 };
 
