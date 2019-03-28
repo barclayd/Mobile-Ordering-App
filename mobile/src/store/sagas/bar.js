@@ -1,7 +1,9 @@
 import {put} from 'redux-saga/effects';
 import {AsyncStorage, Platform} from 'react-native';
 import IonicIcon from "react-native-vector-icons/Ionicons";
-import {setMainApp, setMainAppSettings} from "../../utility/navigation";
+import {setMainApp, setMainAppSettings, popToRoot} from "../../utility/navigation";
+import {emptyBasket} from '../utility';
+
 import axios from '../../axios-instance';
 import * as actions from '../actions/index';
 
@@ -19,6 +21,21 @@ export function* findBarSaga(action) {
                         barCode
                         latitude
                         longitude
+                        image
+                        logo
+                        menus {
+                            _id
+                            name
+                            image
+                            description
+                            drinks {
+                                name
+                                category
+                                nutritionInfo
+                                price
+                                _id
+                            }
+                        }
                     }
                 }
             `,
@@ -32,19 +49,44 @@ export function* findBarSaga(action) {
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            yield put(actions.findBarSuccess(response.data.data.findBar.name, response.data.data.findBar.type, response.data.data.findBar.description, response.data.data.findBar.barCode, response.data.data.findBar.latitude, response.data.data.findBar.longitude));
-            const userId = yield AsyncStorage.getItem("userId");
-            if (userId) {
-                yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
-            }
-            Promise.all([
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
-                IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
-            ])
-                .then(sources => {
-                    setMainAppSettings(sources[0], sources[1]);
-                    setMainApp(action.componentId, response.data.data.findBar.name);
+            const fetchedMenusData = [];
+            for (let key in response.data.data.findBar.menus) {
+                fetchedMenusData.push({
+                    ...response.data.data.findBar.menus[key]
                 });
+            }
+            yield put(actions.findBarSuccess(response.data.data.findBar.name, response.data.data.findBar.type, response.data.data.findBar.description, response.data.data.findBar.barCode, response.data.data.findBar.latitude, response.data.data.findBar.longitude, response.data.data.findBar.image, response.data.data.findBar.logo,  fetchedMenusData));
+            if (!action.autoLogin && !action.redirect) {
+                const userId = yield AsyncStorage.getItem("userId");
+                if (userId) {
+                    yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
+                }
+                const barId =  yield AsyncStorage.getItem("barId");
+                if (!barId) {
+                    AsyncStorage.setItem("barId", response.data.data.findBar._id);
+                    AsyncStorage.setItem("barName", response.data.data.findBar.name);
+                }
+                Promise.all([
+                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-menu" : "ios-menu"), 30),
+                    IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-person"), 30)
+                ])
+                    .then(sources => {
+                        setMainAppSettings(sources[0], sources[1]);
+                        setMainApp(action.componentId, response.data.data.findBar.name);
+                    });
+            }
+            if (action.redirect) {
+                const userId = yield AsyncStorage.getItem("userId");
+                if (userId) {
+                    yield put(actions.updateLastVisitedBar(userId, response.data.data.findBar._id));
+                }
+                AsyncStorage.setItem("barId", response.data.data.findBar._id);
+                AsyncStorage.setItem("barName", response.data.data.findBar.name);
+                yield put(actions.emptyBasketStart());
+                yield emptyBasket();
+                yield put(actions.emptyBasketSuccess());
+                yield popToRoot(action.componentId);
+            }
         }
     } catch (err) {
         console.log(err);
@@ -107,11 +149,11 @@ export function* findAllBarsSaga(action) {
                         description
                         type
                         image
+                        logo
                     }
                 }
             `
         };
-
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
             yield put(actions.findAllBarsFail(response.data.errors[0].message));
