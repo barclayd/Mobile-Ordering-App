@@ -305,49 +305,22 @@ class App extends Component {
   };
 
   // Shows "this is where your orders will be" tip if you have no orders
-  buildInProgressTips = () => {
-
-    // Use a reducer to calculate how many orders the currently logged in user owns from the in-progress array
-    let myInProgressOrdersTotal = this.state.inProgressOrdersIndexes.reduce((accumulator, orderIndex) => {
-      let order = this.state.serverOrders[orderIndex];
-      if (order.orderAssignedTo && order.orderAssignedTo._id === this.state.selectedStaffMemberID) return accumulator + 1; else return accumulator;
-    }, 0)
-
-    // Check they own 0
-    if (myInProgressOrdersTotal === 0) {
-      return <div className="orderContainer in-progress tip-prompt">Your orders will appear here</div>
+  buildOrdersAreaEmptyTip = (totalOrders, tipTitle, tipMessage) => {
+    // Check if there are no orders before displaying tip
+    if (totalOrders === 0) {
+      return <div className="orderContainer tip-prompt">
+        <span className="title">{tipTitle}</span><br />
+        <span className="message">{tipMessage}</span>
+      </div>
     }
   };
 
-  // Func to build JSX to only display "view upcoming" and "take next order" buttons when there's pending orders avaliable
-  buildPendingOrdersArea = () => {
+  // Func to build total pending orders differently depending on the quantity
+  buildPendingOrdersTitle = (numberOfOrders) => {
     if (this.state.pendingOrders.length === 0) {
       return <h4>0 pending orders - you're all caught up!</h4>
     } else {
-      let orderPlural = this.state.pendingOrders.length === 1 ? "order" : "orders"
-      return <>
-        <div className="pendingOrderButtons">
-          <button className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9bc6f75def1d0a9eb73848", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
-            <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
-            <span className="title">Take next order</span>
-            <br />
-            <span className="subtitle">
-              Adds next order to your ({
-                this.state.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
-              }) in-progress feed
-            </span>
-          </button>
-          <button onClick={this.state.showUpcoming} className="pendingOrderButton">
-            <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
-            <span className="title">View upcoming</span>
-            <br />
-            <span className="subtitle">
-              Display a feed of pending orders
-            </span>
-          </button>
-        </div>
-        <h4>{this.state.pendingOrders.length} {orderPlural} currently pending...</h4>
-      </>
+      return <h4>{numberOfOrders} {numberOfOrders === 1 ? "order" : "orders"} currently pending...</h4>
     }
   };
 
@@ -391,6 +364,11 @@ class App extends Component {
 
             <h1>Awaiting collection ({ this.state.awaitingOrdersIndexes.length }):</h1>
             <div className={"ordersContainer " + this.state.awaitingOrdersClass}>
+              {
+                // Build tip shown when there are no orders awaiting collection
+                this.buildOrdersAreaEmptyTip(this.state.awaitingOrdersIndexes.length, "No orders awaiting collection!", "Orders ready for pickup show here")
+              }
+
               {
                 this.state.awaitingOrdersIndexes.map((orderIndex, incrementer) => {
                   const orderData = this.state.serverOrders[orderIndex];
@@ -438,7 +416,16 @@ class App extends Component {
 
             <h1>Your in-progress:</h1>
             <div className="ordersContainer">
-              { this.buildInProgressTips() }
+              {
+                // Build tip shown when there are no in-progress orders for the logged in user
+                this.buildOrdersAreaEmptyTip(
+                  // Reducer to calculate how total orders for current staff member in in-progress array
+                  this.state.inProgressOrdersIndexes.reduce((accumulator, orderIndex) => {
+                    let order = this.state.serverOrders[orderIndex];
+                    if (order.orderAssignedTo && order.orderAssignedTo._id === this.state.selectedStaffMemberID) return accumulator + 1; else return accumulator;
+                  },0), "No in-progress orders!", "Orders you take will appear here")
+              }
+
               {
                   this.state.inProgressOrdersIndexes.map((orderIndex) => {
                     const orderData = this.state.serverOrders[orderIndex];
@@ -481,8 +468,30 @@ class App extends Component {
                 }
             </div>
 
-            { this.buildPendingOrdersArea() }
 
+            <div className="pendingOrderButtons">
+              <button disabled={this.state.pendingOrders.length===0} className="pendingOrderButton" onClick={()=>{this.props.updateOrder("5c9bc6f75def1d0a9eb73848", "IN_PROGRESS", this.state.selectedStaffMemberID)}}>
+                <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
+                <span className="title">Take next order</span>
+                <br />
+                <span className="subtitle">
+                  Adds next order to your ({
+                    this.state.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
+                  }) in-progress feed
+                </span>
+              </button>
+              <button disabled={this.state.pendingOrders.length===0} onClick={this.state.showUpcoming} className="pendingOrderButton">
+                <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
+                <span className="title">View upcoming</span>
+                <br />
+                <span className="subtitle">
+                  Display a feed of pending orders
+                </span>
+              </button>
+            </div>
+            { this.buildPendingOrdersTitle(this.state.pendingOrders.length) }
+
+            {/* Build popup windows, assigning their show functions to the App.js state so they're callable */}
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />

@@ -255,6 +255,29 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
   min-height: 150px;
 }
 
+.orderContainer.tip-prompt {
+  background: #261a29; /* Slightly tint the background colour */
+  border: 5px dashed #5b3f63;
+
+  min-height: 165px;
+  opacity: 0.9;
+
+  padding-top: 45px; /* Vertically center the text in the div */
+  text-align: center;
+
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  line-height: 29px;
+}
+.orderContainer.tip-prompt .title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #888;
+}
+.orderContainer.tip-prompt .message {
+  font-size: 20px;
+  color: #888;
+}
+
 .orderButtonsContainer {
   position: absolute;
   bottom: 0;
@@ -404,6 +427,17 @@ button.orderButton .subtitle {
 .pendingOrderButton .icon.history {
   font-size: 54px;
   background: #FFCC66;
+}
+
+/* Show big red X when buttons are disabled */
+.pendingOrderButton:disabled:after {
+  content: "X";
+  position: absolute;
+  top: 20px;
+  color: #922;
+  left: 0;
+  font-size: 180px;
+  width: 100%;
 }
 
 
