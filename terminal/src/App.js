@@ -291,7 +291,7 @@ class App extends Component {
 
   showOutOfStock = () => { this.state.showOutOfStock() };
 
-  bartender = ()
+
 
   switchAccounts = (staffID) => {
     this.setState({selectedStaffMemberID: staffID})
