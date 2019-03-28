@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
 import Modal from "react-native-modal";
 import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
-import jwt from "expo-jwt";
+import SimpleCrypto from "simple-crypto-js";
 
 class ActiveOrder extends Component {
   constructor(props) {
@@ -95,24 +95,14 @@ class ActiveOrder extends Component {
   };
 
   render() {
-    console.log(this.props.orderStatus);
     let qrCode = null;
-    const qrData = {
-      userId: this.props.userId || this.state.accountName,
-      collectionId: this.props.collectionId || this.props.orderStatus.findOrderById.collectionPoint.collectionPointId
-    };
     const key = "zvBT1lQV1RO9fx6f8";
-    const token = jwt.encode(
-      {
-        qrData
-      },
-      key
-    );
+    const crypto = new SimpleCrypto(key);
+    const token = crypto.encrypt(this.props.collectionId);
 
-    if ((this.props.userId || this.state.accountName ) && (this.props.collectionId || this.props.orderStatus.findOrderById.collectionPoint.collectionPointId)) {
+    if (this.props.collectionId) {
       qrCode = <QRCode value={token} size={300} />;
     }
-
     const  drinkNames = [];
     const finalList = [];
     let orderPrice = 0;
