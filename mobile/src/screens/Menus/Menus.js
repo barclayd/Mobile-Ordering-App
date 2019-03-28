@@ -37,13 +37,15 @@ class ViewMenus extends Component {
   }
 
   componentDidAppear() {
-    Navigation.mergeOptions(this.props.componentId, {
-      topBar: {
-        title: {
-          text: this.props.currentBar.name
+    if (this.props.currentBar.name) {
+      Navigation.mergeOptions(this.props.componentId, {
+        topBar: {
+          title: {
+            text: this.props.currentBar.name
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   navigationButtonPressed({ buttonId }) {

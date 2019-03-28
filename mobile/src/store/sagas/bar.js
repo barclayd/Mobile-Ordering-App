@@ -1,7 +1,9 @@
 import {put} from 'redux-saga/effects';
 import {AsyncStorage, Platform} from 'react-native';
 import IonicIcon from "react-native-vector-icons/Ionicons";
-import {setMainApp, setMainAppSettings, pop, popToRoot} from "../../utility/navigation";
+import {setMainApp, setMainAppSettings, popToRoot} from "../../utility/navigation";
+import {emptyBasket} from '../utility';
+
 import axios from '../../axios-instance';
 import * as actions from '../actions/index';
 
@@ -80,6 +82,9 @@ export function* findBarSaga(action) {
                 }
                 AsyncStorage.setItem("barId", response.data.data.findBar._id);
                 AsyncStorage.setItem("barName", response.data.data.findBar.name);
+                yield put(actions.emptyBasketStart());
+                yield emptyBasket();
+                yield put(actions.emptyBasketSuccess());
                 yield popToRoot(action.componentId);
             }
         }
