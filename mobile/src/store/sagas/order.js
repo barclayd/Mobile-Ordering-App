@@ -103,7 +103,7 @@ export function* submitOrderSaga(action) {
         if (response.status === 200 && response.status !== 201) {
             const orderId = response.data.data.createOrder._id;
             yield AsyncStorage.setItem("orderId", orderId);
-            // set processing modal...
+            yield AsyncStorage.setItem("lastOrder", JSON.stringify(response.data));
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
@@ -189,6 +189,7 @@ export function* orderStatusSaga(action){
                         status
                         date
                         _id
+                        collectionId
                         transactionId
                         userInfo{
                             email
@@ -208,7 +209,7 @@ export function* orderStatusSaga(action){
         }
         if (response.status === 200 && response.status !== 201) {
         // console.log("response",response)
-        yield put(actions.orderStatusSuccess(response.data.data))
+        yield put(actions.orderStatusSuccess(response.data.data.findOrderById))
         }
     } catch (err) {
         console.log(err);

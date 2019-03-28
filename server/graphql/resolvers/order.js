@@ -145,7 +145,7 @@ module.exports = {
                 _id: foundOrder._id,
                 drinks: returnedDrinks,
                 collectionPoint: foundOrder.collectionPoint,
-                collectionId: foundOrder.collectionPoint.collectionId,
+                collectionId: foundOrder.collectionId,
                 status: foundOrder.status,
                 orderAssignedTo: foundOrder.orderAssignedTo,
                 date: dateToString(foundOrder._doc.date),
