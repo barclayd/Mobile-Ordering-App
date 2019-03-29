@@ -51,7 +51,7 @@ class ViewPastOrders extends Component {
     dateArrayHolder: [],
     currentDate: new Date(),
     isDateTimePickerVisible: false,
-    selectedDate: new Date(),
+    selectedDate: null,
     dates: {
       value: null
     },
@@ -184,17 +184,26 @@ class ViewPastOrders extends Component {
     _handleDatePicked = (date) => {
       // const newDate = moment(new Date(date.toString().substr(0, 16))).format('DD-MM-YYYY');
       console.log("A date has been picked: ", date);
-      const newData = this.state.dateArrayHolder.filter(order => {
+      const newData = this.state.arrayHolder.filter(order => {
       const itemData = moment(new Date(order.date)).format("DD-MM-YYYY")
       const pickerDate = moment(date).format("DD-MM-YYYY");
       return itemData === pickerDate;
       })
-      console.log(newData)
+      let pickerDate = moment(date).format("DD-MM-YYYY");
+      console.log(pickerDate)
       this.setState({
-        pastOrders: newData
+        pastOrders: newData,
+        selectedDate: pickerDate
       })
       this._DateTimePicker();
     };
+
+  
+  removeDate = () => {
+    this.setState({
+      selectedDate: null
+    })
+  }
 
   render() {
     const spinner = this.props.ordersLoading ? (
@@ -309,40 +318,32 @@ class ViewPastOrders extends Component {
 
       return (
         <View style={[styles.container]}>
-          <View>
-
+          <View >
             {this.state.showFilters ? (
-              <View>
+              <View style={[styles.filters, { borderBottomWidth: 1,
+                borderBottomColor:
+                this.state.pastOrders.length > 0
+                  ? colours.cream
+                  : colours.warningRed}]}>
                 <TextInput
                   placeholder="Filter by Order Id..."
                   value={this.state.input.orderId.value}
-                  style={[
-                    styles.input,
-                    {
-                      borderColor:
-                        this.state.pastOrders.length > 0
-                          ? colours.white
-                          : colours.warningRed
-                    }
-                  ]}
+                  style={styles.input}
                   placeholderTextColor={colours.white}
                   maxLength={4}
                   autoCorrect={false}
                   selectionColor={colours.orange}
                   onChangeText={val => this.inputUpdateHandler("orderId", val)}
                 />
-
-                <View style={{ paddingVertical: 5 }} />
-
-                <TouchableOpacity onPress={() => this._DateTimePicker()}>
-                  <Text style={{color: colours.pureWhite, fontSize: 16}}>Show DatePicker</Text>
-                </TouchableOpacity>
-
-                <View style={{paddingVertical: 5}}/>
                 
-                <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center", backgroundColor: colours.pureWhite}}>
+                <View style={styles.dateFilter}>
+                <TouchableOpacity onPress={() => this._DateTimePicker()}
+                style={{flexDirection: "row",justifyContent: "flex-start",}}>
+                  <Icon name="calendar" size={22} color={colours.pureWhite}/>
+                  <Text style={styles.dateText}>{this.state.selectedDate === null ? null: " "+this.state.selectedDate}</Text>
+                </TouchableOpacity>
                 <DateTimePicker
-                  date={this.state.selectedDate}
+                  date={this.state.currentDate}
                   isVisible={this.state.isDateTimePickerVisible}
                   onConfirm={this._handleDatePicked}
                   onCancel={this._DateTimePicker}
@@ -377,7 +378,7 @@ class ViewPastOrders extends Component {
             ) : null}
           </View>
           <ScrollView>
-            <View>
+            <View style={{paddingVertical: 5}}>
               {spinner}
               {renderPastOrders}
             </View>
@@ -390,7 +391,6 @@ class ViewPastOrders extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 22,
     backgroundColor: colours.midnightBlack,
     color: colours.white,
     flex: 1
@@ -430,20 +430,36 @@ const styles = StyleSheet.create({
       padding: 20
   },
   input: {
-    width: Dimensions.get("window").width / 1.09,
+    width: Dimensions.get("window").width / 5 *3 ,
     top: 5,
+    left: 5,
     height: Dimensions.get("window").height / 14,
-    borderWidth: 1,
     color: colours.cream,
     fontSize: 16,
     alignSelf: "center",
     fontWeight: "bold",
     textAlign: "center"
   },
+  dateFilter: {
+    width: Dimensions.get("window").width /5 *2 ,
+    top: 5,
+    height: Dimensions.get("window").height / 14,
+    
+    fontSize: 16,
+    alignSelf: "center",
+    fontWeight: "bold",
+    textAlign: "center",
+    justifyContent: "center"
+  },
   filters: {
     flexDirection: "row",
-    justifyContent: "flex-end",
-    marginRight: Dimensions.get("window").width / 14
+    justifyContent: "space-between",
+  },
+  dateText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colours.pureWhite,
+    textAlign: "center"
   }
 });
 
