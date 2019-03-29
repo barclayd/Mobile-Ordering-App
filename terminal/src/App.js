@@ -21,6 +21,7 @@ import {rangeScaling} from "./helpers/FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
 import {rebuildDateAndDrinksForOrderWithQuantities} from './helpers/FunctionLib.js';
 import LoadingIcon from './assets/loading-icon.gif';
+import SettingsPopupWindow from './containers/settings-popup-window/settings-popup-window';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (milliseconds)
@@ -367,7 +368,7 @@ class App extends Component {
                   })
                 }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
 
-               <button className ='large'> <FontAwesomeIcon icon ={faCog} /> Settings </button> 
+               <button onClick={this.state.showSettings} className='large'> <FontAwesomeIcon icon ={faCog} /> Settings </button> 
 
                 <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
 
@@ -513,6 +514,7 @@ class App extends Component {
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
             <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPoint={this.changeCollectionPoint} />
+            <SettingsPopupWindow showFunc={callable => this.setState({showSettings: callable})}/>
 
             <div className="notificationsContainer">
               {
