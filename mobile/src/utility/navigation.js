@@ -139,25 +139,6 @@ const setMainApp = async (componentId, barName, barCode) => {
     });
 };
 
-const setViewDrinks = async (componentId, menuName, menuId) => {
-    await Navigation.push(componentId, {
-        component: {
-            name: screens.ViewDrinksScreen,
-            passProps: {
-                authState: menuName,
-                menuId
-            },
-            options: {
-                topBar: {
->>>>>>> feature/252_dynamic_menus
-                    visible: true,
-                    style: 'light'
-                }
-            }
-        }
-    });
-};
-
 const setOrderStatus = async (componentId, collectionId, userId, collectionPoint, date, orderNumber) => {
     let component = componentId;
     if (!componentId) {
