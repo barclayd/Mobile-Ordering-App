@@ -176,14 +176,14 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
     })
 };
 
-const showQRcodeOnNotificationPress = async (showQRcode, collectionId, icon) => {
+const showQRCodeOnNotificationPress = async (showQRCode, collectionId, icon) => {
     await Navigation.showModal({
         stack: {
             children: [{
                 component: {
                     name: screens.ActiveOrder,
                     passProps: {
-                        showQRcode,
+                        showQRCode,
                         collectionId
                     },
                     options: {
@@ -415,5 +415,5 @@ const pop = async (componentId) => {
 };
 
 export {
-    setOrderStatus, setSwitchBars, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, showQRcodeOnNotificationPress
+    setOrderStatus, setSwitchBars, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, showQRCodeOnNotificationPress
 }

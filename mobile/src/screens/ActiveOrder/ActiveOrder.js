@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import IconFa from 'react-native-vector-icons/FontAwesome'
 import * as Progress from "react-native-progress";
 import { connect } from "react-redux";
-import {showQRcodeOnNotificationPress} from '../../utility/navigation';
+import {showQRCodeOnNotificationPress} from '../../utility/navigation';
 import * as actions from "../../store/actions/index";
 import Modal from "react-native-modal";
 import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
@@ -33,10 +33,11 @@ class ActiveOrder extends Component {
 
   state = {
     orderStatus: [],
-    showQRCode: this.props.showQRcode ? this.props.showQRcode : false,
+    showQRCode: this.props.showQRCode ? this.props.showQRCode : false,
     quantities: {},
     drinks: {},
-    senderId: appConfig.senderID
+    senderId: appConfig.senderID,
+    screenActive: false
   };
 
   async componentDidMount() {
@@ -58,6 +59,18 @@ class ActiveOrder extends Component {
         orderStatus: nextProps.orderStatus
       });
     }
+  }
+
+  componentDidAppear() {
+    this.setState({
+      screenActive: true
+    });
+  }
+
+  componentDidDisappear() {
+    this.setState({
+      screenActive: false
+    });
   }
 
   navigationButtonPressed({ buttonId }) {
@@ -117,14 +130,18 @@ class ActiveOrder extends Component {
   };
 
   showQRCode = async () => {
-    if (!this.state.showQRCode) {
+    if (!this.state.showQRCode && !this.state.screenActive) {
       Promise.all([
         IconFa.getImageSource(
             Platform.OS === "android" ? "close" : "close",
             30
         )
       ]).then(sources => {
-          showQRcodeOnNotificationPress(true, this.props.collectionId, sources[0]);
+          showQRCodeOnNotificationPress(true, this.props.collectionId, sources[0]);
+      })
+    } else {
+      this.setState({
+        showQRCode: true
       })
     }
   };
