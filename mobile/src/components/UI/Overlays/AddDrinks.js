@@ -11,13 +11,37 @@ class AddDrinks extends Component {
   state = {
     value: 1,
     price: null,
-    orderedDrinks: []
+    orderedDrinks: [],
+    verb: false
   };
+
+  componentWillReceiveProps(nextProps){
+    if (!nextProps.loading){
+      if (nextProps.drinkDetails){
+        // if item exists in the basket -> show quantity of item in basket.
+        let drinksList = [];
+        this.props.basket.map(drinks => {
+          drinksList.push(drinks.name)
+        })
+        if (drinksList.includes(nextProps.drinkDetails.name)){
+            nextProps.basket.map(drink => {
+              if (drink.name == nextProps.drinkDetails.name){
+                console.log(drink.name,"has : ",drink.quantity, "quantity");
+                this.setState({
+                  value: drink.quantity
+                })
+              }
+            })
+          }
+        }
+      }
+    }
 
   valueChanged = value => {
     if (value === 0) {
       return;
     }
+
     const nextValue = Number(value.toFixed(2));
     let initialPrice = Number(this.props.drinkDetails.price) * nextValue;
     let price = parseFloat(Math.round(initialPrice * 100) / 100).toFixed(2);
@@ -92,7 +116,10 @@ class AddDrinks extends Component {
                   style={styles.buttonStyle}
                   onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price ? this.state.price : this.props.drinkDetails.price, this.state.value)}
                 >
-                  <Text style={styles.textStyle}>Add £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>
+                {this.props.basketAction ? 
+                <Text style={styles.textStyle}>Update £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>
+                :
+                <Text style={styles.textStyle}>Add £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>}
                 </TouchableOpacity>
 
 

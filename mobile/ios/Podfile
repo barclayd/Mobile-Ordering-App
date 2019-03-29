@@ -4,4 +4,6 @@
 target 'drinkTest' do
   pod 'Stripe', '~> 14.0.0'
   inherit! :search_paths
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
 end

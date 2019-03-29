@@ -1,18 +1,9 @@
-import React, { Component } from "react";
-import {
-  Text,
-  View,
-  TouchableHighlight,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions
-} from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Card } from "react-native-elements";
+import React, {Component} from "react";
+import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Card} from "react-native-elements";
 import OverlayComponent from "../../../components/UI/Overlays/AddDrinks";
 import * as colours from "../../../styles/colourScheme";
-import { connect } from "react-redux";
-import { SimpleStepper } from "react-native-simple-stepper";
+import {connect} from "react-redux";
 import * as actions from "../../../store/actions/index";
 
 class TabbedCategories extends Component {
@@ -23,17 +14,28 @@ class TabbedCategories extends Component {
     itemSelected: "",
     quantity: 0,
     value: 1,
-    cardColour: ""
+    basketAction: false
   };
 
   openOverlay = i => {
     const drinkSelected = this.props.drinks[i];
-    this.setState({
-      isVisible: true,
-      drinkSelected: drinkSelected,
-      cardColour: "#DCDCDC"
+    const basketDrinks = [];
+    this.props.basket.map(drinks => {
+      basketDrinks.push(drinks.name)
     });
-    console.log("this.state.cardColour", this.state.cardColour);
+    if (basketDrinks.includes(drinkSelected.name)){
+      this.setState({
+        basketAction: true
+      });
+    } else {
+      this.setState({
+        basketAction: false
+      })
+    }
+  this.setState({
+    isVisible: true,
+    drinkSelected: drinkSelected,
+  });
   };
 
   onBackdropPress = () => {
@@ -49,19 +51,6 @@ class TabbedCategories extends Component {
     });
   };
 
-  _onLongPressButton = (i, u) => {
-    const drinkSelected = this.props.drinks[i];
-    this.setState({
-      itemSelected: u.name,
-      drinkSelected: u
-    });
-    if (this.basketItems(this.props.drinks[i].name) > 0) {
-      this.setState({
-        trashCanVisible: !this.state.trashCanVisible
-      });
-    }
-  };
-
   basketItems = name => {
     let quantity = 0;
     this.props.basket.map(drink => {
@@ -70,18 +59,10 @@ class TabbedCategories extends Component {
     return quantity;
   };
 
-  valueChanged = value => {
-    if (value === 0) {
-      return;
-    }
-    const drink = this.state.drinkSelected;
-    const quantity = Number(value.toFixed(2));
-    let drinksObj = {
-      ...drink,
-      quantity
-    };
-    this.props.updateBasket(drinksObj, "update");
+  priceValidation = price => {
+    return parseFloat(Math.round(price * 100) / 100).toFixed(2)
   };
+
 
   render() {
     return (
@@ -92,7 +73,6 @@ class TabbedCategories extends Component {
                 <TouchableOpacity
                   key={i}
                   onPress={() => this.openOverlay(i)}
-                  onLongPress={() => this._onLongPressButton(i, u)}
                 >
                   <Card>
                     <View style={styles.rowContainer}>
@@ -101,7 +81,7 @@ class TabbedCategories extends Component {
                       </View>
 
                       <View>
-                        <Text style={styles.price}>£{u.price}</Text>
+                        <Text style={styles.price}>£{this.priceValidation(u.price)}</Text>
                       </View>
                     </View>
 
@@ -114,31 +94,6 @@ class TabbedCategories extends Component {
                           x{this.basketItems(u.name)} Pint{" "}
                         </Text>
                       ) : null}
-
-                    </View>
-
-
-
-                    <View style={styles.rowContainer}>
-
-                      {this.state.trashCanVisible &&
-                      this.props.drinks[i].name === this.state.itemSelected ? (
-                        <View style={styles.rightContainer}>
-                          <Icon
-                            name="trash-o"
-                            style={styles.trash}
-                            size={30}
-                            color={colours.orange}
-                          />
-                          <SimpleStepper
-                            value={this.basketItems(u.name)}
-                            imageHeight={10}
-                            imageWidth={20}
-                            tintColor={colours.orange}
-                            valueChanged={value => this.valueChanged(value)}
-                          />
-                        </View>
-                      ) : null}
                     </View>
                   </Card>
                 </TouchableOpacity>
@@ -150,6 +105,7 @@ class TabbedCategories extends Component {
           drinkDetails={this.state.drinkSelected}
           isVisible={this.state.isVisible}
           onBackdropPress={this.onBackdropPress}
+          basketAction={this.state.basketAction}
         />
       </View>
     );
@@ -204,6 +160,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  endContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end"
+  },
   title: {
     paddingTop: 10,
     paddingLeft: Dimensions.get("window").width / 14,
@@ -225,7 +185,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TabbedCategories);
+export default connect(mapStateToProps, mapDispatchToProps)(TabbedCategories);

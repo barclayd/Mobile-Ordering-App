@@ -9,13 +9,12 @@ import {
 } from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
-const orderRedirect = async (collectionId, userId, collectionPoint, date) => {
+const orderRedirect = async (collectionId, userId, collectionPoint, date, orderId) => {
     await popToRoot('ViewMenus');
-    await setOrderStatus('ViewMenus', collectionId, userId, collectionPoint, date);
+    await setOrderStatus('ViewMenus', collectionId, userId, collectionPoint, date, orderId);
 };
 
 export function* submitOrderSaga(action) {
-
     yield stripe.setOptions({
         publishableKey: 'pk_test_YTzEkzlEFVjyy6GAez7JqTse'
     });
@@ -35,6 +34,8 @@ export function* submitOrderSaga(action) {
 
     const date = new Date().toISOString();
     const user = yield AsyncStorage.getItem('userId');
+    const collectionId = action.paymentInfo.collectionPoint.id;
+
     yield put(actions.submitOrderStart());
     let drinksList = [];
     action.order.map(drink => {
@@ -49,13 +50,14 @@ export function* submitOrderSaga(action) {
     try {
         let requestBody = {
             query: `
-                mutation CreateOrder($drinks: [ID!], $collectionPoint: String!, $status: String!, $date: String!, $userInfo: ID!) {
+                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID!) {
                     createOrder(orderInput: {
                         drinks: $drinks
                         collectionPoint: $collectionPoint
                         status: $status
                         date: $date
                         userInfo: $userInfo
+                        price: $price
                     }) {
                         _id
                         drinks {
@@ -63,7 +65,11 @@ export function* submitOrderSaga(action) {
                           price
                           _id
                        }
-                        collectionPoint
+                        collectionPoint {
+                            name
+                            collectionPointId
+                        }
+                        price
                         status
                         transactionId
                         userInfo {
@@ -77,10 +83,11 @@ export function* submitOrderSaga(action) {
             `,
             variables: {
                 drinks: drinksList,
-                collectionPoint: "SU Lounge",
+                collectionPoint: collectionId,
                 status: "PENDING",
                 date: date,
-                userInfo: user ? user : '5c69c7c058574e24c841ddc8'
+                userInfo: user,
+                price: orderPrice
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody), {
@@ -90,19 +97,21 @@ export function* submitOrderSaga(action) {
             }
         });
         if (response.data.errors) {
-            console.log('error was found');
             yield put(actions.submitOrderFail(response.data.errors[0].message));
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
+            const orderId = response.data.data.createOrder._id;
+            yield AsyncStorage.setItem("orderId", orderId);
+            yield AsyncStorage.setItem("lastOrder", JSON.stringify(response.data));
             yield put(actions.submitOrderSuccess(response.data));
             yield put(actions.emptyBasketStart());
             yield emptyBasket();
             yield put(actions.emptyBasketSuccess());
             const collectionId = response.data.data.createOrder.collectionId;
-            const collectionPoint = response.data.data.createOrder.collectionPoint;
+            const collectionPoint = response.data.data.createOrder.collectionPoint.name;
             const date = response.data.data.createOrder.date;
-            yield orderRedirect(collectionId, user, collectionPoint, date);
+            yield orderRedirect(collectionId, user, collectionPoint, date, orderId);
         }
     } catch (err) {
         yield put(actions.submitOrderFail(err));
@@ -124,8 +133,12 @@ export function* orderHistorySaga(action) {
                             category
                             price
                         }
-                        collectionPoint
+                        collectionPoint {
+                            name
+                            collectionPointId
+                        }
                         status
+                        collectionId
                         date
                         _id
                         transactionId
@@ -153,6 +166,55 @@ export function* orderHistorySaga(action) {
     } catch (err) {
         console.log(err);
         yield put(actions.orderHistoryFailure());
+    }
+}
+
+export function* orderStatusSaga(action){
+    yield put(actions.orderStatusStart());
+    const id = yield AsyncStorage.getItem("orderId");
+    try {
+        let requestBody = {
+            query: `
+                query FindOrderById($id: ID!) {
+                    findOrderById(id: $id) {
+                        drinks {
+                            name
+                            category
+                            price
+                        }
+                        collectionPoint {
+                            name
+                            collectionPointId
+                        }
+                        price
+                        status
+                        date
+                        _id
+                        collectionId
+                        transactionId
+                        userInfo{
+                            email
+                            name
+                        }
+                   }
+                }
+            `,
+            variables: {
+                id: id ? id : '5c9680a7e76095a316b3687b'
+            }
+        };
+        const response = yield axios.post('/', JSON.stringify(requestBody));
+        if (response.data.errors) {
+            yield put(actions.orderHistoryFailure(response.data.errors[0].message));
+            throw Error(response.data.errors[0].message);
+        }
+        if (response.status === 200 && response.status !== 201) {
+        // console.log("response",response)
+        yield put(actions.orderStatusSuccess(response.data.data.findOrderById))
+        }
+    } catch (err) {
+        console.log(err);
+        yield put(actions.orderStatusFailure(err));
     }
 }
 
