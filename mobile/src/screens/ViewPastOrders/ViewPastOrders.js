@@ -38,7 +38,7 @@ const dates = [
   }
 ];
 
-class componentName extends Component {
+class ViewPastOrders extends Component {
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this);
@@ -98,11 +98,10 @@ class componentName extends Component {
     });
   };
 
-  qrcode = () => {
-    userId = AsyncStorage.getItem("userId");
+  qrCode = () => {
+    const userId = AsyncStorage.getItem("userId");
     if (this.state.selectedOrder && userId) {
 
-      let qrCode = null;
       const qrData = {
         userId: this.state.accountName,
         collectionId: this.state.selectedOrder.collectionPoint.collectionPointId
@@ -131,15 +130,15 @@ class componentName extends Component {
     order.drinks.map(drink => {
       drinksList.push(drink.name);
     });
-    let indiDrinks = [...new Set(drinksList)];
-    indiDrinks.map(indi => {
-      var count = drinksList.reduce(function(n, val) {
-        return n + (val === indi);
+    let individualDrinks = [...new Set(drinksList)];
+    individualDrinks.map(drink => {
+      const count = drinksList.reduce((n, val) => {
+        return n + (val === drink);
       }, 0);
-      finalList.push({ name: indi, quantity: count });
+      finalList.push({ name: drink, quantity: count });
     });
     return finalList.map(drink => {
-      <Text key={index} style={styles.subInformationDrinksText}>
+      return <Text key={index} style={styles.subInformationDrinksText}>
         {drink.quantity} x{drink.name}
       </Text>;
     });
@@ -175,16 +174,16 @@ class componentName extends Component {
     });
   };
 
-  // _DateTimePicker = () =>
-  //     this.setState({
-  //       isDateTimePickerVisible: !this.state.isDateTimePickerVisible
-  //     });
+  _DateTimePicker = () =>
+      this.setState({
+        isDateTimePickerVisible: !this.state.isDateTimePickerVisible
+      });
 
-  //   _handleDatePicked = (date) => {
-  //     // const newDate = moment(new Date(date.toString().substr(0, 16))).format('DD-MM-YYYY');
-  //     console.log("A date has been picked: ", date);
-  //     this._DateTimePicker();
-  //   };
+    _handleDatePicked = (date) => {
+      // const newDate = moment(new Date(date.toString().substr(0, 16))).format('DD-MM-YYYY');
+      console.log("A date has been picked: ", date);
+      this._DateTimePicker();
+    };
 
   render() {
     const spinner = this.props.ordersLoading ? (
@@ -213,14 +212,7 @@ class componentName extends Component {
           <TouchableOpacity onPress={() => this.toggleOrderOverlay(i)} key={i}>
             <Card
               key={i}
-              title={
-                order.transactionId
-                  ? `#${order.transactionId.slice(0, 7).toUpperCase()}`
-                  : `#${Math.random()
-                      .toString(36)
-                      .substring(2, 9)
-                      .toUpperCase()}`
-              }
+              title={`#${order.collectionId}`}
               containerStyle={{ backgroundColor: colours.lightGrey }}
               titleStyle={{
                 color: colours.midBlue,
@@ -233,10 +225,11 @@ class componentName extends Component {
                 key={i}
                 titleStyle={{
                   color: colours.midnightBlack,
-                  fontWeight: "bold"
+                  fontWeight: "bold",
+                    textAlign: 'center'
                 }}
                 containerStyle={{ backgroundColor: colours.lightGrey }}
-                title={`The Taf: ${order.collectionPoint.name}`}
+                title={`${order.collectionPoint.bar.name} | ${order.collectionPoint.name}`}
                 bottomDivider
                 subtitle={
                   <View style={styles.subtitleView}>
@@ -247,6 +240,7 @@ class componentName extends Component {
                         justifyContent: "flex-start"
                       }}
                     >
+
                       <Text
                         style={{
                           color: colours.midnightBlack,
@@ -270,14 +264,7 @@ class componentName extends Component {
                         justifyContent: "flex-start"
                       }}
                     >
-                      <Text
-                        style={{
-                          color: colours.midnightBlack,
-                          fontWeight: "bold"
-                        }}
-                      >
-                        Order Status
-                      </Text>
+                      <Text style={{color: colours.midnightBlack, fontWeight: "bold"}}>Order Status: </Text>
                       <Text style={styles.subInformationTextPrice}>
                         {order.status}
                       </Text>
@@ -298,7 +285,7 @@ class componentName extends Component {
                     {this.state.showOrderOverlay &&
                     this.state.selectedOrder._id === order._id ? (
                       <View>
-                        <View style={styles.qrCode}>{this.qrcode()}</View>
+                        <View style={styles.qrCode}>{this.qrCode()}</View>
                       </View>
                     ) : null}
                   </View>
@@ -312,7 +299,7 @@ class componentName extends Component {
       return (
         <View style={[styles.container]}>
           <View>
-            
+
             {this.state.showFilters ? (
               <View>
                 <TextInput
@@ -334,7 +321,7 @@ class componentName extends Component {
                   onChangeText={val => this.inputUpdateHandler("orderId", val)}
                 />
 
-                {/* <View style={{ paddingVertical: 5 }} />
+                <View style={{ paddingVertical: 5 }} />
 
                 <TouchableOpacity onPress={() => this._DateTimePicker()}>
                   <Text style={{color: colours.pureWhite, fontSize: 16}}>Show DatePicker</Text>
@@ -342,11 +329,11 @@ class componentName extends Component {
                 <DateTimePicker
                   date={this.state.selectedDate}
                   isVisible={this.state.isDateTimePickerVisible}
-                  onConfirm={() => this._handleDatePicked()}
-                  onCancel={() => this._DateTimePicker()}
+                  onConfirm={this._handleDatePicked}
+                  onCancel={this._DateTimePicker}
                   mode={'datetime'}
                   is24Hour={true}
-                /> */}
+                />
 
                 {/* <View style={{flexDirection: "row", justifyContent: "center", top: 0, width: (Dimensions.get("window").width) / 1.09,}}>
                 <RNPickerSelect
@@ -422,7 +409,8 @@ const styles = StyleSheet.create({
   },
   qrCode: {
     backgroundColor: colours.pureWhite,
-    alignSelf: "center"
+    alignSelf: "center",
+      padding: 20
   },
   input: {
     width: Dimensions.get("window").width / 1.09,
@@ -455,7 +443,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentName);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewPastOrders);
