@@ -7,7 +7,6 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
-  AsyncStorage,
   TextInput
 } from "react-native";
 import validate from "../../utility/validation";

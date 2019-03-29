@@ -17,7 +17,7 @@ class Checkout extends Component {
 
     state = {
         isScrollEnabled: false,
-        basketBarHeight: screenHeight - (Dimensions.get('window').height / 4.8),
+        basketBarHeight: screenHeight - (Dimensions.get('window').height / 4.4),
         activeSections: [],
         multipleSelect: true,
         editVisible: false,
@@ -347,7 +347,7 @@ class Checkout extends Component {
                                 </View>
                             </View>
                         </Animated.View>
-                        <View style={{ height: 1000 }}>
+                        <View style={{ height: (100 + (100*this.props.basket.length)) }}>
                             <Accordion
                                 activeSections={activeSections}
                                 sections={this.props.basketCategories}
@@ -547,6 +547,5 @@ const mapDispatchToProps = dispatch => {
       findCollectionPoints: () => dispatch(actions.findCollectionPoints())
     };
   };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout)
