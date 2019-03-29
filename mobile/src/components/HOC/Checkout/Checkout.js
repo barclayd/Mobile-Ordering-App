@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, ActivityIndicator, AsyncStorage} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -7,9 +7,10 @@ import {ListItem, Card, withBadge} from 'react-native-elements';
 import * as colours from '../../../styles/colourScheme';
 import {connect} from 'react-redux';
 import * as actions from "../../../store/actions/index"
-import ApplePay from '../../../assets/apple-pay-payment-mark.svg';
+import ApplePay from '../../../assets/apple-pay.svg';
 import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
 import Payment from '../../UI/Overlays/Payment';
+import {setLoginScreen, setLoginSettings} from "../../../utility/navigation";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -22,7 +23,8 @@ class Checkout extends Component {
         multipleSelect: true,
         editVisible: false,
         emptyBasketChecked: false,
-        showPaymentOverlay: false
+        showPaymentOverlay: false,
+        collectionPoint: ""
     };
 
 
@@ -70,7 +72,23 @@ class Checkout extends Component {
         })
     }
 
+    componentDidMount(){
+        this.props.findCollectionPoints()
+    }
+
     addValue = () => {
+    };
+
+    collectionPoints = () => {
+        let collectionPoints = [];
+        if (this.props.collectionPoint.collectionPoints){
+            this.props.collectionPoint.collectionPoints.map(
+                cps => {
+                    collectionPoints.push({name: cps.name, id: cps._id})
+                }
+            )
+        }
+        return collectionPoints;
     };
 
     basketItems = () => {
@@ -101,7 +119,6 @@ class Checkout extends Component {
 
     onSubmitOrder = (paymentInfo) => {
         const basketPrice = this.basketPrice();
-        console.log(basketPrice);
         this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, basketPrice);
         this.setState({
             showPaymentOverlay: false
@@ -177,7 +194,12 @@ class Checkout extends Component {
         }
     };
 
-    togglePaymentOverlay = () => {
+    togglePaymentOverlay = async () => {
+        const userId = await AsyncStorage.getItem('userId');
+        if (!userId) {
+            // setLoginSettings();
+            // setLoginScreen(this.props.componentId, 'Login');
+        }
         this.setState(prevState => {
             return {
                 ...prevState,
@@ -343,14 +365,16 @@ class Checkout extends Component {
                                 duration={400}
                                 onChange={this.setSections}
                             />
+
                             <Payment
                                 visible={this.state.showPaymentOverlay}
                                 basketItems={this.basketItems()}
                                 basketPrice={this.basketPrice()}
+                                collectionPoints={this.collectionPoints()}
                                 onCancel={this.togglePaymentOverlay}
                                 submitOrder={this.onSubmitOrder}
                                 hidePayment={this.togglePaymentOverlay}/>
-                            {this.basketItems() > 0 ?
+                            {this.basketItems() > 0 && !this.props.orderInProgress ?
                             <View style={{marginTop: 20}}>
                                     <View style={styles.paymentButtons}>
                                         <TouchableHighlight>
@@ -363,7 +387,13 @@ class Checkout extends Component {
                                         </TouchableHighlight>
                                     </View>
                                     </View>
-                                : <View style={styles.emptyBasket}>
+                                : this.props.orderInProgress ?
+                                    <View>
+                                        <Text style={styles.emptyBasketHeader}>Your Order is being Processed...</Text>
+                                        <ActivityIndicator size={"large"} color={colours.orange}/>
+                                    </View>
+                                    :
+                                    <View style={styles.emptyBasket}>
                                     <Text style={styles.emptyBasketHeader}>Your Basket is Empty...</Text>
                                     <Text style={styles.emptyBasketText}>Explore the thirst quenching drinks on offer in the menus</Text>
                                 </View> }
@@ -511,14 +541,17 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         basket: state.basket.basket,
-        basketCategories: state.basket.categories
+        basketCategories: state.basket.categories,
+        collectionPoint: state.collectionPoint,
+        orderInProgress: state.order.orderInProgress
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
       submitOrder: (basket, componentId, paymentInfo, basketPrice) => dispatch(actions.submitOrder(basket, componentId, paymentInfo, basketPrice)),
-      emptyBasket: () => dispatch(actions.emptyBasket())
+      emptyBasket: () => dispatch(actions.emptyBasket()),
+      findCollectionPoints: () => dispatch(actions.findCollectionPoints())
     };
   };
 

@@ -1,10 +1,11 @@
 import {takeEvery, takeLatest, all} from 'redux-saga/effects';
 import {authUserSaga, logoutSaga, authCheckStateSaga, checkAuthTimeoutSaga, autoSignInSaga} from "./auth";
-import {findBarSaga} from './bar';
+import {findBarSaga, updateLastVisitedBarSaga, findAllBarsSaga} from './bar';
 import {findDrinksSaga, findDrinkCategoriesSaga} from './drinks';
 import {updateBasketSaga, emptyBasketSaga} from './basket';
-import {submitOrderSaga, orderHistorySaga} from './order';
+import {submitOrderSaga, orderHistorySaga, orderStatusSaga} from './order';
 import * as actionTypes from '../actions/actionTypes';
+import { findCollectionPointsSaga } from './collectionPoint';
 
 export function* watchAuth() {
     yield all ([
@@ -18,6 +19,8 @@ export function* watchAuth() {
 
 export function* watchBar() {
     yield takeLatest(actionTypes.FIND_BAR, findBarSaga);
+    yield takeLatest(actionTypes.UPDATE_LAST_VISITED_BAR, updateLastVisitedBarSaga);
+    yield takeLatest(actionTypes.FIND_ALL_BARS, findAllBarsSaga);
 }
 
 export function* watchDrinks() {
@@ -33,4 +36,9 @@ export function* watchBasket() {
 export function* watchOrder() {
     yield takeLatest(actionTypes.SUBMIT_ORDER, submitOrderSaga);
     yield takeLatest(actionTypes.ORDER_HISTORY, orderHistorySaga);
+    yield takeLatest(actionTypes.RETRIEVE_ORDER_STATUS, orderStatusSaga);
+}
+
+export function* watchCollectionPoint() {
+    yield takeLatest(actionTypes.FIND_COLLECTION_POINTS, findCollectionPointsSaga);
 }

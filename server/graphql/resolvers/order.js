@@ -1,6 +1,8 @@
 const Drink = require('../../models/drink');
 const Order = require('../../models/order');
 const User = require('../../models/user');
+const BarStaff = require('../../models/barStaff');
+const CollectionPoint = require('../../models/collectionPoint');
 const {dateToString} = require("../../helpers/date");
 const {transformOrder} = require('./merge');
 const {drinks} = require('./mergeResolvers/drinks');
@@ -27,6 +29,10 @@ module.exports = {
             if (!user) {
                 throw new Error ('Invalid user account to process order');
             }
+            const collectionPoint = await CollectionPoint.findById(args.orderInput.collectionPoint);
+            if (!collectionPoint) {
+                throw new Error ('Invalid collection point to process order');
+            }
             const generatedTransactionId = uuid();
             const collectionId = randomString.generate({
                 length: 4,
@@ -43,13 +49,14 @@ module.exports = {
             }
             const createdOrder = new Order({
                 drinks: foundDrinks,
-                collectionPoint: args.orderInput.collectionPoint,
+                collectionPoint: collectionPoint,
                 status: args.orderInput.status,
                 orderAssignedTo: args.orderInput.orderAssignedTo,
                 date: dateToString(args.orderInput.date),
                 userInfo: user,
                 collectionId: collectionId,
-                transactionId: generatedTransactionId
+                transactionId: generatedTransactionId,
+                price: args.orderInput.price
             });
             const result = await createdOrder.save();
             return transformOrder(result);
@@ -59,7 +66,7 @@ module.exports = {
     },
     findOrdersByUser: async ({userInfo}) => {
         try {
-            const foundOrders = await Order.find({userInfo}).populate('userInfo');
+            const foundOrders = await Order.find({userInfo}).populate('userInfo').populate('collectionPoint');
             return foundOrders.reverse().map(async foundOrder => {
                 const modifiedUserInfo = {
                     ...foundOrder.userInfo._doc,
@@ -70,6 +77,7 @@ module.exports = {
                     _id: foundOrder._id,
                     drinks: returnedDrinks,
                     collectionPoint: foundOrder.collectionPoint,
+                    collectionId: foundOrder.collectionId,
                     status: foundOrder.status,
                     orderAssignedTo: foundOrder.orderAssignedTo,
                     date: dateToString(foundOrder._doc.date),
@@ -81,9 +89,38 @@ module.exports = {
             throw err;
         }
     },
+    findOrdersByCollectionPoint: async ({collectionPoint}) => {
+        try {
+            const foundCollectionPoint = await CollectionPoint.findOne({_id: collectionPoint});
+            if (!foundCollectionPoint) {
+                throw new Error(`Collection Point ${collectionPoint} does not exist`);
+            }
+            const foundOrders = await Order.find({$and: [{collectionPoint}, {status: ["AWAITING_COLLECTION", "PENDING", "IN_PROGRESS"]}]}).populate('userInfo').populate('collectionPoint');
+            return foundOrders.reverse().map(async foundOrder => {
+                const modifiedUserInfo = {
+                    ...foundOrder.userInfo._doc,
+                    password: null
+                };
+                const returnedDrinks = await drinks(foundOrder.drinks);
+                return {
+                    _id: foundOrder._id,
+                    drinks: returnedDrinks,
+                    collectionPoint: foundOrder.collectionPoint,
+                    collectionId: foundOrder.collectionId,
+                    status: foundOrder.status,
+                    orderAssignedTo: foundOrder.orderAssignedTo,
+                    date: dateToString(foundOrder._doc.date),
+                    userInfo: modifiedUserInfo,
+                    transactionId: foundOrder.transactionId
+                };
+            });
+            } catch (err) {
+            throw err;
+        }
+    },
     findOrders: async () => {
         try {
-            const foundOrders = await Order.find().populate('userInfo');
+            const foundOrders = await Order.find().populate('userInfo').populate('collectionPoint');
             return foundOrders.reverse().map(async foundOrder => {
                 const returnedDrinks = await drinks(foundOrder.drinks);
                 return {
@@ -101,5 +138,78 @@ module.exports = {
             throw err;
         }
     },
+    findOrderById: async ({id}) => {
+        try {
+            const foundOrder = await Order.findOne({_id: id}).populate('userInfo').populate('collectionPoint');
+            const returnedDrinks = await drinks(foundOrder.drinks);
+            return {
+                _id: foundOrder._id,
+                drinks: returnedDrinks,
+                collectionPoint: foundOrder.collectionPoint,
+                collectionId: foundOrder.collectionId,
+                status: foundOrder.status,
+                orderAssignedTo: foundOrder.orderAssignedTo,
+                date: dateToString(foundOrder._doc.date),
+                userInfo: foundOrder.userInfo,
+                transactionId: foundOrder.transactionId,
+                price: foundOrder.price
+            };
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+    updateOrder: async (args) => {
+        try {
+            const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderId}).populate('orderAssignedTo');
+            foundOrder.status = args.orderStatusInput.status;
+            const returnedDrinks = await drinks(foundOrder.drinks);
+            if (args.orderStatusInput.barStaffId) {
+                foundOrder.orderAssignedTo = args.orderStatusInput.barStaffId;
+            }
+            const barStaffMember = await BarStaff.findOne({_id: args.orderStatusInput.barStaffId});
+            await foundOrder.save();
+            return {
+                _id: foundOrder._id,
+                drinks: returnedDrinks,
+                collectionPoint: foundOrder.collectionPoint,
+                collectionId: foundOrder.collectionPoint.collectionId,
+                status: foundOrder.status,
+                orderAssignedTo: barStaffMember,
+                date: dateToString(foundOrder._doc.date),
+                userInfo: foundOrder.userInfo,
+                transactionId: foundOrder.transactionId
+            }
+        } catch (err) {
+            throw err;
+        }
+    },
+    updateOrderAssignedTo: async (args) => {
+        try {
+            const foundOrder = await Order.findOne({_id: args.orderAssignedToInput.orderId}).populate('orderAssignedTo');
+            if (args.orderAssignedToInput.barStaffId) {
+                foundOrder.orderAssignedTo = args.orderAssignedToInput.barStaffId;
+            } else {
+                foundOrder.orderAssignedTo = null;
+            }
+            const barStaffMember = await BarStaff.findOne({_id: args.orderAssignedToInput.barStaffId});
+            await foundOrder.save();
+            return {
+                _id: foundOrder._id,
+                drinks: foundOrder.drinks,
+                collectionPoint: foundOrder.collectionPoint,
+                collectionId: foundOrder.collectionPoint.collectionId,
+                status: foundOrder.status,
+                orderAssignedTo: barStaffMember,
+                date: dateToString(foundOrder._doc.date),
+                userInfo: foundOrder.userInfo,
+                transactionId: foundOrder.transactionId
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
 };
+
+
 
