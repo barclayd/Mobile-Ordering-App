@@ -43,7 +43,8 @@ class ActiveOrder extends Component {
       this.props.findOrderById(orderNumber);
     }
     this.setState({
-      accountName: await this.getAccountName()
+      accountName: await this.getAccountName(),
+      barName: await this.getBarName()
     });
   }
 
@@ -97,6 +98,10 @@ class ActiveOrder extends Component {
 
   getOrderDetails = async () => {
     return await AsyncStorage.getItem("orderId");
+  };
+
+  getBarName = async () => {
+    return await AsyncStorage.getItem("barName");
   };
 
   onNotification = (notif) => {
@@ -182,7 +187,6 @@ class ActiveOrder extends Component {
                 <Text style={styles.orderText}>Collection Point:</Text>
                 <Text style={styles.orderSubtitle}>
                   {this.state.orderStatus.collectionPoint.name}
-                  {this.state.orderStatus.collectionPoint.collectionPoindId}
                 </Text>
               </View>
               <Text style={styles.orderText}>
@@ -223,7 +227,7 @@ class ActiveOrder extends Component {
               <View style={styles.button}>
                 <ButtonBackground
                     color={colours.midGrey}
-                    onPress={() => this.notification.scheduleNotification('Order marked as Ready', this.state.orderStatus.collectionId)}
+                    onPress={() => this.notification.scheduleNotification('Ready for Collection', this.state.barName, this.state.orderStatus.collectionId, this.state.orderStatus.collectionPoint.name)}
                     textColor={colours.midnightBlack}
                 >
                   Send Notification Reminder
