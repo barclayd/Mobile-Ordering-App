@@ -36,6 +36,23 @@ class SwitchBar extends Component {
         }
     };
 
+    componentDidAppear() {
+        navigator.geolocation.requestAuthorization();
+        navigator.geolocation.getCurrentPosition(pos => {
+            const foundCoordinates = {
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude
+            };
+            this.setState({
+                coordinates: foundCoordinates
+            });
+        });
+    }
+
+    componentDidDisappear() {
+        navigator.geolocation.stopObserving();
+    }
+
     inputUpdateHandler = (key, value) => {
 
         this.setState(prevState => {
@@ -127,7 +144,7 @@ class SwitchBar extends Component {
                         </View>
                     </View>
                     <View style={styles.mapView}>
-                        <MapDisplay componentId={this.props.componentId} redirect={true}/>
+                        <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} redirect={true}/>
                     </View>
                 </View>
             </ScrollView>

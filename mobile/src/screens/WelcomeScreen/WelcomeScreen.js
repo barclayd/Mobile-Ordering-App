@@ -25,6 +25,7 @@ let submittedCode;
 class WelcomeScreen extends Component {
 
     async componentDidMount() {
+        Navigation.events().bindComponent(this);
         this.props.onTryAutoSignIn(this.props.componentId);
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
@@ -42,7 +43,8 @@ class WelcomeScreen extends Component {
                     minLength: 4
                 }
             }
-        }
+        },
+        coordinates: {}
     };
 
     onSubmitCodeHandler = () => {
@@ -51,6 +53,23 @@ class WelcomeScreen extends Component {
             submittedCode = this.state.controls.barCode.value;
         }
     };
+
+    componentDidAppear() {
+        navigator.geolocation.requestAuthorization();
+        navigator.geolocation.getCurrentPosition(pos => {
+            const foundCoordinates = {
+                        latitude: pos.coords.latitude,
+                        longitude: pos.coords.longitude
+            };
+            this.setState({
+                coordinates: foundCoordinates
+            });
+        });
+    }
+
+    componentDidDisappear() {
+        navigator.geolocation.stopObserving();
+    }
 
     inputUpdateHandler = (key, value) => {
 
@@ -132,7 +151,7 @@ class WelcomeScreen extends Component {
                                 </View>
                             </View>
                             <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>
-                                <MapDisplay componentId={this.props.componentId}/>
+                                <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates}/>
                             </View>
                         </Swiper>
                     </WelcomeBackground>
@@ -244,7 +263,8 @@ const mapStateToProps = state => {
         barLoading: state.bar.loading,
         barError: state.bar.error,
         userId: state.auth.userId,
-        name: state.auth.name
+        name: state.auth.name,
+        bars: state.bar.bars
     }
 };
 
