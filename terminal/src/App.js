@@ -277,31 +277,55 @@ class App extends Component {
 
   // Runs an inteligent queuing algorithm to pull the top order, and similar top orders at once into the current staff member's in-progress feed
   TakeNextOrdersFromQueue = () => {
-    let mostRecentOrder = this.state.pendingOrders[0];
-    
+
+    const firstOrder = this.state.pendingOrders[0]; // Get the top order to always be taken from queue
     const ordersToScan = 4; // How many of the top orders to check for similarities
     const maxOrdersToTake = 3; // How many orders MAX can be taken automatically at once
-    console.log(this.state.pendingOrders)
-    
-    let orderMatches = [];
-    
+    const matchThreshold = 40; // Percentage match required to pull order
+
+
+    // Loop through orders under the top order
+    let orderMatches = []; // Array holding IDs of orders under firstOrder and their number of matches
     for (let i = 1, len=ordersToScan+1; i < len; i++) {
       let orderData = this.state.pendingOrders[i];
       if (!orderData) break; // If no order exists at this index, stop scanning
 
-      // Loop through each drink in the mostRecentOrder
-      for (let i = 0, len=mostRecentOrder.drinks; i < len; i++) {
-        
-      }
-      console.log(orderData.drinks)
+      // Loop through each drink in the top/firstOrder to see if it's in the orderData
+      let matches = 0;
+      firstOrder.drinks.forEach(function(firstOrderDrink) {
+        if (orderData.drinks.some(drink => {
+          return firstOrderDrink._id === drink._id
+        })) matches++
+      });
+
+      // Add order to list of orders with matches
+      if (matches > 0) orderMatches.push({id: orderData._id, matches: matches})
     }
 
+    // Calculate which orders to take
+    let ordersToTake = [firstOrder._id]; // Array of orders to be taken by bartender
 
-    let ordersToTake = [mostRecentOrder._id];
+    // Sort orderMatches by match count
+    orderMatches.sort((a,b)=>{
+      if (a.matches > b.matches) return 1;
+      if (a.matches < b.matches) return -1;
+      return 0;
+    })
 
+    // Take top n matched orders from orderMatches
+    for (let i = 0, len=maxOrdersToTake-1; i < len; i++) {
+      const orderMatch = orderMatches[i];
+      if (!orderMatch) break; // Break for when orderMatches is smaller than maxOrdersToTake
+
+      const matchPercentage = firstOrder.drinks.length / orderMatch.matches * 100
+      if (matchPercentage < matchThreshold) break; // Stop taking orders from orderMatches once an order doesn't meet the threshold
+      console.log(matchPercentage)
+      ordersToTake.push(orderMatch.id); // Add order to ordersToTake
+    }
+    
     // Run API to take all orders in ordersToTake
     for (let i = 0, len = ordersToTake.length; i < len; i++) {
-      // this.props.updateOrder(ordersToTake[i], "IN_PROGRESS", this.state.selectedStaffMemberID)
+      this.props.updateOrder(ordersToTake[i], "IN_PROGRESS", this.state.selectedStaffMemberID)
     }
   }
 
