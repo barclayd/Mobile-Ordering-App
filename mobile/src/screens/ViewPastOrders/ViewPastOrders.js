@@ -48,6 +48,7 @@ class ViewPastOrders extends Component {
     selectedOrder: null,
     showOrderOverlay: false,
     arrayHolder: [],
+    dateArrayHolder: [],
     currentDate: new Date(),
     isDateTimePickerVisible: false,
     selectedDate: new Date(),
@@ -60,7 +61,7 @@ class ViewPastOrders extends Component {
         value: null,
         valid: false,
         validationRules: {
-          minLength: 7
+          minLength: 4
         }
       }
     }
@@ -74,7 +75,8 @@ class ViewPastOrders extends Component {
     if (!nextProps.loading) {
       this.setState({
         pastOrders: nextProps.pastOrders,
-        arrayHolder: nextProps.pastOrders
+        arrayHolder: nextProps.pastOrders,
+        dateArrayHolder: nextProps.pastOrders
       });
     }
   }
@@ -165,7 +167,7 @@ class ViewPastOrders extends Component {
     });
 
     const newData = this.state.arrayHolder.filter(order => {
-      const itemData = order.transactionId.slice(0, 7).toLowerCase();
+      const itemData = order.collectionId.toLowerCase();
       const text = value.toLowerCase();
       return itemData.indexOf(text) > -1;
     });
@@ -182,6 +184,15 @@ class ViewPastOrders extends Component {
     _handleDatePicked = (date) => {
       // const newDate = moment(new Date(date.toString().substr(0, 16))).format('DD-MM-YYYY');
       console.log("A date has been picked: ", date);
+      const newData = this.state.dateArrayHolder.filter(order => {
+      const itemData = moment(new Date(order.date)).format("DD-MM-YYYY")
+      const pickerDate = moment(date).format("DD-MM-YYYY");
+      return itemData === pickerDate;
+      })
+      console.log(newData)
+      this.setState({
+        pastOrders: newData
+      })
       this._DateTimePicker();
     };
 
@@ -315,7 +326,7 @@ class ViewPastOrders extends Component {
                     }
                   ]}
                   placeholderTextColor={colours.white}
-                  maxLength={7}
+                  maxLength={4}
                   autoCorrect={false}
                   selectionColor={colours.orange}
                   onChangeText={val => this.inputUpdateHandler("orderId", val)}
@@ -326,14 +337,20 @@ class ViewPastOrders extends Component {
                 <TouchableOpacity onPress={() => this._DateTimePicker()}>
                   <Text style={{color: colours.pureWhite, fontSize: 16}}>Show DatePicker</Text>
                 </TouchableOpacity>
+
+                <View style={{paddingVertical: 5}}/>
+                
+                <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center", backgroundColor: colours.pureWhite}}>
                 <DateTimePicker
                   date={this.state.selectedDate}
                   isVisible={this.state.isDateTimePickerVisible}
                   onConfirm={this._handleDatePicked}
                   onCancel={this._DateTimePicker}
-                  mode={'datetime'}
+                  mode={'date'}
                   is24Hour={true}
+                  maximumDate={new Date()}
                 />
+                </View>
 
                 {/* <View style={{flexDirection: "row", justifyContent: "center", top: 0, width: (Dimensions.get("window").width) / 1.09,}}>
                 <RNPickerSelect
