@@ -17,7 +17,7 @@ class Checkout extends Component {
 
     state = {
         isScrollEnabled: false,
-        basketBarHeight: screenHeight - 180,
+        basketBarHeight: screenHeight - (Dimensions.get('window').height / 4.8),
         activeSections: [],
         multipleSelect: true,
         editVisible: false,
@@ -44,12 +44,12 @@ class Checkout extends Component {
                 this.animation.setValue({x: 0, y: gestureState.dy})
             },
             onPanResponderRelease: (event, gestureState) => {
-                if(gestureState.moveY > screenHeight - 180) {
+                if(gestureState.moveY > screenHeight - (screenHeight * 180/812)) {
                     Animated.spring(this.animation.y, {
                         toValue: 0,
                         tension: 1
                     }).start();
-                } else if (gestureState.moveY < 180) {
+                } else if (gestureState.moveY < (screenHeight * 0.180/812)) {
                     Animated.spring(this.animation.y, {
                         toValue: 0,
                         tension: 1
@@ -57,13 +57,13 @@ class Checkout extends Component {
                 } else if (gestureState.dy < 0) {
                     this.setState({isScrollEnabled: true});
                     Animated.spring(this.animation.y, {
-                        toValue: -screenHeight + 140,
+                        toValue: -screenHeight + (screenHeight * 140/812),
                         tension: 1
                     }).start();
                 } else if (gestureState.dy > 0) {
                     this.setState({isScrollEnabled: false});
                     Animated.spring(this.animation.y, {
-                        toValue: screenHeight - 140,
+                        toValue: screenHeight - (screenHeight * 140/812),
                         tension: 1
                     }).start();
                 }
@@ -233,6 +233,7 @@ class Checkout extends Component {
     };
 
     render() {
+        console.log((Dimensions.get('window').height))
         const { activeSections } = this.state;
 
         const BadgedIcon = withBadge(this.basketItems())(Icon);
@@ -242,44 +243,44 @@ class Checkout extends Component {
         };
 
         const animatedImageHeight = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
             outputRange: [64, 32],
             extrapolate: 'clamp'
         });
 
         const animatedTextOpacity = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-500, screenHeight - 180],
+            inputRange: [0, screenHeight-(screenHeight * 500/812), screenHeight - (screenHeight * 180/812)],
             outputRange: [0, 0, 1],
             extrapolate: 'clamp'
         });
 
         const animatedImageMarginLeft = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
-            outputRange: [screenWidth/2-32, 15],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
+            outputRange: [screenWidth/2-(screenWidth * 32/414), screenWidth * 15/414],
             extrapolate: 'clamp'
         });
 
         const animatedHeaderHeight = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
-            outputRange: [screenHeight/5, 90],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
+            outputRange: [screenHeight/5, screenHeight * 90/812],
             extrapolate: 'clamp'
         });
 
         const animatedMainContentOpacity = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-500, screenHeight-90],
+            inputRange: [0, screenHeight-(screenHeight * 500/812), screenHeight-(screenHeight * 90/812)],
             outputRange: [1, 0, 0],
             extrapolate: 'clamp'
         });
 
         const animatedBackgroundColor = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
             outputRange: [colours.midnightBlack, colours.transparent],
             extrapolate: 'clamp'
         });
 
         const animatedSettingsHeight = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
-            outputRange: [screenHeight/12, 90],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
+            outputRange: [screenHeight/12, screenHeight * 90/812],
             extrapolate: 'clamp'
         });
 
