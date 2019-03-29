@@ -71,10 +71,6 @@ class Checkout extends Component {
         })
     }
 
-    componentDidMount(){
-        this.props.findCollectionPoints()
-    }
-
     addValue = () => {
     };
 
@@ -194,6 +190,9 @@ class Checkout extends Component {
     };
 
     togglePaymentOverlay = () => {
+        if (this.state.collectionPoint.length < 1 && !this.state.showPaymentOverlay) {
+            this.props.findCollectionPoints();
+        }
         this.setState(prevState => {
             return {
                 ...prevState,
@@ -233,7 +232,6 @@ class Checkout extends Component {
     };
 
     render() {
-        console.log((Dimensions.get('window').height))
         const { activeSections } = this.state;
 
         const BadgedIcon = withBadge(this.basketItems())(Icon);
@@ -310,7 +308,7 @@ class Checkout extends Component {
 
                             <Animated.View style={{ opacity: animatedTextOpacity, }}>
                                 <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}>
-                                    <Text style={styles.barOrderDetails1}>{this.basketItems()} Drinks   </Text>
+                                    <Text style={styles.barOrderDetails1}>Drinks: {this.basketItems()}        </Text>
                                     <Text style={styles.barOrderDetails2}>    £{this.basketPrice()} </Text>
                                 </Animated.Text>
                             </Animated.View>
