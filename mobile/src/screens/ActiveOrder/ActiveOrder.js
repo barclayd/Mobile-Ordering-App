@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
+    Alert,
   ActivityIndicator, AsyncStorage
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
@@ -15,19 +16,23 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
 import Modal from "react-native-modal";
 import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
+import NotificationService from '../../../src/notifications/NotificationService';
+import appConfig from '../../../app.json';
 import SimpleCrypto from "simple-crypto-js";
 
 class ActiveOrder extends Component {
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this);
+    this.notification= new NotificationService(this.onRegister.bind(this), this.onNotification.bind(this));
   }
 
   state = {
     orderStatus: [],
     showQRCode: false,
     quantities: {},
-    drinks: {}
+    drinks: {},
+    senderId: appConfig.senderID
   };
 
   async componentDidMount() {
@@ -92,6 +97,17 @@ class ActiveOrder extends Component {
 
   getOrderDetails = async () => {
     return await AsyncStorage.getItem("orderId");
+  };
+
+  onNotification = (notif) => {
+    console.log(notif);
+    Alert.alert(notif.title, notif.message);
+  };
+
+  onRegister = (token) => {
+    Alert.alert("Registered !", JSON.stringify(token));
+    console.log(token);
+    this.setState({ registerToken: token.token, gcmRegistered: true });
   };
 
   render() {
@@ -202,6 +218,15 @@ class ActiveOrder extends Component {
                   textColor={colours.pureWhite}
                 >
                   Show QR Code
+                </ButtonBackground>
+              </View>
+              <View style={styles.button}>
+                <ButtonBackground
+                    color={colours.midGrey}
+                    onPress={() => this.notification.scheduleNotification('Order marked as Ready', this.state.orderStatus.collectionId)}
+                    textColor={colours.midnightBlack}
+                >
+                  Send Notification Reminder
                 </ButtonBackground>
               </View>
               <Modal
