@@ -133,7 +133,7 @@ const setMainApp = async (componentId, barName, barCode) => {
                     title: {
                         text: barName ? barName : 'DrinKing'
                     }
-                },
+                }
             }
         }
     });
