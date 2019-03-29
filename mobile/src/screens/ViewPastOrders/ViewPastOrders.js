@@ -7,7 +7,6 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
-  AsyncStorage,
   TextInput
 } from "react-native";
 import validate from "../../utility/validation";
@@ -22,21 +21,6 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import jwt from "expo-jwt";
 import QRCode from "react-native-qrcode-svg";
 import moment from 'moment';
-
-const dates = [
-  {
-    label: "Football",
-    value: "football"
-  },
-  {
-    label: "Baseball",
-    value: "baseball"
-  },
-  {
-    label: "Hockey",
-    value: "hockey"
-  }
-];
 
 class ViewPastOrders extends Component {
   constructor(props) {
@@ -101,49 +85,17 @@ class ViewPastOrders extends Component {
   };
 
   qrCode = () => {
-    const userId = AsyncStorage.getItem("userId");
-    if (this.state.selectedOrder && userId) {
-
+    if (this.state.selectedOrder) {
       const qrData = {
         userId: this.state.accountName,
         collectionId: this.state.selectedOrder.collectionPoint.collectionPointId
       };
-
       const key = "zvBT1lQV1RO9fx6f8";
-      const token = jwt.encode(
-        {
-          qrData
-        },
-        key
-      );
-
-      if (
-        userId &&
-        this.state.selectedOrder.collectionPoint.collectionPointId
-      ) {
+      const token = jwt.encode({qrData}, key);
+      if (this.state.selectedOrder.collectionPoint.collectionPointId) {
         return <QRCode value={token} size={300} />;
       }
     }
-  };
-
-  drinksLogic = order => {
-    let drinksList = [];
-    let finalList = [];
-    order.drinks.map(drink => {
-      drinksList.push(drink.name);
-    });
-    let individualDrinks = [...new Set(drinksList)];
-    individualDrinks.map(drink => {
-      const count = drinksList.reduce((n, val) => {
-        return n + (val === drink);
-      }, 0);
-      finalList.push({ name: drink, quantity: count });
-    });
-    return finalList.map(drink => {
-      return <Text key={index} style={styles.subInformationDrinksText}>
-        {drink.quantity} x{drink.name}
-      </Text>;
-    });
   };
 
   showFilters = () => {
@@ -220,12 +172,12 @@ class ViewPastOrders extends Component {
           drinksList.push(drink.name);
         });
 
-        let indiDrinks = [...new Set(drinksList)];
-        indiDrinks.map(indi => {
-          var count = drinksList.reduce(function(n, val) {
-            return n + (val === indi);
+        let individualDrinks = [...new Set(drinksList)];
+        individualDrinks.map(drink => {
+          const count = drinksList.reduce((n, val) => {
+            return n + (val === drink);
           }, 0);
-          finalList.push({ name: indi, quantity: count });
+          finalList.push({ name: drink, quantity: count });
         });
 
         return (
@@ -299,8 +251,6 @@ class ViewPastOrders extends Component {
                     ))}
 
                     <View style={{ paddingVertical: 5 }} />
-
-                    {/* on card press */}
 
                     {this.state.showOrderOverlay &&
                     this.state.selectedOrder._id === order._id ? (

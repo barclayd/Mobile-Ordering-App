@@ -27,7 +27,7 @@ class ViewMenus extends Component {
 
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+    Navigation.events().bindComponent(this);
   }
 
   componentDidMount() {
