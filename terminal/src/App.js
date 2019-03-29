@@ -281,7 +281,7 @@ class App extends Component {
     const firstOrder = this.state.pendingOrders[0]; // Get the top order to always be taken from queue
     const ordersToScan = 4; // How many of the top orders to check for similarities
     const maxOrdersToTake = 3; // How many orders MAX can be taken automatically at once
-    const matchThreshold = 40; // Percentage match required to pull order
+    const matchThreshold = 30; // Percentage match required to pull order
 
 
     // Loop through orders under the top order
@@ -317,12 +317,11 @@ class App extends Component {
       const orderMatch = orderMatches[i];
       if (!orderMatch) break; // Break for when orderMatches is smaller than maxOrdersToTake
 
-      const matchPercentage = firstOrder.drinks.length / orderMatch.matches * 100
+      const matchPercentage = orderMatch.matches / firstOrder.drinks.length * 100
       if (matchPercentage < matchThreshold) break; // Stop taking orders from orderMatches once an order doesn't meet the threshold
-      console.log(matchPercentage)
       ordersToTake.push(orderMatch.id); // Add order to ordersToTake
     }
-    
+
     // Run API to take all orders in ordersToTake
     for (let i = 0, len = ordersToTake.length; i < len; i++) {
       this.props.updateOrder(ordersToTake[i], "IN_PROGRESS", this.state.selectedStaffMemberID)
