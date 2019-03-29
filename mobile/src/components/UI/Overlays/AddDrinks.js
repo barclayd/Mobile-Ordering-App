@@ -134,8 +134,8 @@ class AddDrinks extends Component {
 const styles = StyleSheet.create({
   textStyle: {
     fontSize:16,
-	color: colours.midnightBlack,
-	textAlign: 'center'
+	  color: colours.midnightBlack,
+	  textAlign: 'center'
   },
 
   buttonStyle: {
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   btnContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    paddingTop: "7%"
+    paddingTop: Dimensions.get("window").height / 44,
   },
   container: {
     flex: 1,
