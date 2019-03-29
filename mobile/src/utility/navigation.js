@@ -176,6 +176,33 @@ const setOrderStatus = async (componentId, collectionId, userId, collectionPoint
     })
 };
 
+const showQRcodeOnNotificationPress = async (showQRcode, collectionId, icon) => {
+    await Navigation.showModal({
+        stack: {
+            children: [{
+                component: {
+                    name: screens.ActiveOrder,
+                    passProps: {
+                        showQRcode,
+                        collectionId
+                    },
+                    options: {
+                        topBar: {
+                            rightButtons: {
+                                id: 'close',
+                                icon: icon,
+                                color: colours.white
+                            },
+                            leftButtons: [],
+                            visible: true,
+                        }
+                    }
+                }
+            }]
+        }
+    })
+};
+
 const setSwitchBars = async (componentId) => {
     let component = componentId;
     if (!componentId) {
@@ -388,5 +415,5 @@ const pop = async (componentId) => {
 };
 
 export {
-    setOrderStatus, setSwitchBars, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks,
+    setOrderStatus, setSwitchBars, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, showQRcodeOnNotificationPress
 }
