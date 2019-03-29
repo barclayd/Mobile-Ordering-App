@@ -11,6 +11,8 @@ import {
 import QRCode from "react-native-qrcode-svg";
 import * as colours from "../../styles/colourScheme";
 import { Navigation } from "react-native-navigation";
+import { RNNotificationBanner } from 'react-native-notification-banner';
+import Icon from 'react-native-vector-icons/Ionicons'
 import * as Progress from "react-native-progress";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
@@ -29,7 +31,7 @@ class ActiveOrder extends Component {
 
   state = {
     orderStatus: [],
-    showQRCode: false,
+    showQRCode: this.props.showQRCode ? this.props.showQRCode : false,
     quantities: {},
     drinks: {},
     senderId: appConfig.senderID
@@ -104,9 +106,9 @@ class ActiveOrder extends Component {
     return await AsyncStorage.getItem("barName");
   };
 
-  onNotification = (notif) => {
-    console.log(notif);
-    Alert.alert(notif.title, notif.message);
+  onNotification = () => {
+    let drinkReady = <Icon name="ios-beer" size={24} color="#FFFFFF" family={"Ionicons"} />;
+    RNNotificationBanner.Success({ title: `Order #${this.state.orderStatus.collectionId}: Ready for Collection`, subTitle: `Order is now available for collection from ${this.state.orderStatus.collectionPoint.name} collection point`, withIcon: true, icon: drinkReady})
   };
 
   onRegister = (token) => {
