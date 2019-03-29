@@ -75,7 +75,7 @@ export default class NotifService {
     scheduleNotification(action, barName, collectionId, collectionPoint) {
         this.lastId++;
         PushNotification.localNotificationSchedule({
-            date: new Date(Date.now() + (10 * 1000)), // in 30 secs
+            date: new Date(Date.now() + (5 * 1000)), // in 30 secs
 
             /* iOS only properties */
             alertAction: 'view', // (optional) default: view

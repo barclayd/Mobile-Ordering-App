@@ -5,16 +5,18 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-    Alert,
-  ActivityIndicator, AsyncStorage
+  Alert,
+  ActivityIndicator, AsyncStorage, Platform
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import * as colours from "../../styles/colourScheme";
 import { Navigation } from "react-native-navigation";
 import { RNNotificationBanner } from 'react-native-notification-banner';
 import Icon from 'react-native-vector-icons/Ionicons'
+import IconFa from 'react-native-vector-icons/FontAwesome'
 import * as Progress from "react-native-progress";
 import { connect } from "react-redux";
+import {showQRcodeOnNotificationPress} from '../../utility/navigation';
 import * as actions from "../../store/actions/index";
 import Modal from "react-native-modal";
 import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
@@ -31,7 +33,7 @@ class ActiveOrder extends Component {
 
   state = {
     orderStatus: [],
-    showQRCode: this.props.showQRCode ? this.props.showQRCode : false,
+    showQRCode: this.props.showQRcode ? this.props.showQRcode : false,
     quantities: {},
     drinks: {},
     senderId: appConfig.senderID
@@ -71,6 +73,9 @@ class ActiveOrder extends Component {
         }
       });
     }
+    if (buttonId === "close") {
+      Navigation.dismissModal(this.props.componentId);
+    }
     if (buttonId === "profileButton") {
       !this.isSideDrawerVisible
         ? (this.isSideDrawerVisible = true)
@@ -108,7 +113,20 @@ class ActiveOrder extends Component {
 
   onNotification = () => {
     let drinkReady = <Icon name="ios-beer" size={24} color="#FFFFFF" family={"Ionicons"} />;
-    RNNotificationBanner.Success({ title: `Order #${this.state.orderStatus.collectionId}: Ready for Collection`, subTitle: `Order is now available for collection from ${this.state.orderStatus.collectionPoint.name} collection point`, withIcon: true, icon: drinkReady})
+    RNNotificationBanner.Success({ onClick: this.showQRCode, title: `Order #${this.state.orderStatus.collectionId}: Ready for Collection`, subTitle: `Order is now available for collection from ${this.state.orderStatus.collectionPoint.name} collection point`, withIcon: true, icon: drinkReady})
+  };
+
+  showQRCode = async () => {
+    if (!this.state.showQRCode) {
+      Promise.all([
+        IconFa.getImageSource(
+            Platform.OS === "android" ? "close" : "close",
+            30
+        )
+      ]).then(sources => {
+          showQRcodeOnNotificationPress(true, this.props.collectionId, sources[0]);
+      })
+    }
   };
 
   onRegister = (token) => {
