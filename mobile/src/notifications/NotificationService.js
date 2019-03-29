@@ -72,7 +72,7 @@ export default class NotifService {
         });
     }
 
-    scheduleNotification(action, collectionId) {
+    scheduleNotification(action, barName, collectionId, collectionPoint) {
         this.lastId++;
         PushNotification.localNotificationSchedule({
             date: new Date(Date.now() + (5 * 1000)), // in 30 secs
@@ -83,8 +83,8 @@ export default class NotifService {
             userInfo: {}, // (optional) default: null (object containing additional notification data)
 
             /* iOS and Android properties */
-            title: `DrinKing: ${action}`, // (optional)
-            message: `Order #${collectionId} is ready for collection!`, // (required)
+            title: `${barName} order is ${action}`, // (optional)
+            message: `Order #${collectionId} is available from ${collectionPoint} collection point`, // (required)
             playSound: true, // (optional) default: true
             soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
         });
