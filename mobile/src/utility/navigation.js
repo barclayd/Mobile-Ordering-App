@@ -2,8 +2,6 @@ import {Navigation} from "react-native-navigation";
 import * as colours from "../styles/colourScheme";
 import * as screens from './screens';
 
-import {AsyncStorage} from 'react-native';
-
 const setDefaultSettings = () => {
     Navigation.setDefaultOptions({
         topBar: {
@@ -250,12 +248,13 @@ const setViewBasketSettings = (image) => {
     });
 };
 
-const setViewDrinks = async (componentId, menuName) => {
+const setViewDrinks = async (componentId, menuName, menuId) => {
     await Navigation.push(componentId, {
         component: {
             name: screens.ViewDrinksScreen,
             passProps: {
-                authState: menuName
+                authState: menuName,
+                menuId
             },
             options: {
                 topBar: {
@@ -263,10 +262,6 @@ const setViewDrinks = async (componentId, menuName) => {
                     title: {
                         text: menuName,
                     }
-                },
-                statusBar: {
-                    visible: true,
-                    style: 'light'
                 }
             }
         }

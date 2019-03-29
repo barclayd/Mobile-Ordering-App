@@ -114,6 +114,7 @@ class ViewMenus extends Component {
               ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
               data={this.props.menus}
               renderItem={({ item: rowData }) => {
+                console.log(rowData);
                 return (
                   <TouchableOpacity
                     key={rowData}

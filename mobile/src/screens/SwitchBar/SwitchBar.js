@@ -91,7 +91,7 @@ class SwitchBar extends Component {
 
         const drinKingText =
             <View style={{top: (Dimensions.get("window").height) / 11}}>
-            <Text style={styles.header}>Browse the map for nearby Dri<Text style={{color: colours.orange}}>Kings</Text></Text>
+            <Text style={styles.header}>Browse the map for nearby Drin<Text style={{color: colours.orange}}>Kings</Text></Text>
             </View>;
 
         return (
