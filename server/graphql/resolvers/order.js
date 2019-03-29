@@ -82,17 +82,20 @@ module.exports = {
             if (!foundCollectionPoint) {
                 throw new Error(`Collection Point ${collectionPoint} does not exist`);
             }
-            const foundOrders = await Order.find({$and: [{collectionPoint}, {status: ["AWAITING_COLLECTION", "PENDING", "IN_PROGRESS"]}]})
+
+            let foundOrders = await Order.find({$and: [{collectionPoint}, {status: ["AWAITING_COLLECTION", "PENDING", "IN_PROGRESS"]}]})
                     .populate('collectionPoint drinks')
                     .populate({
                         path: 'userInfo',
                         select: '-password' // Explicitly exclude password field
                     });
+            
             return foundOrders.reverse().map(async foundOrder => {
                 foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
                 return foundOrder;
             });
         } catch (err) {
+            console.log(err)
             throw err;
         }
     },
