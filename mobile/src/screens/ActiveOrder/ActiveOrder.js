@@ -124,9 +124,13 @@ class ActiveOrder extends Component {
     return await AsyncStorage.getItem("barName");
   };
 
-  onNotification = () => {
-    let drinkReady = <Icon name="ios-beer" size={24} color="#FFFFFF" family={"Ionicons"} />;
-    RNNotificationBanner.Success({ onClick: this.showQRCode, title: `Order #${this.state.orderStatus.collectionId}: Ready for Collection`, subTitle: `Order is now available for collection from ${this.state.orderStatus.collectionPoint.name} collection point`, withIcon: true, icon: drinkReady})
+  onNotification = (notification) => {
+    if (notification.foreground) {
+      let drinkReady = <Icon name="ios-beer" size={24} color="#FFFFFF" family={"Ionicons"} />;
+      RNNotificationBanner.Success({ onClick: this.showQRCode, title: `Order #${this.state.orderStatus.collectionId}: Ready for Collection`, subTitle: `Order is now available for collection from ${this.state.orderStatus.collectionPoint.name} collection point`, withIcon: true, icon: drinkReady})
+    } else {
+      this.showQRCode();
+    }
   };
 
   showQRCode = async () => {
