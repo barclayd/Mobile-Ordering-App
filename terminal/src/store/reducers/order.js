@@ -1,5 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
-import {updateObject, cloneArray} from "../utility";
+import {updateObject} from "../utility";
+import update from 'immutability-helper';
 
 const initialState = {
     loading: null,
@@ -39,14 +40,8 @@ const updateOrderStart = (state, action) => {
 };
 const updateOrderSuccess = (state, action) => {
     const index = state.orders.map(order => order._id).indexOf(action.orderId);
-    const updateOrderArray = cloneArray(state.orders);
-    updateOrderArray[index] = action.updatedOrder;
-    
-    return updateObject(state, {
-        updatedOrder: action.updatedOrder,
-        orders: updateOrderArray,
-        updatingOrderLoading: false
-    });
+
+    return update(state, {orders: {[index]: {$set: action.updatedOrder}}});
 };
 const updateOrderFailure = (state, action) => {
     return updateObject(state, {
