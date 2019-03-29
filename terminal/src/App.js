@@ -1,5 +1,5 @@
 import { faClock } from '@fortawesome/free-regular-svg-icons';
-import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy, faCheck, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy, faCheck, faUndoAlt, faCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import QrReader from "react-qr-reader";
@@ -366,6 +366,8 @@ class App extends Component {
                     }
                   })
                 }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
+
+               <button className ='large'> <FontAwesomeIcon icon ={faCog} /> Settings </button> 
 
                 <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
 
