@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class PopupWindow extends Component {
   constructor(props) {
@@ -85,7 +87,9 @@ class PopupWindow extends Component {
   renderCloseButton = (shouldShow) => {
     if (shouldShow) {
         return (
-            <div className="popup-close-button" onClick={this.dismissPopup} >🗙</div>
+            <div className="popup-close-button" onClick={this.dismissPopup} >
+              <FontAwesomeIcon icon={faTimes} />
+            </div>
         )
     }
   };
