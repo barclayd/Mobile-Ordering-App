@@ -90,7 +90,7 @@ class App extends Component {
     this.setState({
       awaitingOrdersIndexes: awaitingOrdersIndexes,
       inProgressOrdersIndexes: inProgressOrdersIndexes,
-      pendingOrders: pendingOrders
+      pendingOrders: pendingOrders.reverse()
     })
   };
 
@@ -202,7 +202,7 @@ class App extends Component {
     if (this.props.serverOrders.length === 0) return;
     let newServerOrders = rebuildDateAndDrinksForOrderWithQuantities(this.props.serverOrders);
     let areArraysEqual = JSON.stringify(newServerOrders) === JSON.stringify(prevState.serverOrders);
-
+    
     // only update chart if the data has changed
     if (!this.props.loading && !areArraysEqual) {
       this.loadOrdersIntoStateIndexArrays(newServerOrders); // Load orders into arrays
@@ -276,12 +276,31 @@ class App extends Component {
 
   // Runs an inteligent queuing algorithm to pull the top order, and similar top orders at once into the current staff member's in-progress feed
   TakeNextOrdersFromQueue = () => {
-    let mostRecentOrderID = this.state.pendingOrders[this.state.pendingOrders.length-1]._id;
-    let ordersToTake = [mostRecentOrderID];
+    let mostRecentOrder = this.state.pendingOrders[0];
+    
+    const ordersToScan = 4; // How many of the top orders to check for similarities
+    const maxOrdersToTake = 3; // How many orders MAX can be taken automatically at once
     console.log(this.state.pendingOrders)
+    
+    let orderMatches = [];
+    
+    for (let i = 1, len=ordersToScan+1; i < len; i++) {
+      let orderData = this.state.pendingOrders[i];
+      if (!orderData) break; // If no order exists at this index, stop scanning
 
+      // Loop through each drink in the mostRecentOrder
+      for (let i = 0, len=mostRecentOrder.drinks; i < len; i++) {
+        
+      }
+      console.log(orderData.drinks)
+    }
+
+
+    let ordersToTake = [mostRecentOrder._id];
+
+    // Run API to take all orders in ordersToTake
     for (let i = 0, len = ordersToTake.length; i < len; i++) {
-      this.props.updateOrder(ordersToTake[i], "IN_PROGRESS", this.state.selectedStaffMemberID)
+      // this.props.updateOrder(ordersToTake[i], "IN_PROGRESS", this.state.selectedStaffMemberID)
     }
   }
 
