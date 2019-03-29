@@ -1,5 +1,5 @@
 import { faClock } from '@fortawesome/free-regular-svg-icons';
-import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy, faCheck, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy, faCheck, faUndoAlt, faCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import QrReader from "react-qr-reader";
@@ -11,7 +11,7 @@ import ManualPickupPopupWindow from './containers/manual-pickup-popup-window/man
 import MultiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
 import PickupPopupWindow from './containers/pickup-popup-window/pickup-popup-window';
-import SwitchAccountsPopupWindow from './containers/switch-accounts-popup-window/switch-accounts-popup-window';
+import MoreAccountsPopupWindow from './containers/more-accounts-popup-window/more-accounts-popup-window';
 import SelectCollectionPointPopupWindow from './containers/select-collection-point-popup-window/select-collection-point-popup-window';
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
@@ -21,6 +21,7 @@ import {rangeScaling} from "./helpers/FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
 import {rebuildDateAndDrinksForOrderWithQuantities} from './helpers/FunctionLib.js';
 import LoadingIcon from './assets/loading-icon.gif';
+import SettingsPopupWindow from './containers/settings-popup-window/settings-popup-window';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (milliseconds)
@@ -320,7 +321,7 @@ class App extends Component {
 
   showOutOfStock = () => { this.state.showOutOfStock() };
 
-  switchAccounts = (staffID) => {
+  moreAccounts = (staffID) => {
     this.setState({selectedStaffMemberID: staffID});
     localStorage.setItem("selectedStaffMemberID", staffID)
   };
@@ -369,7 +370,7 @@ class App extends Component {
                 this.state.barStaff.map((staffData) => {
                   let buttonClass = "";
                   if (this.state.selectedStaffMemberID === staffData._id) buttonClass = "selected";
-                  return ( <button key={staffData._id} onClick={()=>{this.switchAccounts(staffData._id)}} className={buttonClass}>{staffData.firstName}</button> );
+                  return ( <button key={staffData._id} onClick={()=>{this.moreAccounts(staffData._id)}} className={buttonClass}>{staffData.firstName}</button> );
                 })
               }
               </div>
@@ -386,9 +387,11 @@ class App extends Component {
                   })
                 }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
 
+               <button onClick={this.state.showSettings} className='large'> <FontAwesomeIcon icon ={faCog} /> Settings </button> 
+
                 <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
 
-                <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> More accounts</button>
+                <button onClick={this.state.showMoreAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> More accounts</button>
               </div>
             </div>
 
@@ -525,11 +528,12 @@ class App extends Component {
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
-            <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} switchAccountsFunc={this.switchAccounts} />
+            <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} morehAccountsFunc={this.moreAccounts} />
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
             <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPoint={this.changeCollectionPoint} />
+            <SettingsPopupWindow showFunc={callable => this.setState({showSettings: callable})}/>
 
             <div className="notificationsContainer">
               {
