@@ -88,7 +88,7 @@ class Checkout extends Component {
             )
         }
         return collectionPoints;
-    }
+    };
 
     basketItems = () => {
         let totalItems = 0;
