@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import validate from "../../utility/validation";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { Navigation } from "react-native-navigation";
 import * as colours from "./../../styles/colourScheme";
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
@@ -20,6 +21,7 @@ import { Card, ListItem } from "react-native-elements";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import jwt from "expo-jwt";
 import QRCode from "react-native-qrcode-svg";
+import moment from 'moment';
 
 const dates = [
   {
@@ -37,6 +39,10 @@ const dates = [
 ];
 
 class componentName extends Component {
+  constructor(props) {
+    super(props);
+    Navigation.events().bindComponent(this);
+  }
   state = {
     pastOrders: [],
     selectedOrder: null,
@@ -44,6 +50,7 @@ class componentName extends Component {
     arrayHolder: [],
     currentDate: new Date(),
     isDateTimePickerVisible: false,
+    selectedDate: new Date(),
     dates: {
       value: null
     },
@@ -69,6 +76,14 @@ class componentName extends Component {
         pastOrders: nextProps.pastOrders,
         arrayHolder: nextProps.pastOrders
       });
+    }
+  }
+
+  navigationButtonPressed({ buttonId }) {
+    if (buttonId === "arrow-down") {
+      this.setState({
+        showFilters: !this.state.showFilters
+      })
     }
   }
 
@@ -160,15 +175,16 @@ class componentName extends Component {
     });
   };
 
-  _DateTimePicker = () =>
-      this.setState({
-        isDateTimePickerVisible: !this.state.isDateTimePickerVisible
-      });
+  // _DateTimePicker = () =>
+  //     this.setState({
+  //       isDateTimePickerVisible: !this.state.isDateTimePickerVisible
+  //     });
 
-    _handleDatePicked = date => {
-      console.log("A date has been picked: ", date);
-      this._DateTimePicker();
-    };
+  //   _handleDatePicked = (date) => {
+  //     // const newDate = moment(new Date(date.toString().substr(0, 16))).format('DD-MM-YYYY');
+  //     console.log("A date has been picked: ", date);
+  //     this._DateTimePicker();
+  //   };
 
   render() {
     const spinner = this.props.ordersLoading ? (
@@ -296,21 +312,7 @@ class componentName extends Component {
       return (
         <View style={[styles.container]}>
           <View>
-            <TouchableOpacity
-              style={styles.filters}
-              onPress={() => this.showFilters()}
-            >
-              <Text style={{ color: colours.pureWhite, fontSize: 16 }}>
-                Filters
-              </Text>
-              <Icon
-                name="chevron-down"
-                size={22}
-                color={colours.pureWhite}
-                style={{ top: -3 }}
-              />
-            </TouchableOpacity>
-
+            
             {this.state.showFilters ? (
               <View>
                 <TextInput
@@ -332,16 +334,19 @@ class componentName extends Component {
                   onChangeText={val => this.inputUpdateHandler("orderId", val)}
                 />
 
-                <View style={{ paddingVertical: 5 }} />
+                {/* <View style={{ paddingVertical: 5 }} />
 
                 <TouchableOpacity onPress={() => this._DateTimePicker()}>
                   <Text style={{color: colours.pureWhite, fontSize: 16}}>Show DatePicker</Text>
                 </TouchableOpacity>
                 <DateTimePicker
+                  date={this.state.selectedDate}
                   isVisible={this.state.isDateTimePickerVisible}
                   onConfirm={() => this._handleDatePicked()}
                   onCancel={() => this._DateTimePicker()}
-                />
+                  mode={'datetime'}
+                  is24Hour={true}
+                /> */}
 
                 {/* <View style={{flexDirection: "row", justifyContent: "center", top: 0, width: (Dimensions.get("window").width) / 1.09,}}>
                 <RNPickerSelect

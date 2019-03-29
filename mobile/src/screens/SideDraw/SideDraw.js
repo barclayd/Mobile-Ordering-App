@@ -11,12 +11,14 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { Avatar } from "react-native-elements";
 import * as colours from "../../styles/colourScheme";
+import IonicIcon from "react-native-vector-icons/Ionicons";
 import {
   setDefaultSettings,
   setWelcomePageRoot,
   setViewPastOrders,
   setViewPastOrdersSettings,
   setOrderStatus,
+  setOrderStatusSettings,
   popToRoot
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
@@ -50,9 +52,13 @@ class SideDrawer extends Component {
   };
 
   previousOrders = async () => {
-    setViewPastOrdersSettings();
+    Promise.all([
+      IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-arrow-down"), 30)
+  ]).then(sources => {
+    setViewPastOrdersSettings(sources[0]);
     setViewPastOrders(this.props.componentId, "ViewMenus");
-  };
+});
+}
 
   orderStatus = async () => {
     await setOrderStatus(null, 124);
