@@ -5,23 +5,49 @@ import PopupWindow from '../../containers/popup-window/popup-window'
 
 class SettingsPopupWindow extends Component {
     state = {}
+ 
+    showCollectionPoint = () => {
+    this.state.showCollectionPoint();
+
+};
 
     render() {
         return (
             <PopupWindow
                     className="switchAccountsPopup"
                     title="Settings:"
-                    subtitle={<span>Select your username to add to the hotbar</span>}
+                    subtitle={<span>Further options below</span>}
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
             >
+            <div onClick ={this.props.showCollectionPoint} className="collectionpointbutton">
+            <h2>Change collection point:</h2> 
+                <button className="collection">Change collection point</button>
+            </div>
+
+            <div className = "InputContainer"> 
+                <h2>Find Order by Longer ID:</h2>
+                <form>
+                <input type = "text"/>
+                
+                </form>
+            </div>
+
+            <div className = "InputContainer2"> 
+                <h2>Find Order history by Customer:</h2>
+                <form>
+                <input type = "text"/>
+                
+                </form>
+            </div>
             </PopupWindow>
         )
     }
 };
 
 SettingsPopupWindow.propTypes = {
-    showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
+    showFunc: PropTypes.func,
+    showCollectionPoint: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
 };
 
 export default SettingsPopupWindow;
