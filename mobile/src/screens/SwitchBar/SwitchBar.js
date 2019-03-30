@@ -33,8 +33,10 @@ class SwitchBar extends Component {
                     minLength: 4
                 }
             }
-        }
+        },
+        notificationSent: false
     };
+
 
     componentDidAppear() {
         navigator.geolocation.requestAuthorization();
@@ -68,6 +70,13 @@ class SwitchBar extends Component {
             }
         });
 
+    };
+
+    handleNotificationSent = (sent) => {
+        console.log(sent);
+        this.setState({
+            notificationSent: sent
+        })
     };
 
     navigationButtonPressed({ buttonId }) {
@@ -144,7 +153,7 @@ class SwitchBar extends Component {
                         </View>
                     </View>
                     <View style={styles.mapView}>
-                        <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} redirect={true}/>
+                        <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} redirect={true} notificationStatus={this.state.notificationSent} sentNotification={this.handleNotificationSent}/>
                     </View>
                 </View>
             </ScrollView>

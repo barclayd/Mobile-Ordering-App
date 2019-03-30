@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import * as colours from '../../styles/colourScheme';
-import {Dimensions, StyleSheet, View, Text} from 'react-native';
+import {Dimensions, StyleSheet, View, Text, AsyncStorage} from 'react-native';
 import MapView, {Marker, Callout} from 'react-native-maps';
 import {Card} from 'react-native-elements';
 import ButtonWithBackground from '../UI/Buttons/ButtonWithBackground';
@@ -19,11 +19,10 @@ class MapDisplay extends Component {
             latitudeDelta: 0.015,
             longitudeDelta: Dimensions.get('window').width / Dimensions.get('window').height * 0.015
         },
-        chosenMarker: null,
-        notificationSent: false
+        chosenMarker: null
     };
 
-    async componentDidMount() {
+    componentDidMount() {
         // await this.getLocationHandler();
         this.props.findAllBars();
     }
@@ -35,6 +34,7 @@ class MapDisplay extends Component {
             });
         }
     }
+
 
     getLocationHandler = () => {
         navigator.geolocation.getCurrentPosition(pos => {
@@ -70,16 +70,20 @@ class MapDisplay extends Component {
         this.props.findBar(barCode, this.props.componentId, null, this.props.redirect);
     };
 
-    showNearestBar = (bar) => {
-        if (bar && !this.state.notificationSent) {
+    showNearestBar = async (bar) => {
+        const currentBarId = await this.getCurrentBar();
+        console.log(currentBarId);
+        if (bar && !this.props.notificationStatus) {
             let map = <Icon name="map-o" size={24} color="#FFFFFF" family={"FontAwesome"} />;
             setTimeout(() => {
                 RNNotificationBanner.Info({ onClick: () => this.handleNotificationPress(bar.barCode), duration: 5, title: `Nearest DrinKing: ${bar.name}`, subTitle: `Tap to View the Menus for ${bar.name}`, withIcon: true, icon: map});
             }, 5000);
-            this.setState({
-                notificationSent: true
-            });
+            this.handleNotificationSent();
         }
+    };
+
+    getCurrentBar = async () => {
+      return await AsyncStorage.getItem('barId');
     };
 
     pickLocationHandler = event => {
@@ -102,6 +106,10 @@ class MapDisplay extends Component {
         }
     };
 
+    handleNotificationSent = () => {
+        this.props.sentNotification(true);
+    };
+
     render() {
         const distanceFromBars = [];
         const barMarkers = this.props.bars.map((bar, index) => {
@@ -110,7 +118,8 @@ class MapDisplay extends Component {
                 distanceFromBars.push({
                     name: bar.name,
                     distance,
-                    barCode: bar.barCode
+                    barCode: bar.barCode,
+                    id: bar._id
                 });
             }
             let markerCoordinates = {
