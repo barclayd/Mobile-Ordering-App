@@ -44,7 +44,8 @@ class WelcomeScreen extends Component {
                 }
             }
         },
-        coordinates: {}
+        coordinates: {},
+        notificationSent: false
     };
 
     onSubmitCodeHandler = () => {
@@ -91,6 +92,13 @@ class WelcomeScreen extends Component {
     onLoginButtonHandler = (authType) => {
         setLoginSettings();
         setLoginScreen(this.props.componentId, authType);
+    };
+
+    handleNotificationSent = (sent) => {
+        console.log(sent);
+        this.setState({
+            notificationSent: sent
+        })
     };
 
     render() {
@@ -151,7 +159,7 @@ class WelcomeScreen extends Component {
                                 </View>
                             </View>
                             <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>
-                                <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates}/>
+                                <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} notificationStatus={this.state.notificationSent} sentNotification={this.handleNotificationSent}/>
                             </View>
                         </Swiper>
                     </WelcomeBackground>
