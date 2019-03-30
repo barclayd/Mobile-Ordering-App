@@ -279,7 +279,7 @@ class App extends Component {
   TakeNextOrdersFromQueue = () => {
 
     const firstOrder = this.state.pendingOrders[0]; // Get the top order to always be taken from queue
-    const ordersToScan = 4; // How many of the top orders to check for similarities
+    const ordersToScan = 4; // How many extra orders to check for similarities
     const maxOrdersToTake = 3; // How many orders MAX can be taken automatically at once
     const matchThreshold = 30; // Percentage match required to pull order
 
@@ -290,34 +290,39 @@ class App extends Component {
       let orderData = this.state.pendingOrders[i];
       if (!orderData) break; // If no order exists at this index, stop scanning
 
-      // Loop through each drink in the top/firstOrder to see if it's in the orderData
+      // Loop through each drink in the orderData to see if it's in firstOrder
       let matches = 0;
-      firstOrder.drinks.forEach(function(firstOrderDrink) {
-        if (orderData.drinks.some(drink => {
+      let differences = 0;
+      orderData.drinks.forEach(function(drink) {
+        if (firstOrder.drinks.some(firstOrderDrink => {
           return firstOrderDrink._id === drink._id
-        })) matches++
+        })) { matches++ } else { differences++ }
       });
 
-      // Add order to list of orders with matches
-      if (matches > 0) orderMatches.push({id: orderData._id, matches: matches})
+      // Add order to list of orders with matches and differences
+      orderMatches.push({id: orderData._id, matches: matches, differences: differences})
     }
 
     // Calculate which orders to take
     let ordersToTake = [firstOrder._id]; // Array of orders to be taken by bartender
 
-    // Sort orderMatches by match count
+    // Sort orderMatches by match & difference count
     orderMatches.sort((a,b)=>{
-      if (a.matches > b.matches) return 1;
-      if (a.matches < b.matches) return -1;
-      return 0;
+      if (a.matches < b.matches) return 1; // Swap if A has less matches than B
+      if (a.matches > b.matches) return -1; // Swap other direction if A has more matches than B
+      if (a.differences > b.differences) return 1; // Swap if A has more differences than B and same matches
+      if (a.differences < b.differences) return -1; // Swap other direction if A has less differences than B and same matches
+      return 0; // Do nothing if differences and matches are equal
     })
+
+    console.log(orderMatches)
 
     // Take top n matched orders from orderMatches
     for (let i = 0, len=maxOrdersToTake-1; i < len; i++) {
       const orderMatch = orderMatches[i];
       if (!orderMatch) break; // Break for when orderMatches is smaller than maxOrdersToTake
 
-      const matchPercentage = orderMatch.matches / firstOrder.drinks.length * 100
+      const matchPercentage = orderMatch.matches === 0 ? 0 : orderMatch.matches / firstOrder.drinks.length * 100
       if (matchPercentage < matchThreshold) break; // Stop taking orders from orderMatches once an order doesn't meet the threshold
       ordersToTake.push(orderMatch.id); // Add order to ordersToTake
     }

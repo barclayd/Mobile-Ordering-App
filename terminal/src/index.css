@@ -65,8 +65,11 @@ button:disabled {
 }
 
 button.large {
-  width: 182px;
   height: 42px;
+  width: auto;
+  white-space: nowrap;
+
+  padding: 0 19px 0 19px;
 }
 
 button.selected {
