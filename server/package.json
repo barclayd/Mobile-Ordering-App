@@ -15,10 +15,12 @@
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
     "graphql": "^14.1.1",
+    "graphql-subscriptions": "^1.0.0",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.4.9",
     "randomstring": "^1.1.5",
     "stripe": "^6.26.0",
+    "subscriptions-transport-ws": "^0.9.16",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

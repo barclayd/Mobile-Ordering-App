@@ -2,10 +2,14 @@ const express = require('express');
 const app = express();
 const graphqlHttp = require('express-graphql');
 const mongoose = require('mongoose');
+const {createServer} = require('http');
 require('dotenv').config();
 
+const {execute, subscribe} = require('graphql');
 const graphQLSchema = require('./graphql/schema');
 const graphQlResolvers = require('./graphql/resolvers');
+
+const {SubscriptionServer} = require('subscriptions-transport-ws');
 
 const checkAuth = require('./middleware/check-auth');
 
@@ -38,12 +42,26 @@ app.use('/hello-world', (req, res, next) => {
     })
 });
 
+const server = createServer(app);
+
 mongoose.set('useCreateIndex',true);
 
 // connect to MongoDB
 mongoose.connect(`mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PW}@drinksapp-otvvz.mongodb.net/${process.env.DB_NAME}?retryWrites=true`, {useNewUrlParser: true})
     .then(() => {
-        app.listen(process.env.PORT);
+        // app.listen(process.env.PORT);
+        server.listen(process.env.PORT, () => {
+            new SubscriptionServer({
+                    execute,
+                    subscribe,
+                    graphQLSchema
+                },
+                {
+                    server,
+                    path: '/subscriptions'
+                }
+            )
+        });
     })
     .catch(err => {
         console.log(err);

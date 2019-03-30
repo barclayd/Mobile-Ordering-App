@@ -186,7 +186,6 @@ module.exports = buildSchema(`
         createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
         createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
         createMenu(menuInput: MenuInput): Menu
-        updateOrder(orderStatusInput: OrderStatusInput): Order
         updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
         updateLastVisitedBar(userId: ID!, barId: ID): User!
     }
