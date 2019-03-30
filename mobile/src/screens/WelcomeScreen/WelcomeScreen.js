@@ -69,6 +69,9 @@ class WelcomeScreen extends Component {
     }
 
     componentDidDisappear() {
+        this.setState({
+            notificationSent: true
+        });
         navigator.geolocation.stopObserving();
     }
 

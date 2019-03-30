@@ -8,6 +8,7 @@ import {
     setOrderStatus
 } from "../../utility/navigation";
 import {emptyBasket} from '../utility';
+import {errorNotification} from "../../notifications/ErrorHandling";
 
 const orderRedirect = async (collectionId, userId, collectionPoint, date, orderId) => {
     await popToRoot('ViewMenus');
@@ -165,6 +166,7 @@ export function* orderHistorySaga(action) {
         }
     } catch (err) {
         console.log(err);
+        errorNotification('Retrieving Order History Failed', 'Please try again')
         yield put(actions.orderHistoryFailure());
     }
 }
