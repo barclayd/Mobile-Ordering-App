@@ -73,7 +73,6 @@ class SwitchBar extends Component {
     };
 
     handleNotificationSent = (sent) => {
-        console.log(sent);
         this.setState({
             notificationSent: sent
         })
@@ -153,7 +152,7 @@ class SwitchBar extends Component {
                         </View>
                     </View>
                     <View style={styles.mapView}>
-                        <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} redirect={true} notificationStatus={this.state.notificationSent} sentNotification={this.handleNotificationSent}/>
+                        <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} redirect={true} notificationStatus={this.state.notificationSent} sentNotification={this.handleNotificationSent} parentScreen='SwitchBar'/>
                     </View>
                 </View>
             </ScrollView>

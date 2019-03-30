@@ -72,12 +72,15 @@ class MapDisplay extends Component {
 
     showNearestBar = async (bar) => {
         const currentBarId = await this.getCurrentBar();
-        console.log(currentBarId);
         if (bar && !this.props.notificationStatus) {
             let map = <Icon name="map-o" size={24} color="#FFFFFF" family={"FontAwesome"} />;
             setTimeout(() => {
-                RNNotificationBanner.Info({ onClick: () => this.handleNotificationPress(bar.barCode), duration: 5, title: `Nearest DrinKing: ${bar.name}`, subTitle: `Tap to View the Menus for ${bar.name}`, withIcon: true, icon: map});
-            }, 5000);
+                if((currentBarId === bar.id) && this.props.parentScreen !== 'WelcomeScreen') {
+                    RNNotificationBanner.Normal({duration: 5, title: `Nearest DrinKing Bar: ${bar.name}`, subTitle: `You are currently viewing the menus of your closest DrinKing`, withIcon: true, icon: map});
+                } else {
+                    RNNotificationBanner.Info({ onClick: () => this.handleNotificationPress(bar.barCode), duration: 5, title: `Nearest DrinKing: ${bar.name}`, subTitle: `Tap to View the Menus for ${bar.name}`, withIcon: true, icon: map});
+                }
+            }, 3000);
             this.handleNotificationSent();
         }
     };
