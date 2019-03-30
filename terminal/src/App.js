@@ -342,6 +342,9 @@ class App extends Component {
 
   showOutOfStock = () => { this.state.showOutOfStock() };
 
+  showCollectionPoint = () => { this.state.showCollectionPoint()};
+  
+
   moreAccounts = (staffID) => {
     this.setState({selectedStaffMemberID: staffID});
     localStorage.setItem("selectedStaffMemberID", staffID)
@@ -553,7 +556,7 @@ class App extends Component {
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
             <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPoint={this.changeCollectionPoint} />
-            <SettingsPopupWindow showFunc={callable => this.setState({showSettings: callable})}/>
+            <SettingsPopupWindow showFunc={callable => this.setState({showSettings: callable})} showCollectionPoint={this.showCollectionPoint}/>
 
             <div className="notificationsContainer">
               {
