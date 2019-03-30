@@ -95,7 +95,6 @@ class WelcomeScreen extends Component {
     };
 
     handleNotificationSent = (sent) => {
-        console.log(sent);
         this.setState({
             notificationSent: sent
         })
@@ -159,7 +158,7 @@ class WelcomeScreen extends Component {
                                 </View>
                             </View>
                             <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>
-                                <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} notificationStatus={this.state.notificationSent} sentNotification={this.handleNotificationSent}/>
+                                <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} notificationStatus={this.state.notificationSent} sentNotification={this.handleNotificationSent} parentScreen='WelcomeScreen'/>
                             </View>
                         </Swiper>
                     </WelcomeBackground>
