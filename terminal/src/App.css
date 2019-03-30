@@ -83,10 +83,11 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
 .App-header { padding-top: 45px; } /* Add space for fixed top bar */
 
 #accountsHotbar {
+  max-height: 36px;
+
   /* Only show buttons that can fit onscreen: */
   overflow: hidden;
-  max-height: 36px;
-  margin-right: 600px;
+  margin-right: 770px;
 }
 #accountsHotbar button { margin-right: 15px } /* Space account quick-switch buttons */
 
