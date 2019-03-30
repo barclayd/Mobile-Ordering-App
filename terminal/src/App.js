@@ -151,11 +151,11 @@ class App extends Component {
       });
 
       try {
-        let qrJSON = JSON.parse(data); // Attempt to parse QR data to see if it contains valid JSON
-        if (qrJSON.orderID && new Date() - this.state.lastValidScan > validScanCooldown) { // Check the JSON contains an order ID, then run the pickup function
-          this.pickupOrder(qrJSON.orderID, qrJSON.customerID);
+        if (new Date() - this.state.lastValidScan > validScanCooldown) { // Check an item hasn't just been scanned then run pickup function
           this.setState({
             lastValidScan: new Date()
+          }, ()=>{
+            this.pickupOrderRelaxed(data);
           });
         }
 
@@ -175,8 +175,17 @@ class App extends Component {
 
   // Strict func that takes order ID and corresponding customer ID from QR to prevent order code theft
   pickupOrder = (orderID, customerID) => {
-    let order = this.state.serverOrders.find(order => order.id === orderID && order.customerID === customerID); // Find order sharing the same ID and customer ID
+    const order = this.state.serverOrders.find(order => order.collectionId === orderID && order.userInfo._id === customerID); // Find order and validate the customer ID
+    this.showPickupOrder(order)
+  };
 
+  // Relaxed version of pickup order (doesn't check corresponding customer ID)
+  pickupOrderRelaxed = (orderID) => {
+    this.showPickupOrder( this.state.serverOrders.find(order => order.collectionId === orderID) )
+  };
+
+  showPickupForOrder = (order) => {
+    
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
       if (order.status === OrderStatuses.AWAITING_COLLECTION) {
@@ -184,11 +193,11 @@ class App extends Component {
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
       }
-
+    
     } else if (!order) {
-      this.addNotification("error", "Scan error", "Customer QR has been tampered with!")
+      this.addNotification("warning", "Order not found", "No order could be found for this QR code!")
     }
-  };
+  }
 
   componentDidMount() {
     // Pull orders from server
@@ -214,22 +223,6 @@ class App extends Component {
       });
     }
   }
-
-
-
-  // Relaxed version of pickup order, used for bartenders to manually input just an order ID (not corresponding customer ID)
-  pickupOrderInsecure = (orderID) => {
-    let order = this.state.serverOrders.find(order => order.collectionId === orderID); // Find order by ID
-    if (order) {
-      if (order.status === OrderStatuses.AWAITING_COLLECTION) {
-        this.setState({orderForPopup: order}, this.state.showPickup) // Show billing popup
-      } else {
-        this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
-      }
-    } else {
-      this.addNotification("error", "Order not found", "No order with code " + orderID + " exists!")
-    }
-  };
 
   getUserMedia = () => {
       if (navigator.getUserMedia) {
@@ -388,7 +381,6 @@ class App extends Component {
       return this.buildLoadingScreen("Loading orders...")
 
     } else {
-
       return (
         <div className="App">
           <header className="App-header">
@@ -557,7 +549,7 @@ class App extends Component {
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
             <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} morehAccountsFunc={this.moreAccounts} />
-            <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
+            <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderRelaxed} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
             <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPoint={this.changeCollectionPoint} />
