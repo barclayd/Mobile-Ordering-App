@@ -75,7 +75,7 @@ class MapDisplay extends Component {
         if (bar && !this.props.notificationStatus) {
             let map = <Icon name="map-o" size={24} color="#FFFFFF" family={"FontAwesome"} />;
             setTimeout(() => {
-                if((currentBarId === bar.id) && this.props.parentScreen !== 'WelcomeScreen') {
+                if((currentBarId === bar.id) && this.props.parentScreen) {
                     RNNotificationBanner.Normal({duration: 5, title: `Nearest DrinKing Bar: ${bar.name}`, subTitle: `You are currently viewing the menus of your closest DrinKing`, withIcon: true, icon: map});
                 } else {
                     RNNotificationBanner.Info({ onClick: () => this.handleNotificationPress(bar.barCode), duration: 5, title: `Nearest DrinKing: ${bar.name}`, subTitle: `Tap to View the Menus for ${bar.name}`, withIcon: true, icon: map});
