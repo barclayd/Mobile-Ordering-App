@@ -176,12 +176,12 @@ class App extends Component {
   // Strict func that takes order ID and corresponding customer ID from QR to prevent order code theft
   pickupOrder = (orderID, customerID) => {
     const order = this.state.serverOrders.find(order => order.collectionId === orderID && order.userInfo._id === customerID); // Find order and validate the customer ID
-    this.showPickupOrder(order)
+    this.showPickupForOrder(order)
   };
 
   // Relaxed version of pickup order (doesn't check corresponding customer ID)
   pickupOrderRelaxed = (orderID) => {
-    this.showPickupOrder( this.state.serverOrders.find(order => order.collectionId === orderID) )
+    this.showPickupForOrder( this.state.serverOrders.find(order => order.collectionId === orderID) )
   };
 
   showPickupForOrder = (order) => {
