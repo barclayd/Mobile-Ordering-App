@@ -9,13 +9,16 @@
     "test": "jest"
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.5.1",
     "apollo-cache-redux": "^0.1.2",
     "apollo-client": "^2.5.1",
     "apollo-link": "^1.2.11",
+    "apollo-link-http": "^1.5.14",
     "apollo-link-redux": "^0.2.1",
     "apollo-link-ws": "^1.0.17",
     "apollo-utilities": "^1.2.1",
     "axios": "^0.18.0",
+    "graphql-tag": "^2.10.1",
     "install": "^0.12.2",
     "npm": "^6.9.0",
     "react": "16.6.3",
