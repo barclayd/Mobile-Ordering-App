@@ -6,6 +6,7 @@ import TimeAgo from '../time-ago-clean/time-ago-clean'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt, faGlassCheers } from '@fortawesome/free-solid-svg-icons';
+import {OrderStatuses} from '../../helpers/schemaHelper';
 
 
 class PickupPopupWindow extends Component {
@@ -14,10 +15,18 @@ class PickupPopupWindow extends Component {
         this.state.showOutOfStock()
     };
 
-    buildButtons = () => {
+    updateOrder = (orderID, status, optionalStaffID) => {
+        if (optionalStaffID) {
+            this.props.updateOrderFunc(orderID, status);
+        } else {
+            this.props.updateOrderFunc(orderID, status, optionalStaffID);
+        }
+    }
+
+    buildButtons = (order) => {
         return (
             <div className="popupButtonsContainer">
-                <button className="orderButton">
+                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.COMPLETED)}} className="orderButton">
                     <span className="icon complete"><FontAwesomeIcon icon={faGlassCheers} /></span>
                     <span className="title">Completed</span>
                     <br />
@@ -99,7 +108,7 @@ class PickupPopupWindow extends Component {
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
                     dismissedHandler={this.props.dismissedHandler}
-                    buttons={this.buildButtons()}
+                    buttons={this.buildButtons(this.props.order)}
             >
                 { this.buildChildren(this.props.order) }
             </PopupWindow>
@@ -112,6 +121,7 @@ PickupPopupWindow.propTypes = {
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
     showOutOfStock: PropTypes.func.isRequired, // Function to show out of stock window
     dismissedHandler: PropTypes.func.isRequired, // Function ran when billing popup is closed without action
+    updateOrderFunc: PropTypes.func.isRequired // Func to post updated order status
 };
 
 export default PickupPopupWindow;
