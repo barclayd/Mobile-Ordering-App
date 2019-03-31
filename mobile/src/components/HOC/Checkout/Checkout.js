@@ -18,7 +18,7 @@ class Checkout extends Component {
 
     state = {
         isScrollEnabled: false,
-        basketBarHeight: screenHeight - 180,
+        basketBarHeight: screenHeight - (Dimensions.get('window').height / 4.4),
         activeSections: [],
         multipleSelect: true,
         editVisible: false,
@@ -45,12 +45,12 @@ class Checkout extends Component {
                 this.animation.setValue({x: 0, y: gestureState.dy})
             },
             onPanResponderRelease: (event, gestureState) => {
-                if(gestureState.moveY > screenHeight - 180) {
+                if(gestureState.moveY > screenHeight - (screenHeight * 180/812)) {
                     Animated.spring(this.animation.y, {
                         toValue: 0,
                         tension: 1
                     }).start();
-                } else if (gestureState.moveY < 180) {
+                } else if (gestureState.moveY < (screenHeight * 0.180/812)) {
                     Animated.spring(this.animation.y, {
                         toValue: 0,
                         tension: 1
@@ -58,22 +58,18 @@ class Checkout extends Component {
                 } else if (gestureState.dy < 0) {
                     this.setState({isScrollEnabled: true});
                     Animated.spring(this.animation.y, {
-                        toValue: -screenHeight + 140,
+                        toValue: -screenHeight + (screenHeight * 140/812),
                         tension: 1
                     }).start();
                 } else if (gestureState.dy > 0) {
                     this.setState({isScrollEnabled: false});
                     Animated.spring(this.animation.y, {
-                        toValue: screenHeight - 140,
+                        toValue: screenHeight - (screenHeight * 140/812),
                         tension: 1
                     }).start();
                 }
             }
         })
-    }
-
-    componentDidMount(){
-        this.props.findCollectionPoints()
     }
 
     addValue = () => {
@@ -194,11 +190,9 @@ class Checkout extends Component {
         }
     };
 
-    togglePaymentOverlay = async () => {
-        const userId = await AsyncStorage.getItem('userId');
-        if (!userId) {
-            // setLoginSettings();
-            // setLoginScreen(this.props.componentId, 'Login');
+    togglePaymentOverlay = () => {
+        if (this.state.collectionPoint.length < 1 && !this.state.showPaymentOverlay) {
+            this.props.findCollectionPoints();
         }
         this.setState(prevState => {
             return {
@@ -248,44 +242,44 @@ class Checkout extends Component {
         };
 
         const animatedImageHeight = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
             outputRange: [64, 32],
             extrapolate: 'clamp'
         });
 
         const animatedTextOpacity = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-500, screenHeight - 180],
+            inputRange: [0, screenHeight-(screenHeight * 500/812), screenHeight - (screenHeight * 180/812)],
             outputRange: [0, 0, 1],
             extrapolate: 'clamp'
         });
 
         const animatedImageMarginLeft = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
-            outputRange: [screenWidth/2-32, 15],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
+            outputRange: [screenWidth/2-(screenWidth * 32/414), screenWidth * 15/414],
             extrapolate: 'clamp'
         });
 
         const animatedHeaderHeight = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
-            outputRange: [screenHeight/5, 90],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
+            outputRange: [screenHeight/5, screenHeight * 90/812],
             extrapolate: 'clamp'
         });
 
         const animatedMainContentOpacity = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-500, screenHeight-90],
+            inputRange: [0, screenHeight-(screenHeight * 500/812), screenHeight-(screenHeight * 90/812)],
             outputRange: [1, 0, 0],
             extrapolate: 'clamp'
         });
 
         const animatedBackgroundColor = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
             outputRange: [colours.midnightBlack, colours.transparent],
             extrapolate: 'clamp'
         });
 
         const animatedSettingsHeight = this.animation.y.interpolate({
-            inputRange: [0, screenHeight-90],
-            outputRange: [screenHeight/12, 90],
+            inputRange: [0, screenHeight-(screenHeight * 90/812)],
+            outputRange: [screenHeight/12, screenHeight * 90/812],
             extrapolate: 'clamp'
         });
 
@@ -315,7 +309,7 @@ class Checkout extends Component {
 
                             <Animated.View style={{ opacity: animatedTextOpacity, }}>
                                 <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}>
-                                    <Text style={styles.barOrderDetails1}>{this.basketItems()} Drinks   </Text>
+                                    <Text style={styles.barOrderDetails1}>Drinks: {this.basketItems()}        </Text>
                                     <Text style={styles.barOrderDetails2}>    £{this.basketPrice()} </Text>
                                 </Animated.Text>
                             </Animated.View>
@@ -354,7 +348,7 @@ class Checkout extends Component {
                                 </View>
                             </View>
                         </Animated.View>
-                        <View style={{ height: 1000 }}>
+                        <View style={{ height: (100 + (100*this.props.basket.length)) }}>
                             <Accordion
                                 activeSections={activeSections}
                                 sections={this.props.basketCategories}
@@ -554,6 +548,5 @@ const mapDispatchToProps = dispatch => {
       findCollectionPoints: () => dispatch(actions.findCollectionPoints())
     };
   };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout)
