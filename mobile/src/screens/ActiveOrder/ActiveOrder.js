@@ -62,6 +62,7 @@ class ActiveOrder extends Component {
   }
 
   componentDidAppear() {
+    console.log("user made a purchase");
     this.setState({
       screenActive: true
     });
