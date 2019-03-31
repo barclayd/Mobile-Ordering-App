@@ -1,50 +1,59 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
-export default class setUp extends Component {
+export default class setUp extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    const typeOfBar = [
+    const questionsForUser = [
       {
-        name: "Student Bar",
-        description: "Suitable for bars for students."
+        text: "What is your target audience for your business?",
+        option: [
+          "Students",
+          "Local people close to your bar",
+          "High-Income clients",
+          "Unsure/huge variety"
+        ],
       },
       {
-        name: "Cocktail Bar",
-        description: "Suitable for cocktail bars."
+        text: "What kind of drinks do you specialise in?",
+        option: [
+          "Craft Beers",
+          "Low price drinks",
+          "Classy cocktails",
+          "Family craft drinks"
+        ],
       },
       {
-        name: "Festivals",
-        description: "Suitable for festivals."
+        text: "Thank you very much for your option." ,
+        option: [] //that's it.
       },
     ];
-    this.state = {current:0, barSelect: typeOfBar}
-    this.handleClick = this.handleClick.bind(this)
-  }
 
-  handleClick(select) {
-    if (this.state.current == 4) {
-      this.setState({current: 0})
-    }
-    else{
+    this.state = {current:0, dataSet:questionsForUser}
+    this.handleClick = this.handleClick.bind(this)
+
+  } // end constructor
+
+  handleClick() {
+    if (this.state.current === 2) {
+    } else {
       this.setState({current: this.state.current + 1})
     }
   }
+
   render() {
     return(
       <div>
-        <selectionBox handleClick={this.handleClick} dataSet={this.state.dataSet[this.state.current]} />
+        <p>hi</p>
       </div>
     )
   }
 }
 
-function selectionBox(props) {
-  let style = {
-    width: "25%",
-    display: "block",
-    textAlign: "center",
-    boxSizing: "border-box",
-    float: "left",
-    padding: "0 2em"
-  }
+
+
+ReactDOM.render(
+  <setUp />,
+  document.getElementById("root")
+)
