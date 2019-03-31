@@ -1,5 +1,5 @@
 import {put} from 'redux-saga/effects';
-import {AsyncStorage, Platform} from 'react-native';
+import {AsyncStorage, Platform, Alert} from 'react-native';
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import {setMainApp, setMainAppSettings, popToRoot} from "../../utility/navigation";
 import {emptyBasket} from '../utility';
@@ -91,6 +91,7 @@ export function* findBarSaga(action) {
     } catch (err) {
         console.log(err);
         yield put(actions.findBarFail(err));
+        Alert.alert('No Internet Connection... 🔌')
     }
 }
 
