@@ -172,6 +172,33 @@ class App extends Component {
     this.setOrderForPopup(orderIndex, () => { this.state.showNotes() });
   };
 
+  addStaffByIDToHotbar = (staffID) => {
+    let newStaffHotBarOrder = this.state.staffHotBarOrder;
+    let origStaffHotBarEntryIndex = newStaffHotBarOrder.findIndex((entry) => { return entry.id === staffID })
+    if (origStaffHotBarEntryIndex !== -1) { // Check if the staff member already has an entry in staffHotBarOrder
+      newStaffHotBarOrder[origStaffHotBarEntryIndex].dateAdded = new Date().getTime(); // Update their dateAdded to jump them to the hotbar front
+
+    } else {
+      // No entry for this staff member exists so create them one with the current date&time
+      const staffHotBarEntry = {
+        id: staffID,
+        dateAdded: new Date().getTime(),
+      }
+      newStaffHotBarOrder.push(staffHotBarEntry)
+    }
+
+    // Sort array by last login time
+    newStaffHotBarOrder.sort((a,b)=>{
+      if (a.dateAdded < b.dateAdded) return 1; // Swap if A is older than B
+      if (a.dateAdded > b.dateAdded) return -1; // Swap other direction if A is newer than B
+      return 0; // Do nothing when dates are equal
+    });
+
+    // Update state
+    this.setState({ staffHotBarOrder: newStaffHotBarOrder });
+    localStorage.setItem("staffHotBarOrder", JSON.stringify(newStaffHotBarOrder)); // Update localstorage
+  };
+
   handleScan = (data) => {
     if (data) {
       this.setState({
@@ -228,11 +255,21 @@ class App extends Component {
   }
 
   componentDidMount() {
+    
+    // Pull bartenders from server
+    this.props.findBarStaff("5c6aafda90d4735a4e22f711");
+    
+    // Load selected bartender account from localstorage, or select the first if none exists
+    this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || "5c97adae8cab340a0995dd25"});
+    
+    // Load bartender hotbar order from localstorage (or use empty array)
+    this.setState({staffHotBarOrder: JSON.parse(localStorage.getItem("staffHotBarOrder")) || []});
+
     // Pull orders from server
     const collectionId = localStorage.getItem('collectionPoint') || '5c925636bc63a912ed715316';
-    this.props.findBarStaff("5c6aafda90d4735a4e22f711");
-    this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || "5c97adae8cab340a0995dd25"});
     this.props.loadOrders(collectionId);
+
+    // Load webcam for iOS
     this.getUserMedia();
   }
 
@@ -407,6 +444,12 @@ class App extends Component {
     }
   };
 
+  buildHotbarButton = (staffData) => {
+    let buttonClass = "";
+    if (this.state.selectedStaffMemberID === staffData._id) buttonClass = "selected";
+    return ( <button key={staffData._id} onClick={()=>{this.moreAccounts(staffData._id)}} className={buttonClass}>{staffData.firstName}</button> );
+  }
+
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
       return this.buildLoadingScreen("Loading orders...")
@@ -418,10 +461,20 @@ class App extends Component {
             <div id="topBar">
               <div id="accountsHotbar">
               {
+                // Build staff buttons from recently switched-into accounts
+                this.state.staffHotBarOrder.map((staffHotBarData) => {
+                  let staffData = this.state.barStaff.find(entry => entry._id === staffHotBarData.id);
+                  return this.buildHotbarButton(staffData)
+                })
+              }
+              {
+                // Build staff buttons for all other accounts
                 this.state.barStaff.map((staffData) => {
-                  let buttonClass = "";
-                  if (this.state.selectedStaffMemberID === staffData._id) buttonClass = "selected";
-                  return ( <button key={staffData._id} onClick={()=>{this.moreAccounts(staffData._id)}} className={buttonClass}>{staffData.firstName}</button> );
+                  if (this.state.staffHotBarOrder.find(entry => entry.id === staffData._id)) {
+                    return null
+                  } else {
+                    return this.buildHotbarButton(staffData)
+                  }
                 })
               }
               </div>
@@ -579,7 +632,7 @@ class App extends Component {
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} updateOrderFunc={this.props.updateOrder}/>
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
-            <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} morehAccountsFunc={this.moreAccounts} />
+            <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} moreAccountsFunc={this.moreAccounts} addStaffByIDToHotbarFunc={this.addStaffByIDToHotbar} />
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderRelaxed} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
