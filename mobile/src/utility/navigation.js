@@ -210,7 +210,8 @@ const showLoginOnNotificationPress = async (barId, icon) => {
                 component: {
                     name: screens.AuthScreen,
                     passProps: {
-                        barId
+                        barId,
+                        modal: true
                     },
                     options: {
                         topBar: {
@@ -228,6 +229,10 @@ const showLoginOnNotificationPress = async (barId, icon) => {
         }
     })
 };
+
+const closeLoginModal = async (componentId) => {
+    Navigation.dismissModal(componentId);
+}
 
 const setSwitchBars = async (componentId) => {
     let component = componentId;
@@ -441,5 +446,5 @@ const pop = async (componentId) => {
 };
 
 export {
-    showLoginOnNotificationPress, setOrderStatus, setSwitchBars, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, showQRCodeOnNotificationPress
+    closeLoginModal, showLoginOnNotificationPress, setOrderStatus, setSwitchBars, popToRoot, pop, setViewPastOrders, setViewPastOrdersSettings, setViewBasket, setViewBasketSettings, setDefaultSettings, setWelcomePageRoot, setMainAppSettings, setMainApp, setLoginSettings, setLoginScreen, setViewDrinksSettings, setViewDrinks, showQRCodeOnNotificationPress
 }

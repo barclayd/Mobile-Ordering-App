@@ -5,7 +5,7 @@ import {Alert} from 'react-native';
 import * as actions from '../actions/index';
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import {Platform} from "react-native";
-import {setMainApp, setMainAppSettings, pop} from "../../utility/navigation";
+import {setMainApp, setMainAppSettings, pop, closeLoginModal} from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
 const authRedirect = (action, barName, barCode) => {
@@ -18,6 +18,10 @@ const authRedirect = (action, barName, barCode) => {
             setMainApp(action.componentId, barName, barCode);
         });
 };
+
+const authDropModal = (componentId) => {
+    closeLoginModal(componentId);
+}
 
 export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("token");
@@ -148,7 +152,11 @@ export function* authUserSaga(action) {
                 }
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
                 if (response.data.data.login.lastVisitedBar) {
+                    if (action.modal === true){
+                        yield authDropModal(action.componentId);
+                    } else {
                     yield authRedirect(action, response.data.data.login.lastVisitedBar.name, response.data.data.login.lastVisitedBar.barCode);
+                    }
                 } else {
                     // return back to previous page
                     yield pop(action.componentId);
