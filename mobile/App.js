@@ -15,32 +15,32 @@ import createSagaMiddleware from 'redux-saga';
 import {watchAuth, watchBar, watchDrinks, watchBasket, watchOrder, watchCollectionPoint} from './src/store/sagas/index';
 import ViewMenus from './src/screens/Menus/Menus';
 import ViewCheckout from './src/components/HOC/Checkout/Checkout';
-const sagaMiddleware = createSagaMiddleware();
 
-const store = configureStore(sagaMiddleware);
-
-sagaMiddleware.run(watchAuth);
-sagaMiddleware.run(watchBar);
-sagaMiddleware.run(watchDrinks);
-sagaMiddleware.run(watchBasket);
-sagaMiddleware.run(watchOrder);
-sagaMiddleware.run(watchCollectionPoint);
+  const sagaMiddleware = createSagaMiddleware();
+//
+  const store = configureStore(sagaMiddleware);
+//
+  sagaMiddleware.run(watchAuth);
+  sagaMiddleware.run(watchBar);
+  sagaMiddleware.run(watchDrinks);
+  sagaMiddleware.run(watchBasket);
+  sagaMiddleware.run(watchOrder);
+  sagaMiddleware.run(watchCollectionPoint);
 
 // register screens
-Navigation.registerComponentWithRedux(screens.AuthScreen, () => AuthScreen, Provider, store);
-Navigation.registerComponentWithRedux(screens.WelcomeScreen, () => WelcomeScreen, Provider, store);
-Navigation.registerComponentWithRedux(screens.ViewDrinksScreen, () => ViewDrinks, Provider, store);
-Navigation.registerComponentWithRedux(screens.SideDrawer, () => SideDrawer, Provider, store);
-Navigation.registerComponentWithRedux(screens.Settings, () => Settings, Provider, store);
-Navigation.registerComponentWithRedux(screens.ViewMenus, () => ViewMenus, Provider, store);
-Navigation.registerComponentWithRedux(screens.ViewCheckout, () => ViewCheckout, Provider, store);
-Navigation.registerComponentWithRedux(screens.ActiveOrder, () => ActiveOrder, Provider, store);
-Navigation.registerComponentWithRedux(screens.ViewPastOrders, () => ViewPastOrders, Provider, store);
-Navigation.registerComponentWithRedux(screens.SwitchBar, () => SwitchBar, Provider, store);
+  Navigation.registerComponentWithRedux(screens.AuthScreen, () => AuthScreen, Provider, store);
+  Navigation.registerComponentWithRedux(screens.WelcomeScreen, () => WelcomeScreen, Provider, store);
+  Navigation.registerComponentWithRedux(screens.ViewDrinksScreen, () => ViewDrinks, Provider, store);
+  Navigation.registerComponentWithRedux(screens.SideDrawer, () => SideDrawer, Provider, store);
+  Navigation.registerComponentWithRedux(screens.Settings, () => Settings, Provider, store);
+  Navigation.registerComponentWithRedux(screens.ViewMenus, () => ViewMenus, Provider, store);
+  Navigation.registerComponentWithRedux(screens.ViewCheckout, () => ViewCheckout, Provider, store);
+  Navigation.registerComponentWithRedux(screens.ActiveOrder, () => ActiveOrder, Provider, store);
+  Navigation.registerComponentWithRedux(screens.ViewPastOrders, () => ViewPastOrders, Provider, store);
+  Navigation.registerComponentWithRedux(screens.SwitchBar, () => SwitchBar, Provider, store);
 
 
-Navigation.events().registerAppLaunchedListener(async () => {
-  setDefaultSettings();
-  await setWelcomePageRoot();
-});
-
+  Navigation.events().registerAppLaunchedListener(async () => {
+    setDefaultSettings();
+    await setWelcomePageRoot();
+  });

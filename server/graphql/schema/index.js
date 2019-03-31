@@ -188,10 +188,11 @@ module.exports = buildSchema(`
         createMenu(menuInput: MenuInput): Menu
         updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
         updateLastVisitedBar(userId: ID!, barId: ID): User!
+        updateOrder(orderStatusInput: OrderStatusInput): Order!
     }
     
     type RootSubscription {
-        updateOrder(orderStatusInput: OrderStatusInput): Order!
+        orderUpdated(orderId: ID!): Order!
     }
     
     schema {

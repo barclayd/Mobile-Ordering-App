@@ -23,12 +23,13 @@ import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
 import NotificationService from '../../../src/notifications/NotificationService';
 import appConfig from '../../../app.json';
 import SimpleCrypto from "simple-crypto-js";
+import {orderAdded} from '../../store/subscriptions/orderSubscriptions';
 
 class ActiveOrder extends Component {
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this);
-    this.notification= new NotificationService(this.onRegister.bind(this), this.onNotification.bind(this));
+    this.notification = new NotificationService(this.onRegister.bind(this), this.onNotification.bind(this));
   }
 
   state = {
@@ -39,6 +40,30 @@ class ActiveOrder extends Component {
     senderId: appConfig.senderID,
     screenActive: false
   };
+
+  async componentWillMount() {
+    const orderNumber = await this.getOrderDetails();
+    // if (this.props.orderNumber) {
+    //   this.props.updateOrder(this.props.orderNumber);
+    // } else {
+    //   this.props.updateOrder(orderNumber);
+    // }
+    this.props.data.subscribeToMore({
+      document: orderAdded,
+      variables: {
+        orderId: this.props.orderNumber ? this.props.orderNumber : orderNumber
+      },
+      updateQuery: (prev, {subscriptionData}) => {
+        if (!subscriptionData.data) {
+          return prev;
+        }
+        const updatedOrder = subscriptionData.data.orderUpdated;
+        this.setState({
+          orderStatus: updatedOrder
+        });
+      }
+    })
+  }
 
   async componentDidMount() {
     const orderNumber = await this.getOrderDetails();
@@ -435,6 +460,7 @@ const styles = StyleSheet.create({
   }
 });
 
+
 const mapStateToProps = state => {
   return {
     orderStatus: state.order.orderStatus,
@@ -444,7 +470,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    findOrderById: id => dispatch(actions.orderStatus(id))
+    findOrderById: id => dispatch(actions.orderStatus(id)),
+    updateOrder: (orderId) => dispatch(actions.subscribeToOrderChanges(orderId))
   };
 };
 

@@ -8,12 +8,12 @@ const {transformOrder} = require('./merge');
 const {drinks} = require('./mergeResolvers/drinks');
 const {processPayment} = require('../../helpers/stripe');
 const uuid = require('uuid/v4');
-const {PubSub} = require('graphql-subscriptions');
+const {PubSub, withFilter} = require('graphql-subscriptions');
 const randomString = require('randomstring');
 
 const pubSub = new PubSub();
 
-const UPDATE_ORDER = 'UPDATE_ORDER';
+const ORDER_UPDATED = 'ORDER_UPDATED';
 
 module.exports = {
     createOrder: async (args, req) => {
@@ -174,8 +174,8 @@ module.exports = {
             }
             const barStaffMember = await BarStaff.findOne({_id: args.orderStatusInput.barStaffId});
             await foundOrder.save();
-            await pubSub.publish(UPDATE_ORDER, {
-                orderUpdated: foundOrder._id,
+            await pubSub.publish(ORDER_UPDATED, {
+                orderId: foundOrder._id,
                 orderStatus: foundOrder.status
             });
             return {
@@ -193,9 +193,11 @@ module.exports = {
             throw err;
         }
     },
-    updateOrderSubscription: {
-        subscribe: () => pubSub.asyncIterator(UPDATE_ORDER),
-
+    orderUpdated: {
+        subscribe: withFilter(
+            () => pubSub.asyncIterator(ORDER_UPDATED),
+            (payload, args) => payload.orderId === args.orderId,
+        ),
     },
     updateOrderAssignedTo: async (args) => {
         try {
