@@ -193,6 +193,9 @@ const setSwitchBars = async (componentId) => {
                         largeTitle: true
                     }
                 }
+            },statusBar: {
+                visible: true,
+                style: 'light'
             }
         }
     })
@@ -310,7 +313,7 @@ const setViewPastOrders = (componentId, menuName) => {
 };
 
 
-const setViewPastOrdersSettings = () => {
+const setViewPastOrdersSettings = (image) => {
     Navigation.setDefaultOptions({
         sideMenu: {
             openGestureMode: 'bezel',
@@ -328,16 +331,11 @@ const setViewPastOrdersSettings = () => {
             hideWithTopBar: false,
         },
         topBar: {
-            leftButtons: [
-                {
-                    id: 'menuButton',
-                    color: colours.white
-                }
-            ],
             barStyle: 'black',
             rightButtons: [
                 {
-                    id: 'profileButton',
+                    id: 'arrow-down',
+                    icon: image,
                     color: colours.white
                 }
             ]

@@ -66,7 +66,12 @@ module.exports = {
     },
     findOrdersByUser: async ({userInfo}) => {
         try {
-            const foundOrders = await Order.find({userInfo}).populate('userInfo').populate('collectionPoint');
+            const foundOrders = await Order.find({userInfo}).populate('userInfo').populate({
+                path: 'collectionPoint',
+                populate: {
+                    path: 'bar'
+                }
+            });
             return foundOrders.reverse().map(async foundOrder => {
                 const modifiedUserInfo = {
                     ...foundOrder.userInfo._doc,

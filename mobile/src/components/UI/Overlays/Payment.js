@@ -67,7 +67,7 @@ class MobilePayments extends Component {
         return (
             <Overlay
                 animationType="slide"
-                height={(screenHeight / 3) * 2.65}
+                height={(screenHeight / 3) * 2.5}
                 width={screenWidth / 1.05}
                 overlayBackgroundColor={colours.midnightBlack}
                 overlayStyle={styles.overlayBorder}
