@@ -7,9 +7,11 @@ class SettingsPopupWindow extends Component {
     state = {}
  
     showCollectionPoint = () => {
-    this.state.showCollectionPoint();
-
-};
+        this.setState({closePopup: true}, ()=>{
+            this.setState({closePopup: null})
+            this.props.showCollectionPoint();
+        })
+    };
 
     render() {
         return (
@@ -19,10 +21,11 @@ class SettingsPopupWindow extends Component {
                     subtitle={<span>Further options below</span>}
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
+                    closePopup={this.state.closePopup}
             >
-            <div onClick ={this.props.showCollectionPoint} className="collectionpointbutton">
+            <div onClick={this.showCollectionPoint} className="collectionpointbutton">
             <h2>Change collection point:</h2> 
-                <button className="collection">Change collection point</button>
+                <button  className="collection">Change collection point</button>
             </div>
 
             <div className = "InputContainer"> 

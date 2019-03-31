@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt, faGlassCheers } from '@fortawesome/free-solid-svg-icons';
 
+
 class PickupPopupWindow extends Component {
 
     showOutOfStock = () => {
