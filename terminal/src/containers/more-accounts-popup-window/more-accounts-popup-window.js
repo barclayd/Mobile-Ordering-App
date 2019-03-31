@@ -27,6 +27,7 @@ class MoreAccountsPopupWindow extends Component {
                                     this.setState({closePopup: true}, () => {
                                         this.setState({closePopup: null});
                                         this.props.moreAccountsFunc(staffMember._id)
+                                        this.props.addStaffByIDToHotbarFunc(staffMember._id)
                                     });
                                 }}>
                                     {staffMember.firstName}
@@ -46,7 +47,8 @@ MoreAccountsPopupWindow.propTypes = {
     barStaff: PropTypes.array,
     showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
     activeUser: PropTypes.string, // Holds the ID of the currently logged in staff member
-    moreAccountsFunc: PropTypes.func // Func to switch the current active bar staff ID
+    moreAccountsFunc: PropTypes.func, // Func to switch the current active bar staff ID
+    addStaffByIDToHotbarFunc: PropTypes.func.isRequired,
 };
 
 export default MoreAccountsPopupWindow;
