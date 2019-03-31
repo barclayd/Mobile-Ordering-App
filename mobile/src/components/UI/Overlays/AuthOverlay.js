@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, Dimensions, AsyncStorage} from 'react-native';
+import {Text, StyleSheet, View, Dimensions, AsyncStorage, TextInput, KeyboardAvoidingView} from 'react-native';
 import {Card, Overlay} from 'react-native-elements';
 import { CreditCardInput } from "react-native-credit-card-input";
 import ButtonBackground from '../Buttons/ButtonWithBackground';
 import RNPickerSelect from 'react-native-picker-select';
 import * as colours from '../../../styles/colourScheme';
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import {DismissKeyboard} from '../../../components/Utilities/DismissKeyboard';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-class MobilePayments extends Component {
+class AuthOverlay extends Component {
 
     state = {
         userId: null,
@@ -30,114 +30,107 @@ class MobilePayments extends Component {
             valid: false,
             value: null,
             id: null
+        },
+        controls: {
+            email: {
+                value: null,
+                valid: false,
+                validationRules: {
+                    isEmail: true
+                },
+                touched: false
+            },
+            password:  {
+                value: '',
+                valid: false,
+                validationRules: {
+                    minLength: 4
+                },
+                touched: false
+            },
+            confirmPassword: {
+                value: '',
+                valid: false,
+                validationRules: {
+                    equalTo: 'password'
+                },
+                touched: false
+            },
+            firstName: {
+                value: '',
+                valid: false,
+                validationRules: {
+                    minLength: 2
+                },
+                touched: false
+            },
+            surname: {
+                value: '',
+                valid: false,
+                validationRules: {
+                    minLength: 2
+                },
+                touched: false
+            }
         }
     };
 
-    onInputChange = (formData) => {
-        this.setState({
-            number: {
-                valid: formData.status.number === 'valid',
-                value: formData.values.number
-            },
-            expiration: {
-                valid: formData.status.expiry === 'valid',
-                value: formData.values.expiry
-            },
-            cvc: {
-                valid: formData.status.cvc === 'valid',
-                value: formData.values.cvc
-            }
-        })
+    updateInputHandler = (key, value) => {
+        console.log("input handler",key, value)
     };
 
     render() {
-        const placeholder = {
-            label: 'Select Collection Point',
-            value: null,
-            color: 'gray',
-        };
-
-
-
-        const collectionPoints = [];
-
-        if (this.props.collectionPoints){
-            this.props.collectionPoints.map(points => {
-                collectionPoints.push({label: points.name, value: points.name, id: points.id})
-            })
-        }
 
         return (
+            <DismissKeyboard>
             <Overlay
                 animationType="slide"
                 height={(screenHeight / 3) * 2.65}
                 width={screenWidth / 1.05}
                 overlayBackgroundColor={colours.midnightBlack}
                 overlayStyle={styles.overlayBorder}
-                onBackdropPress={this.props.hidePayment}
+                onBackdropPress={this.props.hideAuth}
                 isVisible={this.props.visible}>
                 <View style={[{height: screenHeight / 2.5}]}>
                     <Text style={styles.header}>
-                        Checkout
+                        Login
                     </Text>
-                    <CreditCardInput
-                        cardScale={0.7}
-                        onChange={this.onInputChange}
-                        labelStyle={{color: colours.pureWhite}}
-                        inputStyle={{color: colours.orange}}
-                        allowScroll/>
-
-                    <View style={styles.picker}>
-                    <View>
-                    <Text style={styles.collectionPoint}>COLLECTION POINT</Text>
-                    </View>
-                    <View style={styles.pad}>
-                        <RNPickerSelect
-                        placeholder={placeholder}
-                        items={collectionPoints}
-                        onValueChange={(value) => {
-                            collectionPoints.map(cps => {
-                                if (value === cps.label){
-                                    this.setState({
-                                        ...collectionPoints,
-                                        collectionPoint: {
-                                            id: cps.id,
-                                            valid: true,
-                                            value: value
-                                        }
-                                    })
-                                }
-                            })
-                        }}
-                        style={{color: colours.midGrey,
-                        paddingRight: 30,
-                        iconContainer: {
-                            right: 0,
-                          },}}
-                        value={this.state.favSport0}
-                        // Icon={() => {
-                        //     return <Icon name="chevron-down" size={20} color="gray" />;
-                        // }}
-                        />
-                    </View>
-                    </View>
-
-                    <Card
+                    {/* <Card
                         containerStyle={{backgroundColor: colours.midnightBlack, marginTop: 25}}>
                         <View style={styles.summary}>
                             <Text style={styles.barOrderDetails1}>
-                                Items: {this.props.basketItems}
+                                blahh
                             </Text>
                             <Text style={{color: colours.midGrey, fontSize: 30}}>
                                 |
                             </Text>
                             <Text style={styles.barOrderDetails2}>
-                                Price: £{this.props.basketPrice}
+                                bleeeee
                             </Text>
                         </View>
-                    </Card>
+                    </Card> */}
 
-                    <View style={[{height: screenHeight / 5.1}, styles.buttons]}>
+
+                    <View style={styles.container}>
+                    {/* <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}> */}
+                    
+                    <TextInput
+                        style={[styles.input]}
+                        placeholder='Email'
+                        placeholderTextColor={colours.white}
+                        autoComplete='email'
+                        autoCorrect={false}
+                        keyboardType='email-address'
+                        selectionColor={colours.orange}
+                        textContentType='emailAddress'
+                        autoCapitalize='none'
+                        value={this.state.controls.email.value}
+                        onChangeText={(val) => this.updateInputHandler('email', val)}/>
+                    
+                    {/* </View> */}
+                    </View>
+
+                    <View style={[{height: screenHeight / 4}, styles.buttons]}>
                         <View style={styles.buttonStyle}>
                             <ButtonBackground
                                 color={colours.warningRed}
@@ -152,12 +145,14 @@ class MobilePayments extends Component {
                                 disabled={!this.state.cvc.valid || !this.state.number.valid || !this.state.expiration.valid || !this.state.collectionPoint.valid || this.state.userId !== null}
                                 textColor={colours.orange}
                                 onPress={() => this.props.submitOrder(this.state)}>
-                                Pay
+                                Login
                             </ButtonBackground>
                         </View>
                     </View>
+                    
                 </View>
             </Overlay>
+            </DismissKeyboard>
         )
     }
 }
@@ -166,6 +161,11 @@ const styles = StyleSheet.create({
     overlayBorder: {
         borderColor: colours.darkGrey,
         borderWidth: 3
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     summary: {
         flexDirection: 'row',
@@ -207,7 +207,22 @@ const styles = StyleSheet.create({
     },
     pad: {
         marginTop: 5
-    }
+    },
+    input: {
+        width: '80%',
+        height: screenHeight / 12,
+        margin: 15,
+        borderWidth: 1,
+        borderColor: colours.cream,
+        borderRadius: 25,
+        color: colours.cream,
+        fontSize: 16,
+        fontStyle: 'italic',
+        top: screenHeight / 12,
+        alignSelf: 'center',
+        textAlign: 'center'
+    },
+
 });
 
-export default MobilePayments
+export default AuthOverlay

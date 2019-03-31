@@ -35,6 +35,8 @@ export function* submitOrderSaga(action) {
     const date = new Date().toISOString();
     const user = yield AsyncStorage.getItem('userId');
     const collectionId = action.paymentInfo.collectionPoint.id;
+    // let map = <Icon name="map-o" size={24} color="#FFFFFF" family={"FontAwesome"} />;
+
 
     yield put(actions.submitOrderStart());
     let drinksList = [];
@@ -98,6 +100,7 @@ export function* submitOrderSaga(action) {
         });
         if (response.data.errors) {
             yield put(actions.submitOrderFail(response.data.errors[0].message));
+            Alert.alert('Unsuccessful Order : ', response.data.errors[0].message)
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
