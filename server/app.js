@@ -13,6 +13,9 @@ const {SubscriptionServer} = require('subscriptions-transport-ws');
 
 const checkAuth = require('./middleware/check-auth');
 
+const subscriptionsEndpoint = `ws://localhost:${process.env.PORT}/subscriptions`;
+
+
 // middleware
 
 express.json();
@@ -32,7 +35,8 @@ app.use(checkAuth);
 app.use('/graphql', graphqlHttp({
     schema: graphQLSchema,
     rootValue: graphQlResolvers,
-    graphiql: true
+    graphiql: true,
+    subscriptionsEndpoint: subscriptionsEndpoint
 }));
 
 

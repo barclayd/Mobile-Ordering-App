@@ -10,7 +10,6 @@ import * as actions from "../../../store/actions/index"
 import ApplePay from '../../../assets/apple-pay.svg';
 import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
 import Payment from '../../UI/Overlays/Payment';
-import {setLoginScreen, setLoginSettings} from "../../../utility/navigation";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -197,8 +196,7 @@ class Checkout extends Component {
     togglePaymentOverlay = async () => {
         const userId = await AsyncStorage.getItem('userId');
         if (!userId) {
-            // setLoginSettings();
-            // setLoginScreen(this.props.componentId, 'Login');
+            // render not signed in notification
         }
         this.setState(prevState => {
             return {
