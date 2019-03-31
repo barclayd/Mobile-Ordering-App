@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, ActivityIndicator, AsyncStorage} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, ActivityIndicator, AsyncStorage, Platform} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -11,8 +11,10 @@ import ApplePay from '../../../assets/apple-pay.svg';
 import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
 import Payment from '../../UI/Overlays/Payment';
 import AuthOverlay from '../../UI/Overlays/AuthOverlay';
-import {setLoginScreen, setLoginSettings} from "../../../utility/navigation";
+import {showLoginOnNotificationPress} from "../../../utility/navigation";
 import {RNNotificationBanner} from "react-native-notification-banner";
+import { Navigation } from "react-native-navigation";
+import NotificationService from '../../../notifications/NotificationService';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -86,17 +88,25 @@ class Checkout extends Component {
         return await AsyncStorage.getItem("userId");
       };
 
+    getBarId = async () => {
+        return await AsyncStorage.getItem("barId");
+    }
     showNotification() {
         let icon = <Icon name="user" size={24} color="#FFFFFF" family={"FontAwesome"} />;
         RNNotificationBanner.Normal({duration: 60, onClick: () => this.handleNotificationPress(),  title: `No user logged in.`, subTitle: `Please click banner to sign in.`, withIcon: true, icon: icon});
     }
 
-    handleNotificationPress() {
-        console.log("notifi pressed")
-        this.togglePaymentOverlay()
-        this.toggleAuthOverlay()
+    handleNotificationPress = async () =>  {
+        // console.log("notifi pressed")
+        Promise.all([
+            Icon.getImageSource(
+                Platform.OS === "android" ? "remove" : "remove",
+                30
+            )
+          ]).then(sources => {
+              showLoginOnNotificationPress(this.getBarId(), sources[0]);
+          })
     }
-
     addValue = () => {
     };
 
@@ -405,7 +415,7 @@ class Checkout extends Component {
 
                             {this.state.showAuthOverlay ?
                             <AuthOverlay
-                                visable={this.state.showAuthOverlay}
+                                visible={this.state.showAuthOverlay}
                                 onCancel={this.toggleAuthOverlay}
                                 hideAuth={this.toggleAuthOverlay}
                                 />

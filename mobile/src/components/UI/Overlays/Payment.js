@@ -31,7 +31,7 @@ class MobilePayments extends Component {
             value: null,
             id: null
         }
-    };
+        };
 
     onInputChange = (formData) => {
         this.setState({
@@ -92,14 +92,13 @@ class MobilePayments extends Component {
                     <Text style={styles.collectionPoint}>COLLECTION POINT</Text>
                     </View>
                     <View style={styles.pad}>
-                        <RNPickerSelect
+                    <RNPickerSelect
                         placeholder={placeholder}
                         items={collectionPoints}
                         onValueChange={(value) => {
                             collectionPoints.map(cps => {
                                 if (value === cps.label){
                                     this.setState({
-                                        ...collectionPoints,
                                         collectionPoint: {
                                             id: cps.id,
                                             valid: true,
@@ -109,16 +108,14 @@ class MobilePayments extends Component {
                                 }
                             })
                         }}
-                        style={{color: colours.midGrey,
-                        paddingRight: 30,
-                        iconContainer: {
-                            right: 0,
-                          },}}
-                        value={this.state.favSport0}
+                        style={{color: colours.pureWhite,
+                        paddingRight: 30}}
+                        value={this.state.collectionPoint.value}
                         // Icon={() => {
                         //     return <Icon name="chevron-down" size={20} color="gray" />;
                         // }}
                         />
+
                     </View>
                     </View>
 
