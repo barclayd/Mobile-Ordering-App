@@ -59,6 +59,34 @@ class App extends Component {
       }
     ],
 
+    staffMemberHotBar: [
+      {
+      id: 50,
+      date: "March 30, 2019 03:24:00"
+    },
+
+    {
+      id: 51,
+      date: "March 29, 2019 03:24:00"
+    },
+
+    {
+      id: 48,
+      date: "March 31, 2019 05:24:00"
+    },
+
+    {
+      id: 49,
+      date: "March 25, 2019 05:24:00"
+    },
+
+    {
+      id: 52,
+      date: "March 26, 2019 05:24:00"
+    }
+
+  ],
+
     lastNotificationID: 0,
 
     selectedStaffMemberID: "5c97adae8cab340a0995dd25",
