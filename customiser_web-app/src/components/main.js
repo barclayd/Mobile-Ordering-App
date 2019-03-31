@@ -5,6 +5,7 @@ import main_page from './main_page';
 import statistics from './statistics';
 import Menu from './menu';
 import account from './account';
+import setUp from './setUp'
 
 const Main = () => (
   <Switch>
@@ -12,6 +13,7 @@ const Main = () => (
     <Route path="/menu" component={Menu} />
     <Route path="/statistics" component={statistics} />
     <Route path="/account" component={account} />
+    <Route path="/setUp" component={setUp} />
   </Switch>
 );
 
