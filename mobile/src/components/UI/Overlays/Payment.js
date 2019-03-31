@@ -50,14 +50,13 @@ class MobilePayments extends Component {
         })
     };
 
+
     render() {
         const placeholder = {
             label: 'Select Collection Point',
             value: null,
             color: 'gray',
         };
-
-
 
         const collectionPoints = [];
 
@@ -66,6 +65,8 @@ class MobilePayments extends Component {
                 collectionPoints.push({label: points.name, value: points.name, id: points.id})
             })
         }
+
+        const userInfo = this.props.userId === null ? (<Icon name="warning" size={22} color={colours.warningRed}/>) : (<Icon name="check" size={30} color={colours.green}/>);
 
         return (
             <Overlay
@@ -119,6 +120,15 @@ class MobilePayments extends Component {
                     </View>
                     </View>
 
+                    <View style={{paddingVertical:5}}/>
+
+                    <View style={{flexDirection: "row", alignContent: 'flex-start', paddingHorizontal: 20}}>        
+                    <Text style={styles.collectionPoint}>User Infomation</Text>
+
+                    {userInfo}
+
+                    </View>
+
                     <Card
                         containerStyle={{backgroundColor: colours.midnightBlack, marginTop: 25}}>
                         <View style={styles.summary}>
@@ -146,7 +156,7 @@ class MobilePayments extends Component {
                         <View style={styles.buttonStyle}>
                             <ButtonBackground
                                 color={colours.white}
-                                disabled={!this.state.cvc.valid || !this.state.number.valid || !this.state.expiration.valid || !this.state.collectionPoint.valid || this.state.userId !== null}
+                                disabled={!this.state.cvc.valid || !this.state.number.valid || !this.state.expiration.valid || !this.state.collectionPoint.valid || this.state.userId === null}
                                 textColor={colours.orange}
                                 onPress={() => this.props.submitOrder(this.state)}>
                                 Pay

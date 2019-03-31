@@ -7,20 +7,21 @@ import * as colours from "../../styles/colourScheme";
 import ButtonWithBackground from "../../components/UI/Buttons/ButtonWithBackground";
 import img from '../../assets/nightclub.jpg';
 import {DismissKeyboard} from '../../components/Utilities/DismissKeyboard';
-import validate from "../../utility/validation";
+import validate from "../../utility/validation";   
 import * as actions from '../../store/actions/index';
+import {closeLoginModal} from '../../utility/navigation';
 
 class AuthScreen extends Component {
 
     constructor(props) {
         super(props);
+        Navigation.events().bindComponent(this);
         Dimensions.addEventListener("change", this.updateStyles);
     }
 
     componentWillUnmount() {
         Dimensions.removeEventListener("change", this.updateStyles);
     }
-
     updateStyles = () => {
         this.setState({
             viewMode: Dimensions.get("window").height > 800 ? 'portrait' : 'landscape'
@@ -74,6 +75,12 @@ class AuthScreen extends Component {
         }
     };
 
+    navigationButtonPressed({ buttonId }) {
+        if (buttonId === "close") {
+            closeLoginModal(this.props.componentId)
+        }
+    }
+
     switchAuthModeHandler = () => {
         this.setState(prevState => {
             return {
@@ -122,7 +129,7 @@ class AuthScreen extends Component {
         const password = this.state.controls.password.value;
         const name = this.state.controls.firstName.value + ' ' + this.state.controls.surname.value;
         const authMode = this.state.authMode === 'signup';
-        await this.props.onAuth(email, password, name, this.props.componentId, authMode);
+        await this.props.onAuth(email, password, name, this.props.componentId, authMode, this.props.modal);
     };
 
     render() {
@@ -322,7 +329,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, name, componentId, isSignUp) => dispatch(actions.auth(email, password, name, componentId, isSignUp))
+        onAuth: (email, password, name, componentId, isSignUp, modal) => dispatch(actions.auth(email, password, name, componentId, isSignUp, modal))
     }
 };
 

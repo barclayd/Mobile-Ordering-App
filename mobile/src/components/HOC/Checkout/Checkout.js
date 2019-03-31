@@ -82,6 +82,11 @@ class Checkout extends Component {
 
     async componentDidMount() {
         this.props.findCollectionPoints()
+        this.getAccountName().then(value => {
+            this.setState({
+                userId: value
+            })
+        })
     }
 
     getAccountName = async () => {
@@ -93,11 +98,10 @@ class Checkout extends Component {
     }
     showNotification() {
         let icon = <Icon name="user" size={24} color="#FFFFFF" family={"FontAwesome"} />;
-        RNNotificationBanner.Normal({duration: 60, onClick: () => this.handleNotificationPress(),  title: `No user logged in.`, subTitle: `Please click banner to sign in.`, withIcon: true, icon: icon});
+        RNNotificationBanner.Error({duration: 60, onClick: () => this.handleNotificationPress(),  title: `No user logged in.`, subTitle: `Please click banner to sign in.`, withIcon: true, icon: icon});
     }
 
     handleNotificationPress = async () =>  {
-        // console.log("notifi pressed")
         Promise.all([
             Icon.getImageSource(
                 Platform.OS === "android" ? "remove" : "remove",
@@ -227,15 +231,15 @@ class Checkout extends Component {
 
     togglePaymentOverlay = async () => {
             this.getAccountName().then((value) => {
-                console.log("bean", value)
+                console.log("userId", value)
                 this.setState({
                     userId: value
                 })
                 if (value == null && this.state.notificationSent === false){
                     this.showNotification()
-                    this.setState({
-                        notificationSent: true
-                    })
+                    // this.setState({
+                        // notificationSent: true
+                    // })
                 }
             });
         this.setState(prevState => {
@@ -426,6 +430,7 @@ class Checkout extends Component {
                                 basketItems={this.basketItems()}
                                 basketPrice={this.basketPrice()}
                                 collectionPoints={this.collectionPoints()}
+                                userId={this.state.userId}
                                 onCancel={this.togglePaymentOverlay}
                                 submitOrder={this.onSubmitOrder}
                                 hidePayment={this.togglePaymentOverlay}/>
