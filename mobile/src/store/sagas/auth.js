@@ -36,7 +36,6 @@ export function* logoutSaga(action) {
 
 export function* authUserSaga(action) {
     yield put(actions.authStart());
-
     if (action.isSignUp) {
         try {
             let requestBody = {

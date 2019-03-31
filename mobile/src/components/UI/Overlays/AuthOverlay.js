@@ -7,13 +7,18 @@ import RNPickerSelect from 'react-native-picker-select';
 import * as colours from '../../../styles/colourScheme';
 import Icon from "react-native-vector-icons/FontAwesome";
 import {DismissKeyboard} from '../../../components/Utilities/DismissKeyboard';
+import validate from '../../../utility/validation';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 class AuthOverlay extends Component {
+    constructor(props) {
+        super(props);
+      }    
 
     state = {
+        text: null,
         userId: null,
       number: {
           valid: false,
@@ -77,12 +82,23 @@ class AuthOverlay extends Component {
 
     updateInputHandler = (key, value) => {
         console.log("input handler",key, value)
+        this.setState(prevState => {
+            return {
+                ...prevState.controls,
+                [key]: {
+                    ...prevState.controls[key],
+                    value: value,
+                    valid: validate(value, prevState.controls[key]),
+                    touched: true
+                },}
+            });  
     };
 
     render() {
 
         return (
             <DismissKeyboard>
+            <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
             <Overlay
                 animationType="slide"
                 height={(screenHeight / 3) * 2.65}
@@ -152,6 +168,7 @@ class AuthOverlay extends Component {
                     
                 </View>
             </Overlay>
+            </KeyboardAvoidingView>
             </DismissKeyboard>
         )
     }
@@ -221,6 +238,9 @@ const styles = StyleSheet.create({
         top: screenHeight / 12,
         alignSelf: 'center',
         textAlign: 'center'
+    },
+    inputContainer: {
+        flex: 1,
     },
 
 });
