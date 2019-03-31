@@ -138,11 +138,9 @@ export function* authUserSaga(action) {
 
             const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.status === 200 && response.status !== 201) {
-                console.log(response.data.data.login);
                 yield AsyncStorage.setItem("name", response.data.data.login.name);
                 yield AsyncStorage.setItem("token", response.data.data.login.token);
                 yield AsyncStorage.setItem("userId", response.data.data.login.userId);
-                console.log(response.data.data.login.lastVisitedBar);
                 if (response.data.data.login.lastVisitedBar) {
                     yield AsyncStorage.setItem("barName", response.data.data.login.lastVisitedBar.name);
                     yield AsyncStorage.setItem("barId", response.data.data.login.lastVisitedBar._id);
