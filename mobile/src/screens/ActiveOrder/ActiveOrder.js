@@ -135,7 +135,7 @@ class ActiveOrder extends Component {
     }
   };
 
-  showQRCode = async () => {
+  showQRCode = () => {
     if (!this.state.showQRCode && !this.state.screenActive) {
       Promise.all([
         IconFa.getImageSource(
@@ -196,46 +196,8 @@ class ActiveOrder extends Component {
                 Thank You {this.state.accountName}!
               </Text>
               <View style={styles.progressCircle}>
-                {/*<Text style={styles.orderText}>Status:</Text>*/}
-                {/*<Text style={styles.orderSubtitle}>*/}
-                {/*  {this.state.orderStatus.status}{" "}*/}
-                {/*</Text>*/}
-                {/*<Progress.Circle*/}
-                {/*  size={30}*/}
-                {/*  indeterminate={true}*/}
-                {/*  color={colours.orange}*/}
-                {/*  thickness={15}*/}
-                {/*/>*/}
-                <OrderStatus orderId={this.props.orderNumber ? this.props.orderNumber : this.state.orderNumber}/>
+                <OrderStatus orderId={this.props.orderNumber ? this.props.orderNumber : this.state.orderNumber} barName={this.state.barName} showQRCode={() => this.showQRCode()}/>
               </View>
-              <View style={styles.progressCircle}>
-                <Text style={styles.orderText}>Collection Code :</Text>
-                <Text style={styles.orderSubtitle}>
-                  #{this.state.orderStatus.collectionId}{" "}
-                </Text>
-              </View>
-              <View style={styles.progressCircle}>
-                <Text style={styles.orderText}>Ordered at :</Text>
-                <Text style={styles.date}>
-                  {new Date(this.state.orderStatus.date)
-                    .toTimeString()
-                    .slice(0, 8)}
-                </Text>
-                <Text style={styles.date}>
-                  {new Date(
-                    this.state.orderStatus.date
-                  ).toDateString()}
-                </Text>
-              </View>
-              <View style={styles.progressCircle}>
-                <Text style={styles.orderText}>Collection Point:</Text>
-                <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.collectionPoint.name}
-                </Text>
-              </View>
-              <Text style={styles.orderText}>
-                Estimated Collection Time : 10:59pm
-              </Text>
               <Text style={[styles.status, styles.padd]}>Order Summary</Text>
 
               {finalList.map((drinks, i) => {
