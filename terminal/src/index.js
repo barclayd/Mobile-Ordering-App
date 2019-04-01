@@ -9,6 +9,13 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import ordersReducer from './store/reducers/order'
 import barReducer from './store/reducers/bar'
 import {watchOrders, watchBar} from './store/sagas/index';
+import { ApolloProvider} from 'react-apollo';
+import {WebSocketLink} from "apollo-link-ws";
+import { getMainDefinition } from 'apollo-utilities';
+import {split} from 'apollo-link';
+import {ApolloClient} from "apollo-client";
+import {HttpLink} from "apollo-link-http";
+import {InMemoryCache} from "apollo-cache-inmemory";
 
 const rootReducer = combineReducers({
     orders: ordersReducer,
@@ -24,10 +31,33 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMidd
 sagaMiddleware.run(watchOrders);
 sagaMiddleware.run(watchBar);
 
+const httpLink = new HttpLink({
+    uri: 'http://localhost:3000/graphql',
+});
+const wsLink = new WebSocketLink({
+    uri: 'ws://localhost:3000/subscriptions',
+    options: {
+        reconnect: true
+    },
+});
+const link = split(
+    ({ query }) => {
+        const { kind, operation } = getMainDefinition(query);
+        return kind === 'OperationDefinition' && operation === 'subscription';
+    },
+    wsLink,
+    httpLink,
+);
+const cache = new InMemoryCache();
+const client = new ApolloClient({ link, cache });
+
+
 const app = (
-    <Provider store={store}>
-        <App />
-    </Provider>
+    <ApolloProvider client={client}>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </ApolloProvider>
 );
 
 ReactDOM.render(app, document.getElementById('root'));

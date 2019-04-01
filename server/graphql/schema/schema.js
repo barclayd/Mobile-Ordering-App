@@ -1,4 +1,4 @@
-const { makeExecutableSchema } = require('graphql-tools/dist/index');
+const { makeExecutableSchema } = require('graphql-tools');
 
 const resolvers = require("../resolvers/resolvers");
 

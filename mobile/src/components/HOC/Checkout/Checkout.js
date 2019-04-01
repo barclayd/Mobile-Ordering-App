@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, ActivityIndicator, AsyncStorage} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, ActivityIndicator} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -192,8 +192,6 @@ class Checkout extends Component {
     togglePaymentOverlay = async () => {
         if (this.state.collectionPoint.length < 1 && !this.state.showPaymentOverlay) {
             this.props.findCollectionPoints();
-            const userId = await AsyncStorage.getItem('userId');
-            if (!userId) {
                 // render not signed in notification
                 this.setState(prevState => {
                     return {
@@ -202,7 +200,6 @@ class Checkout extends Component {
                     }
                 });
             }
-        }
     };
 
     renderHeader = (section, _, isActive) => {
