@@ -110,6 +110,7 @@ export function* updateLastVisitedBarSaga(action) {
                         lastVisitedBar {
                             _id
                             name
+                            barCode
                         }
                     }
                 }
@@ -127,6 +128,7 @@ export function* updateLastVisitedBarSaga(action) {
         if (response.status === 200 && response.status !== 201) {
             yield AsyncStorage.setItem("barId", action.barId);
             yield AsyncStorage.setItem("barName", response.data.data.updateLastVisitedBar.lastVisitedBar.name);
+            yield AsyncStorage.setItem("barCode", response.data.data.updateLastVisitedBar.lastVisitedBar.barCode);
             yield put(actions.updateLastVisitedBarSuccess(response.data.data.updateLastVisitedBar.lastVisitedBar.name, response.data.data.updateLastVisitedBar.lastVisitedBar._id));
         }
     } catch (err) {
