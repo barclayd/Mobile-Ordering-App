@@ -23,7 +23,7 @@ import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
 import NotificationService from '../../../src/notifications/NotificationService';
 import appConfig from '../../../app.json';
 import SimpleCrypto from "simple-crypto-js";
-import MessageList from '../../store/subscriptions/MessageList';
+import OrderStatus from '../../store/subscriptions/OrderStatus';
 
 class ActiveOrder extends Component {
   constructor(props) {
@@ -49,6 +49,7 @@ class ActiveOrder extends Component {
       this.props.findOrderById(orderNumber);
     }
     this.setState({
+        orderNumber: await this.getOrderDetails(),
       accountName: await this.getAccountName(),
       barName: await this.getBarName()
     });
@@ -205,7 +206,7 @@ class ActiveOrder extends Component {
                 {/*  color={colours.orange}*/}
                 {/*  thickness={15}*/}
                 {/*/>*/}
-                <MessageList />
+                <OrderStatus orderId={this.props.orderNumber ? this.props.orderNumber : this.state.orderNumber}/>
               </View>
               <View style={styles.progressCircle}>
                 <Text style={styles.orderText}>Collection Code :</Text>
@@ -260,8 +261,8 @@ class ActiveOrder extends Component {
 
               <View style={styles.button}>
                 <ButtonBackground
-                  color={colours.orange}
-                  onPress={() => this.toggleQRCode()}
+                    color={colours.orange}
+                    onPress={() => this.toggleQRCode()}
                   textColor={colours.pureWhite}
                 >
                   Show QR Code

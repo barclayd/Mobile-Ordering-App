@@ -38,7 +38,7 @@ subscription {
 }
 `;
 
-class MessageListView extends Component {
+class OrderStatusView extends Component {
     componentDidMount() {
         this.props.subscribeToMore();
     }
@@ -53,9 +53,10 @@ class MessageListView extends Component {
     }
 }
 
-const MessageList = () => (
-    <Query query={query} variables={{id: '5c9bc6d65def1d0a9eb73847'}}>
-        {({ loading, error, data, subscribeToMore }) => {
+const OrderStatus = props => {
+    console.log(props);
+    return <Query query={query} variables={{id: props.orderId}}>
+        {({loading, error, data, subscribeToMore}) => {
             if (loading) return <Text style={{color: 'white'}}>Loading...</Text>;
             if (error) {
                 console.log(error);
@@ -63,16 +64,15 @@ const MessageList = () => (
             }
             const more = () => subscribeToMore({
                 document: subscription,
-                updateQuery: (prev, { subscriptionData }) => {
-                    console.log(subscriptionData);
+                updateQuery: (prev, {subscriptionData}) => {
                     if (!subscriptionData.data) return prev;
-                    const { _id, status } = subscriptionData.data;
+                    const {_id, status} = subscriptionData.data;
                     return null;
                 },
             });
-            return <MessageListView data={data} subscribeToMore={more}/>;
+            return <OrderStatusView data={data} subscribeToMore={more}/>;
         }}
     </Query>
-);
+};
 
-export default MessageList;
+export default OrderStatus;
