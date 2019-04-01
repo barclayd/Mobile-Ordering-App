@@ -100,7 +100,6 @@ class ViewMenus extends Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <Checkout componentId={this.props.componentId}>
       <View style={styles.background}>
@@ -114,7 +113,6 @@ class ViewMenus extends Component {
               ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
               data={this.props.menus}
               renderItem={({ item: rowData }) => {
-                console.log(rowData);
                 return (
                   <TouchableOpacity
                     key={rowData}
