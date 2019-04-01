@@ -1,23 +1,16 @@
-const apolloSchema = require('./graphql/apollo/schema');
-const apolloResolvers = require('./graphql/apollo/resolvers');
-
 const express = require('express');
 const app = express();
 const graphqlHttp = require('express-graphql');
 const mongoose = require('mongoose');
 const {createServer} = require('http');
 require('dotenv').config();
-
 const {execute, subscribe} = require('graphql');
-const graphQLSchema = require('./graphql/schema');
-const graphQlResolvers = require('./graphql/resolvers');
-
 const {SubscriptionServer} = require('subscriptions-transport-ws');
-
 const checkAuth = require('./middleware/check-auth');
-
 const subscriptionsEndpoint = `ws://localhost:${process.env.PORT}/subscriptions`;
 
+const apolloSchema = require('./graphql/apollo/schema');
+const apolloResolvers = require('./graphql/apollo/resolvers');
 
 // middleware
 express.json();
@@ -35,13 +28,6 @@ app.use((req, res, next) => {
 app.use(checkAuth);
 
 app.use('/graphql', graphqlHttp({
-    schema: graphQLSchema,
-    rootValue: graphQlResolvers,
-    graphiql: true,
-    subscriptionsEndpoint: subscriptionsEndpoint
-}));
-
-app.use('/graphiql', graphqlHttp({
     schema: apolloSchema,
     rootValue: apolloResolvers,
     graphiql: true,

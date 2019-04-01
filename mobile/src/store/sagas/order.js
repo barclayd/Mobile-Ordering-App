@@ -207,7 +207,7 @@ export function* orderStatusSaga(action){
                 id: id
             }
         };
-        const response = yield axios.post('http://localhost:3000/graphiql', JSON.stringify(requestBody));
+        const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
             yield put(actions.orderHistoryFailure(response.data.errors[0].message));
             throw Error(response.data.errors[0].message);

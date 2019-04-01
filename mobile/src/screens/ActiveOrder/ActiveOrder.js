@@ -379,7 +379,9 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: "center",
-    width: Dimensions.get("window").width / 2
+    textAlign: 'center',
+    width: Dimensions.get("window").width / 2,
+    marginTop: 20
   },
   header: {
     color: colours.midnightBlack,

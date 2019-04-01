@@ -28,6 +28,7 @@ export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("barCode");
     yield AsyncStorage.removeItem("lastOrder");
     yield AsyncStorage.removeItem("orderId");
+    yield AsyncStorage.removeItem("uuid");
     yield put(actions.emptyBasketStart());
     yield emptyBasket();
     yield put(actions.emptyBasketSuccess());
@@ -61,7 +62,7 @@ export function* authUserSaga(action) {
                 }
             };
 
-            const response = yield axios.post('http://localhost:3000/graphiql', JSON.stringify(requestBody));
+            const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.data.errors) {
                 throw Error(response.data.errors[0].message);
             }
@@ -89,7 +90,7 @@ export function* authUserSaga(action) {
                         }
                     };
 
-                    const res = yield axios.post('http://localhost:3000/graphiql', JSON.stringify(requestBody));
+                    const res = yield axios.post('/', JSON.stringify(requestBody));
                     if (res.status === 200 && res.status !== 201) {
                         yield put(actions.authSuccess(res.data.data.login.token, res.data.data.login.userId, res.data.data.login.tokenExpiration, res.data.data.login.name));
                         yield AsyncStorage.setItem("token", res.data.data.login.token);
@@ -137,7 +138,7 @@ export function* authUserSaga(action) {
                 }
             };
 
-            const response = yield axios.post('http://localhost:3000/graphiql', JSON.stringify(requestBody));
+            const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.status === 200 && response.status !== 201) {
                 console.log(response.data.data.login);
                 yield AsyncStorage.setItem("name", response.data.data.login.name);
