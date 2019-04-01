@@ -50,7 +50,8 @@ module.exports = {
                 date: dateToString(args.orderInput.date),
                 userInfo: user,
                 collectionId: collectionId,
-                transactionId: uuid()
+                transactionId: uuid(),
+                price: args.orderInput.price
             });
 
             // Save to server

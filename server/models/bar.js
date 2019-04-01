@@ -24,7 +24,17 @@ const barSchema = mongoose.Schema({
     longitude: {
         type: Number,
         required: true
-    }
+    },
+    image: {
+        type: String
+    },
+    logo: {
+        type: String
+    },
+    menus: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Menu'
+    }]
 });
 
 module.exports = mongoose.model('Bar', barSchema);

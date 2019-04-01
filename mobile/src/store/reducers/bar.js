@@ -8,8 +8,17 @@ const initialState = {
     description: null,
     latitude: null,
     longitude: null,
+    image: null,
+    logo: null,
     type: null,
     barCode: null,
+    updatingLastVisitedBar: false,
+    errorUpdatingLastVisitedBar: false,
+    lastVisitedBar: null,
+    findAllBarsLoading: false,
+    bars: [],
+    findAllBarsError: null,
+    menus: []
 };
 
 const findBarStart = (state, action) => {
@@ -27,6 +36,9 @@ const findBarSuccess = (state, action) => {
         barCode: action.barCode,
         latitude: action.latitude,
         longitude: action.longitude,
+        image: action.image,
+        logo: action.logo,
+        menus: action.menus,
         loading: false,
         error: false
     });
@@ -39,11 +51,71 @@ const findBarFail = (state, action) => {
     });
 };
 
+const updateLastVisitedBarStart = (state, action) => {
+    return updateObject(state, {
+        updatingLastVisitedBar: true
+    });
+};
+
+const updateLastVisitedBarSuccess = (state, action) => {
+    const lastVisitedBar = {
+        barName: action.barName,
+        barId: action.barId
+    };
+    return updateObject(state, {
+        updatingLastVisitedBar: false,
+        errorUpdatingLastVisitedBar: false,
+        lastVisitedBar: lastVisitedBar
+    });
+};
+
+const updateLastVisitedBarFail = (state, action) => {
+    return updateObject(state, {
+        updatingLastVisitedBar: false,
+        errorUpdatingLastVisitedBar: action.err,
+    });
+};
+
+const findAllBarsStart = (state, action) => {
+    return updateObject(state, {
+        findAllBarsLoading: true
+    });
+};
+
+const findAllBarsSuccess = (state, action) => {
+    return updateObject(state, {
+        findAllBarsError: false,
+        findAllBarsLoading: false,
+        bars: action.bars
+    });
+};
+
+const findAllBarsFail = (state, action) => {
+    return updateObject(state, {
+        findAllBarsLoading: false,
+        findAllBarsError: action.err,
+    });
+};
+
+const logout = (state, action) => {
+    return updateObject(state, {
+        ...initialState,
+        bars: state.bars,
+    })
+};
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FIND_BAR_START: return findBarStart(state, action);
         case actionTypes.FIND_BAR_SUCCESS: return findBarSuccess(state, action);
         case actionTypes.FIND_BAR_FAIL: return findBarFail(state, action);
+        case actionTypes.UPDATE_LAST_VISITED_BAR_START: return updateLastVisitedBarStart(state, action);
+        case actionTypes.UPDATE_LAST_VISITED_BAR_SUCCESS: return updateLastVisitedBarSuccess(state, action);
+        case actionTypes.UPDATE_LAST_VISITED_BAR_FAIL: return updateLastVisitedBarFail(state, action);
+        case actionTypes.FIND_ALL_BARS_START: return findAllBarsStart(state, action);
+        case actionTypes.FIND_ALL_BARS_SUCCESS: return findAllBarsSuccess(state, action);
+        case actionTypes.FIND_ALL_BARS_FAIL: return findAllBarsFail(state, action);
+        case actionTypes.AUTH_LOGOUT: return logout(state, action);
         default: return state;
     }
 };

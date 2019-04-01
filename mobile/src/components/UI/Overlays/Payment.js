@@ -3,9 +3,11 @@ import {Text, StyleSheet, View, Dimensions} from 'react-native';
 import {Card, Overlay} from 'react-native-elements';
 import { CreditCardInput } from "react-native-credit-card-input";
 import ButtonBackground from '../Buttons/ButtonWithBackground';
+import RNPickerSelect from 'react-native-picker-select';
 import * as colours from '../../../styles/colourScheme';
 
 const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 class MobilePayments extends Component {
 
@@ -20,6 +22,11 @@ class MobilePayments extends Component {
         }, cvc: {
             valid: false,
             value: null
+        },
+        collectionPoint: {
+            valid: false,
+            value: null,
+            id: null
         }
     };
 
@@ -41,10 +48,27 @@ class MobilePayments extends Component {
     };
 
     render() {
+        const placeholder = {
+            label: 'Select Collection Point',
+            value: null,
+            color: 'gray',
+        };
+
+
+
+        const collectionPoints = [];
+
+        if (this.props.collectionPoints){
+            this.props.collectionPoints.map(points => {
+                collectionPoints.push({label: points.name, value: points.name, id: points.id})
+            })
+        }
+
         return (
             <Overlay
                 animationType="slide"
-                height={(screenHeight / 3) * 2}
+                height={(screenHeight / 3) * 2.5}
+                width={screenWidth / 1.05}
                 overlayBackgroundColor={colours.midnightBlack}
                 overlayStyle={styles.overlayBorder}
                 onBackdropPress={this.props.hidePayment}
@@ -59,8 +83,44 @@ class MobilePayments extends Component {
                         labelStyle={{color: colours.pureWhite}}
                         inputStyle={{color: colours.orange}}
                         allowScroll/>
+
+                    <View style={styles.picker}>
+                    <View>
+                    <Text style={styles.collectionPoint}>COLLECTION POINT</Text>
+                    </View>
+                    <View style={styles.pad}>
+                        <RNPickerSelect
+                        placeholder={placeholder}
+                        items={collectionPoints}
+                        onValueChange={(value) => {
+                            collectionPoints.map(cps => {
+                                if (value === cps.label){
+                                    this.setState({
+                                        ...collectionPoints,
+                                        collectionPoint: {
+                                            id: cps.id,
+                                            valid: true,
+                                            value: value
+                                        }
+                                    })
+                                }
+                            })
+                        }}
+                        style={{color: colours.midGrey,
+                        paddingRight: 30,
+                        iconContainer: {
+                            right: 0,
+                          },}}
+                        value={this.state.favSport0}
+                        // Icon={() => {
+                        //     return <Icon name="chevron-down" size={20} color="gray" />;
+                        // }}
+                        />
+                    </View>
+                    </View>
+
                     <Card
-                        containerStyle={{backgroundColor: colours.midnightBlack}}>
+                        containerStyle={{backgroundColor: colours.midnightBlack, marginTop: 25}}>
                         <View style={styles.summary}>
                             <Text style={styles.barOrderDetails1}>
                                 Items: {this.props.basketItems}
@@ -73,7 +133,8 @@ class MobilePayments extends Component {
                             </Text>
                         </View>
                     </Card>
-                    <View style={[{height: screenHeight / 3}, styles.buttons]}>
+
+                    <View style={[{height: screenHeight / 5.1}, styles.buttons]}>
                         <View style={styles.buttonStyle}>
                             <ButtonBackground
                                 color={colours.warningRed}
@@ -85,7 +146,7 @@ class MobilePayments extends Component {
                         <View style={styles.buttonStyle}>
                             <ButtonBackground
                                 color={colours.white}
-                                disabled={!this.state.cvc.valid || !this.state.number.valid || !this.state.expiration.valid}
+                                disabled={!this.state.cvc.valid || !this.state.number.valid || !this.state.expiration.valid || !this.state.collectionPoint.valid}
                                 textColor={colours.orange}
                                 onPress={() => this.props.submitOrder(this.state)}>
                                 Pay
@@ -129,7 +190,21 @@ const styles = StyleSheet.create({
         color: colours.white,
         fontSize: 24,
         textAlign: 'center'
+    },
+    picker: {
+        justifyContent: "space-evenly",
+        alignItems: "flex-start",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    collectionPoint:{
+        fontSize: 14,
+        color: 'white',
+        fontWeight: 'bold'
+    },
+    pad: {
+        marginTop: 5
     }
 });
 
-export default MobilePayments;
+export default MobilePayments
