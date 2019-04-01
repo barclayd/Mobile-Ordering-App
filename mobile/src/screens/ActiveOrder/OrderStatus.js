@@ -58,16 +58,6 @@ class OrderStatusView extends Component {
         this.unsubscribe = this.props.subscribeToMore();
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     // check if the order for Active Order has changed
-    //     if (nextProps.orderId !== orderStatus.orderId) {
-    //         if (this.unsubscribe) {
-    //             this.unsubscribe();
-    //             // subscribe to new orderId
-    //         }
-    //     }
-    // }
-
     componentWillUnmount() {
         if (this.unsubscribe) {
             this.unsubscribe();
