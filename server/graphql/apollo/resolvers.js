@@ -292,7 +292,7 @@ const resolvers = {
         },
     },
     Mutation: {
-        createOrder: async (parent, args, req) => {
+        createOrder: async (parent, args, {headers}) => {
             try {
                 let drinksIdCheck = false;
                 let foundDrinks = [];
@@ -320,8 +320,8 @@ const resolvers = {
                     charset: 'readable',
                     capitalization: 'uppercase'
                 });
-                const token = await req.get('Payment');
-                const orderPrice = await req.get('Checkout');
+                const token = await headers.payment;
+                const orderPrice = await headers.checkout;
                 // process payment with stripe
                 const userPayment = await processPayment(token, parseInt(orderPrice), collectionId, 'gbp');
                 if (!userPayment) {
@@ -339,8 +339,7 @@ const resolvers = {
                     transactionId: generatedTransactionId,
                     price: args.orderInput.price
                 });
-                const result = await createdOrder.save();
-                return transformOrder(result);
+                return await createdOrder.save();
             } catch (err) {
                 throw err;
             }
@@ -505,7 +504,7 @@ const resolvers = {
                     _id: foundOrder._id,
                     drinks: returnedDrinks,
                     collectionPoint: foundOrder.collectionPoint,
-                    collectionId: foundOrder.collectionPoint.collectionId,
+                    collectionId: foundOrder.collectionId,
                     status: foundOrder.status,
                     orderAssignedTo: barStaffMember,
                     date: dateToString(foundOrder._doc.date),

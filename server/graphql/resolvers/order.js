@@ -46,6 +46,7 @@ module.exports = {
             });
             const token = await req.get('Payment');
             const orderPrice = await req.get('Checkout');
+            console.log(token);
             // process payment with stripe
             const userPayment = await processPayment(token, parseInt(orderPrice), collectionId, 'gbp');
             if (!userPayment) {

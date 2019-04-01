@@ -34,6 +34,7 @@ export function* submitOrderSaga(action) {
     const orderPrice = parseFloat(action.basketPrice) * 100;
 
     const date = new Date().toISOString();
+    const userToken = yield AsyncStorage.getItem('token');
     const user = yield AsyncStorage.getItem('userId');
     const collectionId = action.paymentInfo.collectionPoint.id;
 
@@ -93,6 +94,7 @@ export function* submitOrderSaga(action) {
         };
         const response = yield axios.post('/', JSON.stringify(requestBody), {
             headers: {
+                'Authorization': `Bearer ${userToken}`,
                 'Payment': token.tokenId,
                 'Checkout': orderPrice
             }
