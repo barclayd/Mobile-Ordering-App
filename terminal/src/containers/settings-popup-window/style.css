@@ -1,28 +1,19 @@
 .collectionpointbutton {
-    padding: 0 30px;
-    text-align: center;
-  }
+  padding: 0 30px;
+  text-align: center;
+}
 
-  .collection {
-      margin: 0 auto;
-      height: 100px;
-      width: 300px;
-  }
+.collection {
+  margin: 0 auto;
+  height: 100px;
+  width: 300px;
+}
 
-  .input{
-      margin: 0 auto;
-  }
+input {
+  margin: 0 auto;
+}
 
-  .InputContainer {
-    padding: 0 30px;
-    text-align: center;
-  }
-
-  .lol {
-    display: block;
-  }
-
-  .InputContainer2 {
-    padding: 0 30px;
-    text-align: center;
-  }
+.InputContainer {
+  padding: 0 30px;
+  text-align: center;
+}

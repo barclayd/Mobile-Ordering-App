@@ -18,31 +18,30 @@ class SettingsPopupWindow extends Component {
             <PopupWindow
                     className="switchAccountsPopup"
                     title="Settings:"
-                    subtitle={<span>Further options below</span>}
+                    subtitle={<span>configure this terminal</span>}
                     showCloseButton={true}
                     showFunc={this.props.showFunc}
                     closePopup={this.state.closePopup}
             >
-            <div onClick={this.showCollectionPoint} className="collectionpointbutton">
-            <h2>Change collection point:</h2> 
-                <button  className="collection">Change collection point</button>
-            </div>
+                <div className="collectionpointbutton">
+                    <h2>Change collection point:</h2> 
+                    <button onClick={this.showCollectionPoint} className="collection">Change collection point</button>
+                </div>
 
-            <div className = "InputContainer"> 
-                <h2>Find Order by Longer ID:</h2>
-                <form>
-                <input type = "text"/>
-                
-                </form>
-            </div>
+                <div className="InputContainer"> 
+                    <h2>Find Order by Longer ID:</h2>
+                    <input type="text"/>
+                </div>
 
-            <div className = "InputContainer2"> 
-                <h2>Find Order history by Customer:</h2>
-                <form>
-                <input type = "text"/>
-                
-                </form>
-            </div>
+                <div className="InputContainer"> 
+                    <h2>Find Order history by Customer:</h2>
+                    <input type="text"/>
+                </div>
+
+                <div className="InputContainer">
+                    <h2>Reload page:</h2>
+                    <button onClick={()=>window.location.reload()}>Reload</button>
+                </div>
             </PopupWindow>
         )
     }
