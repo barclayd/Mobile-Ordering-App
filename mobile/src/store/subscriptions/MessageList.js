@@ -4,39 +4,39 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
 const query = gql`
-{
-  allMessages(orderBy: createdAt_DESC, first: 20) {
-    id
-    createdAt
-    text
-    author
-  }
-}
+       query FindOrderById($id: ID!) {
+                    findOrderById(id: $id) {
+                        drinks {
+                            name
+                            category
+                            price
+                        }
+                        collectionPoint {
+                            name
+                            collectionPointId
+                        }
+                        price
+                        status
+                        date
+                        _id
+                        collectionId
+                        transactionId
+                        userInfo{
+                            email
+                            name
+                        }
+                   }
+                }
 `;
 
 const subscription = gql`
-subscription Message {
-  Message {
-    mutation
-    node {
-      id
-      createdAt
-      text
-      author
-    }
+subscription {
+  orderUpdated {
+    _id
+    status
   }
 }
 `;
-
-const MessageItem = ({ message }) => (
-    <View style={{ border:  1}}>
-        <Text style={{color: 'white'}}>
-            {message.author || 'Anonymous'}: {' '}
-            {message.text} {' '}
-            {new Date(message.createdAt).toLocaleString()}
-        </Text>
-    </View>
-);
 
 class MessageListView extends Component {
     componentDidMount() {
@@ -44,28 +44,30 @@ class MessageListView extends Component {
     }
     render() {
         const { data } = this.props;
+        console.log(data);
         return (
             <View>
-                {data.allMessages.map(message => <MessageItem key={message.id} message={message} />)}
+                <Text style={{color: 'white'}}>Order Number: {data.findOrderById.collectionId} | Status: {data.findOrderById.status}</Text>
             </View>
         );
     }
 }
 
 const MessageList = () => (
-    <Query query={query}>
+    <Query query={query} variables={{id: '5c9bc6d65def1d0a9eb73847'}}>
         {({ loading, error, data, subscribeToMore }) => {
             if (loading) return <Text style={{color: 'white'}}>Loading...</Text>;
-            if (error) return <Text style={{color: 'white'}}>Error: {error.message}</Text>;
+            if (error) {
+                console.log(error);
+                return <Text style={{color: 'white'}}>Error: {error.message}</Text>;
+            }
             const more = () => subscribeToMore({
                 document: subscription,
                 updateQuery: (prev, { subscriptionData }) => {
+                    console.log(subscriptionData);
                     if (!subscriptionData.data) return prev;
-                    const { mutation, node } = subscriptionData.data.Message;
-                    if (mutation !== 'CREATED') return prev;
-                    return Object.assign({}, prev, {
-                        allMessages: [node, ...prev.allMessages].slice(0, 20),
-                    });
+                    const { _id, status } = subscriptionData.data;
+                    return null;
                 },
             });
             return <MessageListView data={data} subscribeToMore={more}/>;

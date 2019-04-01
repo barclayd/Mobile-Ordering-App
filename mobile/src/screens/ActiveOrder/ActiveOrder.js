@@ -23,7 +23,6 @@ import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
 import NotificationService from '../../../src/notifications/NotificationService';
 import appConfig from '../../../app.json';
 import SimpleCrypto from "simple-crypto-js";
-import Message from '../../store/subscriptions/Message';
 import MessageList from '../../store/subscriptions/MessageList';
 
 class ActiveOrder extends Component {
@@ -206,7 +205,6 @@ class ActiveOrder extends Component {
                 {/*  color={colours.orange}*/}
                 {/*  thickness={15}*/}
                 {/*/>*/}
-                <Message />
                 <MessageList />
               </View>
               <View style={styles.progressCircle}>
