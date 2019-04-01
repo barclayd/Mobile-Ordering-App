@@ -1,8 +1,10 @@
-const {buildSchema} = require('graphql');
+const { makeExecutableSchema } = require('graphql-tools');
 
-module.exports = buildSchema(`
+const resolvers = require("./resolvers");
 
-     type User {
+
+const typeDefs =[ `
+type User {
         _id: ID!
         email: String!
         password: String
@@ -157,7 +159,7 @@ module.exports = buildSchema(`
         barStaffId: ID
     }
     
-    type RootQuery {
+    type Query {
        login(email: String!, password: String!): AuthData!
        findBar(barCode: String!): Bar!
        findAllBars: [Bar]
@@ -177,7 +179,7 @@ module.exports = buildSchema(`
        findBarStaffByBar(barId: ID!): [BarStaff]
     }
     
-    type RootMutation {
+    type Mutation {
         createUser(userInput: UserInput): User
         createBar(barInput: BarInput): Bar
         createDrink(drinkInput: DrinkInput): Drink
@@ -191,13 +193,22 @@ module.exports = buildSchema(`
         updateOrder(orderStatusInput: OrderStatusInput): Order!
     }
     
-    type RootSubscription {
+    type Subscription {
         orderUpdated: Order!
     }
     
     schema {
-        query: RootQuery
-        mutation: RootMutation
-        subscription: RootSubscription
+        query: Query
+        mutation: Mutation
+        subscription: Subscription
     }
-`);
+`];
+
+// GraphQL: Schema
+const apolloServer = makeExecutableSchema({
+    typeDefs: typeDefs,
+    resolvers: resolvers
+});
+
+
+module.exports = apolloServer;

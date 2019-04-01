@@ -175,14 +175,13 @@ module.exports = {
             const barStaffMember = await BarStaff.findOne({_id: args.orderStatusInput.barStaffId});
             await foundOrder.save();
             await pubSub.publish(ORDER_UPDATED, {
-                orderId: foundOrder._id,
-                orderStatus: foundOrder.status
+               orderUpdated: foundOrder
             });
             return {
                 _id: foundOrder._id,
                 drinks: returnedDrinks,
                 collectionPoint: foundOrder.collectionPoint,
-                collectionId: foundOrder.collectionPoint.collectionId,
+                collectionId: foundOrder.collectionId,
                 status: foundOrder.status,
                 orderAssignedTo: barStaffMember,
                 date: dateToString(foundOrder._doc.date),
@@ -193,11 +192,15 @@ module.exports = {
             throw err;
         }
     },
+    // orderUpdated: {
+    //     subscribe: withFilter(
+    //         () => pubSub.asyncIterator(ORDER_UPDATED),
+    //         (payload, args) => payload.orderId === args.orderId,
+    //     ),
+    // },
     orderUpdated: {
-        subscribe: withFilter(
+        subscribe:
             () => pubSub.asyncIterator(ORDER_UPDATED),
-            (payload, args) => payload.orderId === args.orderId,
-        ),
     },
     updateOrderAssignedTo: async (args) => {
         try {

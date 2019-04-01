@@ -16,8 +16,6 @@ import ViewMenus from './src/screens/Menus/Menus';
 import ViewCheckout from './src/components/HOC/Checkout/Checkout';
 import { ApolloProvider} from 'react-apollo';
 import {WebSocketLink} from "apollo-link-ws";
-import ReduxLink from 'apollo-link-redux';
-import { ReduxCache } from 'apollo-cache-redux';
 import { getMainDefinition } from 'apollo-utilities';
 import {split} from 'apollo-link';
 import createSagaMiddleware from 'redux-saga';
@@ -26,10 +24,6 @@ import {ApolloClient} from "apollo-client";
 import withProvider from './src/components/HOC/Apollo/withProvider';
 import {HttpLink} from "apollo-link-http";
 import {InMemoryCache} from "apollo-cache-inmemory";
-
-// const wsClient = new SubscriptionClient(`wss://subscriptions.ap-northeast-1.graph.cool/v1/cjjoa2ta44sb201919b2xa3rl`, {
-//   reconnect: true,
-// });
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -42,39 +36,11 @@ sagaMiddleware.run(watchBasket);
 sagaMiddleware.run(watchOrder);
 sagaMiddleware.run(watchCollectionPoint);
 
-// const reduxLink = new ReduxLink(store);
-//
-// const cache = new ReduxCache({ store });
-//
-// const webSocketLink = new WebSocketLink(wsClient);
-//
-// const requestLink = ({ queryOrMutationLink, subscriptionLink }) =>
-//     ApolloLink.split(
-//         ({ query }) => {
-//           const { kind, operation } = getMainDefinition(query);
-//           return kind === 'OperationDefinition' && operation === 'subscription';
-//         },
-//         subscriptionLink,
-//         queryOrMutationLink,
-//     );
-//
-// const link = ApolloLink.from([
-//   reduxLink,
-//   requestLink({
-//     subscriptionLink: webSocketLink,
-//   }),
-// ]);
-//
-// export const client = new ApolloClient({
-//   link,
-//   cache
-// });
-
 const httpLink = new HttpLink({
-    uri: 'https://api.graph.cool/simple/v1/cjjoa2ta44sb201919b2xa3rl',
+    uri: 'http://localhost:3000/graphiql',
 });
 const wsLink = new WebSocketLink({
-    uri: 'wss://subscriptions.ap-northeast-1.graph.cool/v1/cjjoa2ta44sb201919b2xa3rl',
+    uri: 'ws://localhost:3000/subscriptions',
     options: {
         reconnect: true
     },
