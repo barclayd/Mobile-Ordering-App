@@ -1,19 +1,22 @@
-const {dateToString} = require("../../helpers/date");
 const Drink = require('../../models/drink');
 const Menu = require('../../models/menu');
-const {transformDrink} = require('./mergeResolvers/drinks');
-const { PubSub, withFilter } = require('graphql-subscriptions');
 const Order = require('../../models/order');
 const BarStaff = require('../../models/barStaff');
 const CollectionPoint = require('../../models/collectionPoint');
 const Bar = require('../../models/bar');
 const User = require('../../models/user');
-const {drinks} = require('./mergeResolvers/drinks');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const {processPayment} = require('../../helpers/stripe');
+
 const uuid = require('uuid/v4');
 const randomString = require('randomstring');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { PubSub, withFilter } = require('graphql-subscriptions/dist/index');
+
+const {dateToString} = require("../../helpers/date");
+const {drinks} = require('../mergeResolvers/drinks');
+const {processPayment} = require('../../helpers/stripe');
+
+
 
 const pubSub = new PubSub();
 
@@ -60,20 +63,9 @@ const resolvers = {
         },
         findOrderById: async (parent, {id}) => {
             try {
-                const foundOrder = await Order.findOne({_id: id}).populate('userInfo').populate('collectionPoint');
-                const returnedDrinks = await drinks(foundOrder.drinks);
-                return {
-                    _id: foundOrder._id,
-                    drinks: returnedDrinks,
-                    collectionPoint: foundOrder.collectionPoint,
-                    collectionId: foundOrder.collectionId,
-                    status: foundOrder.status,
-                    orderAssignedTo: foundOrder.orderAssignedTo,
-                    date: dateToString(foundOrder._doc.date),
-                    userInfo: foundOrder.userInfo,
-                    transactionId: foundOrder.transactionId,
-                    price: foundOrder.price
-                };
+                const foundOrder = await Order.findById(id).populate('userInfo collectionPoint drinks');
+                foundOrder.date = dateToString(foundOrder.date); // Convert date to string
+                return foundOrder;
             } catch (err) {
                 console.log(err);
                 throw err;
@@ -175,7 +167,7 @@ const resolvers = {
             try {
                 const foundDrinks = await Drink.find({category: category});
                 return foundDrinks.map(foundDrink => {
-                    return transformDrink(foundDrink)
+                    return foundDrink
                 });
             } catch (err) {
                 console.log(err);
@@ -198,7 +190,6 @@ const resolvers = {
         findDrinkCategoriesByMenu: async (parent, {menuId}) => {
             try {
                 const menu = await Menu.findOne({_id: menuId}).populate('drinks');
-                // const returnedDrinks = await drinks(menu.drinks);
                 const categories = [];
                 menu.drinks.map(drink => {
                     if (!categories.includes(drink.category)) {
@@ -217,24 +208,15 @@ const resolvers = {
         },
         findOrdersByUser: async (parent, {userInfo}) => {
             try {
-                const foundOrders = await Order.find({userInfo}).populate('userInfo').populate('collectionPoint');
+                const foundOrders = await Order.find({userInfo})
+                    .populate('userInfo collectionPoint drinks')
+                    .populate({
+                        path: 'userInfo',
+                        select: '-password' // Explicitly exclude password field
+                    });
                 return foundOrders.reverse().map(async foundOrder => {
-                    const modifiedUserInfo = {
-                        ...foundOrder.userInfo._doc,
-                        password: null
-                    };
-                    const returnedDrinks = await drinks(foundOrder.drinks);
-                    return {
-                        _id: foundOrder._id,
-                        drinks: returnedDrinks,
-                        collectionPoint: foundOrder.collectionPoint,
-                        collectionId: foundOrder.collectionId,
-                        status: foundOrder.status,
-                        orderAssignedTo: foundOrder.orderAssignedTo,
-                        date: dateToString(foundOrder._doc.date),
-                        userInfo: modifiedUserInfo,
-                        transactionId: foundOrder.transactionId
-                    };
+                    foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
+                    return foundOrder;
                 });
             } catch (err) {
                 throw err;
@@ -242,28 +224,19 @@ const resolvers = {
         },
         findOrdersByCollectionPoint: async (parent, {collectionPoint}) => {
             try {
-                const foundCollectionPoint = await CollectionPoint.findOne({_id: collectionPoint});
+                const foundCollectionPoint = await CollectionPoint.findById(collectionPoint);
                 if (!foundCollectionPoint) {
                     throw new Error(`Collection Point ${collectionPoint} does not exist`);
                 }
-                const foundOrders = await Order.find({$and: [{collectionPoint}, {status: ["AWAITING_COLLECTION", "PENDING", "IN_PROGRESS"]}]}).populate('userInfo').populate('collectionPoint');
+                const foundOrders = await Order.find({$and: [{collectionPoint}, {status: ["AWAITING_COLLECTION", "PENDING", "IN_PROGRESS"]}]})
+                    .populate('collectionPoint drinks')
+                    .populate({
+                        path: 'userInfo',
+                        select: '-password' // Explicitly exclude password field
+                    });
                 return foundOrders.reverse().map(async foundOrder => {
-                    const modifiedUserInfo = {
-                        ...foundOrder.userInfo._doc,
-                        password: null
-                    };
-                    const returnedDrinks = await drinks(foundOrder.drinks);
-                    return {
-                        _id: foundOrder._id,
-                        drinks: returnedDrinks,
-                        collectionPoint: foundOrder.collectionPoint,
-                        collectionId: foundOrder.collectionId,
-                        status: foundOrder.status,
-                        orderAssignedTo: foundOrder.orderAssignedTo,
-                        date: dateToString(foundOrder._doc.date),
-                        userInfo: modifiedUserInfo,
-                        transactionId: foundOrder.transactionId
-                    };
+                    foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
+                    return foundOrder;
                 });
             } catch (err) {
                 throw err;
@@ -271,21 +244,12 @@ const resolvers = {
         },
         findOrders: async () => {
             try {
-                const foundOrders = await Order.find().populate('userInfo').populate('collectionPoint');
+                const foundOrders = await Order.find().populate('userInfo collectionPoint drinks');
                 return foundOrders.reverse().map(async foundOrder => {
-                    const returnedDrinks = await drinks(foundOrder.drinks);
-                    return {
-                        ...foundOrder._doc,
-                        drinks: returnedDrinks,
-                        collectionPoint: foundOrder.collectionPoint,
-                        status: foundOrder.status,
-                        orderAssignedTo: foundOrder.orderAssignedTo,
-                        date: dateToString(foundOrder.date),
-                        userInfo: foundOrder.userInfo,
-                        transactionId: foundOrder.transactionId
-                    };
-                });
-            } catch (err) {
+                    foundOrder.date = dateToString(foundOrder.date); // Convert date to string
+                    return foundOrder;
+                })
+                } catch (err) {
                 throw err;
             }
         },
@@ -293,6 +257,17 @@ const resolvers = {
     Mutation: {
         createOrder: async (parent, args, {headers}) => {
             try {
+                // check validity of entered user details
+                const user = await User.findById(args.orderInput.userInfo);
+                if (!user) {
+                    throw new Error ('Invalid user account to process order');
+                }
+                // check validity of entered collectionPoint details
+                const collectionPoint = await CollectionPoint.findById(args.orderInput.collectionPoint);
+                if (!collectionPoint) {
+                    throw new Error ('Invalid collection point to process order');
+                }
+                // check validity of entered drinks for order
                 let drinksIdCheck = false;
                 let foundDrinks = [];
                 for (let i in args.orderInput.drinks) {
@@ -305,26 +280,17 @@ const resolvers = {
                 if (!drinksIdCheck) {
                     throw new Error ('Drink with invalid ID entered');
                 }
-                const user = await User.findById(args.orderInput.userInfo);
-                if (!user) {
-                    throw new Error ('Invalid user account to process order');
-                }
-                const collectionPoint = await CollectionPoint.findById(args.orderInput.collectionPoint);
-                if (!collectionPoint) {
-                    throw new Error ('Invalid collection point to process order');
-                }
-                const generatedTransactionId = uuid();
+                // generate readable collection code
                 const collectionId = randomString.generate({
                     length: 4,
                     charset: 'readable',
                     capitalization: 'uppercase'
                 });
+                // process payment with stripe
                 const token = await headers.payment;
                 const orderPrice = await headers.checkout;
-                // process payment with stripe
                 const userPayment = await processPayment(token, parseInt(orderPrice), collectionId, 'gbp');
                 if (!userPayment) {
-                    // userPayment failed
                     throw new Error ('Attempt to process user payment failed.');
                 }
                 const createdOrder = new Order({
@@ -335,7 +301,7 @@ const resolvers = {
                     date: dateToString(args.orderInput.date),
                     userInfo: user,
                     collectionId: collectionId,
-                    transactionId: generatedTransactionId,
+                    transactionId: uuid(),
                     price: args.orderInput.price
                 });
                 return await createdOrder.save();
@@ -487,54 +453,36 @@ const resolvers = {
         },
         updateOrder: async (parent, args)  => {
             try {
-                const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderId}).populate('orderAssignedTo');
+                const foundOrder = await Order.findById(args.orderStatusInput.orderId).populate('orderAssignedTo drinks userInfo');
+                // update order status
                 foundOrder.status = args.orderStatusInput.status;
-                const returnedDrinks = await drinks(foundOrder.drinks);
                 if (args.orderStatusInput.barStaffId) {
                     foundOrder.orderAssignedTo = args.orderStatusInput.barStaffId;
                 }
-                const barStaffMember = await BarStaff.findOne({_id: args.orderStatusInput.barStaffId});
                 await foundOrder.save();
                 await pubSub.publish(ORDER_UPDATED, {
                     orderId: foundOrder._id,
                     orderUpdated: foundOrder
                 });
-                return {
-                    _id: foundOrder._id,
-                    drinks: returnedDrinks,
-                    collectionPoint: foundOrder.collectionPoint,
-                    collectionId: foundOrder.collectionId,
-                    status: foundOrder.status,
-                    orderAssignedTo: barStaffMember,
-                    date: dateToString(foundOrder._doc.date),
-                    userInfo: foundOrder.userInfo,
-                    transactionId: foundOrder.transactionId
-                }
+                foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
+                return foundOrder;
             } catch (err) {
                 throw err;
             }
         },
         updateOrderAssignedTo: async (parent, args) => {
             try {
-                const foundOrder = await Order.findOne({_id: args.orderAssignedToInput.orderId}).populate('orderAssignedTo');
+                // Find order and reassign bartender
+                const foundOrder = await Order.findById(args.orderAssignedToInput.orderId).populate('orderAssignedTo userInfo');
                 if (args.orderAssignedToInput.barStaffId) {
                     foundOrder.orderAssignedTo = args.orderAssignedToInput.barStaffId;
                 } else {
+                    // if no bartender is present, unassign a bartender from the query
                     foundOrder.orderAssignedTo = null;
                 }
-                const barStaffMember = await BarStaff.findOne({_id: args.orderAssignedToInput.barStaffId});
                 await foundOrder.save();
-                return {
-                    _id: foundOrder._id,
-                    drinks: foundOrder.drinks,
-                    collectionPoint: foundOrder.collectionPoint,
-                    collectionId: foundOrder.collectionPoint.collectionId,
-                    status: foundOrder.status,
-                    orderAssignedTo: barStaffMember,
-                    date: dateToString(foundOrder._doc.date),
-                    userInfo: foundOrder.userInfo,
-                    transactionId: foundOrder.transactionId
-                }
+                foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
+                return foundOrder
             } catch (err) {
                 throw err;
             }

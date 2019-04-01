@@ -1,7 +1,6 @@
-const { makeExecutableSchema } = require('graphql-tools');
+const { makeExecutableSchema } = require('graphql-tools/dist/index');
 
-const resolvers = require("./resolvers");
-
+const resolvers = require("../resolvers/resolvers");
 
 const typeDefs =[ `
 type User {
@@ -204,7 +203,6 @@ type User {
     }
 `];
 
-// GraphQL: Schema
 const apolloServer = makeExecutableSchema({
     typeDefs: typeDefs,
     resolvers: resolvers
