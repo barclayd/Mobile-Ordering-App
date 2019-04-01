@@ -13,7 +13,7 @@ export const rangeScaling = (value, xMin, xMax, yMin, yMax) => {
 export const rebuildDateAndDrinksForOrderWithQuantities = (ordersArray) => {
     let newOrdersArray = JSON.parse(JSON.stringify(ordersArray)); // Deep-copy array
     newOrdersArray.forEach((order, index) => {
-        order.date = new Date(order.date); // Convert order dates from strings to date objects
+        order.date = new Date(parseInt(order.date)); // Convert order dates from strings to date objects
         order.drinks = rebuildDrinksWithQuantities(order.drinks)
     });
 
