@@ -22,7 +22,7 @@ import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
 import NotificationService from '../../../src/notifications/NotificationService';
 import appConfig from '../../../app.json';
 import SimpleCrypto from "simple-crypto-js";
-import OrderStatus from '../../store/subscriptions/OrderStatus';
+import OrderStatus from './OrderStatus';
 
 class ActiveOrder extends Component {
   constructor(props) {
@@ -268,7 +268,7 @@ class ActiveOrder extends Component {
                     <Text style={styles.infoText}>
                       Order Time:{" "}
                       <Text style={{ color: colours.orange }}>
-                        {new Date(this.props.orderStatus.date).toTimeString().slice(0, 5)}
+                        {new Date(parseInt(this.props.orderStatus.date)).toTimeString().slice(0, 5)}
                       </Text>
                     </Text>
                   </View>

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {ActivityIndicator, Alert, Dimensions, StyleSheet, Text, View} from 'react-native';
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { Query } from 'react-apollo/index';
 import * as colours from "../../styles/colourScheme";
 import NotificationService from "../../notifications/NotificationService";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -116,14 +116,12 @@ class OrderStatusView extends Component {
                 <View style={styles.progressCircle}>
                     <Text style={styles.orderText}>Ordered at :</Text>
                     <Text style={styles.date}>
-                        {new Date(orderStatus.date)
+                        {new Date(parseInt(orderStatus.date))
                             .toTimeString()
                             .slice(0, 8)}
                     </Text>
                     <Text style={styles.date}>
-                        {new Date(
-                            orderStatus.date
-                        ).toDateString()}
+                        {new Date(parseInt(orderStatus.date)).toDateString()}
                     </Text>
                 </View>
                 <View style={styles.progressCircle}>
