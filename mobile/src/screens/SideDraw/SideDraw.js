@@ -19,7 +19,8 @@ import {
   setViewPastOrdersSettings,
   setOrderStatus,
     setSwitchBars,
-  popToRoot
+  popToRoot,
+  showLoginOnNotificationPress
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
 import { Navigation } from "react-native-navigation";
@@ -78,6 +79,10 @@ class SideDrawer extends Component {
       return await AsyncStorage.getItem("name");
   };
 
+  getBarId = async () => {
+    return await AsyncStorage.getItem("barId");
+  }
+
   getUserId = async () => {
     return await AsyncStorage.getItem("userId");
   };
@@ -85,6 +90,17 @@ class SideDrawer extends Component {
   getOrderId = async () => {
     return await AsyncStorage.getItem("orderId");
   };
+
+  signInLogic = async () =>  {
+    Promise.all([
+        Icon.getImageSource(
+            Platform.OS === "android" ? "remove" : "remove",
+            30
+        )
+      ]).then(sources => {
+          showLoginOnNotificationPress(this.getBarId(), sources[0]);
+      })
+}
 
   render() {
     let menuOptions =
@@ -172,7 +188,7 @@ class SideDrawer extends Component {
           </TouchableOpacity>
         </>;
 
-    if (!this.getUserId()) {
+    if (!this.state.userId) {
       menuOptions =
           <>
             <View style={[styles.drawItem, styles.header]}>
@@ -185,7 +201,7 @@ class SideDrawer extends Component {
               />
               <Text style={styles.text}>Create an Account</Text>
             </View>
-            <TouchableOpacity onPress={() => this.logoutHandler()}>
+            <TouchableOpacity onPress={() => this.signInLogic()}>
               <View style={styles.drawItem}>
                 <Icon
                     size={30}
