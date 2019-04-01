@@ -1,4 +1,4 @@
-const Drink = require('../../../models/drink.js');
+const Drink = require('../../models/drink');
 
 const drinks = async (drinkIds) => {
     try {

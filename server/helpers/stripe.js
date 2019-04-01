@@ -1,4 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_KEY);
+const stripe = require('stripe')('sk_test_og2wtkFlVbxanpmP8jxaFAmq');
 
 const processPayment = async (token, orderPrice, orderId, currency) => {
     if (!token) {

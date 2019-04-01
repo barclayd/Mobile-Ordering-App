@@ -2,10 +2,13 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import * as colours from '../../styles/colourScheme';
-import {Dimensions, StyleSheet, View, Text} from 'react-native';
+import {Dimensions, StyleSheet, View, Text, AsyncStorage} from 'react-native';
 import MapView, {Marker, Callout} from 'react-native-maps';
 import {Card} from 'react-native-elements';
 import ButtonWithBackground from '../UI/Buttons/ButtonWithBackground';
+import {distanceCalculator} from '../../utility/maps';
+import Icon from "react-native-vector-icons/FontAwesome";
+import {RNNotificationBanner} from "react-native-notification-banner";
 
 class MapDisplay extends Component {
 
@@ -19,7 +22,7 @@ class MapDisplay extends Component {
         chosenMarker: null
     };
 
-    async componentDidMount() {
+    componentDidMount() {
         // await this.getLocationHandler();
         this.props.findAllBars();
     }
@@ -31,6 +34,7 @@ class MapDisplay extends Component {
             });
         }
     }
+
 
     getLocationHandler = () => {
         navigator.geolocation.getCurrentPosition(pos => {
@@ -51,17 +55,38 @@ class MapDisplay extends Component {
 
     handleMarkerPress = (event) => {
         const markerId = event.nativeEvent.id;
-        console.log(markerId);
         this.setState({
             chosenMarker: markerId
-        })
+        });
     };
 
     handleCalloutPress = () => {
       if (this.state.chosenMarker) {
-          console.log(this.props);
           this.props.findBar(this.state.chosenMarker, this.props.componentId, null, this.props.redirect);
       }
+    };
+
+    handleNotificationPress = (barCode) => {
+        this.props.findBar(barCode, this.props.componentId, null, this.props.redirect);
+    };
+
+    showNearestBar = async (bar) => {
+        const currentBarId = await this.getCurrentBar();
+        if (bar && !this.props.notificationStatus) {
+            let map = <Icon name="map-o" size={24} color="#FFFFFF" family={"FontAwesome"} />;
+            setTimeout(() => {
+                if((currentBarId === bar.id) && this.props.parentScreen) {
+                    RNNotificationBanner.Normal({duration: 5, title: `Nearest DrinKing Bar: ${bar.name}`, subTitle: `You are currently viewing the menus of your closest DrinKing`, withIcon: true, icon: map});
+                } else {
+                    RNNotificationBanner.Info({ onClick: () => this.handleNotificationPress(bar.barCode), duration: 5, title: `Nearest DrinKing: ${bar.name}`, subTitle: `Tap to View the Menus for ${bar.name}`, withIcon: true, icon: map});
+                }
+            }, 3000);
+            this.handleNotificationSent();
+        }
+    };
+
+    getCurrentBar = async () => {
+      return await AsyncStorage.getItem('barId');
     };
 
     pickLocationHandler = event => {
@@ -84,9 +109,22 @@ class MapDisplay extends Component {
         }
     };
 
-    render() {
+    handleNotificationSent = () => {
+        this.props.sentNotification(true);
+    };
 
+    render() {
+        const distanceFromBars = [];
         const barMarkers = this.props.bars.map((bar, index) => {
+            if(this.props.userCoordinates) {
+                const distance = distanceCalculator(bar.latitude, bar.longitude, this.props.userCoordinates.latitude, this.props.userCoordinates.latitude);
+                distanceFromBars.push({
+                    name: bar.name,
+                    distance,
+                    barCode: bar.barCode,
+                    id: bar._id
+                });
+            }
             let markerCoordinates = {
                 ...this.state.focusedLocation,
                 latitude: bar.latitude,
@@ -96,7 +134,6 @@ class MapDisplay extends Component {
                     <Callout style={styles.callout}>
                             <View>
                                 <Text style={styles.calloutHeader}>{bar.name}</Text>
-                            {/*    <Text>{bar.description}</Text>*/}
                             </View>
                         <Card
                             containerStyle={styles.cardContainer}
@@ -112,6 +149,11 @@ class MapDisplay extends Component {
                 </Callout>
             </Marker>
         });
+        if (distanceFromBars.length > 0) {
+            const shortestDistance = distanceFromBars.reduce((min, bar) => bar.distance < min ? bar.distance : min, distanceFromBars[0].distance);
+            const closestBar = distanceFromBars.filter(bar => bar.distance === shortestDistance);
+            this.showNearestBar(closestBar[0]);
+        }
         return (
             <View style={styles.container}>
                 <MapView

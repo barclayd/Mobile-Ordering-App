@@ -10,7 +10,6 @@ import * as actions from "../../../store/actions/index"
 import ApplePay from '../../../assets/apple-pay.svg';
 import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
 import Payment from '../../UI/Overlays/Payment';
-import {setLoginScreen, setLoginSettings} from "../../../utility/navigation";
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -190,16 +189,20 @@ class Checkout extends Component {
         }
     };
 
-    togglePaymentOverlay = () => {
+    togglePaymentOverlay = async () => {
         if (this.state.collectionPoint.length < 1 && !this.state.showPaymentOverlay) {
             this.props.findCollectionPoints();
-        }
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                showPaymentOverlay: !prevState.showPaymentOverlay
+            const userId = await AsyncStorage.getItem('userId');
+            if (!userId) {
+                // render not signed in notification
+                this.setState(prevState => {
+                    return {
+                        ...prevState,
+                        showPaymentOverlay: !prevState.showPaymentOverlay
+                    }
+                });
             }
-        })
+        }
     };
 
     renderHeader = (section, _, isActive) => {
@@ -549,4 +552,4 @@ const mapDispatchToProps = dispatch => {
     };
   };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout)
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

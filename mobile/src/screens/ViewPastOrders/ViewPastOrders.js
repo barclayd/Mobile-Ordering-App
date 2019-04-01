@@ -219,12 +219,12 @@ class ViewPastOrders extends Component {
                         Order Date :{" "}
                       </Text>
                       <Text style={styles.subInformationText}>
-                        {new Date(order.date).toDateString()}
+                        {new Date(parseInt(order.date)).toDateString()}
                       </Text>
                       {/* spacing */}
                       <Text> </Text>
                       <Text style={styles.subInformationText}>
-                        {new Date(order.date).toTimeString().slice(0, 5)}
+                        {new Date(parseInt(order.date)).toTimeString().slice(0, 5)}
                       </Text>
                     </View>
                     <View

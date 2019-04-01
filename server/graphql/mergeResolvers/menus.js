@@ -1,10 +1,10 @@
-const Menu = require('../../../models/menu');
+const Menu = require('../../models/menu');
 
 const menus = async (menuIds) => {
     try {
         const foundMenus = [];
         await menuIds.forEach(id => {
-            const menu = Menu.findOne({_id: id});
+            const menu = Menu.findById(id);
             foundMenus.push(menu);
         });
         await foundMenus.map(async menu => {

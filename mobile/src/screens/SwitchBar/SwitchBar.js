@@ -33,8 +33,27 @@ class SwitchBar extends Component {
                     minLength: 4
                 }
             }
-        }
+        },
+        notificationSent: false
     };
+
+
+    componentDidAppear() {
+        navigator.geolocation.requestAuthorization();
+        navigator.geolocation.getCurrentPosition(pos => {
+            const foundCoordinates = {
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude
+            };
+            this.setState({
+                coordinates: foundCoordinates
+            });
+        });
+    }
+
+    componentDidDisappear() {
+        navigator.geolocation.stopObserving();
+    }
 
     inputUpdateHandler = (key, value) => {
 
@@ -51,6 +70,12 @@ class SwitchBar extends Component {
             }
         });
 
+    };
+
+    handleNotificationSent = (sent) => {
+        this.setState({
+            notificationSent: sent
+        })
     };
 
     navigationButtonPressed({ buttonId }) {
@@ -127,7 +152,7 @@ class SwitchBar extends Component {
                         </View>
                     </View>
                     <View style={styles.mapView}>
-                        <MapDisplay componentId={this.props.componentId} redirect={true}/>
+                        <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} redirect={true} notificationStatus={this.state.notificationSent} sentNotification={this.handleNotificationSent} parentScreen='SwitchBar'/>
                     </View>
                 </View>
             </ScrollView>
