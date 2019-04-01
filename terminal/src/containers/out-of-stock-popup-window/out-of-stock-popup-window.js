@@ -31,7 +31,7 @@ class OutOfStockPopUpWindow extends Component {
     };
 
     buildIngredients = (ingredients) => { // Check item contains more ingredients than just itself
-        if (ingredients.length > 1) {
+        if (ingredients && ingredients.length > 1) {
             return (
                 <ul className="ingredientList">
                     {
@@ -62,7 +62,7 @@ class OutOfStockPopUpWindow extends Component {
             <React.Fragment>
                 <div className="indentedContent">
                     <ul className="orderList">
-                        {order.items.map((itemData, incrementer) => {
+                        {order.drinks.map((itemData, incrementer) => {
                             return (
                                 <li key={incrementer}>
                                     <span className="item">{itemData.name}</span>

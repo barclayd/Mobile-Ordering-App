@@ -1,5 +1,5 @@
 import { faClock } from '@fortawesome/free-regular-svg-icons';
-import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy, faCheck, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBeer, faCamera, faExclamation, faExclamationTriangle, faInfo, faLongArrowAltUp, faRetweet, faTrophy, faCheck, faUndoAlt, faCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import QrReader from "react-qr-reader";
@@ -11,14 +11,17 @@ import ManualPickupPopupWindow from './containers/manual-pickup-popup-window/man
 import MultiColumnItemList from './components/multi-column-item-list/multi-column-item-list';
 import NotesPopupWindow from './components/notes-popup-window/notes-popup-window';
 import PickupPopupWindow from './containers/pickup-popup-window/pickup-popup-window';
-import SwitchAccountsPopupWindow from './components/switch-accounts-popup-window/switch-accounts-popup-window';
+import MoreAccountsPopupWindow from './containers/more-accounts-popup-window/more-accounts-popup-window';
+import SelectCollectionPointPopupWindow from './containers/select-collection-point-popup-window/select-collection-point-popup-window';
 import TimeAgo from './containers/time-ago-clean/time-ago-clean';
 import UpcomingPopupWindow from './components/upcoming-popup-window/upcoming-popup-window';
 import NotesIcon from "./assets/notes.svg";
-import OrderStatus from './helpers/OrderStatuses.js';
-import IngredientAmounts from './helpers/IngredientAmounts.js';
+import {OrderStatuses} from './helpers/schemaHelper.js';
 import {rangeScaling} from "./helpers/FunctionLib.js";
 import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of-stock-popup-window';
+import {rebuildDateAndDrinksForOrderWithQuantities} from './helpers/FunctionLib.js';
+import LoadingIcon from './assets/loading-icon.gif';
+import SettingsPopupWindow from './containers/settings-popup-window/settings-popup-window';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (milliseconds)
@@ -31,518 +34,81 @@ class App extends Component {
   constructor (props) {
     super(props);
 
-    this.state = {
-      orders: [
-        {
-          id: "ALVR",
-          orderDate: new Date(),
-          customerID: 42,
-          staffMemberID: 4,
-          notes: "hi",
-          items: [
-            {
-              id: 1,
-              name: "VK Orange",
-              price: 250,
-              quantity: 1,
-              ingredients: [{
-                id: 546,
-                name: "VK Orange",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.FACTORY,
+    this.previewDiv = React.createRef();
+  }
 
-              }]
+  state = {
+    // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
+    notifications: [],
 
-            },
-          ],
-          status: OrderStatus.AWAITING_COLLECTION
-        },
-        {
-          id: "KHVD", orderDate: new Date(), customerID: 13, staffMemberID: 6, items: [
-            {
-              id: 1,
-              name: "VK Orange",
-              price: 250,
-              quantity: 1,
-              ingredients: [{
-                id: 547,
-                name: "VK Orange",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.FACTORY,
+    collectionPoints: [
+      {
+        id: 1,
+        name: "Downstairs",
+        description: "Outside WHSmiths, usually dead."
+      },
+      {
+        id: 2,
+        name: "Upstairs",
+        description: "Small minibar."
+      },
+      {
+        id: 3,
+        name: "Main floor",
+        description: "Wide bar."
+      }
+    ],
 
-              }]
-            },
-          ],
-          status: OrderStatus.AWAITING_COLLECTION
-        },
-        { id: "EOPL", orderDate: new Date(), customerID: 13, staffMemberID: 4, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KJHS", orderDate: new Date(), customerID: 13, staffMemberID: 2, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KXHS", orderDate: new Date(), customerID: 13, staffMemberID: 10, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        { id: "KAHS", orderDate: new Date(), customerID: 13, staffMemberID: 1, items: [ { id: 1, name: "VK Orange", price: 250, quantity: 1, ingredients: [{id: 547, name: "VK Orange", containsAlcohol: true, allergens: [], amount: IngredientAmounts.FACTORY, }] }, ], status: OrderStatus.AWAITING_COLLECTION },
-        {
-          id: "XHBS",
-          orderDate: new Date(),
-          customerID: 93,
-          staffMemberID: 0,
-          items: [
-            {
-              id: 1,
-              name: "VK Orange",
-              price: 250,
-              quantity: 1,
-            },
-            {
-              id: 19,
-              name: "VK Green",
-              price: 250,
-              quantity: 2,
-            }
-          ],
-          status: OrderStatus.IN_PROGRESS
-        },
-        {
-          id: "ZBNU",
-          orderDate: new Date(),
-          customerID: 93,
-          staffMemberID: 1,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-              ingredients: [
-                {
-                  id: 921,
-                  name: "VK Red",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.FACTORY,
-                  inStock: true,
-                }
-              ]
-            },
-            {
-              id: 122,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 5,
-              ingredients: [
-                {
-                  id: 8349,
-                  name: "Jagermeister",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.SHOT,
-                  inStock: true,
-                },
-                {
-                  id: 13,
-                  name: "Redbull",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.FILL,
-                  inStock: true,
-                }
-              ]
-            },
-            {
-              id: 484,
-              name: "Mojito",
-              price: 125,
-              quantity: 1,
-              ingredients: [
-                {
-                  id: 48,
-                  name: "Lime cordial",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.FILL,
-                  inStock: true,
-                },
-                {
-                  id: 10,
-                  name: "White rum",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.DOUBLE_SHOT,
-                  inStock: true,
-                }
-              ]
-            },
-            {
-              id: 1023,
-              name: "Bottled water",
-              price: 90,
-              quantity: 2,
-              ingredients: [
-                {
-                  id: 19,
-                  name: "Bottled water",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.FACTORY,
-                  inStcok: true,
-                }
-              ]
-            },
-            {
-              id: 67,
-              name: "Jumba juice cocktail",
-              price: 750,
-              quantity: 1,
-              ingredients: [
-                {
-                  id: 123,
-                  name: "Slurp juice",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.DOUBLE_SHOT,
-                  inStock: true,
-                },
-                {
-                  id: 276,
-                  name: "Tomato soup",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.SHOT,
-                  inStock: false,
-                },
-                {
-                  id: 2384,
-                  name: "Diced Lego bricks",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.PINT,
-                  inStock: true,
-                }
-              ]
-            }
-          ],
-          notes: "pleawse dont put a lime in my Vk becaseu i dont think im not allergic to htem!!!!",
-          status: OrderStatus.IN_PROGRESS
-        },
-        {
-          id: "ACBS",
-          orderDate: new Date(),
-          customerID: 93,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-              ingredients: [ {
-                id: 222,
-                name: "VK Red",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.FACTORY,
-              }]
-            },
-            {
-              id: 122,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 5,
-              ingredients: [{
-                id: 663,
-                name: "Jagermesiter",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.SHOT,
-                },
-              {
-                id: 197,
-                name: "Red Bull",
-                containsAlcohol: false,
-                allergens: [],
-                amount: IngredientAmounts.FILL,
-              }]
-            },
-            {
-              id: 484,
-              name: "Mojito",
-              price: 450,
-              quantity: 1,
-              ingredients: [{
+    staffMemberHotBar: [
+      {
+      id: 50,
+      date: "March 30, 2019 03:24:00"
+    },
 
-                id: 48,
-                name: "Lime cordial",
-                containsAlcohol: false,
-                allergens: [],
-                amount: IngredientAmounts.FILL,
-              },
-              {
-                id: 10,
-                name: "White rum",
-                containsAlcohol: true,
-                allergens: [],
-                amount: IngredientAmounts.DOUBLE_SHOT,
+    {
+      id: 51,
+      date: "March 29, 2019 03:24:00"
+    },
 
-              }]
-            },
-            {
-              id: 1023,
-              name: "Bottled water",
-              price: 90,
-              quantity: 2,
-              ingredients: [{
-                id:1010,
-                name: "Bottled Water",
-                containsAlcohol: false,
-                allergens: [],
-                amount: IngredientAmounts.FACTORY
-              }]
-            },
-            {
-              id: 67,
-              name: "Jumba juice cocktail",
-              price: 750,
-              quantity: 1,
-              ingredients: [{
-                  id: 105,
-                  name: "Slurp juice",
-                  containsAlcohol: true,
-                  allergens: [],
-                  amount: IngredientAmounts.DOUBLE_SHOT,
-                },
-                {
-                  id: 277,
-                  name: "Tomato soup",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.SHOT,
-                },
-                {
-                  id: 2386,
-                  name: "Diced Lego bricks",
-                  containsAlcohol: false,
-                  allergens: [],
-                  amount: IngredientAmounts.PINT,
-              }]
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-        {
-          id: "PPLC",
-          orderDate: new Date(),
-          customerID: 93,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-            },
-            {
-              id: 122,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 5,
-            },
-            {
-              id: 484,
-              name: "Mojito",
-              price: 750,
-              quantity: 1,
-            },
-            {
-              id: 1023,
-              name: "Bottled water",
-              price: 90,
-              quantity: 2,
-            },
-            {
-              id: 67,
-              name: "Jumba juice cocktail",
-              price: 750,
-              quantity: 1,
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-        {
-          id: "AHBS",
-          orderDate: new Date(),
-          customerID: 93,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-        {
-          id: "LJPN",
-          orderDate: new Date(),
-          customerID: 93,
-          items: [
-            {
-              id: 672,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 4,
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-        {
-          id: "GVAQ",
-          orderDate: new Date(),
-          customerID: 92,
-          items: [
-            {
-              id: 672,
-              name: "VK Red",
-              price: 250,
-              quantity: 1,
-            },
-            {
-              id: 122,
-              name: "Jager bomb",
-              price: 125,
-              quantity: 5,
-            },
-            {
-              id: 484,
-              name: "Mojito",
-              price: 250,
-              quantity: 1,
-            },
-            {
-              id: 1023,
-              name: "Bottled water",
-              price: 90,
-              quantity: 2,
-            }
-          ],
-          status: OrderStatus.PENDING
-        },
-      ],
+    {
+      id: 48,
+      date: "March 31, 2019 05:24:00"
+    },
 
-      staffMembers: [
-        {
-          id: 0,
-          firstName: "Ben",
-          surname: "Davies"
-        },
-        {
-          id: 1,
-          firstName: "Jess",
-          surname: "Chessell"
-        },
-        {
-          id: 2,
-          firstName: "Markus",
-          surname: "Jones"
-        },
-        {
-          id: 3,
-          firstName: "James",
-          surname: "Smith"
-        },
-        {
-          id: 4,
-          firstName: "Joe",
-          surname: "Bourton"
-        },
-        {
-          id: 5,
-          firstName: "Taylor",
-          surname: "Stephens"
-        },
-        {
-          id: 6,
-          firstName: "Austin",
-          surname: "Wheeler"
-        },
-        {
-          id: 7,
-          firstName: "Oscar",
-          surname: "Isaac"
-        },
-        {
-          id: 8,
-          firstName: "Fenton",
-          surname: "Reed"
-        },
-        {
-          id: 9,
-          firstName: "Ronnie",
-          surname: "Pickering"
-        },
-        {
-          id: 10,
-          firstName: "Franco",
-          surname: "Begbie"
-        }
-      ],
+    {
+      id: 49,
+      date: "March 25, 2019 05:24:00"
+    },
 
-      // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
-      notifications: [
-        {
-          id: -1,
-          class: "error",
-          title: "Scan error",
-          description: "Customer QR has been tampered with!",
-          date: new Date(),
-          isDismissed: false
-        },
-        {
-          id: -2,
-          class: "success",
-          title: "Order completed",
-          description: "You finished order #AHIF",
-          date: new Date(),
-          isDismissed: false
-        },
-        {
-          id: -3,
-          class: "info",
-          title: "New order",
-          description: "You now have 1 pending order",
-          date: new Date(),
-          isDismissed: false
-        },
-        {
-          id: -4,
-          class: "warning",
-          title: "Collection not ready",
-          description: "Customer's order is not ready for collection",
-          date: new Date(),
-          isDismissed: false
-        }
-      ],
+    {
+      id: 52,
+      date: "March 26, 2019 05:24:00"
+    }
 
-      lastNotificationID: 0,
+  ],
 
-      selectedStaffMember: 1,
-      awaitingOrdersIndexes: [],
-      inProgressOrdersIndexes: [],
-      pendingOrders: [],
+    lastNotificationID: 0,
 
-      lastValidScan: 0,
-      qrResult: "empty",
+    selectedStaffMemberID: "5c97adae8cab340a0995dd25",
 
-      awaitingOrdersClass: "collapsed",
-      awaitingOrdersCollapsed: true,
-    };
+    lastValidScan: 0,
+    qrResult: "empty",
 
+    awaitingOrdersClass: "collapsed",
+    awaitingOrdersCollapsed: true,
+  };
+
+  loadOrdersIntoStateIndexArrays = (orders) => {
     let awaitingOrdersIndexes=[], inProgressOrdersIndexes=[], pendingOrders=[];
-    for (let orderIndex in this.state.orders) {
-      let order = this.state.orders[orderIndex];
+
+    for(let orderIndex = 0; orderIndex < orders.length; orderIndex += 1) {
+      let order = orders[orderIndex];
+
       switch (order.status) {
-        case OrderStatus.AWAITING_COLLECTION:
+        case OrderStatuses.AWAITING_COLLECTION:
           awaitingOrdersIndexes.push(orderIndex);
           break;
-        case OrderStatus.IN_PROGRESS:
+        case OrderStatuses.IN_PROGRESS:
           inProgressOrdersIndexes.push(orderIndex);
           break;
         default:
@@ -550,12 +116,12 @@ class App extends Component {
       }
     }
 
-    this.state.awaitingOrdersIndexes = awaitingOrdersIndexes;
-    this.state.inProgressOrdersIndexes = inProgressOrdersIndexes;
-    this.state.pendingOrders = pendingOrders;
-
-    this.previewDiv = React.createRef();
-  }
+    this.setState({
+      awaitingOrdersIndexes: awaitingOrdersIndexes,
+      inProgressOrdersIndexes: inProgressOrdersIndexes,
+      pendingOrders: pendingOrders.reverse()
+    })
+  };
 
   addNotification = (iconClassName, title, description) => {
     // Increment notification key/id
@@ -577,21 +143,24 @@ class App extends Component {
         return {
           notifications: [...prevState.notifications, newNotification]
         }
-      }, () => {
-        // Re-render notifications
-        this.loadNotificationsJSX()
       })
     })
   };
 
-  getStaffMemberFullName = (staffID) => {
-    let staffMember = this.state.staffMembers.find(x => x.id === staffID);
-    return staffMember.firstName + " " + staffMember.surname;
+  getStaffMemberFullName = (userInfoObj) => {
+    if (!userInfoObj) return "unknown";
+    let staffMember = this.state.barStaff.find(x => x._id === userInfoObj._id);
+    if (!staffMember) return "unknown";
+    return staffMember.firstName + " " + staffMember.lastName;
   };
 
   // Takes an order index to get an order object to set orderForPopup state obj
   setOrderForPopup = (orderIndex, callback) => {
-    this.setState({orderForPopup: this.state.orders[orderIndex]}, callback());
+    this.setState({orderForPopup: this.state.serverOrders[orderIndex]}, callback());
+  };
+
+  changeCollectionPoint = (collectionPointID) => {
+    this.setState({collectionPointID: collectionPointID});
   };
 
   // Displays billing popup for order by order index
@@ -604,6 +173,33 @@ class App extends Component {
     this.setOrderForPopup(orderIndex, () => { this.state.showNotes() });
   };
 
+  addStaffByIDToHotbar = (staffID) => {
+    let newStaffHotBarOrder = this.state.staffHotBarOrder;
+    let origStaffHotBarEntryIndex = newStaffHotBarOrder.findIndex((entry) => { return entry.id === staffID })
+    if (origStaffHotBarEntryIndex !== -1) { // Check if the staff member already has an entry in staffHotBarOrder
+      newStaffHotBarOrder[origStaffHotBarEntryIndex].dateAdded = new Date().getTime(); // Update their dateAdded to jump them to the hotbar front
+
+    } else {
+      // No entry for this staff member exists so create them one with the current date&time
+      const staffHotBarEntry = {
+        id: staffID,
+        dateAdded: new Date().getTime(),
+      }
+      newStaffHotBarOrder.push(staffHotBarEntry)
+    }
+
+    // Sort array by last login time
+    newStaffHotBarOrder.sort((a,b)=>{
+      if (a.dateAdded < b.dateAdded) return 1; // Swap if A is older than B
+      if (a.dateAdded > b.dateAdded) return -1; // Swap other direction if A is newer than B
+      return 0; // Do nothing when dates are equal
+    });
+
+    // Update state
+    this.setState({ staffHotBarOrder: newStaffHotBarOrder });
+    localStorage.setItem("staffHotBarOrder", JSON.stringify(newStaffHotBarOrder)); // Update localstorage
+  };
+
   handleScan = (data) => {
     if (data) {
       this.setState({
@@ -611,11 +207,11 @@ class App extends Component {
       });
 
       try {
-        let qrJSON = JSON.parse(data); // Attempt to parse QR data to see if it contains valid JSON
-        if (qrJSON.orderID && new Date() - this.state.lastValidScan > validScanCooldown) { // Check the JSON contains an order ID, then run the pickup function
-          this.pickupOrder(qrJSON.orderID, qrJSON.customerID);
+        if (new Date() - this.state.lastValidScan > validScanCooldown) { // Check an item hasn't just been scanned then run pickup function
           this.setState({
             lastValidScan: new Date()
+          }, ()=>{
+            this.pickupOrderRelaxed(data);
           });
         }
 
@@ -635,51 +231,64 @@ class App extends Component {
 
   // Strict func that takes order ID and corresponding customer ID from QR to prevent order code theft
   pickupOrder = (orderID, customerID) => {
-    let order = this.state.orders.find(order => order.id === orderID && order.customerID === customerID); // Find order sharing the same ID and customer ID
+    const order = this.state.serverOrders.find(order => order.collectionId === orderID && order.userInfo._id === customerID); // Find order and validate the customer ID
+    this.showPickupForOrder(order)
+  };
 
+  // Relaxed version of pickup order (doesn't check corresponding customer ID)
+  pickupOrderRelaxed = (orderID) => {
+    this.showPickupForOrder( this.state.serverOrders.find(order => order.collectionId === orderID) )
+  };
+
+  showPickupForOrder = (order) => {
+    
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
-      if (order.status === OrderStatus.AWAITING_COLLECTION) {
+      if (order.status === OrderStatuses.AWAITING_COLLECTION) {
         this.setState({orderForPopup: order, orderWindowOpen: true}, this.state.showPickup) // Show billing popup
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
       }
-
+    
     } else if (!order) {
-      this.addNotification("error", "Scan error", "Customer QR has been tampered with!")
+      this.addNotification("warning", "Order not found", "No order could be found for this QR code!")
     }
-  };
-
-  componentDidMount() {
-    // Pull orders from server
-    const collectionId = localStorage.getItem('collectionPoint') || '5c925624bc63a912ed715315';
-    this.props.loadOrders(collectionId);
-    this.loadNotificationsJSX();
-    this.getUserMedia();
-    setInterval(this.loadNotificationsJSX, notificationDuration + 1)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
+  componentDidMount() {
+    
+    // Pull bartenders from server
+    this.props.findBarStaff("5c6aafda90d4735a4e22f711");
+    
+    // Load selected bartender account from localstorage, or select the first if none exists
+    this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || "5c97adae8cab340a0995dd25"});
+    
+    // Load bartender hotbar order from localstorage (or use empty array)
+    this.setState({staffHotBarOrder: JSON.parse(localStorage.getItem("staffHotBarOrder")) || []});
+
+    // Pull orders from server
+    const collectionId = localStorage.getItem('collectionPoint') || '5c925636bc63a912ed715316';
+    this.props.loadOrders(collectionId);
+
+    // Load webcam for iOS
+    this.getUserMedia();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.serverOrders.length === 0) return;
+    let newServerOrders = rebuildDateAndDrinksForOrderWithQuantities(this.props.serverOrders);
+    let areArraysEqual = JSON.stringify(newServerOrders) === JSON.stringify(prevState.serverOrders);
+    
+    // only update chart if the data has changed
+    if (!this.props.loading && !areArraysEqual) {
+      this.loadOrdersIntoStateIndexArrays(newServerOrders); // Load orders into arrays
+
       this.setState({
-        serverOrders: nextProps.serverOrders
+        serverOrders: newServerOrders,
+        barStaff: this.props.barStaff
       });
     }
   }
-
-  // Relaxed version of pickup order, used for bartenders to manually input just an order ID (not corresponding customer ID)
-  pickupOrderInsecure = (orderID) => {
-    let order = this.state.orders.find(order => order.id === orderID); // Find order by ID
-    if (order) {
-      if (order.status === OrderStatus.AWAITING_COLLECTION) {
-        this.setState({orderForPopup: order}, this.state.showPickup) // Show billing popup
-      } else {
-        this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
-      }
-    } else {
-      this.addNotification("error", "Order not found", "No order with code " + orderID + " exists!")
-    }
-  };
 
   getUserMedia = () => {
       if (navigator.getUserMedia) {
@@ -725,36 +334,63 @@ class App extends Component {
     }
   }
 
-  // Function to load feed of active un-dismissed notifications as JSX into state for rendering
-  loadNotificationsJSX = () => {
-    const notificationsJSX = (
-      <div className="notificationsContainer">
-        {
-        this.state.notifications.map((notificationData) => {
-          // Check the notification hasn't expired or been dismissed:
-          if ((new Date() - notificationData.date) > notificationDuration || notificationData.isDismissed) return null;
+  // Runs an inteligent queuing algorithm to pull the top order, and similar top orders at once into the current staff member's in-progress feed
+  TakeNextOrdersFromQueue = () => {
 
-          return (
-            <div key={notificationData.id} className="notificationBanner">
-              <span className={"icon " + notificationData.class}>{ App.getNotificationIconJSX(notificationData.class) }</span>
-              <div className="textContainer">
-                <span className="title">{notificationData.title}</span>
-                <br />
-                <span className="description">{notificationData.description}</span>
-              </div>
-              <div className="closeButton noselect" onClick={()=> {
-                notificationData.isDismissed = true;
-                this.loadNotificationsJSX()
-              }}>&#x2716;</div>
-            </div>
-          )
-        })
-      }
-      </div>
-    );
+    const firstOrder = this.state.pendingOrders[0]; // Get the top order to always be taken from queue
+    const ordersToScan = 4; // How many extra orders to check for similarities
+    const maxOrdersToTake = 3; // How many orders MAX can be taken automatically at once
+    const matchThreshold = 30; // Percentage match required to pull order
 
-    this.setState({notificationsJSX: notificationsJSX})
-  };
+
+    // Loop through orders under the top order
+    let orderMatches = []; // Array holding IDs of orders under firstOrder and their number of matches
+    for (let i = 1, len=ordersToScan+1; i < len; i++) {
+      let orderData = this.state.pendingOrders[i];
+      if (!orderData) break; // If no order exists at this index, stop scanning
+
+      // Loop through each drink in the orderData to see if it's in firstOrder
+      let matches = 0;
+      let differences = 0;
+      orderData.drinks.forEach(function(drink) {
+        if (firstOrder.drinks.some(firstOrderDrink => {
+          return firstOrderDrink._id === drink._id
+        })) { matches++ } else { differences++ }
+      });
+
+      // Add order to list of orders with matches and differences
+      orderMatches.push({id: orderData._id, matches: matches, differences: differences})
+    }
+
+    // Calculate which orders to take
+    let ordersToTake = [firstOrder._id]; // Array of orders to be taken by bartender
+
+    // Sort orderMatches by match & difference count
+    orderMatches.sort((a,b)=>{
+      if (a.matches < b.matches) return 1; // Swap if A has less matches than B
+      if (a.matches > b.matches) return -1; // Swap other direction if A has more matches than B
+      if (a.differences > b.differences) return 1; // Swap if A has more differences than B and same matches
+      if (a.differences < b.differences) return -1; // Swap other direction if A has less differences than B and same matches
+      return 0; // Do nothing if differences and matches are equal
+    })
+
+    console.log(orderMatches)
+
+    // Take top n matched orders from orderMatches
+    for (let i = 0, len=maxOrdersToTake-1; i < len; i++) {
+      const orderMatch = orderMatches[i];
+      if (!orderMatch) break; // Break for when orderMatches is smaller than maxOrdersToTake
+
+      const matchPercentage = orderMatch.matches === 0 ? 0 : orderMatch.matches / firstOrder.drinks.length * 100
+      if (matchPercentage < matchThreshold) break; // Stop taking orders from orderMatches once an order doesn't meet the threshold
+      ordersToTake.push(orderMatch.id); // Add order to ordersToTake
+    }
+
+    // Run API to take all orders in ordersToTake
+    for (let i = 0, len = ordersToTake.length; i < len; i++) {
+      this.props.updateOrder(ordersToTake[i], "IN_PROGRESS", this.state.selectedStaffMemberID)
+    }
+  }
 
   ToggleAwaitingCollapse = (event) => {
     let newStyle = "collapsed";
@@ -763,8 +399,7 @@ class App extends Component {
       newStyle = "";
       collapsed = false;
     }
-
-    this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed})
+    this.setState({awaitingOrdersClass: newStyle, awaitingOrdersCollapsed: collapsed});
   };
 
   scrollToPreview = () => {
@@ -773,116 +408,138 @@ class App extends Component {
 
   showOutOfStock = () => { this.state.showOutOfStock() };
 
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <div id="topBar">
-            <div id="accountsHotbar">
-            {
-              this.state.staffMembers.map((staffData) => {
-                let buttonClass = "";
-                if (this.state.selectedStaffMember === staffData.id) buttonClass = "selected";
-                return ( <button key={staffData.id} className={buttonClass}>{staffData.firstName}</button> );
-              })
-            }
-            </div>
+  showCollectionPoint = () => { this.state.showCollectionPoint()};
+  
 
-            <div id="buttonsToolbar">
-              <button className="large" onClick={() => {
-                this.setState({showPreview: !this.state.showPreview}, () => {
-                  if (this.state.showPreview) {
-                    document.getElementsByClassName("qrReader")[0].style.display = "block";
-                    this.scrollToPreview();
+  moreAccounts = (staffID) => {
+    this.setState({selectedStaffMemberID: staffID});
+    localStorage.setItem("selectedStaffMemberID", staffID)
+  };
+
+  buildLoadingScreen = (message) => {
+    return (
+      <div className="loadingScreen">
+          <img src={LoadingIcon} alt="Loading icon"/>
+          <span className="loadingMessage">{message}</span>
+      </div>
+    )
+  };
+
+  // Shows "this is where your orders will be" tip if you have no orders
+  buildOrdersAreaEmptyTip = (totalOrders, tipTitle, tipMessage) => {
+    // Check if there are no orders before displaying tip
+    if (totalOrders === 0) {
+      return <div className="orderContainer tip-prompt">
+        <span className="title">{tipTitle}</span><br />
+        <span className="message">{tipMessage}</span>
+      </div>
+    }
+  };
+
+  // Func to build total pending orders differently depending on the quantity
+  buildPendingOrdersTitle = (numberOfOrders) => {
+    if (this.state.pendingOrders.length === 0) {
+      return <h4>0 pending orders - you're all caught up!</h4>
+    } else {
+      return <h4>{numberOfOrders} {numberOfOrders === 1 ? "order" : "orders"} currently pending...</h4>
+    }
+  };
+
+  buildHotbarButton = (staffData) => {
+    let buttonClass = "";
+    if (this.state.selectedStaffMemberID === staffData._id) buttonClass = "selected";
+    return ( <button key={staffData._id} onClick={()=>{this.moreAccounts(staffData._id)}} className={buttonClass}>{staffData.firstName}</button> );
+  }
+
+  render() {
+    if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
+      return this.buildLoadingScreen("Loading orders...")
+
+    } else {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <div id="topBar">
+              <div id="accountsHotbar">
+              {
+                // Build staff buttons from recently switched-into accounts
+                this.state.staffHotBarOrder.map((staffHotBarData) => {
+                  let staffData = this.state.barStaff.find(entry => entry._id === staffHotBarData.id);
+                  return this.buildHotbarButton(staffData)
+                })
+              }
+              {
+                // Build staff buttons for all other accounts
+                this.state.barStaff.map((staffData) => {
+                  if (this.state.staffHotBarOrder.find(entry => entry.id === staffData._id)) {
+                    return null
                   } else {
-                    document.getElementsByClassName("qrReader")[0].style.display = "none";
+                    return this.buildHotbarButton(staffData)
                   }
                 })
-              }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
+              }
+              </div>
 
-              <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
+              <div id="buttonsToolbar">
+                <button className="large" onClick={() => {
+                  this.setState({showPreview: !this.state.showPreview}, () => {
+                    if (this.state.showPreview) {
+                      document.getElementsByClassName("qrReader")[0].style.display = "block";
+                      this.scrollToPreview();
+                    } else {
+                      document.getElementsByClassName("qrReader")[0].style.display = "none";
+                    }
+                  })
+                }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
 
-              <button onClick={this.state.showSwitchAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> Switch account</button>
+               <button onClick={this.state.showSettings} className='large'> <FontAwesomeIcon icon ={faCog} /> Settings </button> 
+
+                <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
+
+                <button onClick={this.state.showMoreAccounts} className="large"><FontAwesomeIcon icon={faRetweet} /> More accounts</button>
+              </div>
             </div>
-          </div>
 
-          <h1>AWAITING COLLECTION ({ this.state.awaitingOrdersIndexes.length }):</h1>
-          <div className={"ordersContainer " + this.state.awaitingOrdersClass}>
-            {
-              this.state.awaitingOrdersIndexes.map((orderIndex, incrementer) => {
-                const orderData = this.state.orders[orderIndex];
-                const orderZIndex = this.state.awaitingOrdersIndexes.length - incrementer;
+            <h1>Awaiting collection ({ this.state.awaitingOrdersIndexes.length }):</h1>
+            <div className={"ordersContainer " + this.state.awaitingOrdersClass}>
+              {
+                // Build tip shown when there are no orders awaiting collection
+                this.buildOrdersAreaEmptyTip(this.state.awaitingOrdersIndexes.length, "No orders awaiting collection!", "Orders ready for pickup show here")
+              }
 
-                // Calculate styles
-                let orderOpacity = 1; // Order opacity (lowered when collapsed and far down)
-                let width = 100; // Width as percentage
-                if (incrementer !== 0) {
-                  if (this.state.awaitingOrdersCollapsed)
-                    orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
-                    width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
-                }
+              {
+                this.state.awaitingOrdersIndexes.map((orderIndex, incrementer) => {
+                  const orderData = this.state.serverOrders[orderIndex];
+                  const orderZIndex = this.state.awaitingOrdersIndexes.length - incrementer;
 
-                return (
-                  <div
-                      key={orderIndex}
-                      onClick={this.ToggleAwaitingCollapse}
-                      className="orderContainer collapsible"
-                      style={{zIndex: orderZIndex, opacity: orderOpacity, width: width + "%"}}
-                  >
-                    <h2>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h2>
-                    <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.staffMemberID) }</span></h5>
-                    <div className="orderButtonsContainer" onClick={(e)=>{e.stopPropagation()}}>
-                      <button className="orderButton">
-                        <span className="icon notReady"><FontAwesomeIcon icon={faUndoAlt} /></span>
-                        <span className="title">Not ready</span>
-                        <br />
-                        <span className="subtitle">Mark as un-ready</span>
-                      </button>
-                      <button onClick={()=>{this.showBilling(orderIndex)}} className="orderButton">
-                        <span className="icon billingAndMore"></span>
-                        <span className="title">More</span>
-                        <br />
-                        <span className="subtitle">Billing &amp; more</span>
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            }
-          </div>
-
-          <h1>YOUR IN-PROGRESS ({this.state.inProgressOrdersIndexes.length}):</h1>
-          <div className="ordersContainer">
-            {
-                this.state.inProgressOrdersIndexes.map((orderIndex) => {
-                  const orderData = this.state.orders[orderIndex];
-
-                  // Only show pending orders belonging to the current staff member
-                  if (orderData.staffMemberID !== this.state.selectedStaffMember) return null;
-
+                  // Calculate styles
+                  let orderOpacity = 1; // Order opacity (lowered when collapsed and far down)
+                  let width = 100; // Width as percentage
+                  if (incrementer !== 0) {
+                    if (this.state.awaitingOrdersCollapsed)
+                      orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
+                      width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
+                  }
+                  
                   return (
-                    <div key={orderIndex} className="orderContainer in-progress">
-
-                      <MultiColumnItemList orderItems={orderData.items} />
-
-                      <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
-
-                      { this.renderCustomerNotes(orderIndex, orderData.notes) }
-
-                      <div className="orderButtonsContainer">
-                        <button className="orderButton">
-                          <span className="icon ready"><FontAwesomeIcon icon={faCheck} /></span>
-                          <span className="title">Ready</span>
+                    <div
+                        key={orderIndex}
+                        onClick={this.ToggleAwaitingCollapse}
+                        className="orderContainer collapsible"
+                        style={{zIndex: orderZIndex, opacity: orderOpacity, width: width + "%"}}
+                    >
+                      <h2>#{orderData.collectionId} - <TimeAgo date={orderData.date}/></h2>
+                      <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.orderAssignedTo) }</span></h5>
+                      <div className="orderButtonsContainer" onClick={(e)=>{ e.stopPropagation(); }}>
+                        <button className="orderButton" onClick={()=>{
+                          this.props.updateOrder(orderData._id, "IN_PROGRESS", this.state.selectedStaffMemberID); // Update order to state to pending and assign to current bartender
+                        }}>
+                          <span className="icon notReady"><FontAwesomeIcon icon={faUndoAlt} /></span>
+                          <span className="title">Not ready</span>
                           <br />
-                          <span className="subtitle">Mark as ready</span>
+                          <span className="subtitle">Mark as un-ready</span>
                         </button>
-                        <button className="orderButton">
-                          <span className="icon notInProgress"><FontAwesomeIcon icon={faUndoAlt} /></span>
-                          <span className="title">Not in progress</span>
-                          <br />
-                          <span className="subtitle">Return to pending</span>
-                        </button>
-                        <button onClick={() => { this.showBilling(orderIndex) }} className="orderButton">
+                        <button onClick={()=>{this.showBilling(orderIndex)}} className="orderButton">
                           <span className="icon billingAndMore"></span>
                           <span className="title">More</span>
                           <br />
@@ -893,73 +550,164 @@ class App extends Component {
                   );
                 })
               }
-          </div>
+            </div>
 
-          <div className="pendingOrderButtons">
-            <button className="pendingOrderButton">
-              <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
-              <span className="title">Take next order</span>
-              <br />
-              <span className="subtitle">
-                Adds next order to your ({
-                  this.state.staffMembers.find(x => x.id === this.state.selectedStaffMember).firstName
-                }) in-progress feed
-              </span>
-            </button>
+            <h1>Your in-progress:</h1>
+            <div className="ordersContainer">
+              {
+                // Build tip shown when there are no in-progress orders for the logged in user
+                this.buildOrdersAreaEmptyTip(
+                  // Reducer to calculate how total orders for current staff member in in-progress array
+                  this.state.inProgressOrdersIndexes.reduce((accumulator, orderIndex) => {
+                    let order = this.state.serverOrders[orderIndex];
+                    if (order.orderAssignedTo && order.orderAssignedTo._id === this.state.selectedStaffMemberID) return accumulator + 1; else return accumulator;
+                  },0), "No in-progress orders!", "Orders you take will appear here")
+              }
 
-            <button onClick={this.state.showUpcoming} className="pendingOrderButton">
-              <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
-              <span className="title">View upcoming</span>
-              <br />
-              <span className="subtitle">
-                Display a feed of pending orders
-              </span>
-            </button>
-          </div>
+              {
+                  this.state.inProgressOrdersIndexes.map((orderIndex) => {
+                    const orderData = this.state.serverOrders[orderIndex];
 
-          <h4>{this.state.pendingOrders.length} orders currently pending...</h4>
+                    // Only show pending orders belonging to the current staff member
+                    if (orderData.orderAssignedTo._id !== this.state.selectedStaffMemberID) return null;
 
-          <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
-          <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} />
-          <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
-          <SwitchAccountsPopupWindow showFunc={callable => this.setState({showSwitchAccounts: callable})} staffMembers={this.state.staffMembers} />
-          <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderInsecure} />
-          <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
-          <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
+                    return (
+                      <div key={orderIndex} className="orderContainer in-progress">
 
-          { this.state.notificationsJSX }
+                        <MultiColumnItemList orderItems={orderData.drinks} />
 
-          {
-            this.state.disableScanner ? null :
-              <div ref={this.previewDiv} className="qrReader">
-                <QrReader
-                    delay={qrDelay}
-                    onError={this.handleError}
-                    onScan={this.handleScan}
-                />
-                <p>
-                  QR content:<br />
-                  {this.state.qrResult}
-                </p>
-              </div>
-          }
-        </header>
-      </div>
-    );
+                        <h3>#{orderData.collectionId} - <TimeAgo date={orderData.date}/></h3>
+
+                        { this.renderCustomerNotes(orderIndex, orderData.notes) }
+
+                        <div className="orderButtonsContainer">
+                          <button className="orderButton" onClick={() => this.props.updateOrder(orderData._id, "AWAITING_COLLECTION", this.state.selectedStaffMemberID)}>
+                            <span className="icon ready"><FontAwesomeIcon icon={faCheck} /></span>
+                            <span className="title">Ready</span>
+                            <br />
+                            <span className="subtitle">Mark as ready</span>
+                          </button>
+                          <button className="orderButton" onClick={()=> {this.props.updateOrder(orderData._id, "PENDING", this.state.selectedStaffMemberID)}}>
+                            <span className="icon notInProgress"><FontAwesomeIcon icon={faUndoAlt} /></span>
+                            <span className="title">Not in progress</span>
+                            <br />
+                            <span className="subtitle">Return to pending</span>
+                          </button>
+                          <button onClick={() => { this.showBilling(orderIndex) }} className="orderButton">
+                            <span className="icon billingAndMore"></span>
+                            <span className="title">More</span>
+                            <br />
+                            <span className="subtitle">Billing &amp; more</span>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })
+                }
+            </div>
+
+
+            <div className="pendingOrderButtons">
+              <button disabled={this.state.pendingOrders.length===0} className="pendingOrderButton" onClick={this.TakeNextOrdersFromQueue}>
+                <span className="icon next"><FontAwesomeIcon icon={faLongArrowAltUp} /></span>
+                <span className="title">Take next order</span>
+                <br />
+                <span className="subtitle">
+                  Adds next order to your ({
+                    this.state.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
+                  }) in-progress feed
+                </span>
+              </button>
+              <button disabled={this.state.pendingOrders.length===0} onClick={this.state.showUpcoming} className="pendingOrderButton">
+                <span className="icon history"><FontAwesomeIcon icon={faClock} /></span>
+                <span className="title">View upcoming</span>
+                <br />
+                <span className="subtitle">
+                  Display a feed of pending orders
+                </span>
+              </button>
+            </div>
+            { this.buildPendingOrdersTitle(this.state.pendingOrders.length) }
+
+            {/* Build popup windows, assigning their show functions to the App.js state so they're callable */}
+            <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
+            <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} updateOrderFunc={this.props.updateOrder}/>
+            <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
+            <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} moreAccountsFunc={this.moreAccounts} addStaffByIDToHotbarFunc={this.addStaffByIDToHotbar} />
+            <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderRelaxed} />
+            <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
+            <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
+            <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPoint={this.changeCollectionPoint} />
+            <SettingsPopupWindow showFunc={callable => this.setState({showSettings: callable})} showCollectionPoint={this.showCollectionPoint}/>
+
+            <div className="notificationsContainer">
+              {
+                this.state.notifications.map((notificationData, index) => {
+                  // Check the notification hasn't expired or been dismissed:
+                  if ((new Date() - notificationData.date) > notificationDuration || notificationData.isDismissed) return null;
+
+                  setTimeout(()=> {
+                    let newNotifications = this.state.notifications;
+                    newNotifications[index].isDismissed = true;
+                    this.setState({notifications: newNotifications})
+                  }, notificationDuration);
+
+                  return (
+                    <div key={index} className="notificationBanner">
+                      <span className={"icon " + notificationData.class}>{ App.getNotificationIconJSX(notificationData.class) }</span>
+                      <div className="textContainer">
+                        <span className="title">{notificationData.title}</span>
+                        <br />
+                        <span className="description">{notificationData.description}</span>
+                      </div>
+                      <div className="closeButton noselect" onClick={()=> {
+                        let newNotifications = this.state.notifications;
+                        newNotifications[index].isDismissed = true;
+                        this.setState({notifications: newNotifications})
+                      }}>&#x2716;</div>
+                    </div>
+                  )
+                })
+              }
+            </div>
+
+
+            {
+              this.state.disableScanner ? null :
+                <div ref={this.previewDiv} className="qrReader">
+                  <QrReader
+                      delay={qrDelay}
+                      onError={this.handleError}
+                      onScan={this.handleScan}
+                  />
+                  <p>
+                    QR content:<br />
+                    {this.state.qrResult}
+                  </p>
+                </div>
+            }
+          </header>
+        </div>
+      );
+    }
   }
 }
 
-const mapStateToProps = state => {
+const mapReduxStateToProps = state => {
   return {
     serverOrders: state.orders.orders,
-    ordersLoading: state.orders.loading
+    updatedOrder: state.orders.updatedOrder,
+    ordersLoading: state.orders.loading,
+    barStaff: state.bar.barStaff
   }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadOrders: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint))
+    loadOrders: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint)),
+    updateOrder: (orderId, status, barStaffId) => dispatch(actions.updateOrder(orderId, status, barStaffId)),
+    findBarStaff: (barId) => dispatch(actions.findBarStaff(barId))
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapReduxStateToProps, mapDispatchToProps)(App);

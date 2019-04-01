@@ -42,7 +42,6 @@ module.exports = {
     findDrinkCategoriesByMenu: async ({menuId}) => {
         try {
             const menu = await Menu.findOne({_id: menuId}).populate('drinks');
-            // const returnedDrinks = await drinks(menu.drinks);
             const categories = [];
             menu.drinks.map(drink => {
                 if (!categories.includes(drink.category)) {
