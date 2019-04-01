@@ -20,6 +20,7 @@ const pubSub = new PubSub();
 
 // subscription identifiers
 const ORDER_UPDATED = 'ORDER_UPDATED';
+const ORDER_CREATED = 'ORDER_CREATED';
 
 const resolvers = {
     Subscription: {
@@ -28,6 +29,13 @@ const resolvers = {
                 () => pubSub.asyncIterator([ORDER_UPDATED]),
                 // == must be kept below due to issue with strings not being evaluated correctly
                 (payload, args) => payload.orderId == args.orderId
+            )
+        },
+        orderCreated: {
+            subscribe: withFilter(
+                () => pubSub.asyncIterator([ORDER_CREATED]),
+                // == must be kept below due to issue with strings not being evaluated correctly
+                (payload, args) => payload.collectionPointId == args.collectionPointId
             )
         }
     },
@@ -286,6 +294,11 @@ const resolvers = {
                     collectionId: collectionId,
                     transactionId: uuid(),
                     price: args.orderInput.price
+                });
+                await pubSub.publish(ORDER_CREATED, {
+                    orderId: createdOrder._id,
+                    collectionPoint,
+                    createdOrder: createdOrder
                 });
                 return await createdOrder.save();
             } catch (err) {
