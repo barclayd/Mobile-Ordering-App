@@ -4,57 +4,62 @@ import { Query } from 'react-apollo';
 
 const query = gql`
        query FindOrdersByCollectionPoint($collectionPoint: ID!) {
-                    findOrdersByCollectionPoint(collectionPoint: $collectionPoint) {
-                        _id
-                        collectionId
-                        drinks {
-                          _id
-                          name
-                          price
-                          category
-                        }
-                        collectionPoint {
-                          _id
-                          collectionPointId
-                        }
-                        status
-                        date
-                        transactionId
-                        userInfo {
-                            email
-                            _id
-                        }
-                        orderAssignedTo {
-                            _id
-                            firstName
-                            lastName
-                        }
-                   }
+            findOrdersByCollectionPoint(collectionPoint: $collectionPoint) {
+                _id
+                collectionId
+                drinks {
+                  _id
+                  name
+                  price
+                  category
                 }
+                collectionPoint {
+                  _id
+                  collectionPointId
+                }
+                status
+                date
+                transactionId
+                userInfo {
+                    email
+                    _id
+                }
+                orderAssignedTo {
+                    _id
+                    firstName
+                    lastName
+                }
+           }
+        }
 `;
 
 const subscription = gql`
 subscription ($collectionPointId: ID!) {
   orderCreated(collectionPointId: $collectionPointId) {
-        drinks {
-            name
-            category
-            price
-        }
-        collectionPoint {
-            name
-            collectionPointId
-        }
-        price
-        status
-        date
-        _id
-        collectionId
-        transactionId
-        userInfo {
-            email
-            name
-        }
+                _id
+                collectionId
+                drinks {
+                  _id
+                  name
+                  price
+                  category
+                }
+                collectionPoint {
+                  _id
+                  collectionPointId
+                }
+                status
+                date
+                transactionId
+                userInfo {
+                    email
+                    _id
+                }
+                orderAssignedTo {
+                    _id
+                    firstName
+                    lastName
+                }
    }
 }
 `;
@@ -102,9 +107,9 @@ const Orders = props => {
                     collectionPointId: '5c925636bc63a912ed715316'
                 },
                 updateQuery: (prev, {subscriptionData}) => {
-                    if (!subscriptionData.data) return prev;
                     console.log(subscriptionData.data);
-                    return subscriptionData.data;
+                    if (!subscriptionData.data) return prev;
+                    return null;
                 },
             });
             return <OrdersStream data={data} subscribeToMore={more}/>;
