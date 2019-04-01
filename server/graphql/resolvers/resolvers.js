@@ -16,10 +16,9 @@ const {dateToString} = require("../../helpers/date");
 const {drinks} = require('../mergeResolvers/drinks');
 const {processPayment} = require('../../helpers/stripe');
 
-
-
 const pubSub = new PubSub();
 
+// subscription identifiers
 const ORDER_UPDATED = 'ORDER_UPDATED';
 
 const resolvers = {
@@ -63,9 +62,7 @@ const resolvers = {
         },
         findOrderById: async (parent, {id}) => {
             try {
-                const foundOrder = await Order.findById(id).populate('userInfo collectionPoint drinks');
-                foundOrder.date = dateToString(foundOrder.date); // Convert date to string
-                return foundOrder;
+                return await Order.findById(id).populate('userInfo collectionPoint drinks');
             } catch (err) {
                 console.log(err);
                 throw err;
@@ -98,22 +95,11 @@ const resolvers = {
             if (!bar) {
                 throw new Error(`Bar with bar code: ${barCode} does not exist`);
             }
-            return {
-                _id: bar.id,
-                name: bar.name,
-                barCode: bar.barCode,
-                type: bar.type,
-                description: bar.description,
-                latitude: bar.latitude,
-                longitude: bar.longitude,
-                image: bar.image,
-                logo: bar.logo,
-                menus: bar.menus
-            };
+            return bar;
         },
         findBarStaffByBar: async (parent, {barId}) => {
             try {
-                const bar = await Bar.findOne({_id: barId});
+                const bar = await Bar.findById(barId);
                 if (!bar) {
                     throw new Error (`Bar with barId: ${barId} does not exist`);
                 }
@@ -148,7 +134,7 @@ const resolvers = {
         },
         findCollectionPointsByBar: async (parent, {barId}) => {
             // does collectionPoint exist with given id
-            const bar = await Bar.findOne({_id: barId});
+            const bar = await Bar.findById(barId);
             if (!bar) {
                 throw new Error(`Bar with barId: ${barId} does not exist`);
             }
@@ -189,7 +175,7 @@ const resolvers = {
         },
         findDrinkCategoriesByMenu: async (parent, {menuId}) => {
             try {
-                const menu = await Menu.findOne({_id: menuId}).populate('drinks');
+                const menu = await Menu.findById(menuId).populate('drinks');
                 const categories = [];
                 menu.drinks.map(drink => {
                     if (!categories.includes(drink.category)) {
@@ -215,7 +201,6 @@ const resolvers = {
                         select: '-password' // Explicitly exclude password field
                     });
                 return foundOrders.reverse().map(async foundOrder => {
-                    foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
                     return foundOrder;
                 });
             } catch (err) {
@@ -235,7 +220,6 @@ const resolvers = {
                         select: '-password' // Explicitly exclude password field
                     });
                 return foundOrders.reverse().map(async foundOrder => {
-                    foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
                     return foundOrder;
                 });
             } catch (err) {
@@ -246,7 +230,6 @@ const resolvers = {
             try {
                 const foundOrders = await Order.find().populate('userInfo collectionPoint drinks');
                 return foundOrders.reverse().map(async foundOrder => {
-                    foundOrder.date = dateToString(foundOrder.date); // Convert date to string
                     return foundOrder;
                 })
                 } catch (err) {
@@ -271,7 +254,7 @@ const resolvers = {
                 let drinksIdCheck = false;
                 let foundDrinks = [];
                 for (let i in args.orderInput.drinks) {
-                    const searchedDrinks = await Drink.findOne({_id: args.orderInput.drinks[i]});
+                    const searchedDrinks = await Drink.findById(args.orderInput.drinks[i]);
                     if (searchedDrinks) {
                         foundDrinks.push(searchedDrinks);
                         drinksIdCheck = true;
@@ -311,7 +294,7 @@ const resolvers = {
         },
         createBarStaffMember: async (parent, args) => {
             try {
-                const bar = await Bar.findOne({_id: args.barStaffInput.barId});
+                const bar = await Bar.findById(args.barStaffInput.barId);
                 if (!bar) {
                     throw new Error (`Bar with barId: ${args.barStaffInput.barId} does not exist`);
                 }
@@ -339,7 +322,7 @@ const resolvers = {
                 if (!collectionPoint) {
                     collectionPointId = Math.random().toString(36).substring(2, 6).toUpperCase();
                 }
-                const bar = await Bar.findOne({_id: args.collectionPointInput.bar});
+                const bar = await Bar.findById(args.collectionPointInput.bar);
                 if (!bar) {
                     throw new Error(`Bar with provided id: ${collectionPointId} does not exist`);
                 }
@@ -464,7 +447,6 @@ const resolvers = {
                     orderId: foundOrder._id,
                     orderUpdated: foundOrder
                 });
-                foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
                 return foundOrder;
             } catch (err) {
                 throw err;
@@ -481,7 +463,6 @@ const resolvers = {
                     foundOrder.orderAssignedTo = null;
                 }
                 await foundOrder.save();
-                foundOrder.date = dateToString(foundOrder._doc.date); // Convert date to string
                 return foundOrder
             } catch (err) {
                 throw err;
@@ -490,15 +471,16 @@ const resolvers = {
         updateLastVisitedBar: async (parent, {userId, barId}) => {
             try {
                 let foundBar = null;
-                const user = await User.findOne({_id: userId});
+                const user = await User.findById(userId);
                 if (!user) {
                     throw new Error(`Bar could not be found with barId: ${userId}`);
                 }
                 if (barId) {
-                    foundBar = await Bar.findOne({_id: barId});
+                    foundBar = await Bar.findById(barId);
                     if (!foundBar) {
                         throw new Error(`Bar could not be found with barId: ${barId}`);
                     }
+                    // sets the user's last visited bar
                     user.lastVisitedBar = barId;
                 }
                 await user.save();

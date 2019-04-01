@@ -4,7 +4,7 @@ const drinks = async (drinkIds) => {
     try {
         const foundDrinks = [];
         await drinkIds.forEach(id => {
-            const drink = Drink.findOne({_id: id});
+            const drink = Drink.findById(id);
             foundDrinks.push(drink);
         });
         await foundDrinks.map(drink => {
@@ -21,6 +21,5 @@ const drinks = async (drinkIds) => {
 };
 
 module.exports = {
-    drinks,
-    transformDrink
+    drinks
 };
