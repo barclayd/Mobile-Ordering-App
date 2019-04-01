@@ -1,0 +1,19 @@
+.collectionpointbutton {
+  padding: 0 30px;
+  text-align: center;
+}
+
+.collection {
+  margin: 0 auto;
+  height: 100px;
+  width: 300px;
+}
+
+input {
+  margin: 0 auto;
+}
+
+.InputContainer {
+  padding: 0 30px;
+  text-align: center;
+}

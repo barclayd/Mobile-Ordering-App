@@ -8,6 +8,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.7.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "axios": "^0.18.0",
+    "immutability-helper": "^3.0.0",
     "luxon": "^1.11.3",
     "prop-types": "^15.7.2",
     "react": "^16.8.1",
@@ -15,9 +16,9 @@
     "react-qr-reader": "^2.1.2",
     "react-redux": "^6.0.1",
     "react-scripts": "^2.1.8",
-    "react-timeago": "^4.4.0",
     "redux": "^4.0.1",
-    "redux-saga": "^1.0.2"
+    "redux-saga": "^1.0.2",
+    "timeago.js": "^4.0.0-beta.2"
   },
   "scripts": {
     "start": "react-scripts start",

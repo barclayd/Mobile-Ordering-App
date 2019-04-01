@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class PopupWindow extends Component {
   constructor(props) {
@@ -16,7 +18,11 @@ class PopupWindow extends Component {
 
   componentDidMount () {
     this.props.showFunc(this.showPopup); // Run func from prop binding this.ShowPopup from this instance to allow parent to call ShowPopup() from state
-    document.addEventListener("keydown", this.keyPressed, false);
+    
+    // Only allow close hotkey when close button is visible
+    if (this.props.showCloseButton) {
+      document.addEventListener("keydown", this.keyPressed, false);
+    }
   }
 
   componentWillUnmount () {
@@ -81,14 +87,16 @@ class PopupWindow extends Component {
   renderCloseButton = (shouldShow) => {
     if (shouldShow) {
         return (
-            <div className="popup-close-button" onClick={this.dismissPopup} >🗙</div>
+            <div className="popup-close-button" onClick={this.dismissPopup} >
+              <FontAwesomeIcon icon={faTimes} />
+            </div>
         )
     }
   };
 
   overlayClick = (event) => {
-    // Check that the click event has not been triggered on a child element
-    if (event.target === event.currentTarget) {
+    // Check that the click event has not been triggered on a child element and that close button is allowed
+    if (this.props.showCloseButton && event.target === event.currentTarget) {
       this.dismissPopup()
     }
   };

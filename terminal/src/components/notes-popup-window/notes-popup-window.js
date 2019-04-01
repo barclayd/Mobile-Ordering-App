@@ -11,14 +11,14 @@ const NotesPopupWindow = (props) => {
     const buildSubtitle = (order) => {
         if (order) return (
             <span>
-                for <span className="orderID">#{order.id}</span> ordered at {DateTime.fromJSDate(order.orderDate).toFormat("h:mma")},&nbsp;
-                <TimeAgo date={order.orderDate}/>
+                for <span className="orderID">#{order.id}</span> ordered at {DateTime.fromJSDate(order.date).toFormat("h:mma")},&nbsp;
+                <TimeAgo date={order.date}/>
             </span>
         ); else return (<span></span>);
     };
 
     const buildNotes = (order) => {
-        if (order) return (<p className="notesPara">{order.notes}</p>); else return "";
+        if (order && order.notes) return (<p className="notesPara">{order.notes}</p>); else return "";
     };
 
     return (

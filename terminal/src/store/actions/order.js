@@ -36,23 +36,48 @@ export const updateOrder = (orderId, status, barStaffId) => {
         barStaffId
     };
 };
-
 export const updateOrderStart = () => {
     return {
         type: actionTypes.UPDATE_ORDER_START
     };
 };
-
-export const updateOrderSuccess = (updatedOrder) => {
+export const updateOrderSuccess = (updatedOrder, orderId) => {
     return {
         type: actionTypes.UPDATE_ORDER_SUCCESS,
-        updatedOrder
+        updatedOrder,
+        orderId
     };
 };
-
 export const updateOrderFail = error => {
     return {
         type: actionTypes.UPDATE_ORDER_FAIL,
+        error: error
+    };
+};
+
+
+
+
+export const findBarStaff  = (barId) => {
+    return {
+        type: actionTypes.FIND_BAR_STAFF,
+        barId
+    };
+};
+export const findBarStaffStart = () => {
+    return {
+        type: actionTypes.FIND_BAR_STAFF_START
+    };
+};
+export const findBarStaffSuccess = (barStaff) => {
+    return {
+        type: actionTypes.FIND_BAR_STAFF_SUCCESS,
+        barStaff
+    };
+};
+export const findBarStaffFail = error => {
+    return {
+        type: actionTypes.FIND_BAR_STAFF_FAIL,
         error: error
     };
 };
