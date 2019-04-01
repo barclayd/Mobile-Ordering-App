@@ -1,6 +1,7 @@
 import {put} from 'redux-saga/effects';
 import axios from '../../axios-instance';
 import * as actions from '../actions/index';
+import {AsyncStorage, Platform, Alert} from 'react-native';
 
 export function* findDrinksSaga(action){
     yield put(actions.findDrinksStart());
@@ -64,6 +65,7 @@ export function* findDrinksSaga(action){
     } catch (err) {
         console.log(err);
         yield put(actions.findDrinksFail(err));
+        Alert.alert('No Internet Connection... 🔌')
     }
 }
 
@@ -100,5 +102,6 @@ export function* findDrinkCategoriesSaga(action) {
     } catch (err) {
         console.log(err);
         yield put(actions.findDrinkCategoriesFail(err));
+        Alert.alert('Lost Internet Connection... 🔌')
     }
 }

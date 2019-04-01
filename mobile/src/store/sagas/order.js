@@ -37,6 +37,8 @@ export function* submitOrderSaga(action) {
     const userToken = yield AsyncStorage.getItem('token');
     const user = yield AsyncStorage.getItem('userId');
     const collectionId = action.paymentInfo.collectionPoint.id;
+    // let map = <Icon name="map-o" size={24} color="#FFFFFF" family={"FontAwesome"} />;
+
 
     yield put(actions.submitOrderStart());
     let drinksList = [];
@@ -52,7 +54,7 @@ export function* submitOrderSaga(action) {
     try {
         let requestBody = {
             query: `
-                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID!) {
+                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID) {
                     createOrder(orderInput: {
                         drinks: $drinks
                         collectionPoint: $collectionPoint
@@ -101,6 +103,7 @@ export function* submitOrderSaga(action) {
         });
         if (response.data.errors) {
             yield put(actions.submitOrderFail(response.data.errors[0].message));
+            Alert.alert('Unsuccessful Order : ', response.data.errors[0].message)
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
