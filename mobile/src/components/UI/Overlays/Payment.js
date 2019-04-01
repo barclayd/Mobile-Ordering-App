@@ -156,7 +156,7 @@ class MobilePayments extends Component {
                         <View style={styles.buttonStyle}>
                             <ButtonBackground
                                 color={colours.white}
-                                disabled={!this.state.cvc.valid || !this.state.number.valid || !this.state.expiration.valid || !this.state.collectionPoint.valid || this.state.userId === null}
+                                disabled={!this.state.cvc.valid || !this.state.number.valid || !this.state.expiration.valid || !this.state.collectionPoint.valid || this.props.auth === null}
                                 textColor={colours.orange}
                                 onPress={() => this.props.submitOrder(this.state)}>
                                 Pay

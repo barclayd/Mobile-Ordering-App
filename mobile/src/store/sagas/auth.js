@@ -177,12 +177,16 @@ export function* authCheckStateSaga(action) {
     const token = yield AsyncStorage.getItem("token");
     const barName = yield AsyncStorage.getItem("barName");
     const barCode = yield AsyncStorage.getItem("barCode");
+    const userId = yield AsyncStorage.getItem("userId");
     // if (!token) {
     //     yield put(actions.logout());
     // } else {
     //     authRedirect(action, barName, barCode);
     // }
     if (token) {
+        // populate redux
+        yield put(actions.authStart());
+        yield put(actions.authSuccess(token, userId, null, null));
         authRedirect(action, barName, barCode);
     }
     yield put(actions.retrieveBasketStart());
