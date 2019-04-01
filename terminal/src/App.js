@@ -147,8 +147,9 @@ class App extends Component {
     })
   };
 
-  getStaffMemberFullName = (staffID) => {
-    let staffMember = this.state.barStaff.find(x => x._id === staffID);
+  getStaffMemberFullName = (userInfoObj) => {
+    if (!userInfoObj) return "unknown";
+    let staffMember = this.state.barStaff.find(x => x._id === userInfoObj._id);
     if (!staffMember) return "unknown";
     return staffMember.firstName + " " + staffMember.lastName;
   };
@@ -528,7 +529,7 @@ class App extends Component {
                         style={{zIndex: orderZIndex, opacity: orderOpacity, width: width + "%"}}
                     >
                       <h2>#{orderData.collectionId} - <TimeAgo date={orderData.date}/></h2>
-                      <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.orderAssignedTo._id) }</span></h5>
+                      <h5>Made by <span className="bartenderName">{ this.getStaffMemberFullName(orderData.orderAssignedTo) }</span></h5>
                       <div className="orderButtonsContainer" onClick={(e)=>{ e.stopPropagation(); }}>
                         <button className="orderButton" onClick={()=>{
                           this.props.updateOrder(orderData._id, "IN_PROGRESS", this.state.selectedStaffMemberID); // Update order to state to pending and assign to current bartender
