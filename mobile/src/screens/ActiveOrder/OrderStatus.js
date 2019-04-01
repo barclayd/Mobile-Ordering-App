@@ -93,19 +93,19 @@ class OrderStatusView extends Component {
         return (
             orderStatus ? <View>
                 <View style={styles.progressCircle}>
-                    <Text style={styles.orderText}>Status:</Text>
+                    <Text style={styles.orderText}>Status: </Text>
                     <Text style={styles.orderSubtitle}>
-                        {orderStatusLookUp[orderStatus.status]}{" "}
+                        {orderStatusLookUp[orderStatus.status]}
                     </Text>
                 </View>
                 <View style={styles.progressCircle}>
-                    <Text style={styles.orderText}>Collection Code :</Text>
+                    <Text style={styles.orderText}>Collection Code: </Text>
                     <Text style={styles.orderSubtitle}>
-                        #{orderStatus.collectionId}{" "}
+                        #{orderStatus.collectionId}
                     </Text>
                 </View>
                 <View style={styles.progressCircle}>
-                    <Text style={styles.orderText}>Ordered at :</Text>
+                    <Text style={styles.orderText}>Date of Order: </Text>
                     <Text style={styles.date}>
                         {new Date(parseInt(orderStatus.date))
                             .toTimeString()
@@ -116,16 +116,16 @@ class OrderStatusView extends Component {
                     </Text>
                 </View>
                 <View style={styles.progressCircle}>
-                    <Text style={styles.orderText}>Collection Point:</Text>
+                    <Text style={styles.orderText}>Collection Point: </Text>
                     <Text style={styles.orderSubtitle}>
                         {orderStatus.collectionPoint.name}
                     </Text>
                 </View>
                 {orderStatus.status !== 'COMPLETED' ? <Text style={styles.orderText}>
-                    Estimated Collection Time : {new Date(Date.now() + (300 * 1000)).toTimeString().slice(0, 5)}
+                        Estimated Collection Time: <Text style={styles.date}>{new Date(Date.now() + (300 * 1000)).toTimeString().slice(0, 5)}</Text>
                 </Text> :
                     <Text style={styles.orderText}>
-                        Time of Order Collection : {new Date(parseInt(orderStatus.date)).toDateString()}
+                        Time of Order Collection: <Text style={styles.date}>{new Date(parseInt(orderStatus.date)).toTimeString().slice(0, 5)}</Text>
                     </Text>}
             </View> : <ActivityIndicator size="large" color={colours.orange} />
         );
