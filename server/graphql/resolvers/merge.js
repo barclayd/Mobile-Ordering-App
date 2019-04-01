@@ -1,5 +1,3 @@
-const DataLoader = require('dataloader');
-const {drinks} = require('./mergeResolvers/drinks');
 const {dateToString} = require('../../helpers/date');
 
 const transformDrink = drink => {
@@ -10,19 +8,6 @@ const transformDrink = drink => {
         nutritionInfo: drink._doc.nutritionInfo,
         price: drink._doc.price
     };
-};
-
-const drinkLoader = new DataLoader((drinkIds) => {
-    return drinks(drinkIds);
-});
-
-const drinksList = async drinkIds => {
-    try {
-        const drinks = await drinkLoader.load(drinkIds.toString());
-        return drinks;
-    } catch (err) {
-        throw err;
-    }
 };
 
 const transformOrder = order => {
