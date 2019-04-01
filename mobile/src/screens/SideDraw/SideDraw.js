@@ -19,9 +19,9 @@ import {
   setViewPastOrders,
   setViewPastOrdersSettings,
   setOrderStatus,
-  setSwitchBars,
-  setOrderStatusSettings,
-  popToRoot
+    setSwitchBars,
+  popToRoot,
+  showLoginOnNotificationPress
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
 import { Navigation } from "react-native-navigation";
@@ -93,6 +93,10 @@ class SideDrawer extends Component {
       return await AsyncStorage.getItem("name");
   };
 
+  getBarId = async () => {
+    return await AsyncStorage.getItem("barId");
+  }
+
   getUserId = async () => {
     return await AsyncStorage.getItem("userId");
   };
@@ -100,6 +104,17 @@ class SideDrawer extends Component {
   getOrderId = async () => {
     return await AsyncStorage.getItem("orderId");
   };
+
+  signInLogic = async () =>  {
+    Promise.all([
+        IconFa.getImageSource(
+            Platform.OS === "android" ? "remove" : "remove",
+            30
+        )
+      ]).then(sources => {
+          showLoginOnNotificationPress(this.getBarId(), sources[0]);
+      })
+}
 
   render() {
     let menuOptions =
@@ -200,6 +215,18 @@ class SideDrawer extends Component {
               />
               <Text style={styles.text}>Create an Account</Text>
             </View>
+            <TouchableOpacity onPress={() => this.signInLogic()}>
+              <View style={styles.drawItem}>
+                <Icon
+                    size={30}
+                    color="#fff"
+                    name={Platform.OS === "android" ? "md-person" : "ios-person"}
+                    style={styles.drawItemIcon}
+                />
+                <Text style={[styles.text]}>Sign in </Text>
+              </View>
+            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => this.logoutHandler()}>
               <View style={styles.drawItem}>
                 <Icon
@@ -208,7 +235,7 @@ class SideDrawer extends Component {
                     name={Platform.OS === "android" ? "md-log-out" : "ios-log-in"}
                     style={styles.drawItemIcon}
                 />
-                <Text style={[styles.text]}>Sign in </Text>
+                <Text style={[styles.text]}>Welcome Screen</Text>
               </View>
             </TouchableOpacity>
 

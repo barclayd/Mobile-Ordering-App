@@ -50,14 +50,15 @@ export const checkAuthRole = role => {
 };
 
 
-export const auth = (email, password, name, componentId, isSignUp, ) => {
+export const auth = (email, password, name, componentId, isSignUp, modal) => {
     return {
         type: actionTypes.AUTH_USER,
         email: email,
         password: password,
         name: name,
         componentId: componentId,
-        isSignUp: isSignUp
+        isSignUp: isSignUp,
+        modal: modal
     };
 };
 
