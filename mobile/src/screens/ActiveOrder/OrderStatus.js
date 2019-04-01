@@ -6,6 +6,7 @@ import * as colours from "../../styles/colourScheme";
 import NotificationService from "../../notifications/NotificationService";
 import Icon from "react-native-vector-icons/Ionicons";
 import {RNNotificationBanner} from "react-native-notification-banner";
+import {orderStatusLookUp} from '../../helpers/schemaHelper';
 
 const query = gql`
        query FindOrderById($id: ID!) {
@@ -67,7 +68,7 @@ class OrderStatusView extends Component {
     onNotification = (notification) => {
         if (notification.foreground) {
             const drinkReady = <Icon name="ios-beer" size={24} color="#FFFFFF" family={"Ionicons"} />;
-            RNNotificationBanner.Success({ onClick: this.props.showQRCode, title: `Order #${orderStatus.collectionId}: Ready for Collection`, subTitle: `Order is now available for collection from the ${orderStatus.collectionPoint.name} collection point`, withIcon: true, icon: drinkReady});
+            RNNotificationBanner.Success({ duration: 10, onClick: this.props.showQRCode, title: `Order #${orderStatus.collectionId}: Ready for Collection`, subTitle: `Order is now available for collection from the ${orderStatus.collectionPoint.name} collection point`, withIcon: true, icon: drinkReady});
             this.setState({
                 notificationSent: true
             })
@@ -92,19 +93,19 @@ class OrderStatusView extends Component {
         return (
             orderStatus ? <View>
                 <View style={styles.progressCircle}>
-                    <Text style={styles.orderText}>Status:</Text>
+                    <Text style={styles.orderText}>Status: </Text>
                     <Text style={styles.orderSubtitle}>
-                        {orderStatus.status}{" "}
+                        {orderStatusLookUp[orderStatus.status]}
                     </Text>
                 </View>
                 <View style={styles.progressCircle}>
-                    <Text style={styles.orderText}>Collection Code :</Text>
+                    <Text style={styles.orderText}>Collection Code: </Text>
                     <Text style={styles.orderSubtitle}>
-                        #{orderStatus.collectionId}{" "}
+                        #{orderStatus.collectionId}
                     </Text>
                 </View>
                 <View style={styles.progressCircle}>
-                    <Text style={styles.orderText}>Ordered at :</Text>
+                    <Text style={styles.orderText}>Date of Order: </Text>
                     <Text style={styles.date}>
                         {new Date(parseInt(orderStatus.date))
                             .toTimeString()
@@ -115,14 +116,17 @@ class OrderStatusView extends Component {
                     </Text>
                 </View>
                 <View style={styles.progressCircle}>
-                    <Text style={styles.orderText}>Collection Point:</Text>
+                    <Text style={styles.orderText}>Collection Point: </Text>
                     <Text style={styles.orderSubtitle}>
                         {orderStatus.collectionPoint.name}
                     </Text>
                 </View>
-                <Text style={styles.orderText}>
-                    Estimated Collection Time : 10:59pm
-                </Text>
+                {orderStatus.status !== 'COMPLETED' ? <Text style={styles.orderText}>
+                        Estimated Collection Time: <Text style={styles.date}>{new Date(Date.now() + (300 * 1000)).toTimeString().slice(0, 5)}</Text>
+                </Text> :
+                    <Text style={styles.orderText}>
+                        Time of Order Collection: <Text style={styles.date}>{new Date(parseInt(orderStatus.date)).toTimeString().slice(0, 5)}</Text>
+                    </Text>}
             </View> : <ActivityIndicator size="large" color={colours.orange} />
         );
     }
