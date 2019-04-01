@@ -194,7 +194,7 @@ type User {
     }
     
     type Subscription {
-        orderUpdated: Order!
+        orderUpdated(orderId: ID!): Order!
     }
     
     schema {

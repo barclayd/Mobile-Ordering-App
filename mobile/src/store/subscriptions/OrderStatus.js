@@ -34,8 +34,8 @@ const query = gql`
 `;
 
 const subscription = gql`
-subscription {
-  orderUpdated {
+subscription ($orderId: ID!) {
+  orderUpdated(orderId: $orderId) {
     _id
     status
   }
@@ -58,15 +58,15 @@ class OrderStatusView extends Component {
         this.unsubscribe = this.props.subscribeToMore();
     }
 
-    componentWillReceiveProps(nextProps) {
-        // check if the order for Active Order has changed
-        if (nextProps.orderId !== orderStatus.orderId) {
-            if (this.unsubscribe) {
-                this.unsubscribe();
-                // subscribe to new orderId
-            }
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     // check if the order for Active Order has changed
+    //     if (nextProps.orderId !== orderStatus.orderId) {
+    //         if (this.unsubscribe) {
+    //             this.unsubscribe();
+    //             // subscribe to new orderId
+    //         }
+    //     }
+    // }
 
     componentWillUnmount() {
         if (this.unsubscribe) {
@@ -264,6 +264,9 @@ const OrderStatus = props => {
             }
             const more = () => subscribeToMore({
                 document: subscription,
+                variables: {
+                    orderId: props.orderId
+                },
                 updateQuery: (prev, {subscriptionData}) => {
                     if (!subscriptionData.data) return prev;
                     return null;

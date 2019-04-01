@@ -1,5 +1,5 @@
 const {dateToString} = require("../../helpers/date");
-const { PubSub } = require('graphql-subscriptions/dist/index');
+const { PubSub, withFilter } = require('graphql-subscriptions');
 const Order = require('../../models/order');
 const BarStaff = require('../../models/barStaff');
 const {drinks} = require("../resolvers/drinks");
@@ -11,13 +11,15 @@ const ORDER_UPDATED = 'ORDER_UPDATED';
 const resolvers = {
     Subscription: {
         orderUpdated: {
-            subscribe: () => pubSub.asyncIterator([ORDER_UPDATED]),
+            subscribe: withFilter(
+                () => pubSub.asyncIterator([ORDER_UPDATED]),
+                (payload, args) => payload.orderId == args.orderId
+            )
         }
     },
     Query: {
-        findOrderById: async (parent, {id}, {input})=> {
+        findOrderById: async (parent, {id}, {input}) => {
             try {
-                console.log(id);
                 const foundOrder = await Order.findOne({_id: id}).populate('userInfo').populate('collectionPoint');
                 const returnedDrinks = await drinks(foundOrder.drinks);
                 return {
@@ -41,7 +43,6 @@ const resolvers = {
     Mutation: {
         updateOrder: async (parent, args, {input})  => {
             try {
-                console.log('made it here');
                 const foundOrder = await Order.findOne({_id: args.orderStatusInput.orderId}).populate('orderAssignedTo');
                 foundOrder.status = args.orderStatusInput.status;
                 const returnedDrinks = await drinks(foundOrder.drinks);
@@ -51,6 +52,7 @@ const resolvers = {
                 const barStaffMember = await BarStaff.findOne({_id: args.orderStatusInput.barStaffId});
                 await foundOrder.save();
                 await pubSub.publish(ORDER_UPDATED, {
+                    orderId: foundOrder._id,
                     orderUpdated: foundOrder
                 });
                 return {
