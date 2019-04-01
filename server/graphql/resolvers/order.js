@@ -9,7 +9,7 @@ const {drinks} = require('./mergeResolvers/drinks');
 const {processPayment} = require('../../helpers/stripe');
 const uuid = require('uuid/v4');
 const randomString = require('randomstring');
-
+ 
 module.exports = {
     createOrder: async (args, req) => {
         try {
@@ -25,10 +25,13 @@ module.exports = {
             if (!drinksIdCheck) {
                 throw new Error ('Drink with invalid ID entered');
             }
-            const user = await User.findById(args.orderInput.userInfo);
-            if (!user) {
-                throw new Error ('Invalid user account to process order');
-            }
+           let user = null;
+                if (args.orderInput.userInfo) {
+                    user = await User.findById(args.orderInput.userInfo);
+                    if (!user) {
+                        throw new Error ('Invalid user account to process order');
+                    }
+                }
             const collectionPoint = await CollectionPoint.findById(args.orderInput.collectionPoint);
             if (!collectionPoint) {
                 throw new Error ('Invalid collection point to process order');
@@ -210,6 +213,3 @@ module.exports = {
         }
     }
 };
-
-
-

@@ -59,7 +59,7 @@ module.exports = buildSchema(`
         orderAssignedTo: BarStaff
         status: String!
         date: String!
-        userInfo: User!
+        userInfo: User
         transactionId: String,
         collectionId: String,
         price: Float!
@@ -116,7 +116,7 @@ module.exports = buildSchema(`
         collectionPoint: ID!
         status: String!
         date: String!
-        userInfo: ID!
+        userInfo: ID
         price: Float!
     }
     

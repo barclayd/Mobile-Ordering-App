@@ -88,7 +88,7 @@ class Checkout extends Component {
             })
         })
     }
-    
+
     getAccountName = async () => {
         return await AsyncStorage.getItem("userId");
       };
@@ -98,7 +98,7 @@ class Checkout extends Component {
     }
     showNotification() {
         let icon = <Icon name="user" size={24} color="#FFFFFF" family={"FontAwesome"} />;
-        RNNotificationBanner.Error({duration: 60, onClick: () => this.handleNotificationPress(),  title: `No user logged in.`, subTitle: `Please click banner to sign in.`, withIcon: true, icon: icon});
+        RNNotificationBanner.Normal({duration: 8, onClick: () => this.handleNotificationPress(),  title: `You have not signed in.`, subTitle: `Please sign in or enter email address below.`, withIcon: true, icon: icon});
     }
 
     handleNotificationPress = async () =>  {
@@ -235,11 +235,8 @@ class Checkout extends Component {
                 this.setState({
                     userId: value
                 })
-                if (value == null && this.state.notificationSent === false){
+                if (value == null && this.state.notificationSent === false && this.state.showPaymentOverlay == true){
                     this.showNotification()
-                    // this.setState({
-                        // notificationSent: true
-                    // })
                 }
             });
         this.setState(prevState => {
