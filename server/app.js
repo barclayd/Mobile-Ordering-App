@@ -9,8 +9,8 @@ const {SubscriptionServer} = require('subscriptions-transport-ws');
 const checkAuth = require('./middleware/check-auth');
 const subscriptionsEndpoint = `ws://localhost:${process.env.PORT}/subscriptions`;
 
-const apolloSchema = require('./graphql/apollo/schema');
-const apolloResolvers = require('./graphql/apollo/resolvers');
+const apolloSchema = require('./graphql/schema/schema');
+const apolloResolvers = require('./graphql/resolvers/resolvers');
 
 // middleware
 express.json();
