@@ -27,15 +27,21 @@ const resolvers = {
         orderUpdated: {
             subscribe: withFilter(
                 () => pubSub.asyncIterator([ORDER_UPDATED]),
-                // == must be kept below due to issue with strings not being evaluated correctly
-                (payload, args) => payload.orderId == args.orderId
+                (payload, args) => {
+                    const pay = payload.orderId.toString();
+                    const arg = args.orderId;
+                    return pay === arg;
+                }
             )
         },
         orderCreated: {
             subscribe: withFilter(
                 () => pubSub.asyncIterator([ORDER_CREATED]),
-                // == must be kept below due to issue with strings not being evaluated correctly
-                (payload, args) => payload.collectionPointId == args.collectionPointId
+                (payload, args) => {
+                    const pay = payload.collectionPointId.toString();
+                    const arg = args.collectionPointId;
+                    return pay === arg;
+                }
             )
         }
     },
@@ -249,9 +255,12 @@ const resolvers = {
         createOrder: async (parent, args, {headers}) => {
             try {
                 // check validity of entered user details
-                const user = await User.findById(args.orderInput.userInfo);
-                if (!user) {
-                    throw new Error ('Invalid user account to process order');
+                let user = null;
+                if (args.orderInput.userInfo) {
+                    user = await User.findById(args.orderInput.userInfo);
+                    if (!user) {
+                        throw new Error ('Invalid user account to process order');
+                    }
                 }
                 // check validity of entered collectionPoint details
                 const collectionPoint = await CollectionPoint.findById(args.orderInput.collectionPoint);
@@ -296,8 +305,7 @@ const resolvers = {
                     price: args.orderInput.price
                 });
                 await pubSub.publish(ORDER_CREATED, {
-                    orderId: createdOrder._id,
-                    collectionPoint,
+                    collectionPointId: createdOrder.collectionPoint._id,
                     createdOrder: createdOrder
                 });
                 return await createdOrder.save();
