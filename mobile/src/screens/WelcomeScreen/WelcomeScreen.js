@@ -122,11 +122,13 @@ class WelcomeScreen extends Component {
                     <WelcomeBackground colour1={colours.orange}>
                         {drinKing}
                         <Swiper
+                            autoplay={true}
                             dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
                             activeDot={<View style={{backgroundColor: colours.pureWhite, width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
                             paginationStyle={{
                                 bottom: 40
                             }}
+                            autoplayTimeout={3}
                             loop={false}>
                             <View style={styles.columnContainer}>
                                 <View style={styles.rowContainer}>
