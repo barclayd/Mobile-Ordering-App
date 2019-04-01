@@ -3,7 +3,7 @@ const { PubSub, withFilter } = require('graphql-subscriptions');
 const Order = require('../../models/order');
 const BarStaff = require('../../models/barStaff');
 const Bar = require('../../models/bar');
-const {drinks} = require("../resolvers/drinks");
+const {drinks} = require('../resolvers/mergeResolvers/drinks');
 
 const pubSub = new PubSub();
 
@@ -41,7 +41,7 @@ const resolvers = {
                 throw err;
             }
         },
-        findAllBars: async (parent, args) => {
+        findAllBars: async () => {
             try {
                 const bars = await Bar.find();
                 return bars.map(bar => {

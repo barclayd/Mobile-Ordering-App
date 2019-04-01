@@ -14,7 +14,6 @@ import { Navigation } from "react-native-navigation";
 import { RNNotificationBanner } from 'react-native-notification-banner';
 import Icon from 'react-native-vector-icons/Ionicons'
 import IconFa from 'react-native-vector-icons/FontAwesome'
-import * as Progress from "react-native-progress";
 import { connect } from "react-redux";
 import {showQRCodeOnNotificationPress} from '../../utility/navigation';
 import * as actions from "../../store/actions/index";
@@ -218,7 +217,7 @@ class ActiveOrder extends Component {
 
               <View style={styles.receipt}>
                 <Text style={styles.orderText}>Sub Total</Text>
-                <Text style={styles.orderText}>£{orderPrice}</Text>
+                <Text style={styles.orderText}>£{parseFloat(orderPrice).toFixed(2)}</Text>
               </View>
 
               <View style={styles.button}>
