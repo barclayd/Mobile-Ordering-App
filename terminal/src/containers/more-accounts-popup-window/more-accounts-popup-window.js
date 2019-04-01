@@ -26,8 +26,8 @@ class MoreAccountsPopupWindow extends Component {
                                 <button key={staffMember._id} className={buttonClass} onClick={()=>{ 
                                     this.setState({closePopup: true}, () => {
                                         this.setState({closePopup: null});
-                                        this.props.moreAccountsFunc(staffMember._id)
                                         this.props.addStaffByIDToHotbarFunc(staffMember._id)
+                                        this.props.moreAccountsFunc(staffMember._id)
                                     });
                                 }}>
                                     {staffMember.firstName}
