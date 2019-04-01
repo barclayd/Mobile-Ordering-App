@@ -306,7 +306,7 @@ const resolvers = {
                 });
                 await pubSub.publish(ORDER_CREATED, {
                     collectionPointId: createdOrder.collectionPoint._id,
-                    createdOrder: createdOrder
+                    orderCreated: createdOrder
                 });
                 return await createdOrder.save();
             } catch (err) {
