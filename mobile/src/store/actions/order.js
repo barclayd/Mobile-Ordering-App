@@ -82,3 +82,21 @@ export const orderStatusFailure = error => {
         error: error
     };
 };
+
+export const orderUpdatedSuccess = (order) => {
+    return {
+        type: actionTypes.UPDATE_ORDER_SUCCESS,
+        order
+    };
+};
+
+export const orderUpdatedFailure = error => {
+    console.log(error);
+    return {
+        type: actionTypes.UPDATE_ORDER_FAIL,
+        error
+    };
+};
+
+
+

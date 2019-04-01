@@ -25,6 +25,7 @@ let submittedCode;
 class WelcomeScreen extends Component {
 
     async componentDidMount() {
+        Navigation.events().bindComponent(this);
         this.props.onTryAutoSignIn(this.props.componentId);
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
@@ -42,7 +43,9 @@ class WelcomeScreen extends Component {
                     minLength: 4
                 }
             }
-        }
+        },
+        coordinates: {},
+        notificationSent: false
     };
 
     onSubmitCodeHandler = () => {
@@ -51,6 +54,26 @@ class WelcomeScreen extends Component {
             submittedCode = this.state.controls.barCode.value;
         }
     };
+
+    componentDidAppear() {
+        navigator.geolocation.requestAuthorization();
+        navigator.geolocation.getCurrentPosition(pos => {
+            const foundCoordinates = {
+                        latitude: pos.coords.latitude,
+                        longitude: pos.coords.longitude
+            };
+            this.setState({
+                coordinates: foundCoordinates
+            });
+        });
+    }
+
+    componentDidDisappear() {
+        this.setState({
+            notificationSent: true
+        });
+        navigator.geolocation.stopObserving();
+    }
 
     inputUpdateHandler = (key, value) => {
 
@@ -74,6 +97,12 @@ class WelcomeScreen extends Component {
         setLoginScreen(this.props.componentId, authType);
     };
 
+    handleNotificationSent = (sent) => {
+        this.setState({
+            notificationSent: sent
+        })
+    };
+
     render() {
 
         const drinKing =
@@ -93,11 +122,13 @@ class WelcomeScreen extends Component {
                     <WelcomeBackground colour1={colours.orange}>
                         {drinKing}
                         <Swiper
+                            autoplay={true}
                             dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
                             activeDot={<View style={{backgroundColor: colours.pureWhite, width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
                             paginationStyle={{
                                 bottom: 40
                             }}
+                            autoplayTimeout={3}
                             loop={false}>
                             <View style={styles.columnContainer}>
                                 <View style={styles.rowContainer}>
@@ -128,11 +159,11 @@ class WelcomeScreen extends Component {
                                             <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
                                             <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
                                         </>
-                                    ) : <Text style={styles.h4}>Welcome back, <Text style={{color: colours.orange}}>{this.props.name}</Text></Text>}
+                                    ) : <Text style={styles.h4}>Hello, <Text style={{color: colours.orange}}>{this.props.name}</Text></Text>}
                                 </View>
                             </View>
                             <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>
-                                <MapDisplay componentId={this.props.componentId}/>
+                                <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} notificationStatus={this.state.notificationSent} sentNotification={this.handleNotificationSent} parentScreen='WelcomeScreen'/>
                             </View>
                         </Swiper>
                     </WelcomeBackground>
@@ -244,7 +275,8 @@ const mapStateToProps = state => {
         barLoading: state.bar.loading,
         barError: state.bar.error,
         userId: state.auth.userId,
-        name: state.auth.name
+        name: state.auth.name,
+        bars: state.bar.bars
     }
 };
 

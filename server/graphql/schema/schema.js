@@ -1,8 +1,9 @@
-const {buildSchema} = require('graphql');
+const { makeExecutableSchema } = require('graphql-tools/dist/index');
 
-module.exports = buildSchema(`
+const resolvers = require("../resolvers/resolvers");
 
-     type User {
+const typeDefs =[ `
+type User {
         _id: ID!
         email: String!
         password: String
@@ -53,16 +54,16 @@ module.exports = buildSchema(`
     }
     
     type Order {
-        _id: ID!
+        _id: ID
         collectionPoint: CollectionPoint
         drinks: [Drink!]
         orderAssignedTo: BarStaff
-        status: String!
-        date: String!
-        userInfo: User!
+        status: String
+        date: String
+        userInfo: User
         transactionId: String,
         collectionId: String,
-        price: Float!
+        price: Float
     }
         
      type Bar {
@@ -157,7 +158,7 @@ module.exports = buildSchema(`
         barStaffId: ID
     }
     
-    type RootQuery {
+    type Query {
        login(email: String!, password: String!): AuthData!
        findBar(barCode: String!): Bar!
        findAllBars: [Bar]
@@ -177,7 +178,7 @@ module.exports = buildSchema(`
        findBarStaffByBar(barId: ID!): [BarStaff]
     }
     
-    type RootMutation {
+    type Mutation {
         createUser(userInput: UserInput): User
         createBar(barInput: BarInput): Bar
         createDrink(drinkInput: DrinkInput): Drink
@@ -186,18 +187,27 @@ module.exports = buildSchema(`
         createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
         createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
         createMenu(menuInput: MenuInput): Menu
-        updateOrder(orderStatusInput: OrderStatusInput): Order
         updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
         updateLastVisitedBar(userId: ID!, barId: ID): User!
-    }
-    
-    type RootSubscription {
         updateOrder(orderStatusInput: OrderStatusInput): Order!
     }
     
-    schema {
-        query: RootQuery
-        mutation: RootMutation
-        subscription: RootSubscription
+    type Subscription {
+        orderUpdated(orderId: ID!): Order!
+        orderCreated(collectionPointId: ID!): Order!
     }
-`);
+    
+    schema {
+        query: Query
+        mutation: Mutation
+        subscription: Subscription
+    }
+`];
+
+const apolloServer = makeExecutableSchema({
+    typeDefs: typeDefs,
+    resolvers: resolvers
+});
+
+
+module.exports = apolloServer;

@@ -5,29 +5,39 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-  ActivityIndicator, AsyncStorage
+  Alert,
+  ActivityIndicator, AsyncStorage, Platform
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import * as colours from "../../styles/colourScheme";
 import { Navigation } from "react-native-navigation";
-import * as Progress from "react-native-progress";
+import { RNNotificationBanner } from 'react-native-notification-banner';
+import Icon from 'react-native-vector-icons/Ionicons'
+import IconFa from 'react-native-vector-icons/FontAwesome'
 import { connect } from "react-redux";
+import {showQRCodeOnNotificationPress} from '../../utility/navigation';
 import * as actions from "../../store/actions/index";
 import Modal from "react-native-modal";
 import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
+import NotificationService from '../../../src/notifications/NotificationService';
+import appConfig from '../../../app.json';
 import SimpleCrypto from "simple-crypto-js";
+import OrderStatus from './OrderStatus';
 
 class ActiveOrder extends Component {
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this);
+    this.notification = new NotificationService(this.onRegister.bind(this), this.onNotification.bind(this));
   }
 
   state = {
     orderStatus: [],
-    showQRCode: false,
+    showQRCode: this.props.showQRCode ? this.props.showQRCode : false,
     quantities: {},
-    drinks: {}
+    drinks: {},
+    senderId: appConfig.senderID,
+    screenActive: false
   };
 
   async componentDidMount() {
@@ -38,7 +48,9 @@ class ActiveOrder extends Component {
       this.props.findOrderById(orderNumber);
     }
     this.setState({
-      accountName: await this.getAccountName()
+        orderNumber: await this.getOrderDetails(),
+      accountName: await this.getAccountName(),
+      barName: await this.getBarName()
     });
   }
 
@@ -48,6 +60,18 @@ class ActiveOrder extends Component {
         orderStatus: nextProps.orderStatus
       });
     }
+  }
+
+  componentDidAppear() {
+    this.setState({
+      screenActive: true
+    });
+  }
+
+  componentDidDisappear() {
+    this.setState({
+      screenActive: false
+    });
   }
 
   navigationButtonPressed({ buttonId }) {
@@ -62,6 +86,9 @@ class ActiveOrder extends Component {
           }
         }
       });
+    }
+    if (buttonId === "close") {
+      Navigation.dismissModal(this.props.componentId);
     }
     if (buttonId === "profileButton") {
       !this.isSideDrawerVisible
@@ -94,7 +121,43 @@ class ActiveOrder extends Component {
     return await AsyncStorage.getItem("orderId");
   };
 
+  getBarName = async () => {
+    return await AsyncStorage.getItem("barName");
+  };
+
+  onNotification = (notification) => {
+    if (notification.foreground) {
+      let drinkReady = <Icon name="ios-beer" size={24} color="#FFFFFF" family={"Ionicons"} />;
+      RNNotificationBanner.Success({ onClick: this.showQRCode, title: `Order #${this.state.orderStatus.collectionId}: Ready for Collection`, subTitle: `Order is now available for collection from ${this.state.orderStatus.collectionPoint.name} collection point`, withIcon: true, icon: drinkReady});
+    } else {
+      this.showQRCode();
+    }
+  };
+
+  showQRCode = () => {
+    if (!this.state.showQRCode && !this.state.screenActive) {
+      Promise.all([
+        IconFa.getImageSource(
+            Platform.OS === "android" ? "close" : "close",
+            30
+        )
+      ]).then(sources => {
+          showQRCodeOnNotificationPress(true, this.props.collectionId, sources[0]);
+      })
+    } else {
+      this.setState({
+        showQRCode: true
+      })
+    }
+  };
+
+  onRegister = (token) => {
+    Alert.alert("Registered !", JSON.stringify(token));
+    this.setState({ registerToken: token.token, gcmRegistered: true });
+  };
+
   render() {
+
     let qrCode = null;
     const key = "zvBT1lQV1RO9fx6f8";
     const crypto = new SimpleCrypto(key);
@@ -132,46 +195,8 @@ class ActiveOrder extends Component {
                 Thank You {this.state.accountName}!
               </Text>
               <View style={styles.progressCircle}>
-                <Text style={styles.orderText}>Status:</Text>
-                <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.status}{" "}
-                </Text>
-                <Progress.Circle
-                  size={30}
-                  indeterminate={true}
-                  color={colours.orange}
-                  thickness={15}
-                />
+                <OrderStatus orderId={this.props.orderNumber ? this.props.orderNumber : this.state.orderNumber} barName={this.state.barName} showQRCode={() => this.showQRCode()}/>
               </View>
-              <View style={styles.progressCircle}>
-                <Text style={styles.orderText}>Collection Code :</Text>
-                <Text style={styles.orderSubtitle}>
-                  #{this.state.orderStatus.collectionId}{" "}
-                </Text>
-              </View>
-              <View style={styles.progressCircle}>
-                <Text style={styles.orderText}>Ordered at :</Text>
-                <Text style={styles.date}>
-                  {new Date(this.state.orderStatus.date)
-                    .toTimeString()
-                    .slice(0, 8)}
-                </Text>
-                <Text style={styles.date}>
-                  {new Date(
-                    this.state.orderStatus.date
-                  ).toDateString()}
-                </Text>
-              </View>
-              <View style={styles.progressCircle}>
-                <Text style={styles.orderText}>Collection Point:</Text>
-                <Text style={styles.orderSubtitle}>
-                  {this.state.orderStatus.collectionPoint.name}
-                  {this.state.orderStatus.collectionPoint.collectionPoindId}
-                </Text>
-              </View>
-              <Text style={styles.orderText}>
-                Estimated Collection Time : 10:59pm
-              </Text>
               <Text style={[styles.status, styles.padd]}>Order Summary</Text>
 
               {finalList.map((drinks, i) => {
@@ -192,16 +217,25 @@ class ActiveOrder extends Component {
 
               <View style={styles.receipt}>
                 <Text style={styles.orderText}>Sub Total</Text>
-                <Text style={styles.orderText}>£{orderPrice}</Text>
+                <Text style={styles.orderText}>£{parseFloat(orderPrice).toFixed(2)}</Text>
               </View>
 
               <View style={styles.button}>
                 <ButtonBackground
-                  color={colours.orange}
-                  onPress={() => this.toggleQRCode()}
+                    color={colours.orange}
+                    onPress={() => this.toggleQRCode()}
                   textColor={colours.pureWhite}
                 >
                   Show QR Code
+                </ButtonBackground>
+              </View>
+              <View style={styles.button}>
+                <ButtonBackground
+                    color={colours.midGrey}
+                    onPress={() => this.notification.scheduleNotification('Ready for Collection', this.state.barName, this.state.orderStatus.collectionId, this.state.orderStatus.collectionPoint.name)}
+                    textColor={colours.midnightBlack}
+                >
+                  Send Notification Reminder
                 </ButtonBackground>
               </View>
               <Modal
@@ -234,7 +268,7 @@ class ActiveOrder extends Component {
                     <Text style={styles.infoText}>
                       Order Time:{" "}
                       <Text style={{ color: colours.orange }}>
-                        {new Date(this.props.orderStatus.date).toTimeString().slice(0, 5)}
+                        {new Date(parseInt(this.props.orderStatus.date)).toTimeString().slice(0, 5)}
                       </Text>
                     </Text>
                   </View>
@@ -345,7 +379,9 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: "center",
-    width: Dimensions.get("window").width / 2
+    textAlign: 'center',
+    width: Dimensions.get("window").width / 2,
+    marginTop: 20
   },
   header: {
     color: colours.midnightBlack,
@@ -366,6 +402,7 @@ const styles = StyleSheet.create({
   }
 });
 
+
 const mapStateToProps = state => {
   return {
     orderStatus: state.order.orderStatus,
@@ -375,11 +412,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    findOrderById: id => dispatch(actions.orderStatus(id))
+    findOrderById: id => dispatch(actions.orderStatus(id)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ActiveOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(ActiveOrder);
