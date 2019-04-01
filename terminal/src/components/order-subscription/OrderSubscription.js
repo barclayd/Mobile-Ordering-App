@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+import {connect} from 'react-redux';
+import * as actions from "../../store/actions";
 
 const query = gql`
        query FindOrdersByCollectionPoint($collectionPoint: ID!) {
@@ -66,10 +68,6 @@ subscription ($collectionPointId: ID!) {
 
 class OrdersStream extends Component {
 
-    state = {
-        notificationSent: false
-    };
-
     componentWillMount() {
         this.unsubscribe = this.props.subscribeToMore();
     }
@@ -81,13 +79,11 @@ class OrdersStream extends Component {
     }
 
     render() {
-        console.log(this.props);
-        const orders = this.props.data.findOrdersByCollectionPoint;
-        console.log(orders);
+        const order = this.props.data.orderCreated;
+        console.log(order);
         return (
-            <div>
-                <h1>Orders</h1>
-            </div>
+            <>
+            </>
         )
     }
 }
@@ -107,14 +103,22 @@ const Orders = props => {
                     collectionPointId: '5c925636bc63a912ed715316'
                 },
                 updateQuery: (prev, {subscriptionData}) => {
-                    console.log(subscriptionData.data);
                     if (!subscriptionData.data) return prev;
+                    if (subscriptionData.data.orderCreated) {
+                        props.newOrder(subscriptionData.data.orderCreated);
+                    }
                     return null;
-                },
+                }
             });
             return <OrdersStream data={data} subscribeToMore={more}/>;
         }}
     </Query>
 };
 
-export default Orders;
+const mapDispatchToProps = dispatch => {
+    return {
+        newOrder: (order) => dispatch(actions.newOrder(order))
+    }
+};
+
+export default connect(null, mapDispatchToProps)(Orders);
