@@ -8,8 +8,6 @@ quantityCalculator = (drinks) => {
     const uniqueDrinks = unique(drinks);
     let count;
     for (let drink in uniqueDrinks) {
-        console.log(drinks);
-        console.log(uniqueDrinks[drink]);
         count = drinks.map(foundDrink => foundDrink === uniqueDrinks[drink]).length;
     }
     return count;

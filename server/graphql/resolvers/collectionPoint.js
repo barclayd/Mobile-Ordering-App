@@ -24,7 +24,6 @@ module.exports = {
             if (!collectionPoint) {
                 collectionPointId = Math.random().toString(36).substring(2, 6).toUpperCase();
             }
-            console.log(args);
             const bar = await Bar.findOne({_id: args.collectionPointInput.bar});
             if (!bar) {
                 throw new Error(`Bar with provided id: ${collectionPointId} does not exist`);

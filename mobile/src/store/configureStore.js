@@ -4,13 +4,15 @@ import barReducer from './reducers/bar';
 import drinkReducer from './reducers/drinks';
 import orderReducer from './reducers/order';
 import basketReducer from './reducers/basket';
+import collectionPointReducer from './reducers/collectionPoint';
 
 const rootReducer = combineReducers({
     auth: authReducer,
     bar: barReducer,
     drink: drinkReducer,
     order: orderReducer,
-    basket: basketReducer
+    basket: basketReducer,
+    collectionPoint : collectionPointReducer
 });
 
 let composeEnhancers = compose;

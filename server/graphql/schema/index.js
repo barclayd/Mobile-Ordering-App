@@ -3,14 +3,23 @@ const {buildSchema} = require('graphql');
 module.exports = buildSchema(`
 
      type User {
-            _id: ID!
-            email: String!
-            password: String
-            name: String!
+        _id: ID!
+        email: String!
+        password: String
+        name: String!
+        lastVisitedBar: Bar
         }
         
      type Category {
         category: String!
+     }
+     
+     type Menu {
+        _id: ID!
+        name: String!
+        drinks: [Drink]
+        description: String!
+        image: String
      }
      
      type BarStaff {
@@ -28,19 +37,19 @@ module.exports = buildSchema(`
      }
         
     type Drink {
-            _id: ID!
-            name: String!
-            category: String!
-            nutritionInfo: String!
-            price: String!
+        _id: ID!
+        name: String!
+        category: String!
+        nutritionInfo: String!
+        price: String!
     }
     
     type Ingredient {
-            _id: ID!
-            name: String!
-            amount: String!
-            allergy: String
-            containsAlcohol: Boolean!
+        _id: ID!
+        name: String!
+        amount: String!
+        allergy: String
+        containsAlcohol: Boolean!
     }
     
     type Order {
@@ -52,7 +61,8 @@ module.exports = buildSchema(`
         date: String!
         userInfo: User!
         transactionId: String,
-        collectionId: String
+        collectionId: String,
+        price: Float!
     }
         
      type Bar {
@@ -63,6 +73,9 @@ module.exports = buildSchema(`
         description: String!
         latitude: Float!
         longitude: Float!
+        image: String
+        logo: String
+        menus: [Menu]
      }
         
     type AuthData {
@@ -70,6 +83,7 @@ module.exports = buildSchema(`
         token: String!
         tokenExpiration: Int!
         name: String!
+        lastVisitedBar: Bar
     }
     
     input BarStaffInput {
@@ -85,6 +99,13 @@ module.exports = buildSchema(`
         role: String!
     }
     
+    input MenuInput {
+        name: String!
+        drinks: [ID!]
+        description: String!
+        image: String
+    }
+    
     input CollectionPointInput {
         name: String!
         bar: ID!
@@ -96,6 +117,7 @@ module.exports = buildSchema(`
         status: String!
         date: String!
         userInfo: ID!
+        price: Float!
     }
     
     
@@ -105,6 +127,9 @@ module.exports = buildSchema(`
         description: String!
         latitude: Float!
         longitude: Float!
+        image: String
+        logo: String
+        menus: [ID!]
     }
 
     input DrinkInput {
@@ -135,11 +160,14 @@ module.exports = buildSchema(`
     type RootQuery {
        login(email: String!, password: String!): AuthData!
        findBar(barCode: String!): Bar!
+       findAllBars: [Bar]
        findDrinks(category: String!): [Drink!]!
        drinks: [Drink!]!
        findIngredients(name: String!): [Ingredient!]!
        findDrinkCategories: [Category!]!
+       findDrinkCategoriesByMenu(menuId: ID!): [Category]
        findOrders: [Order!]!
+       findAllMenus: [Menu]
        findOrdersByUser(userInfo: ID!): [Order!]!
        findOrdersByCollectionPoint(collectionPoint: ID!): [Order!]!
        findOrderById(id: ID!): Order!
@@ -157,8 +185,10 @@ module.exports = buildSchema(`
         createOrder(orderInput: OrderInput): Order
         createCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
         createBarStaffMember(barStaffInput: BarStaffInput): BarStaff
+        createMenu(menuInput: MenuInput): Menu
         updateOrder(orderStatusInput: OrderStatusInput): Order
         updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
+        updateLastVisitedBar(userId: ID!, barId: ID): User!
     }
     
     type RootSubscription {

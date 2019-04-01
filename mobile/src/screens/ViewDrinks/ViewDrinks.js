@@ -34,15 +34,15 @@ class ViewDrinks extends Component {
   };
 
   componentDidMount() {
-    this.props.onFetchDrinkCategories();
-    this.props.findAllDrinks();
+    this.props.onFetchDrinkCategories(this.props.menuId);
   };
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
+      const selectedMenu = nextProps.menus.filter(menu => menu._id === this.props.menuId);
       this.setState({
         categories: nextProps.drinkCategories,
-        drinks: nextProps.drinks
+        drinks: selectedMenu[0].drinks
       });
     }
   }
@@ -59,6 +59,7 @@ class ViewDrinks extends Component {
   };
 
   render() {
+    console.log(this.state.drinks);
     return (
         <Checkout componentId={this.props.componentId}>
           <View style={styles.background}>
@@ -67,6 +68,9 @@ class ViewDrinks extends Component {
                   <ScrollableTabView
                       style={{ marginTop: 20 }}
                       initialPage={0}
+                      tabBarUnderlineStyle={{backgroundColor: colours.orange}}
+                      tabBarActiveTextColor={colours.orange}
+                      tabBarTextStyle={{fontWeight: "600",fontSize: 16}}
                       renderTabBar={() => <ScrollableTabBar />}
                   >
                     {this.state.categories.length > 0
@@ -134,16 +138,13 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     drinkCategories: state.drink.categories,
-    drinks: state.drink.drinks
+    menus: state.bar.menus
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchDrinkCategories: () => dispatch(actions.findDrinkCategories()),
-    findDrinks: (category, componentId) =>
-        dispatch(actions.findDrinks(category, componentId)),
-    findAllDrinks: (componentId) => dispatch(actions.findDrinks(null, componentId))
+    onFetchDrinkCategories: (menuId) => dispatch(actions.findDrinkCategories(menuId)),
   };
 };
 

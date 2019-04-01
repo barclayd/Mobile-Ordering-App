@@ -7,7 +7,7 @@ const collectionsPointSchema = mongoose.Schema({
     },
     bar: {
         type: mongoose.Schema.ObjectId,
-        ref: 'Ingredient'
+        ref: 'Bar'
     },
     collectionPointId: {
         type: String,

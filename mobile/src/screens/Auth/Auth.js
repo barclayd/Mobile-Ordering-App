@@ -12,21 +12,6 @@ import * as actions from '../../store/actions/index';
 
 class AuthScreen extends Component {
 
-    constructor(props) {
-        super(props);
-        Dimensions.addEventListener("change", this.updateStyles);
-    }
-
-    componentWillUnmount() {
-        Dimensions.removeEventListener("change", this.updateStyles);
-    }
-
-    updateStyles = () => {
-        this.setState({
-            viewMode: Dimensions.get("window").height > 800 ? 'portrait' : 'landscape'
-        });
-    };
-
     state = {
         viewMode: Dimensions.get("window").height > 800 ? 'portrait' : 'landscape',
         authMode: this.props.authState,
