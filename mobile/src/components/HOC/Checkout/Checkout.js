@@ -88,7 +88,7 @@ class Checkout extends Component {
             })
         })
     }
-
+    
     getAccountName = async () => {
         return await AsyncStorage.getItem("userId");
       };
@@ -430,7 +430,6 @@ class Checkout extends Component {
                                 basketItems={this.basketItems()}
                                 basketPrice={this.basketPrice()}
                                 collectionPoints={this.collectionPoints()}
-                                userId={this.state.userId}
                                 onCancel={this.togglePaymentOverlay}
                                 submitOrder={this.onSubmitOrder}
                                 hidePayment={this.togglePaymentOverlay}/>
