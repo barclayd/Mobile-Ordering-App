@@ -3,7 +3,6 @@ import {ActivityIndicator, Alert, Dimensions, StyleSheet, Text, View} from 'reac
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import * as colours from "../../styles/colourScheme";
-import {Navigation} from "react-native-navigation";
 import NotificationService from "../../notifications/NotificationService";
 import Icon from "react-native-vector-icons/Ionicons";
 import {RNNotificationBanner} from "react-native-notification-banner";
@@ -55,8 +54,24 @@ class OrderStatusView extends Component {
         notificationSent: false
     };
 
-    componentDidMount() {
-        this.props.subscribeToMore();
+    componentWillMount() {
+        this.unsubscribe = this.props.subscribeToMore();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // check if the order for Active Order has changed
+        if (nextProps.orderId !== orderStatus.orderId) {
+            if (this.unsubscribe) {
+                this.unsubscribe();
+                // subscribe to new orderId
+            }
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.unsubscribe) {
+            this.unsubscribe();
+        }
     }
 
     onNotification = (notification) => {
@@ -251,11 +266,10 @@ const OrderStatus = props => {
                 document: subscription,
                 updateQuery: (prev, {subscriptionData}) => {
                     if (!subscriptionData.data) return prev;
-                    const {_id, status} = subscriptionData.data;
                     return null;
                 },
             });
-            return <OrderStatusView orderId={props.orderId} setStatus={this.setStatus} barName={props.barName} showQRCode={props.showQRCode} data={data} subscribeToMore={more}/>;
+            return <OrderStatusView orderId={props.orderId} barName={props.barName} showQRCode={props.showQRCode} data={data} subscribeToMore={more}/>;
         }}
     </Query>
 };
