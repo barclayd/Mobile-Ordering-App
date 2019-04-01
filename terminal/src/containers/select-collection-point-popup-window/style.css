@@ -1,4 +1,4 @@
-.collectionPointButton {
+.collectionPointButton  {
   height: 350px;
   width: 360px;
   margin: 10px 15px;
@@ -8,8 +8,15 @@
   border-radius: 12px;
   text-align: left;
   
+  
   padding: 23px;
 }
+
+.collectionPointButton:hover{
+  background-color: #694972; 
+  color: white;
+}
+
 
 .collectionPointContainer {
   padding-left: 20px;
