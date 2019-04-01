@@ -10,7 +10,7 @@ const uuid = require('uuid/v4');
 const randomString = require('randomstring');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { PubSub, withFilter } = require('graphql-subscriptions/dist/index');
+const { PubSub, withFilter } = require('graphql-subscriptions');
 
 const {dateToString} = require("../../helpers/date");
 const {drinks} = require('../mergeResolvers/drinks');
