@@ -79,8 +79,6 @@ class OrdersStream extends Component {
     }
 
     render() {
-        const order = this.props.data.orderCreated;
-        console.log(order);
         return (
             <>
             </>
@@ -89,13 +87,12 @@ class OrdersStream extends Component {
 }
 
 const Orders = props => {
-    console.log(props);
     return <Query query={query} variables={{collectionPoint: '5c925636bc63a912ed715316'}}>
         {({loading, error, data, subscribeToMore}) => {
-            if (loading) return <p style={{color: 'white'}}>Loading...</p>;
+            if (loading) return <p style={{color: 'white', opacity: 0}}>Loading...</p>;
             if (error) {
                 console.log(error);
-                return <p style={{color: 'white'}}>Error: {error.message}</p>;
+                return <p style={{color: 'white', opacity: 0}}>Error: {error.message}</p>;
             }
             const more = () => subscribeToMore({
                 document: subscription,

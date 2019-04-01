@@ -258,8 +258,11 @@ class App extends Component {
 
   componentDidMount() {
 
+    // hardcoded values to remain until made dynamic
+    localStorage.setItem('barId', '5c6aafda90d4735a4e22f711');
+    localStorage.setItem('collectionPoint', '5c925636bc63a912ed715316');
     // Pull bartenders from server
-    this.props.findBarStaff("5c6aafda90d4735a4e22f711");
+    this.props.findBarStaff(localStorage.getItem('barId'));
 
     // Load selected bartender account from localstorage, or select the first if none exists
     this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || "5c97adae8cab340a0995dd25"});
@@ -268,7 +271,7 @@ class App extends Component {
     this.setState({staffHotBarOrder: JSON.parse(localStorage.getItem("staffHotBarOrder")) || []});
 
     // Pull orders from server
-    const collectionId = localStorage.getItem('collectionPoint') || '5c925636bc63a912ed715316';
+    const collectionId = localStorage.getItem('collectionPoint');
     this.props.loadOrders(collectionId);
 
     // Load webcam for iOS
@@ -450,7 +453,7 @@ class App extends Component {
     let buttonClass = "";
     if (this.state.selectedStaffMemberID === staffData._id) buttonClass = "selected";
     return ( <button key={staffData._id} onClick={()=>{this.moreAccounts(staffData._id)}} className={buttonClass}>{staffData.firstName}</button> );
-  }
+  };
 
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
