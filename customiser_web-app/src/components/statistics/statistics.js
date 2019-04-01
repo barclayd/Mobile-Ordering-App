@@ -6,8 +6,8 @@ import fusioncharts from 'fusioncharts';
 import charts from 'fusioncharts/fusioncharts.charts';
 import ReactFC from 'react-fusioncharts';
 import theme from 'fusioncharts/themes/fusioncharts.theme.fint';
-import * as actionTypes from '../store/actions/actionTypes';
-import { getOrdersByCollectionPointSaga } from "../store/sagas/order";
+import * as actionTypes from '../../store/actions/actionTypes';
+import { getOrdersByCollectionPointSaga } from "../../store/sagas/order";
 
 //passing these as dependencies
 charts(fusioncharts);
