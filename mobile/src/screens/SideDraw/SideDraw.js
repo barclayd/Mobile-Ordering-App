@@ -51,7 +51,16 @@ class SideDrawer extends Component {
         });
     }
 
-  logoutHandler = async () => {
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.userName) {
+          this.setState({
+              accountName: nextProps.userName,
+              userId: nextProps.userId
+          })
+      }
+    }
+
+    logoutHandler = async () => {
     this.props.onLogout();
     setDefaultSettings();
     await setWelcomePageRoot();
@@ -172,7 +181,7 @@ class SideDrawer extends Component {
           </TouchableOpacity>
         </>;
 
-    if (!this.getUserId()) {
+    if (!this.state.userId) {
       menuOptions =
           <>
             <View style={[styles.drawItem, styles.header]}>
@@ -287,10 +296,17 @@ const styles = StyleSheet.create({
   }
 });
 
+const mapStateToProps = state => {
+    return {
+        userName: state.auth.name,
+        userId: state.auth.userId
+    }
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     onLogout: () => dispatch(actions.logout())
   };
 };
 
-export default connect(null, mapDispatchToProps)(SideDrawer);
+export default connect(mapStateToProps, mapDispatchToProps)(SideDrawer);

@@ -155,7 +155,7 @@ export function* findAllBarsSaga(action) {
                 }
             `
         };
-        const response = yield axios.post('/', JSON.stringify(requestBody));
+        const response = yield axios.post('http://localhost:3000/graphiql', JSON.stringify(requestBody));
         if (response.data.errors) {
             yield put(actions.findAllBarsFail(response.data.errors[0].message));
             // errorNotification('No internet connection', 'Tap this banner to try again', 10);

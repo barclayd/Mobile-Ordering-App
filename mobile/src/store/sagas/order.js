@@ -202,7 +202,7 @@ export function* orderStatusSaga(action){
                 }
             `,
             variables: {
-                id: id ? id : '5c9680a7e76095a316b3687b'
+                id: id
             }
         };
         const response = yield axios.post('http://localhost:3000/graphiql', JSON.stringify(requestBody));

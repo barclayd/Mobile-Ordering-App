@@ -8,7 +8,7 @@ const {transformOrder} = require('./merge');
 const {drinks} = require('./mergeResolvers/drinks');
 const {processPayment} = require('../../helpers/stripe');
 const uuid = require('uuid/v4');
-const {PubSub, withFilter} = require('graphql-subscriptions');
+const {PubSub} = require('graphql-subscriptions');
 const randomString = require('randomstring');
 
 const pubSub = new PubSub();
@@ -175,7 +175,7 @@ module.exports = {
             const barStaffMember = await BarStaff.findOne({_id: args.orderStatusInput.barStaffId});
             await foundOrder.save();
             await pubSub.publish(ORDER_UPDATED, {
-               orderUpdated: foundOrder
+                orderUpdated: foundOrder
             });
             return {
                 _id: foundOrder._id,
