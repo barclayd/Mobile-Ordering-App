@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3000/graphiql',
+    baseURL: 'http://localhost:3000/graphql',
     // baseURL: 'http://192.168.0.15:3000/graphql',
     // baseURL: 'http://172.20.10.6:3000/graphql',
     headers: {
