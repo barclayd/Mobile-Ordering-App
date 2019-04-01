@@ -93,7 +93,7 @@ class SideDrawer extends Component {
 
   signInLogic = async () =>  {
     Promise.all([
-        Icon.getImageSource(
+        IconFa.getImageSource(
             Platform.OS === "android" ? "remove" : "remove",
             30
         )
@@ -206,10 +206,22 @@ class SideDrawer extends Component {
                 <Icon
                     size={30}
                     color="#fff"
-                    name={Platform.OS === "android" ? "md-log-out" : "ios-log-in"}
+                    name={Platform.OS === "android" ? "md-person" : "ios-person"}
                     style={styles.drawItemIcon}
                 />
                 <Text style={[styles.text]}>Sign in </Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => this.logoutHandler()}>
+              <View style={styles.drawItem}>
+                <Icon
+                    size={30}
+                    color="#fff"
+                    name={Platform.OS === "android" ? "md-log-out" : "ios-log-in"}
+                    style={styles.drawItemIcon}
+                />
+                <Text style={[styles.text]}>Welcome Screen</Text>
               </View>
             </TouchableOpacity>
 

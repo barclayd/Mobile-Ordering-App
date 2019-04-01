@@ -91,7 +91,6 @@ export function* findBarSaga(action) {
     } catch (err) {
         console.log(err);
         yield put(actions.findBarFail(err));
-        Alert.alert('No Internet Connection... 🔌')
     }
 }
 
