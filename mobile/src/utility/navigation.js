@@ -211,7 +211,8 @@ const showLoginOnNotificationPress = async (barId, icon) => {
                     name: screens.AuthScreen,
                     passProps: {
                         barId,
-                        modal: true
+                        modal: true,
+                        authState: "login"
                     },
                     options: {
                         topBar: {

@@ -6,7 +6,7 @@ import ButtonBackground from '../Buttons/ButtonWithBackground';
 import RNPickerSelect from 'react-native-picker-select';
 import * as colours from '../../../styles/colourScheme';
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import { connect } from "react-redux";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -66,12 +66,12 @@ class MobilePayments extends Component {
             })
         }
 
-        const userInfo = this.props.userId === null ? (<Icon name="warning" size={22} color={colours.warningRed}/>) : (<Icon name="check" size={30} color={colours.green}/>);
+        const userInfo = this.props.auth === null ? (<Icon name="warning" size={22} color={colours.warningRed}/>) : (<Icon name="check" size={30} color={colours.green}/>);
 
         return (
             <Overlay
                 animationType="slide"
-                height={(screenHeight / 3) * 2.65}
+                height={(screenHeight / 3) * 2.3}
                 width={screenWidth / 1.05}
                 overlayBackgroundColor={colours.midnightBlack}
                 overlayStyle={styles.overlayBorder}
@@ -217,4 +217,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default MobilePayments
+const mapStateToProps = state => {
+    return {
+      auth: state.auth.userId
+    };
+  };
+
+export default connect(mapStateToProps, null)(MobilePayments);
