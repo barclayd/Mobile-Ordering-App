@@ -50,8 +50,17 @@ Implementation of further features
 - Loyalty Schemes 
 - Possible Gamification features to promote loyalty and rewards 
 
+Licensing Restrictions 
+- Apple Pay
+- AppStore deployment
+- Apple remote notifications
+- Stripe customer support
+
 ## References
 
 ##### Links
+
+License 
+- Copyright 2019 DrinKing
 
 
