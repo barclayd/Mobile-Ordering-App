@@ -21,7 +21,7 @@ const authRedirect = (action, barName, barCode) => {
 
 const authDropModal = (componentId) => {
     closeLoginModal(componentId);
-}
+};
 
 export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("token");

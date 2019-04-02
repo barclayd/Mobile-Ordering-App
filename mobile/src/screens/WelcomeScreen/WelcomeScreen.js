@@ -8,7 +8,7 @@ import {
     StyleSheet,
     Dimensions,
     TouchableOpacity,
-    KeyboardAvoidingView
+    KeyboardAvoidingView, AsyncStorage
 } from 'react-native';
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
@@ -32,6 +32,10 @@ class WelcomeScreen extends Component {
                 visible: false
             }
         });
+        const userName = this.getUserName();
+        this.setState({
+            userName: userName
+        })
     }
 
     state = {
@@ -74,6 +78,10 @@ class WelcomeScreen extends Component {
         });
         navigator.geolocation.stopObserving();
     }
+
+    getUserName = async () => {
+        return await AsyncStorage.getItem('name');
+    };
 
     inputUpdateHandler = (key, value) => {
 
@@ -159,7 +167,7 @@ class WelcomeScreen extends Component {
                                             <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
                                             <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
                                         </>
-                                    ) : <Text style={styles.h4}>Hello, <Text style={{color: colours.orange}}>{this.props.name}</Text></Text>}
+                                    ) : <Text style={styles.h4}>Hello, <Text style={{color: colours.orange}}>{this.state.userName ? this.state.userName : this.props.name}</Text></Text>}
                                 </View>
                             </View>
                             <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>

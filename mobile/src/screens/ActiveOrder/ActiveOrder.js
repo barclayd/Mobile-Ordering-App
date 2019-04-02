@@ -63,7 +63,6 @@ class ActiveOrder extends Component {
   }
 
   componentDidAppear() {
-    console.log("user made a purchase");
     this.setState({
       screenActive: true
     });
@@ -193,7 +192,7 @@ class ActiveOrder extends Component {
             <View style={styles.header}>
               <Text style={styles.status}>Order Successful!</Text>
               <Text style={styles.success}>
-                Thank You {this.state.accountName}!
+                Thank you for your order{this.state.accountName ? `,${this.state.accountName}`: null}
               </Text>
               <View style={styles.progressCircle}>
                 <OrderStatus orderId={this.props.orderNumber ? this.props.orderNumber : this.state.orderNumber} barName={this.state.barName} showQRCode={() => this.showQRCode()}/>
@@ -248,10 +247,10 @@ class ActiveOrder extends Component {
               >
                 <View style={styles.modal}>
                   <Text style={styles.header}>
-                    Order{" "}
+                    Order
                     <Text style={{ color: colours.orange }}>
                       #{this.state.orderStatus.collectionId ? this.state.orderStatus.collectionId : this.props.collectionId}
-                    </Text>{" "}
+                    </Text>
                   </Text>
                   <View
                     style={{
@@ -261,13 +260,13 @@ class ActiveOrder extends Component {
                     }}
                   >
                     <Text style={styles.infoText}>
-                      Collection:{" "}
+                      Collection:
                       <Text style={{ color: colours.orange }}>
                         {this.props.orderStatus.collectionPoint.name}
                       </Text>
                     </Text>
                     <Text style={styles.infoText}>
-                      Order Time:{" "}
+                      Order Time:
                       <Text style={{ color: colours.orange }}>
                         {new Date(parseInt(this.props.orderStatus.date)).toTimeString().slice(0, 5)}
                       </Text>

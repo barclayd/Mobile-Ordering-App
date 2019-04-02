@@ -5,7 +5,6 @@ import { CreditCardInput } from "react-native-credit-card-input";
 import ButtonBackground from "../Buttons/ButtonWithBackground";
 import RNPickerSelect from "react-native-picker-select";
 import * as colours from "../../../styles/colourScheme";
-import Icon from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
 import validate from '../../../utility/validation';
 
@@ -15,6 +14,7 @@ const screenWidth = Dimensions.get("window").width;
 class MobilePayments extends Component {
   state = {
     userId: null,
+    userName: null,
     input : {
         email: {
             value: null,
@@ -44,6 +44,13 @@ class MobilePayments extends Component {
     }
   };
 
+  async componentDidMount() {
+    const userName = await this.getUserName();
+    this.setState({
+      userName: userName
+    });
+  }
+
   onInputChange = formData => {
     this.setState({
       number: {
@@ -72,8 +79,13 @@ class MobilePayments extends Component {
                     touched: true
                 },}
             }
-        });  
-  }
+        });
+  };
+
+  getUserName = async () => {
+    return await AsyncStorage.getItem('name');
+  };
+
 
   render() {
     const placeholder = {
@@ -116,14 +128,8 @@ class MobilePayments extends Component {
         <View
         style={styles.successUserInfo}
       >
-        <Text style={styles.collectionPoint}>User Infomation </Text>
+          <Text style={styles.collectionPoint}>Signed in as <Text style={{color: colours.orange, fontWeight: 'bold'}}>{this.state.userName ? this.state.userName : this.props.auth.name}</Text></Text>
 
-        <Icon
-          name="check"
-          style={{ top: -6 }}
-          size={24}
-          color={colours.green}
-        />
         </View>
       );
 
@@ -170,9 +176,6 @@ class MobilePayments extends Component {
                 }}
                 style={{ color: colours.pureWhite, paddingRight: 30 }}
                 value={this.state.collectionPoint.value}
-                // Icon={() => {
-                //     return <Icon name="chevron-down" size={20} color="gray" />;
-                // }}
               />
             </View>
           </View>
@@ -272,7 +275,6 @@ const styles = StyleSheet.create({
   collectionPoint: {
     fontSize: 14,
     color: "white",
-    fontWeight: "bold"
   },
   pad: {
     marginTop: 5
@@ -308,7 +310,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(MobilePayments);
+export default connect(mapStateToProps)(MobilePayments);
