@@ -77,43 +77,47 @@ class Menu extends React.Component {
        //   drinks={this.getDrinksByCategory(index)}
        // />
       //</MuiThemeProvider>
-      <MuiThemeProvider tabLabel={category} key={index}>
-        <div className="Menu">
-          <Table
-            handleRemove={this.handleRemove}
-            startEditing={this.startEditing}
-            editIdx={this.state.editIdx}
-            stopEditing={this.stopEditing}
-            handleSave={this.handleSave}
-            data={this.props.drinks}
+      {this.state.categories.length > 0 ? (
+          <MuiThemeProvider tabLabel={category} key={index}>
+            <div className="Menu">
+              <Table
+                handleRemove={this.handleRemove}
+                startEditing={this.startEditing}
+                editIdx={this.state.editIdx}
+                stopEditing={this.stopEditing}
+                handleSave={this.handleSave}
+                data={this.props.drinks}
 
-            header={[
-              {
-                name: "Name",
-                prop: "name"
-              },
-              {
-                name: "Category",
-                prop: "category"
-              },
-              {
-                name: "Nutrition Info",
-                prop: "nutritionInfo"
-              },
-              {
-                name: "Price",
-                prop: "price"
-              }
-            ]}
-          />
-        </div>
-      </MuiThemeProvider>
+                header={[
+                  {
+                    name: "Name",
+                    prop: "name"
+                  },
+                  {
+                    name: "Category",
+                    prop: "category"
+                  },
+                  {
+                    name: "Nutrition Info",
+                    prop: "nutritionInfo"
+                  },
+                  {
+                    name: "Price",
+                    prop: "price"
+                  }
+                ]}
+              />
+            </div>
+          </MuiThemeProvider>
+        ) : null}
+
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
+    drinkCategories: state.drink.categories,
     drinks: state.drinks.drinks(),
   };
 };
