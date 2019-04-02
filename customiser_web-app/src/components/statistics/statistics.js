@@ -8,6 +8,8 @@ import ReactFC from 'react-fusioncharts';
 import theme from 'fusioncharts/themes/fusioncharts.theme.fint';
 import * as actionTypes from '../../store/actions/actionTypes';
 import { getOrdersByCollectionPointSaga } from "../../store/sagas/order";
+import * as actions from "../../store/actions";
+import axios from "../../store/axios-instance";
 
 //passing these as dependencies
 charts(fusioncharts);
@@ -17,17 +19,17 @@ export default class statistics extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      msg: "Loading....."
+      msg: "Loading data"
     };
   }
 
   componentDidMount() {
     getAverageOrdersByCollectionPoint().then((data) => {
       const ChartConfig = generateChartConfig(data, {
-          "caption": "Number of orders in collection point A",
+          "caption": "Number of orders in WHSmith",
           "captionfontsize": "20",
           "theme": "fint",
-          "yaxisminvalue": "12000000"
+          "yaxisminvalue": "0"
         },
         "column2d");
       ReactDOM.unmountComponentAtNode(document.getElementById('chart-viewer'));
@@ -50,7 +52,7 @@ export default class statistics extends Component {
   }
 }
 function generateChartConfig(data,chartAttr,chartType){
-  const numberOfOrders = ["collection point A", "collection point B"
+  const numberOfOrders = ["WHSmith", "otherCollectionPoint"
   ];
   const chartData = data.map((d, i) => {
     return {
@@ -70,12 +72,9 @@ function generateChartConfig(data,chartAttr,chartType){
     dataSource: dataSource
 
   };
-
   return revenueChartConfigs;
 }
 
 export function* getAverageOrdersByCollectionPoint() {
           yield takeLatest(actionTypes.GET_ORDERS_BY_COLLECTION_POINT, getOrdersByCollectionPointSaga)
-
-
 }
