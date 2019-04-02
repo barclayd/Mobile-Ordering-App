@@ -50,7 +50,6 @@
     "redux-graphql-subscriptions": "0.0.9",
     "redux-saga": "^1.0.2",
     "rn-sliding-up-panel": "^2.0.2",
-    "simple-crypto-js": "^2.0.2",
     "subscriptions-transport-ws": "^0.9.16",
     "tipsi-stripe": "^7.4.0"
   },
