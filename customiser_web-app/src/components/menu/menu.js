@@ -1,7 +1,9 @@
 import React, {component} from "react";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import Table from "./table";
+import { Header } from "react-mdl";
 
-export default class Menu extends Component {
+class Menu extends Component {
   state = { //hardcoded for now
     data: [
       {
@@ -23,6 +25,43 @@ export default class Menu extends Component {
         price: "3.99"
       }
     ]
+  }
+  handleRemove = i => {
+    this.setState(state => ({
+      data: state.data.filter((row, j) => j !== i)
+    }));
+  };
+
+  startEditing = i => {
+    this.setState({ editIdx: i });
+  };
+
+  stopEditing = () => {
+    this.setState({ editIdx: -1 });
+  };
+
+  handleSave = (i, x) => {
+    this.setState(state => ({
+      data: state.data.map((row, j) => (j === i ? x : row))
+    }));
+    this.stopEditing();
+  };
+  render() {
+    return (
+      <MuiThemeProvider>
+        <div className="Menu">
+             <Table
+               handleRemove={this.handleRemove}
+               startEditing={this.startEditing}
+               editIdx={this.state.editIdx}
+               stopEditing={this.stopEditing}
+               handleSave={this.handleSave}
+               data={this.state.data}
+             Header = {[]}
+             />
+        </div>
+      </MuiThemeProvider>
+    );
   }
 }
 
