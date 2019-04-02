@@ -32,7 +32,7 @@ class WelcomeScreen extends Component {
                 visible: false
             }
         });
-        const userName = this.getUserName();
+        const userName = await this.getUserName();
         this.setState({
             userName: userName
         })
@@ -167,7 +167,9 @@ class WelcomeScreen extends Component {
                                             <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
                                             <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
                                         </>
-                                    ) : <Text style={styles.h4}>Hello, <Text style={{color: colours.orange}}>{this.state.userName ? this.state.userName : this.props.name}</Text></Text>}
+                                    ) : this.state.userName || this.props.name ? <Text style={styles.h4}>Hello, <Text style={{color: colours.orange}}>{this.state.userName ? this.state.userName : this.props.name}</Text></Text> :
+                                        <Text style={styles.h4}>Thank you for using Drin<Text style={{color: colours.orange}}>King</Text></Text>
+                                    }
                                 </View>
                             </View>
                             <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>

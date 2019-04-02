@@ -17,7 +17,7 @@ import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import { Card, ListItem } from "react-native-elements";
 import SimpleCrypto from "simple-crypto-js";
-// import RNPickerSelect from 'react-native-picker-select';
+import {orderStatusLookUp} from '../../helpers/schemaHelper';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import QRCode from "react-native-qrcode-svg";
 import moment from 'moment';
@@ -85,7 +85,6 @@ class ViewPastOrders extends Component {
   };
 
   qrCode = () => {
-    let qrCode = null;
     const key = "zvBT1lQV1RO9fx6f8";
     const crypto = new SimpleCrypto(key);
     const token = crypto.encrypt(this.state.selectedOrder.collectionId);
@@ -131,28 +130,26 @@ class ViewPastOrders extends Component {
       });
 
     _handleDatePicked = (date) => {
-      // const newDate = moment(new Date(date.toString().substr(0, 16))).format('DD-MM-YYYY');
       console.log("A date has been picked: ", date);
       const newData = this.state.arrayHolder.filter(order => {
       const itemData = moment(new Date(order.date)).format("DD-MM-YYYY")
       const pickerDate = moment(date).format("DD-MM-YYYY");
       return itemData === pickerDate;
-      })
+      });
       let pickerDate = moment(date).format("DD-MM-YYYY");
-      console.log(pickerDate)
       this.setState({
         pastOrders: newData,
         selectedDate: pickerDate
-      })
+      });
       this._DateTimePicker();
     };
 
-  
+
   removeDate = () => {
     this.setState({
       selectedDate: null
     })
-  }
+  };
 
   render() {
     const spinner = this.props.ordersLoading ? (
@@ -235,7 +232,7 @@ class ViewPastOrders extends Component {
                     >
                       <Text style={{color: colours.midnightBlack, fontWeight: "bold"}}>Order Status: </Text>
                       <Text style={styles.subInformationTextPrice}>
-                        {order.status}
+                        {orderStatusLookUp[order.status]}
                       </Text>
                     </View>
 
@@ -282,7 +279,7 @@ class ViewPastOrders extends Component {
                   selectionColor={colours.orange}
                   onChangeText={val => this.inputUpdateHandler("orderId", val)}
                 />
-                
+
                 <View style={styles.dateFilter}>
                 <TouchableOpacity onPress={() => this._DateTimePicker()}
                 style={{flexDirection: "row",justifyContent: "flex-start",}}>
@@ -391,7 +388,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width /5 *2 ,
     top: 5,
     height: Dimensions.get("window").height / 14,
-    
+
     fontSize: 16,
     alignSelf: "center",
     fontWeight: "bold",
