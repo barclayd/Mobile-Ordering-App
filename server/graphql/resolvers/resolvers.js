@@ -209,13 +209,20 @@ const resolvers = {
         findOrdersByUser: async (parent, {userInfo}) => {
             try {
                 const foundOrders = await Order.find({userInfo})
-                    .populate('userInfo collectionPoint drinks')
+                    .populate('drinks')
+                    .populate({
+                        path: 'collectionPoint',
+                        populate: {
+                            path: 'bar'
+                        }
+                    })
                     .populate({
                         path: 'userInfo',
                         select: '-password' // Explicitly exclude password field
                     });
-                return foundOrders.reverse().map(async foundOrder => {
-                    return foundOrder;
+                // arrange dates in reverse chronological order for user order history
+                return foundOrders.sort((a, b) => {
+                    return new Date(b.date) - new Date(a.date);
                 });
             } catch (err) {
                 throw err;
@@ -233,8 +240,9 @@ const resolvers = {
                         path: 'userInfo',
                         select: '-password' // Explicitly exclude password field
                     });
-                return foundOrders.reverse().map(async foundOrder => {
-                    return foundOrder;
+                // arrange dates in chronological order for terminal to process FIFO
+                return foundOrders.sort((a, b) => {
+                    return new Date(a.date) - new Date(b.date);
                 });
             } catch (err) {
                 throw err;
