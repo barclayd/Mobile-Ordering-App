@@ -44,49 +44,21 @@ class App extends Component {
 
     collectionPoints: [
       {
-        id: 1,
+        _id: 1,
         name: "Downstairs",
         description: "Outside WHSmiths, usually dead."
       },
       {
-        id: 2,
+        _id: 2,
         name: "Upstairs",
         description: "Small minibar."
       },
       {
-        id: 3,
+        _id: 3,
         name: "Main floor",
         description: "Wide bar."
       }
     ],
-
-    staffMemberHotBar: [
-      {
-      id: 50,
-      date: "March 30, 2019 03:24:00"
-    },
-
-    {
-      id: 51,
-      date: "March 29, 2019 03:24:00"
-    },
-
-    {
-      id: 48,
-      date: "March 31, 2019 05:24:00"
-    },
-
-    {
-      id: 49,
-      date: "March 25, 2019 05:24:00"
-    },
-
-    {
-      id: 52,
-      date: "March 26, 2019 05:24:00"
-    }
-
-  ],
 
     lastNotificationID: 0,
 
@@ -257,21 +229,24 @@ class App extends Component {
   };
 
   componentDidMount() {
+    const Hardcoded_barID = "5c6ab350180f855c65fce6ef" // Hardcoded SU bar ID until we add a login screen
+    const Hardcoded_barStaffID = "5c97adae8cab340a0995dd25"
+    const Hardcoded_collectionPointID = "5c925636bc63a912ed715316"
 
-    // hardcoded values to remain until made dynamic
-    localStorage.setItem('barId', '5c6aafda90d4735a4e22f711');
-    localStorage.setItem('collectionPoint', '5c925636bc63a912ed715316');
     // Pull bartenders from server
-    this.props.findBarStaff(localStorage.getItem('barId'));
-
+    this.props.findBarStaff(Hardcoded_barID);
+    
     // Load selected bartender account from localstorage, or select the first if none exists
-    this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || "5c97adae8cab340a0995dd25"});
+    this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || Hardcoded_barStaffID});
 
     // Load bartender hotbar order from localstorage (or use empty array)
     this.setState({staffHotBarOrder: JSON.parse(localStorage.getItem("staffHotBarOrder")) || []});
 
+    // Pull collection points from server
+    this.props.findCollectionPoints(Hardcoded_barID);
+
     // Pull orders from server
-    const collectionId = localStorage.getItem('collectionPoint');
+    const collectionId = localStorage.getItem('collectionPoint') || Hardcoded_collectionPointID;
     this.props.loadOrders(collectionId);
 
     // Load webcam for iOS
@@ -641,7 +616,7 @@ class App extends Component {
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderRelaxed} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
-            <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPoint={this.changeCollectionPoint} />
+            <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPointFunc={this.changeCollectionPoint} />
             <SettingsPopupWindow showFunc={callable => this.setState({showSettings: callable})} showCollectionPoint={this.showCollectionPoint}/>
             <OrderSubscription />
 
@@ -700,18 +675,20 @@ class App extends Component {
 
 const mapReduxStateToProps = state => {
   return {
-    serverOrders: state.orders.orders,
-    updatedOrder: state.orders.updatedOrder,
-    ordersLoading: state.orders.loading,
-    barStaff: state.bar.barStaff
+    serverOrders:     state.orders.orders,
+    updatedOrder:     state.orders.updatedOrder,
+    ordersLoading:    state.orders.loading,
+    barStaff:         state.bar.barStaff,
+    collectionPoints: state.bar.collectionPoints
   }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadOrders: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint)),
+    loadOrders: (collectionPoint) =>              dispatch(actions.getOrdersByCollectionPoint(collectionPoint)),
     updateOrder: (orderId, status, barStaffId) => dispatch(actions.updateOrder(orderId, status, barStaffId)),
-    findBarStaff: (barId) => dispatch(actions.findBarStaff(barId))
+    findBarStaff: (barId) =>                      dispatch(actions.findBarStaff(barId)),
+    findCollectionPoints: (barId) =>              dispatch(actions.findCollectionPoints(barId))
   }
 };
 
