@@ -29,7 +29,7 @@ export function* findCollectionPointsSaga(action){
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-            yield put(actions.findCollectionPointsSuccess(response.data.data))
+            yield put(actions.findCollectionPointsSuccess(response.data.data.findCollectionPointsByBar))
         }
     } catch (err) {
         console.log(err);

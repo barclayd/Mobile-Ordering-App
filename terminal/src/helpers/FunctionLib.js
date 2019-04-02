@@ -9,6 +9,12 @@ export const rangeScaling = (value, xMin, xMax, yMin, yMax) => {
 };
 
 
+// Func to convert int pennies into a human-readable price string (ie: 157 to £1.57)
+export const penniesToPriceString = (pennies) => {
+    return (pennies / 100).toLocaleString("en-UK", {style:"currency", currency:"GBP"});
+};
+
+
 // Function takes an array of orders and removes duplicate drinks in each order, adding a quantity field
 export const rebuildDateAndDrinksForOrderWithQuantities = (ordersArray) => {
     let newOrdersArray = JSON.parse(JSON.stringify(ordersArray)); // Deep-copy array
