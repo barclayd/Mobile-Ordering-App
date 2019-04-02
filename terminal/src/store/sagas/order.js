@@ -25,6 +25,7 @@ export function* getOrdersByCollectionPointSaga(action) {
                         }
                         status
                         date
+                        price
                         transactionId
                         userInfo {
                             email
