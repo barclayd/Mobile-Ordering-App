@@ -251,9 +251,9 @@ const resolvers = {
         findOrders: async () => {
             try {
                 const foundOrders = await Order.find().populate('userInfo collectionPoint drinks');
-                return foundOrders.reverse().map(async foundOrder => {
-                    return foundOrder;
-                })
+                return foundOrders.sort((a, b) => {
+                    return new Date(a.date) - new Date(b.date);
+                });
                 } catch (err) {
                 throw err;
             }
@@ -474,6 +474,9 @@ const resolvers = {
                 foundOrder.status = args.orderStatusInput.status;
                 if (args.orderStatusInput.barStaffId) {
                     foundOrder.orderAssignedTo = args.orderStatusInput.barStaffId;
+                }
+                if (args.orderStatusInput.completionTime) {
+                    foundOrder.completionTime = args.orderStatusInput.completionTime;
                 }
                 await foundOrder.save();
                 await pubSub.publish(ORDER_UPDATED, {
