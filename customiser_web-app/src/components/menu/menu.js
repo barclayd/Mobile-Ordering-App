@@ -19,28 +19,6 @@ class Menu extends React.Component {
     return this.state.drinks.filter(drink => drink.category === categoryName);
   };
 
-  // state = { //hardcoded for now
-  //   data: [
-  //     {
-  //       name: "Beer",
-  //       category: "Beer",
-  //       nutritionInfo: "102 Kcal",
-  //       price: "1.99"
-  //     },
-  //     {
-  //       name: "Shiraz",
-  //       category: "Wines",
-  //       nutritionInfo: "500 Kcal",
-  //       price: "4.99"
-  //     },
-  //     {
-  //       name: "Vodka",
-  //       category: "Spirits",
-  //       nutritionInfo: "800 Kcal",
-  //       price: "3.99"
-  //     }
-  //   ]
-  // }
   handleRemove = i => {
     this.setState(state => ({
       data: state.data.filter((row, j) => j !== i)
@@ -64,8 +42,8 @@ class Menu extends React.Component {
 
   render() {
     let tableData = null;
-    if(this.props.drinkCategories.length > 0) {
-      tableData = this.props.drinkCategories.map((category, index) => {
+    if(this.props.drinks.length > 0) {
+      tableData = this.props.drinks.map((category, index) => {
         return (<MuiThemeProvider tabLabel={category} key={index}>
           <div className="Menu">
             <Table
@@ -99,26 +77,10 @@ class Menu extends React.Component {
           </div>
         </MuiThemeProvider>)
     })
-
     }
-
     return (
-     <div>{ this.props.drinkCategories.length > 0 ? tableData : <React.Fragment/> }</div>
+     <div>{ this.props.drinks.length > 0 ? tableData : <React.Fragment/> }</div>
     )
-
-
-    // <MuiThemeProvider tabLabel={category} key={index}>
-    //  <TabbedCategories
-    //   key={category}
-    //   category={category}
-    //   drinks={this.getDrinksByCategory(index)}
-    // />
-    //</MuiThemeProvider>
-
-    //         return ({
-    //   {this.state.categories.length > 0 ?
-    //           }) : <React.Fragment/>;
-    // };
   }
 }
 
