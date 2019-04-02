@@ -21,7 +21,6 @@ import Modal from "react-native-modal";
 import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
 import NotificationService from '../../../src/notifications/NotificationService';
 import appConfig from '../../../app.json';
-import SimpleCrypto from "simple-crypto-js";
 import OrderStatus from './OrderStatus';
 
 class ActiveOrder extends Component {
@@ -157,14 +156,9 @@ class ActiveOrder extends Component {
   };
 
   render() {
-
-    let qrCode = null;
-    const key = "zvBT1lQV1RO9fx6f8";
-    const crypto = new SimpleCrypto(key);
-    const token = crypto.encrypt(this.props.collectionId);
-
+    let qrCode;
     if (this.props.collectionId) {
-      qrCode = <QRCode value={token} size={300} />;
+      qrCode = <QRCode value={this.props.collectionId} size={300} />;
     }
     const  drinkNames = [];
     const finalList = [];
