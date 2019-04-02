@@ -199,6 +199,13 @@ class MobilePayments extends Component {
                 Price: £{this.props.basketPrice}
               </Text>
             </View>
+
+            <View style={styles.summary}>
+              <Text style={styles.barOrderDetails1}>
+                DrinKing Fee: £{this.props.totalPrice}
+              </Text>
+            </View>
+
           </Card>
 
           <View style={[{ height: screenHeight / 5.1 }, styles.buttons]}>

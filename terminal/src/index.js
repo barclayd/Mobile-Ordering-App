@@ -34,10 +34,13 @@ sagaMiddleware.run(watchOrders);
 sagaMiddleware.run(watchBar);
 
 const httpLink = new HttpLink({
-    uri: 'http://localhost:3000/graphql',
+    uri: `http://localhost:${process.env.PORT || 3000}/graphql`,
+    // uri: 'https://cryptic-springs-39644.herokuapp.com:3000/graphql',
 });
 const wsLink = new WebSocketLink({
-    uri: 'ws://localhost:3000/subscriptions',
+    uri: `ws://localhost:${process.env.PORT || 3000}/subscriptions`,
+    // uri: 'ws://https://cryptic-springs-39644.herokuapp.com:3000/subscriptions',
+
     options: {
         reconnect: true
     },

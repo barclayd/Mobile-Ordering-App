@@ -1,12 +1,13 @@
 import * as actionTypes from "./actionTypes";
 
-export const submitOrder = (basket, componentId, paymentInfo, basketPrice) => {
+export const submitOrder = (basket, componentId, paymentInfo, totalPrice, stripeFee) => {
     return {
         type: actionTypes.SUBMIT_ORDER,
         order: basket,
         componentId: componentId,
         paymentInfo,
-        basketPrice
+        totalPrice,
+        stripeFee
     };
 };
 

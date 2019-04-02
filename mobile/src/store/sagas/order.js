@@ -52,7 +52,7 @@ export function* submitOrderSaga(action) {
     try {
         let requestBody = {
             query: `
-                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID) {
+                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID, $stripeFee: Int) {
                     createOrder(orderInput: {
                         drinks: $drinks
                         collectionPoint: $collectionPoint
@@ -60,6 +60,7 @@ export function* submitOrderSaga(action) {
                         date: $date
                         userInfo: $userInfo
                         price: $price
+                        stripeFee: $stripeFee
                     }) {
                         _id
                         drinks {
@@ -89,7 +90,8 @@ export function* submitOrderSaga(action) {
                 status: "PENDING",
                 date: date,
                 userInfo: user,
-                price: orderPrice
+                price: orderPrice,
+                stripeFee: action.stripeFee
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody), {

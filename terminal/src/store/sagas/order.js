@@ -35,6 +35,7 @@ export function* getOrdersByCollectionPointSaga(action) {
                             firstName
                             lastName
                         }
+                        price
                    }
                 }
             `,
@@ -141,6 +142,7 @@ export function* updateOrderSaga(action) {
                                 firstName
                                 lastName
                             }
+                            price
                         }
                     }
                 `,

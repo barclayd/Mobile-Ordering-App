@@ -48,8 +48,7 @@ mongoose.set('useCreateIndex',true);
 // connect to MongoDB
 mongoose.connect(`mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PW}@drinksapp-otvvz.mongodb.net/${process.env.DB_NAME}?retryWrites=true`, {useNewUrlParser: true})
     .then(() => {
-        // app.listen(process.env.PORT);
-        server.listen(process.env.PORT || 3000, () => {
+        server.listen(process.env.PORT, () => {
             new SubscriptionServer({
                     execute,
                     subscribe,
