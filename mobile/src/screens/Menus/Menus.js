@@ -107,10 +107,11 @@ class ViewMenus extends Component {
         <View style={styles.logoHeader}>
           {this.props.currentBar.logo ? <Image style={styles.logo} resizeMode={"contain"} source={{uri: this.props.currentBar.logo}}/> : null}
         </View>
+          <View style={{paddingVertical:20}}/>
           <View style={styles.view}>
             <FlatList
               horizontal
-              ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+              ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
               data={this.props.menus}
               renderItem={({ item: rowData }) => {
                 return (
@@ -120,8 +121,8 @@ class ViewMenus extends Component {
                   >
                       <Image
                         style={styles.image}
-                        source={{uri: rowData.image}}
-                      />
+                        source={{uri: rowData.image}}/>
+
                       <Text style={styles.menuName}>{rowData.name}</Text>
                       <Text style={styles.menuDescription}>{rowData.description}</Text>
                   </TouchableOpacity>
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: fontWeight.bold,
     color: colours.midnightBlack,
-    fontSize: 32
+    fontSize: 26
   },
   menuDescription: {
     textAlign: "center",
@@ -184,8 +185,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 'auto',
-    height: Dimensions.get("window").height / 4,
-    marginTop: 20,
+    height: Dimensions.get("window").height / 3.2,
   },
   card: {
     height: Dimensions.get("window").height / 2.5,
