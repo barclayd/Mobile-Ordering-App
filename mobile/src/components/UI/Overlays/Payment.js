@@ -86,7 +86,6 @@ class MobilePayments extends Component {
     return await AsyncStorage.getItem('name');
   };
 
-
   render() {
     const placeholder = {
       label: "Select Collection Point",
@@ -155,7 +154,7 @@ class MobilePayments extends Component {
 
           <View style={styles.picker}>
             <View>
-              <Text style={styles.collectionPoint}>COLLECTION POINT</Text>
+              <Text style={styles.collectionPoint}>Collection Point</Text>
             </View>
             <View style={styles.pad}>
               <RNPickerSelect
@@ -226,7 +225,7 @@ class MobilePayments extends Component {
                   !this.state.number.valid ||
                   !this.state.expiration.valid ||
                   !this.state.collectionPoint.valid ||
-                  !this.state.input.email.valid
+                  (!this.props.auth && !this.state.input.email.valid)
                 }
                 textColor={colours.orange}
                 onPress={() => this.props.submitOrder(this.state)}
@@ -282,6 +281,7 @@ const styles = StyleSheet.create({
   collectionPoint: {
     fontSize: 14,
     color: "white",
+    fontWeight: '600'
   },
   pad: {
     marginTop: 5
