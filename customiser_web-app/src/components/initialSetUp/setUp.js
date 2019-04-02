@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './setUp.scss'
+import { Cell, Grid } from "react-mdl";
 
 export default class SetUp extends React.Component {
   constructor(props) {
@@ -45,9 +46,11 @@ export default class SetUp extends React.Component {
 
   render() {
     return(
+
       <div>
         <Area handleClick={this.handleClick} data={this.state.data[this.state.current]} />
       </div>
+
     )
   }
 }
@@ -62,16 +65,22 @@ function ChoiceButton(props) {
 
 function Question(props) {
   return (
-    <p>{props.data.line}</p>
+
+
+    <p className="question">{props.data.line}</p>
+
+
   )
 }
 
 function Area(props) {
   return(
+
     <div>
       <Question data={props.data} />
       <List data={props.data} handleClick={props.handleClick} />
     </div>
+
   )
 }
 
