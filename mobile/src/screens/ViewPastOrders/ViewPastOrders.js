@@ -16,7 +16,6 @@ import * as colours from "./../../styles/colourScheme";
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import { Card, ListItem } from "react-native-elements";
-import SimpleCrypto from "simple-crypto-js";
 import {orderStatusLookUp} from '../../helpers/schemaHelper';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import QRCode from "react-native-qrcode-svg";
@@ -85,12 +84,8 @@ class ViewPastOrders extends Component {
   };
 
   qrCode = () => {
-    const key = "zvBT1lQV1RO9fx6f8";
-    const crypto = new SimpleCrypto(key);
-    const token = crypto.encrypt(this.state.selectedOrder.collectionId);
-
     if (this.state.selectedOrder.collectionId) {
-      return <QRCode value={token} size={300} />;
+      return <QRCode value={this.state.selectedOrder.collectionId} size={300} />;
     }
   };
 
@@ -132,7 +127,7 @@ class ViewPastOrders extends Component {
     _handleDatePicked = (date) => {
       console.log("A date has been picked: ", date);
       const newData = this.state.arrayHolder.filter(order => {
-      const itemData = moment(new Date(order.date)).format("DD-MM-YYYY")
+      const itemData = moment(new Date(order.date)).format("DD-MM-YYYY");
       const pickerDate = moment(date).format("DD-MM-YYYY");
       return itemData === pickerDate;
       });
