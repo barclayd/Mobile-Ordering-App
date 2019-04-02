@@ -87,6 +87,10 @@ class MobilePayments extends Component {
   };
 
 
+  componentDidUpdate(){
+    console.log("this.state",this.state)
+  }
+
   render() {
     const placeholder = {
       label: "Select Collection Point",
@@ -219,7 +223,7 @@ class MobilePayments extends Component {
                   !this.state.number.valid ||
                   !this.state.expiration.valid ||
                   !this.state.collectionPoint.valid ||
-                  !this.state.input.email.valid
+                  (!this.props.auth && !this.state.input.email.valid)
                 }
                 textColor={colours.orange}
                 onPress={() => this.props.submitOrder(this.state)}
