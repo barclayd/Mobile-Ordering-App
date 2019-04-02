@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-export default class setUp extends React.Component {
+export default class SetUp extends React.Component {
   constructor(props) {
     super(props)
 
@@ -87,6 +87,6 @@ function List(props) {
 }
 
 ReactDOM.render(
-  <setUp />,
+  <SetUp />,
   document.getElementById("root")
 )
