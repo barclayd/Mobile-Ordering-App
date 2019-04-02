@@ -19,14 +19,14 @@ class SelectCollectionPointPopUpWindow extends Component {
             >
                 <div className="collectionPointContainer">
                     {
-                        this.props.collectionPoints.map((collectionPointData) => {
+                        this.props.collectionPoints.map((collectionPointData, counter) => {
                             return (
                                 <div
-                                        key={collectionPointData.id} 
+                                        key={counter} 
                                         onClick={()=>{
                                             this.setState({closePopup: true}, () => {
                                                 this.setState({closePopup: null});
-                                                this.props.changeColletionPoint(collectionPointData.id);
+                                                this.props.changeColletionPointFunc(collectionPointData._id);
                                             });
                                         }} 
                                         className="button collectionPointButton">
@@ -48,7 +48,7 @@ class SelectCollectionPointPopUpWindow extends Component {
 SelectCollectionPointPopUpWindow.propTypes = {
     collectionPoints: PropTypes.array,
     showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
-    changeColletionPoint: PropTypes.func // Func to change the collection point to pull appropriate orders
+    changeColletionPointFunc: PropTypes.func.isRequired // Func to change the collection point to pull appropriate orders
 };
 
 export default SelectCollectionPointPopUpWindow;
