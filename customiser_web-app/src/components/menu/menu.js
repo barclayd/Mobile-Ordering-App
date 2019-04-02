@@ -10,6 +10,10 @@ class Menu extends React.Component {
     drinksApi: false,
   };
 
+  componentDidMount() {
+    this.props.onFetchDrinkCategories();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
       const selectedMenu = nextProps.menus.filter(menu => menu._id === this.props.menuId);
@@ -68,43 +72,47 @@ class Menu extends React.Component {
   };
 
   render() {
-    const tableData = this.state.categories.map((category, index) => {
-      return (<MuiThemeProvider tabLabel={category} key={index}>
-        <div className="Menu">
-          <Table
-            handleRemove={this.handleRemove}
-            startEditing={this.startEditing}
-            editIdx={this.state.editIdx}
-            stopEditing={this.stopEditing}
-            handleSave={this.handleSave}
-            data={this.props.drinks}
+    let tableData = null;
+    if(this.props.drinkCategories.length > 0) {
+      tableData = this.props.drinkCategories.map((category, index) => {
+        return (<MuiThemeProvider tabLabel={category} key={index}>
+          <div className="Menu">
+            <Table
+              handleRemove={this.handleRemove}
+              startEditing={this.startEditing}
+              editIdx={this.state.editIdx}
+              stopEditing={this.stopEditing}
+              handleSave={this.handleSave}
+              data={this.props.drinks}
 
-            header={[
-              {
-                name: "Name",
-                prop: "name"
-              },
-              {
-                name: "Category",
-                prop: "category"
-              },
-              {
-                name: "Nutrition Info",
-                prop: "nutritionInfo"
-              },
-              {
-                name: "Price",
-                prop: "price"
-              }
-            ]}
+              header={[
+                {
+                  name: "Name",
+                  prop: "name"
+                },
+                {
+                  name: "Category",
+                  prop: "category"
+                },
+                {
+                  name: "Nutrition Info",
+                  prop: "nutritionInfo"
+                },
+                {
+                  name: "Price",
+                  prop: "price"
+                }
+              ]}
 
-          />
-        </div>
-      </MuiThemeProvider>)
+            />
+          </div>
+        </MuiThemeProvider>)
     })
 
+    }
+
     return (
-     <div>{ this.props.categories.length > 0 ? tableData : <React.Fragment/> }</div>
+     <div>{ this.props.drinkCategories.length > 0 ? tableData : <React.Fragment/> }</div>
     )
 
 
@@ -125,8 +133,8 @@ class Menu extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    drinkCategories: state.drink.categories,
-    drinks: state.drinks.drinks(),
+    drinkCategories: state.drinks.categories,
+    drinks: state.drinks.drinks,
   };
 };
 
