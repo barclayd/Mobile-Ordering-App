@@ -1,4 +1,4 @@
-const OrderStatuses = {
+export const OrderStatuses = {
     AWAITING_COLLECTION: "AWAITING_COLLECTION",
     IN_PROGRESS: "IN_PROGRESS",
     PENDING: "PENDING",
@@ -8,7 +8,7 @@ const OrderStatuses = {
     CANCELLED: "CANCELLED",
 };
 
-const IngredientAmounts = {
+export const IngredientAmounts = {
     FACTORY: 0,
     FILL: 1,
     SHOT: 2,
@@ -16,8 +16,4 @@ const IngredientAmounts = {
     HALF_PINT: 4,
     PINT: 5,
     WINE_GLASS: 6,
-};
-
-export {
-    IngredientAmounts, OrderStatuses
 };
