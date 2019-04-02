@@ -10,7 +10,7 @@ const uuid = require('uuid/v4');
 const randomString = require('randomstring');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { PubSub, withFilter } = require('graphql-subscriptions/dist/index');
+const { PubSub, withFilter } = require('graphql-subscriptions');
 
 const {dateToString} = require("../../helpers/date");
 const {drinks} = require('../mergeResolvers/drinks');
@@ -27,15 +27,21 @@ const resolvers = {
         orderUpdated: {
             subscribe: withFilter(
                 () => pubSub.asyncIterator([ORDER_UPDATED]),
-                // == must be kept below due to issue with strings not being evaluated correctly
-                (payload, args) => payload.orderId == args.orderId
+                (payload, args) => {
+                    const pay = payload.orderId.toString();
+                    const arg = args.orderId;
+                    return pay === arg;
+                }
             )
         },
         orderCreated: {
             subscribe: withFilter(
                 () => pubSub.asyncIterator([ORDER_CREATED]),
-                // == must be kept below due to issue with strings not being evaluated correctly
-                (payload, args) => payload.collectionPointId == args.collectionPointId
+                (payload, args) => {
+                    const pay = payload.collectionPointId.toString();
+                    const arg = args.collectionPointId;
+                    return pay === arg;
+                }
             )
         }
     },
@@ -203,12 +209,21 @@ const resolvers = {
         findOrdersByUser: async (parent, {userInfo}) => {
             try {
                 const foundOrders = await Order.find({userInfo})
-                    .populate('userInfo collectionPoint drinks')
+                    .populate('drinks')
+                    .populate({
+                        path: 'collectionPoint',
+                        populate: {
+                            path: 'bar'
+                        }
+                    })
                     .populate({
                         path: 'userInfo',
                         select: '-password' // Explicitly exclude password field
                     });
-                return foundOrders.reverse();
+                // arrange dates in reverse chronological order for user order history
+                return foundOrders.sort((a, b) => {
+                    return new Date(b.date) - new Date(a.date);
+                });
             } catch (err) {
                 throw err;
             }
@@ -225,8 +240,9 @@ const resolvers = {
                         path: 'userInfo',
                         select: '-password' // Explicitly exclude password field
                     });
-                return foundOrders.reverse().map(async foundOrder => {
-                    return foundOrder;
+                // arrange dates in chronological order for terminal to process FIFO
+                return foundOrders.sort((a, b) => {
+                    return new Date(a.date) - new Date(b.date);
                 });
             } catch (err) {
                 throw err;
@@ -247,9 +263,12 @@ const resolvers = {
         createOrder: async (parent, args, {headers}) => {
             try {
                 // check validity of entered user details
-                const user = await User.findById(args.orderInput.userInfo);
-                if (!user) {
-                    throw new Error ('Invalid user account to process order');
+                let user = null;
+                if (args.orderInput.userInfo) {
+                    user = await User.findById(args.orderInput.userInfo);
+                    if (!user) {
+                        throw new Error ('Invalid user account to process order');
+                    }
                 }
                 // check validity of entered collectionPoint details
                 const collectionPoint = await CollectionPoint.findById(args.orderInput.collectionPoint);
@@ -294,9 +313,8 @@ const resolvers = {
                     price: args.orderInput.price
                 });
                 await pubSub.publish(ORDER_CREATED, {
-                    orderId: createdOrder._id,
-                    collectionPoint,
-                    createdOrder: createdOrder
+                    collectionPointId: createdOrder.collectionPoint._id,
+                    orderCreated: createdOrder
                 });
                 return await createdOrder.save();
             } catch (err) {

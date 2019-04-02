@@ -22,6 +22,7 @@ import OutOfStockPopUpWindow from './containers/out-of-stock-popup-window/out-of
 import {rebuildDateAndDrinksForOrderWithQuantities} from './helpers/FunctionLib.js';
 import LoadingIcon from './assets/loading-icon.gif';
 import SettingsPopupWindow from './containers/settings-popup-window/settings-popup-window';
+import OrderSubscription from './components/order-subscription/OrderSubscription';
 
 // Settings:
 const notificationDuration = 8000; // How long notifications stay on-screen (milliseconds)
@@ -147,7 +148,7 @@ class App extends Component {
 
   addStaffByIDToHotbar = (staffID) => {
     let newStaffHotBarOrder = this.state.staffHotBarOrder;
-    let origStaffHotBarEntryIndex = newStaffHotBarOrder.findIndex((entry) => { return entry.id === staffID })
+    let origStaffHotBarEntryIndex = newStaffHotBarOrder.findIndex((entry) => { return entry.id === staffID });
     if (origStaffHotBarEntryIndex !== -1) { // Check if the staff member already has an entry in staffHotBarOrder
       newStaffHotBarOrder[origStaffHotBarEntryIndex].dateAdded = new Date().getTime(); // Update their dateAdded to jump them to the hotbar front
 
@@ -156,7 +157,7 @@ class App extends Component {
       const staffHotBarEntry = {
         id: staffID,
         dateAdded: new Date().getTime(),
-      }
+      };
       newStaffHotBarOrder.push(staffHotBarEntry)
     }
 
@@ -213,7 +214,7 @@ class App extends Component {
   };
 
   showPickupForOrder = (order) => {
-    
+
     // Check order is found and was not already just scanned (stop popup spam)
     if (order && !this.state.orderWindowOpen) {
       if (order.status === OrderStatuses.AWAITING_COLLECTION) {
@@ -221,29 +222,31 @@ class App extends Component {
       } else {
         this.addNotification("warning", "Collection not ready", "Customer's order is not ready for collection")
       }
-    
+
     } else if (!order) {
       this.addNotification("warning", "Order not found", "No order could be found for this QR code!")
     }
-  }
+  };
 
   componentDidMount() {
-    const barID = "5c6aafda90d4735a4e22f711" // Hardcoded until we add a login screen
+    const Hardcoded_barID = "5c6ab350180f855c65fce6ef" // Hardcoded SU bar ID until we add a login screen
+    const Hardcoded_barStaffID = "5c97adae8cab340a0995dd25"
+    const Hardcoded_collectionPointID = "5c925636bc63a912ed715316"
 
     // Pull bartenders from server
-    this.props.findBarStaff(barID);
+    this.props.findBarStaff(Hardcoded_barID);
     
     // Load selected bartender account from localstorage, or select the first if none exists
-    this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || "5c97adae8cab340a0995dd25"});
-    
+    this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || Hardcoded_barStaffID});
+
     // Load bartender hotbar order from localstorage (or use empty array)
     this.setState({staffHotBarOrder: JSON.parse(localStorage.getItem("staffHotBarOrder")) || []});
 
     // Pull collection points from server
-    this.props.findCollectionPoints(barID);
+    this.props.findCollectionPoints(Hardcoded_barID);
 
     // Pull orders from server
-    const collectionId = localStorage.getItem('collectionPoint') || '5c925636bc63a912ed715316';
+    const collectionId = localStorage.getItem('collectionPoint') || Hardcoded_collectionPointID;
     this.props.loadOrders(collectionId);
 
     // Load webcam for iOS
@@ -254,7 +257,7 @@ class App extends Component {
     if (this.props.serverOrders.length === 0) return;
     let newServerOrders = rebuildDateAndDrinksForOrderWithQuantities(this.props.serverOrders);
     let areArraysEqual = JSON.stringify(newServerOrders) === JSON.stringify(prevState.serverOrders);
-    
+
     // only update chart if the data has changed
     if (!this.props.loading && !areArraysEqual) {
       this.loadOrdersIntoStateIndexArrays(newServerOrders); // Load orders into arrays
@@ -348,16 +351,16 @@ class App extends Component {
       if (a.differences > b.differences) return 1; // Swap if A has more differences than B and same matches
       if (a.differences < b.differences) return -1; // Swap other direction if A has less differences than B and same matches
       return 0; // Do nothing if differences and matches are equal
-    })
+    });
 
-    console.log(orderMatches)
+    console.log(orderMatches);
 
     // Take top n matched orders from orderMatches
     for (let i = 0, len=maxOrdersToTake-1; i < len; i++) {
       const orderMatch = orderMatches[i];
       if (!orderMatch) break; // Break for when orderMatches is smaller than maxOrdersToTake
 
-      const matchPercentage = orderMatch.matches === 0 ? 0 : orderMatch.matches / firstOrder.drinks.length * 100
+      const matchPercentage = orderMatch.matches === 0 ? 0 : orderMatch.matches / firstOrder.drinks.length * 100;
       if (matchPercentage < matchThreshold) break; // Stop taking orders from orderMatches once an order doesn't meet the threshold
       ordersToTake.push(orderMatch.id); // Add order to ordersToTake
     }
@@ -366,7 +369,7 @@ class App extends Component {
     for (let i = 0, len = ordersToTake.length; i < len; i++) {
       this.props.updateOrder(ordersToTake[i], "IN_PROGRESS", this.state.selectedStaffMemberID)
     }
-  }
+  };
 
   ToggleAwaitingCollapse = (event) => {
     let newStyle = "collapsed";
@@ -385,7 +388,7 @@ class App extends Component {
   showOutOfStock = () => { this.state.showOutOfStock() };
 
   showCollectionPoint = () => { this.state.showCollectionPoint()};
-  
+
 
   moreAccounts = (staffID) => {
     this.setState({selectedStaffMemberID: staffID});
@@ -425,7 +428,7 @@ class App extends Component {
     let buttonClass = "";
     if (this.state.selectedStaffMemberID === staffData._id) buttonClass = "selected";
     return ( <button key={staffData._id} onClick={()=>{this.moreAccounts(staffData._id)}} className={buttonClass}>{staffData.firstName}</button> );
-  }
+  };
 
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
@@ -468,7 +471,7 @@ class App extends Component {
                   })
                 }}><FontAwesomeIcon icon={faCamera} /> Preview scanner</button>
 
-               <button onClick={this.state.showSettings} className='large'> <FontAwesomeIcon icon ={faCog} /> Settings </button> 
+               <button onClick={this.state.showSettings} className='large'> <FontAwesomeIcon icon ={faCog} /> Settings </button>
 
                 <button className="large" onClick={this.state.showManualPickup}><FontAwesomeIcon icon={faBeer} /> Pickup order</button>
 
@@ -496,7 +499,7 @@ class App extends Component {
                       orderOpacity = rangeScaling(incrementer, 100 - collapsedOrderOpacityOffset, 0, 0, maxCollapsedOrdersToShow) / 100;
                       width = rangeScaling(incrementer, 100, 95, 0, maxCollapsedOrdersToShow);
                   }
-                  
+
                   return (
                     <div
                         key={orderIndex}
@@ -615,6 +618,7 @@ class App extends Component {
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
             <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPointFunc={this.changeCollectionPoint} />
             <SettingsPopupWindow showFunc={callable => this.setState({showSettings: callable})} showCollectionPoint={this.showCollectionPoint}/>
+            <OrderSubscription />
 
             <div className="notificationsContainer">
               {

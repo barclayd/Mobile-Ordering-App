@@ -7,7 +7,9 @@ const initialState = {
     error: null,
     orders: [],
     updatingOrderLoading: null,
-    updatedOrder: null
+    updatedOrder: null,
+    newOrderLoading: null,
+    newOrderError: false
 };
 
 const getOrdersByCollectionPointStart = (state, action) => {
@@ -49,6 +51,22 @@ const updateOrderFailure = (state, action) => {
     });
 };
 
+const newOrderStart = (state, action) => {
+    return updateObject(state, {
+        newOrderLoading: true,
+    });
+};
+const newOrderSuccess = (state, action) => {
+    return updateObject(state, {
+        orders: state.orders.concat(action.order)
+    });
+};
+const newOrderFailure = (state, action) => {
+    return updateObject(state, {
+        newOrderLoading: false,
+        newOrderError: action.error
+    });
+};
 
 
 const reducer = (state = initialState, action) => {
@@ -59,6 +77,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.UPDATE_ORDER_START: return updateOrderStart(state, action);
         case actionTypes.UPDATE_ORDER_SUCCESS: return updateOrderSuccess(state, action);
         case actionTypes.UPDATE_ORDER_FAIL: return updateOrderFailure(state, action);
+        case actionTypes.NEW_ORDER_START: return newOrderStart(state, action);
+        case actionTypes.NEW_ORDER_SUCCESS: return newOrderSuccess(state, action);
+        case actionTypes.NEW_ORDER_FAIL: return newOrderFailure(state, action);
         default: return state;
     }
 };

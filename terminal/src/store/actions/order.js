@@ -81,3 +81,27 @@ export const findBarStaffFail = error => {
         error: error
     };
 };
+
+export const newOrder = (order) => {
+    return {
+        type: actionTypes.NEW_ORDER,
+        order
+    };
+};
+export const newOrderStart = () => {
+    return {
+        type: actionTypes.NEW_ORDER_START
+    };
+};
+export const newOrderSuccess = (order) => {
+    return {
+        type: actionTypes.NEW_ORDER_SUCCESS,
+        order
+    };
+};
+export const newOrderFail = error => {
+    return {
+        type: actionTypes.NEW_ORDER_FAIL,
+        error: error
+    };
+};

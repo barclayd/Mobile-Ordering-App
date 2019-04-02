@@ -1,4 +1,4 @@
-const { makeExecutableSchema } = require('graphql-tools/dist/index');
+const { makeExecutableSchema } = require('graphql-tools');
 
 const resolvers = require("../resolvers/resolvers");
 
@@ -58,8 +58,8 @@ type User {
         collectionPoint: CollectionPoint
         drinks: [Drink!]
         orderAssignedTo: BarStaff
-        status: String
-        date: String
+        status: String!
+        date: String!
         userInfo: User
         transactionId: String,
         collectionId: String,
@@ -117,7 +117,7 @@ type User {
         collectionPoint: ID!
         status: String!
         date: String!
-        userInfo: ID!
+        userInfo: ID
         price: Float!
     }
     

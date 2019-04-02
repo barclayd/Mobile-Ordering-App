@@ -164,3 +164,14 @@ export function* updateOrderSaga(action) {
         yield put(actions.updateOrderFail(err));
     }
 }
+
+export function* newOrderSaga(action) {
+    yield put(actions.newOrderStart());
+    if (action.order.hasOwnProperty('drinks')) {
+        // check if new order has drinks
+        yield put(actions.newOrderSuccess(action.order));
+    } else {
+        yield put(actions.newOrderFail('Incomplete object retrieved from server'));
+        throw Error ('Incomplete object retrieved from server');
+    }
+}

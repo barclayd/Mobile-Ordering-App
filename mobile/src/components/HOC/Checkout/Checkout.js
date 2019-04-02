@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, ActivityIndicator, AsyncStorage} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, Image, TouchableOpacity, Alert, TouchableHighlight, ActivityIndicator, AsyncStorage, Platform} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
@@ -10,6 +10,10 @@ import * as actions from "../../../store/actions/index"
 import ApplePay from '../../../assets/apple-pay.svg';
 import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
 import Payment from '../../UI/Overlays/Payment';
+import AuthOverlay from '../../UI/Overlays/AuthOverlay';
+import {showLoginOnNotificationPress} from "../../../utility/navigation";
+import {RNNotificationBanner} from "react-native-notification-banner";
+
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
@@ -23,7 +27,10 @@ class Checkout extends Component {
         editVisible: false,
         emptyBasketChecked: false,
         showPaymentOverlay: false,
-        collectionPoint: ""
+        collectionPoint: "",
+        userId: null,
+        notificationSent: false,
+        showAuthOverlay: false
     };
 
 
@@ -71,6 +78,37 @@ class Checkout extends Component {
         })
     }
 
+    async componentDidMount() {
+        this.props.findCollectionPoints()
+        this.getAccountName().then(value => {
+            this.setState({
+                userId: value
+            })
+        })
+    }
+
+    getAccountName = async () => {
+        return await AsyncStorage.getItem("userId");
+      };
+
+    getBarId = async () => {
+        return await AsyncStorage.getItem("barId");
+    }
+    showNotification() {
+        let icon = <Icon name="user" size={24} color="#FFFFFF" family={"FontAwesome"} />;
+        RNNotificationBanner.Normal({duration: 8, onClick: () => this.handleNotificationPress(),  title: `You Are Not Signed In to DrinKing`, subTitle: `Tap here to sign in or alternatively enter your email below.`, withIcon: true, icon: icon});
+    }
+
+    handleNotificationPress = async () =>  {
+        Promise.all([
+            Icon.getImageSource(
+                Platform.OS === "android" ? "remove" : "remove",
+                30
+            )
+          ]).then(sources => {
+              showLoginOnNotificationPress(this.getBarId(), sources[0]);
+          })
+    };
     addValue = () => {
     };
 
@@ -117,7 +155,7 @@ class Checkout extends Component {
         this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, basketPrice);
         this.setState({
             showPaymentOverlay: false
-        })
+        });
     };
 
     renderContent = (section, _, isActive) => {
@@ -190,19 +228,29 @@ class Checkout extends Component {
     };
 
     togglePaymentOverlay = async () => {
-        if (this.state.collectionPoint.length < 1 && !this.state.showPaymentOverlay) {
-            this.props.findCollectionPoints();
-            const userId = await AsyncStorage.getItem('userId');
-            if (!userId) {
-                // render not signed in notification
-                this.setState(prevState => {
-                    return {
-                        ...prevState,
-                        showPaymentOverlay: !prevState.showPaymentOverlay
-                    }
+            this.getAccountName().then((value) => {
+                this.setState({
+                    userId: value
                 });
+                if (value == null && !this.state.notificationSent && this.state.showPaymentOverlay){
+                    this.showNotification();
+                }
+            });
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                showPaymentOverlay: !prevState.showPaymentOverlay,
             }
-        }
+    })
+};
+
+    toggleAuthOverlay = async () => {
+        this.setState(prevState => {
+            return {
+            ...prevState,
+            showAuthOverlay: !prevState.showAuthOverlay
+            }
+        })
     };
 
     renderHeader = (section, _, isActive) => {
@@ -362,6 +410,14 @@ class Checkout extends Component {
                                 duration={400}
                                 onChange={this.setSections}
                             />
+
+                            {this.state.showAuthOverlay ?
+                            <AuthOverlay
+                                visible={this.state.showAuthOverlay}
+                                onCancel={this.toggleAuthOverlay}
+                                hideAuth={this.toggleAuthOverlay}
+                                />
+                            : null}
 
                             <Payment
                                 visible={this.state.showPaymentOverlay}
