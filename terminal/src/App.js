@@ -612,7 +612,7 @@ class App extends Component {
             { this.buildPendingOrdersTitle(this.state.pendingOrders.length) }
 
             {/* Build popup windows, assigning their show functions to the App.js state so they're callable */}
-            <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
+            <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} updateOrderFunc={this.UpdateOrderStatus}/>
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} updateOrderFunc={this.UpdateOrderStatus}/>
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
             <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.props.barStaff} activeUser={this.state.selectedStaffMemberID} moreAccountsFunc={this.moreAccounts} addStaffByIDToHotbarFunc={this.addStaffByIDToHotbar} />
