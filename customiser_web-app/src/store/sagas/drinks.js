@@ -1,5 +1,5 @@
 import {put} from 'redux-saga/effects';
-import axios from '../../axios-instance';
+import axios from '../axios-instance';
 import * as actions from '../actions/index';
 
 export function* findDrinksSaga(action){

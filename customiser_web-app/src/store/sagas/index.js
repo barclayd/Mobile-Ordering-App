@@ -1,5 +1,6 @@
 import {takeLatest} from 'redux-saga/effects';
 import {getOrdersByCollectionPointSaga} from './order';
+import {findDrinksSaga} from './drinks';
 import * as actionTypes from '../actions/actionTypes';
 
 export function* watchOrders() {
@@ -7,5 +8,5 @@ export function* watchOrders() {
 }
 
 export function* watchDrinks() {
-    yield takeLatest(actionTypes.FIND_DRINKS, getOrdersByCollectionPointSaga);
+    yield takeLatest(actionTypes.FIND_DRINKS, findDrinksSaga);
 }
