@@ -138,7 +138,7 @@ class Checkout extends Component {
         let totalPrice = 0;
         if (this.props.basket) {
             this.props.basket.map(drink => {
-                totalPrice += (drink.price * drink.quantity);
+                totalPrice += (drink.price /100 * drink.quantity);
             });
         }
         return (totalPrice/100).toFixed(2);
@@ -189,7 +189,7 @@ class Checkout extends Component {
                             <View style={styles.subtitleView}>
                                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                                     <Text style={styles.subInformationText}>{drink.nutritionInfo}</Text>
-                                    <Text style={styles.subInformationTextPrice}>£{(drink.price * drink.quantity).toFixed(2)}</Text>
+                                    <Text style={styles.subInformationTextPrice}>£{(drink.price /100 * drink.quantity).toFixed(2)}</Text>
                                 </View>
                             </View>
                         }

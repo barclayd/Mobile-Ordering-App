@@ -11,28 +11,27 @@ import {OrderStatuses} from '../../helpers/schemaHelper';
 
 class PickupPopupWindow extends Component {
 
-    showOutOfStock = () => {
-        this.state.showOutOfStock()
+    state = {}
+
+    updateOrder = (orderID, status) => {
+        this.setState({closePopup: true}, ()=>this.setState({closePopup: null}));
+        this.props.updateOrderFunc(orderID, status);
     };
 
-    updateOrder = (orderID, status, optionalStaffID) => {
-        if (optionalStaffID) {
-            this.props.updateOrderFunc(orderID, status, optionalStaffID);
-        } else {
-            this.props.updateOrderFunc(orderID, status, optionalStaffID);
-        }
+    showOutOfStock = () => {
+        this.state.showOutOfStock()
     };
 
     buildButtons = (order) => {
         return (
             <div className="popupButtonsContainer">
-                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.COMPLETED, localStorage.getItem('selectedStaffMemberID'))}} className="orderButton">
+                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.COMPLETED)}} className="orderButton">
                     <span className="icon complete"><FontAwesomeIcon icon={faGlassCheers} /></span>
                     <span className="title">Completed</span>
                     <br />
                     <span className="subtitle">Mark as completed</span>
                 </button>
-                <button className="orderButton">
+                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.REFUNDED)}} className="orderButton">
                     <span className="icon refund"></span>
                     <span className="title">Refund</span>
                     <br />
@@ -44,7 +43,7 @@ class PickupPopupWindow extends Component {
                     <br />
                     <span className="subtitle">Mark unavailable</span>
                 </button>
-                <button className="orderButton">
+                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.CANCELLED)}} className="orderButton">
                     <span className="icon delete"><FontAwesomeIcon icon={faTrashAlt} /></span>
                     <span className="title">Delete</span>
                     <br />
@@ -109,6 +108,7 @@ class PickupPopupWindow extends Component {
                     showFunc={this.props.showFunc}
                     dismissedHandler={this.props.dismissedHandler}
                     buttons={this.buildButtons(this.props.order)}
+                    closePopup={this.state.closePopup}
             >
                 { this.buildChildren(this.props.order) }
             </PopupWindow>

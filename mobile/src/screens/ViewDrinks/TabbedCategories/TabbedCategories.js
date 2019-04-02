@@ -60,7 +60,7 @@ class TabbedCategories extends Component {
   };
 
   priceValidation = price => {
-    return parseFloat(Math.round(price * 100) / 100).toFixed(2)
+    return ((price) / 100).toFixed(2)
   };
 
 
