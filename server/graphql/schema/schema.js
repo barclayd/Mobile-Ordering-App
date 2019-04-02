@@ -192,6 +192,7 @@ type User {
         updateOrderAssignedTo(orderAssignedToInput: OrderAssignedToInput): Order
         updateLastVisitedBar(userId: ID!, barId: ID): User!
         updateOrder(orderStatusInput: OrderStatusInput): Order!
+        deleteAllOrders: Boolean
     }
     
     type Subscription {
