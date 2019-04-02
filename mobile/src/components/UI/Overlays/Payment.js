@@ -195,15 +195,15 @@ class MobilePayments extends Component {
               </Text>
               <Text style={{ color: colours.midGrey, fontSize: 30 }}>|</Text>
               <Text style={styles.barOrderDetails2}>
-                Price: £{this.props.basketPrice}
+                Price: £{this.props.totalPrice}
               </Text>
             </View>
 
-            <View style={styles.summary}>
+            {this.props.basketPrice < 5 ? <View style={styles.summary}>
               <Text style={styles.barOrderDetails1}>
-                DrinKing Fee: £{this.props.totalPrice}
+                DrinKing Fee: £{(this.props.totalPrice-this.props.basketPrice).toFixed(2)}
               </Text>
-            </View>
+            </View> : null}
 
           </Card>
 

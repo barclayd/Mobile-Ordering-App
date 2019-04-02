@@ -63,8 +63,8 @@ type User {
         userInfo: User
         transactionId: String,
         collectionId: String,
-        price: Float
-        stripeFee: Float
+        price: Int
+        stripeFee: Int
     }
         
      type Bar {
@@ -119,8 +119,8 @@ type User {
         status: String!
         date: String!
         userInfo: ID
-        price: Float!
-        stripeFee: Float
+        price: Int!
+        stripeFee: Int
     }
     
     

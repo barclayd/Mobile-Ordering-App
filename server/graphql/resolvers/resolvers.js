@@ -301,6 +301,7 @@ const resolvers = {
                 if (!userPayment) {
                     throw new Error ('Attempt to process user payment failed.');
                 }
+                console.log(args.orderInput);
                 const createdOrder = new Order({
                     drinks: foundDrinks,
                     collectionPoint: collectionPoint,
@@ -310,7 +311,8 @@ const resolvers = {
                     userInfo: user,
                     collectionId: collectionId,
                     transactionId: uuid(),
-                    price: args.orderInput.price
+                    price: args.orderInput.price,
+                    stripeFee: args.orderInput.stripeFee
                 });
                 await pubSub.publish(ORDER_CREATED, {
                     collectionPointId: createdOrder.collectionPoint._id,

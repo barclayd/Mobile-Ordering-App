@@ -141,16 +141,17 @@ class Checkout extends Component {
                 totalPrice += (drink.price /100 * drink.quantity);
             });
         }
-        return (totalPrice/100).toFixed(2);
+        return (totalPrice).toFixed(2);
     };
 
     totalPrice = () => {
         const basketPrice = this.basketPrice();
+        let totalCost = parseFloat(basketPrice);
         let stripeFee = 0;
         if (basketPrice < 5) {
-            stripeFee = (basketPrice * 1.0014) + 0.2;
+            stripeFee = parseFloat((basketPrice * 0.014) + 0.2);
         }
-        const totalCost = stripeFee;
+        totalCost += parseFloat(stripeFee);
         return totalCost.toFixed(2);
     };
 
