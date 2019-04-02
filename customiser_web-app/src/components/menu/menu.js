@@ -14,15 +14,6 @@ class Menu extends React.Component {
     this.props.onFetchDrinkCategories();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
-      const selectedMenu = nextProps.menus.filter(menu => menu._id === this.props.menuId);
-      this.setState({
-        drinks: selectedMenu[0].drinks
-      });
-    }
-  }
-
   getDrinksByCategory = (id) => {
     const categoryName = this.state.categories[id];
     return this.state.drinks.filter(drink => drink.category === categoryName);
