@@ -69,50 +69,53 @@ class Menu extends React.Component {
   };
 
   render() {
-    return (
-     // <MuiThemeProvider tabLabel={category} key={index}>
-      //  <TabbedCategories
-       //   key={category}
-       //   category={category}
-       //   drinks={this.getDrinksByCategory(index)}
-       // />
-      //</MuiThemeProvider>
-      {this.state.categories.length > 0 ? (
-          <MuiThemeProvider tabLabel={category} key={index}>
-            <div className="Menu">
-              <Table
-                handleRemove={this.handleRemove}
-                startEditing={this.startEditing}
-                editIdx={this.state.editIdx}
-                stopEditing={this.stopEditing}
-                handleSave={this.handleSave}
-                data={this.props.drinks}
+    // <MuiThemeProvider tabLabel={category} key={index}>
+    //  <TabbedCategories
+    //   key={category}
+    //   category={category}
+    //   drinks={this.getDrinksByCategory(index)}
+    // />
+    //</MuiThemeProvider>
+    {
+      this.state.categories.length > 0 ? this.state.categories.map((category, index) => {
+          return (
+            <MuiThemeProvider tabLabel={category} key={index}>
+              <div className="Menu">
+                <Table
+                  handleRemove={this.handleRemove}
+                  startEditing={this.startEditing}
+                  editIdx={this.state.editIdx}
+                  stopEditing={this.stopEditing}
+                  handleSave={this.handleSave}
+                  data={this.props.drinks}
 
-                header={[
-                  {
-                    name: "Name",
-                    prop: "name"
-                  },
-                  {
-                    name: "Category",
-                    prop: "category"
-                  },
-                  {
-                    name: "Nutrition Info",
-                    prop: "nutritionInfo"
-                  },
-                  {
-                    name: "Price",
-                    prop: "price"
-                  }
-                ]}
-              />
-            </div>
-          </MuiThemeProvider>
-        ) : null}
+                  header={[
+                    {
+                      name: "Name",
+                      prop: "name"
+                    },
+                    {
+                      name: "Category",
+                      prop: "category"
+                    },
+                    {
+                      name: "Nutrition Info",
+                      prop: "nutritionInfo"
+                    },
+                    {
+                      name: "Price",
+                      prop: "price"
+                    }
+                  ]}
+                />
+              </div>
+            </MuiThemeProvider>
+          )
 
-    );
-  }
+        }
+      ) : null
+    }
+  };
 }
 
 const mapStateToProps = state => {
