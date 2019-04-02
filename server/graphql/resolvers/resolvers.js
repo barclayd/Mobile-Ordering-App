@@ -208,9 +208,7 @@ const resolvers = {
                         path: 'userInfo',
                         select: '-password' // Explicitly exclude password field
                     });
-                return foundOrders.reverse().map(async foundOrder => {
-                    return foundOrder;
-                });
+                return foundOrders.reverse();
             } catch (err) {
                 throw err;
             }
