@@ -79,7 +79,7 @@ class Checkout extends Component {
     }
 
     async componentDidMount() {
-        this.props.findCollectionPoints()
+        this.props.findCollectionPoints();
         this.getAccountName().then(value => {
             this.setState({
                 userId: value
@@ -141,7 +141,17 @@ class Checkout extends Component {
                 totalPrice += (drink.price * drink.quantity);
             });
         }
-        return totalPrice.toFixed(2);
+        return (totalPrice/100).toFixed(2);
+    };
+
+    totalPrice = () => {
+        const basketPrice = this.basketPrice();
+        let stripeFee = 0;
+        if (basketPrice < 5) {
+            stripeFee = (basketPrice * 1.0014) + 0.2;
+        }
+        const totalCost = stripeFee;
+        return totalCost.toFixed(2);
     };
 
     onEditPress = () => {
@@ -151,8 +161,10 @@ class Checkout extends Component {
     };
 
     onSubmitOrder = (paymentInfo) => {
-        const basketPrice = this.basketPrice();
-        this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, basketPrice);
+        const basketPrice = this.basketPrice()*100;
+        const totalPrice = this.totalPrice()*100;
+        const stripeFee = totalPrice - basketPrice;
+        this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, totalPrice, stripeFee);
         this.setState({
             showPaymentOverlay: false
         });
@@ -423,6 +435,7 @@ class Checkout extends Component {
                                 visible={this.state.showPaymentOverlay}
                                 basketItems={this.basketItems()}
                                 basketPrice={this.basketPrice()}
+                                totalPrice={this.totalPrice()}
                                 collectionPoints={this.collectionPoints()}
                                 onCancel={this.togglePaymentOverlay}
                                 submitOrder={this.onSubmitOrder}
@@ -602,7 +615,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-      submitOrder: (basket, componentId, paymentInfo, basketPrice) => dispatch(actions.submitOrder(basket, componentId, paymentInfo, basketPrice)),
+      submitOrder: (basket, componentId, paymentInfo, totalPrice, stripeFee) => dispatch(actions.submitOrder(basket, componentId, paymentInfo, totalPrice, stripeFee)),
       emptyBasket: () => dispatch(actions.emptyBasket()),
       findCollectionPoints: () => dispatch(actions.findCollectionPoints())
     };
