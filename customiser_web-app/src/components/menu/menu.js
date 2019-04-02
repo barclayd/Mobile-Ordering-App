@@ -104,7 +104,7 @@ class Menu extends React.Component {
     })
 
     return (
-     <div>{ this.state.categories.length > 0 ? tableData : <React.Fragment/> }</div>
+     <div>{ this.props.categories.length > 0 ? tableData : <React.Fragment/> }</div>
     )
 
 
