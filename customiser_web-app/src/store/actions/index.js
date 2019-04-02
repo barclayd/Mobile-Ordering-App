@@ -1,3 +1,3 @@
-export {
-  getOrdersByCollectionPoint, getOrdersByCollectionPointStart, getOrdersByCollectionPointSuccess, getOrdersByCollectionPointFail
-} from './order';
+export * from './order';
+export * from './drinks';
+

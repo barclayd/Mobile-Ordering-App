@@ -7,15 +7,21 @@ import 'react-mdl/extra/material.css';
 import 'react-mdl/extra/material.js';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
+import {watchOrders, watchDrinks} from './store/sagas/index';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { BrowserRouter } from 'react-router-dom';
-import ordersReducer from "../../terminal/src/store/reducers/order";
+import ordersReducer from "../src/store/reducers/order";
+import drinksReducer from "../src/store/reducers/drinks"
 
 const rootReducer = combineReducers({
-  orders: ordersReducer
+  orders: ordersReducer,
+  drinks: drinksReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();
+
+sagaMiddleware.run(watchOrders);
+sagaMiddleware.run(watchDrinks);
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -23,13 +29,13 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMidd
 
 const app = (
   <Provider store={store}>
+    <BrowserRouter>
     <App />
+    </BrowserRouter>
   </Provider>
 );
 
 ReactDOM.render(
-  <BrowserRouter>
-<App />
-  </BrowserRouter>
+  app
   , document.getElementById('root'));
 registerServiceWorker();
