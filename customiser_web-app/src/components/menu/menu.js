@@ -45,35 +45,38 @@ class Menu extends React.Component {
     }));
     this.stopEditing();
   };
+  
   render() {
     return (
       <MuiThemeProvider>
         <div className="Menu">
-             <Table
-               handleRemove={this.handleRemove}
-               startEditing={this.startEditing}
-               editIdx={this.state.editIdx}
-               stopEditing={this.stopEditing}
-               handleSave={this.handleSave}
-               data={this.state.data}
-             Header = {[{
-               name: "Name",
-               prop: "name"
-             },
-               {
-                 name: "Category",
-                 prop: "category"
-               },
-               {
-                 name: "Nutrition Info",
-                 prop: "nutritionInfo"
-               },
-               {
-                 name: "Price",
-                 prop: "price"
-               }
-               ]}
-             />
+          <Table
+            handleRemove={this.handleRemove}
+            startEditing={this.startEditing}
+            editIdx={this.state.editIdx}
+            stopEditing={this.stopEditing}
+            handleSave={this.handleSave}
+            data={this.state.data}
+
+            header={[
+              {
+                name: "Name",
+                prop: "name"
+              },
+              {
+                name: "Category",
+                prop: "category"
+              },
+              {
+                name: "Nutrition Info",
+                prop: "nutritionInfo"
+              },
+              {
+                name: "Price",
+                prop: "price"
+              }
+            ]}
+          />
         </div>
       </MuiThemeProvider>
     );
