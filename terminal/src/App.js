@@ -42,24 +42,6 @@ class App extends Component {
     // Hardcoded notifications have IDs in the negative so as to not conflict with addNotification()
     notifications: [],
 
-    collectionPoints: [
-      {
-        _id: 1,
-        name: "Downstairs",
-        description: "Outside WHSmiths, usually dead."
-      },
-      {
-        _id: 2,
-        name: "Upstairs",
-        description: "Small minibar."
-      },
-      {
-        _id: 3,
-        name: "Main floor",
-        description: "Wide bar."
-      }
-    ],
-
     lastNotificationID: 0,
 
     selectedStaffMemberID: "5c97adae8cab340a0995dd25",
@@ -122,7 +104,7 @@ class App extends Component {
 
   getStaffMemberFullName = (userInfoObj) => {
     if (!userInfoObj) return "unknown";
-    let staffMember = this.state.barStaff.find(x => x._id === userInfoObj._id);
+    let staffMember = this.props.barStaff.find(x => x._id === userInfoObj._id);
     if (!staffMember) return "unknown";
     return staffMember.firstName + " " + staffMember.lastName;
   };
@@ -133,7 +115,13 @@ class App extends Component {
   };
 
   changeCollectionPoint = (collectionPointID) => {
-    this.setState({collectionPointID: collectionPointID});
+    console.log("Changed collection point", collectionPointID)
+
+    // Update localstorage so same collection point shows after page reload
+    localStorage.setItem("selectedcollectionPointID", collectionPointID)
+
+    // Pull orders from server by selected collection point
+    this.props.loadOrders(collectionPointID);
   };
 
   // Displays billing popup for order by order index
@@ -235,24 +223,31 @@ class App extends Component {
 
     // Pull bartenders from server
     this.props.findBarStaff(Hardcoded_barID);
+
+    
+    // Load bartender hotbar order from localstorage (or use empty array)
+    this.setState({staffHotBarOrder: JSON.parse(localStorage.getItem("staffHotBarOrder")) || []});
     
     // Load selected bartender account from localstorage, or select the first if none exists
     this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || Hardcoded_barStaffID});
-
-    // Load bartender hotbar order from localstorage (or use empty array)
-    this.setState({staffHotBarOrder: JSON.parse(localStorage.getItem("staffHotBarOrder")) || []});
+    
 
     // Pull collection points from server
     this.props.findCollectionPoints(Hardcoded_barID);
 
-    // Pull orders from server
-    const collectionId = localStorage.getItem('collectionPoint') || Hardcoded_collectionPointID;
-    this.props.loadOrders(collectionId);
+    
+    // Load selected collection point from localstorage, or select the first if none exists
+    const collectionPointID = localStorage.getItem("selectedcollectionPointID") || Hardcoded_collectionPointID;
+
+    // Pull orders from server by selected collection point
+    this.props.loadOrders(collectionPointID);
+
 
     // Load webcam for iOS
     this.getUserMedia();
   }
 
+  // Map redux-recieved data that needs to be manipulated to react state from props
   componentDidUpdate(prevProps, prevState) {
     if (this.props.serverOrders.length === 0) return;
     let newServerOrders = rebuildDateAndDrinksForOrderWithQuantities(this.props.serverOrders);
@@ -264,7 +259,6 @@ class App extends Component {
 
       this.setState({
         serverOrders: newServerOrders,
-        barStaff: this.props.barStaff
       });
     }
   }
@@ -433,6 +427,9 @@ class App extends Component {
   render() {
     if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
       return this.buildLoadingScreen("Loading orders...")
+    
+    } else if (!this.props.collectionPoints || this.props.collectionPoints.length === 0) {
+      return this.buildLoadingScreen("Loading collection points...")
 
     } else {
       return (
@@ -443,13 +440,13 @@ class App extends Component {
               {
                 // Build staff buttons from recently switched-into accounts
                 this.state.staffHotBarOrder.map((staffHotBarData) => {
-                  let staffData = this.state.barStaff.find(entry => entry._id === staffHotBarData.id);
+                  let staffData = this.props.barStaff.find(entry => entry._id === staffHotBarData.id);
                   return this.buildHotbarButton(staffData)
                 })
               }
               {
                 // Build staff buttons for all other accounts
-                this.state.barStaff.map((staffData) => {
+                this.props.barStaff.map((staffData) => {
                   if (this.state.staffHotBarOrder.find(entry => entry.id === staffData._id)) {
                     return null
                   } else {
@@ -593,7 +590,7 @@ class App extends Component {
                 <br />
                 <span className="subtitle">
                   Adds next order to your ({
-                    this.state.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
+                    this.props.barStaff.find(x => x._id === this.state.selectedStaffMemberID).firstName
                   }) in-progress feed
                 </span>
               </button>
@@ -612,11 +609,11 @@ class App extends Component {
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
             <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} updateOrderFunc={this.props.updateOrder}/>
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
-            <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.state.barStaff} activeUser={this.state.selectedStaffMemberID} moreAccountsFunc={this.moreAccounts} addStaffByIDToHotbarFunc={this.addStaffByIDToHotbar} />
+            <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.props.barStaff} activeUser={this.state.selectedStaffMemberID} moreAccountsFunc={this.moreAccounts} addStaffByIDToHotbarFunc={this.addStaffByIDToHotbar} />
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderRelaxed} />
             <UpcomingPopupWindow showFunc={callable => this.setState({showUpcoming: callable})} pendingOrders={this.state.pendingOrders} />
             <OutOfStockPopUpWindow showFunc={callable => this.setState({showOutOfStock: callable})} order={this.state.orderForPopup} />
-            <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.state.collectionPoints} changeColletionPointFunc={this.changeCollectionPoint} />
+            <SelectCollectionPointPopupWindow showFunc={callable => this.setState({showCollectionPoint: callable})} collectionPoints={this.props.collectionPoints} changeColletionPointFunc={this.changeCollectionPoint} />
             <SettingsPopupWindow showFunc={callable => this.setState({showSettings: callable})} showCollectionPoint={this.showCollectionPoint}/>
             <OrderSubscription />
 
@@ -679,7 +676,7 @@ const mapReduxStateToProps = state => {
     updatedOrder:     state.orders.updatedOrder,
     ordersLoading:    state.orders.loading,
     barStaff:         state.bar.barStaff,
-    collectionPoints: state.bar.collectionPoints
+    collectionPoints: state.collectionPoints.collectionPoints
   }
 };
 
