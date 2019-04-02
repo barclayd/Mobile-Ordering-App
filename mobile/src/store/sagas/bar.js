@@ -3,7 +3,6 @@ import {AsyncStorage, Platform} from 'react-native';
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import {setMainApp, setMainAppSettings, popToRoot} from "../../utility/navigation";
 import {emptyBasket} from '../utility';
-
 import axios from '../../axios-instance';
 import * as actions from '../actions/index';
 import {errorNotification} from "../../notifications/ErrorHandling";
@@ -160,7 +159,7 @@ export function* findAllBarsSaga(action) {
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
             yield put(actions.findAllBarsFail(response.data.errors[0].message));
-            // errorNotification('No internet connection', 'Tap this banner to try again', 10);
+            errorNotification('No internet connection', 'Tap this banner to try again', 10);
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {

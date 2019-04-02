@@ -2,7 +2,7 @@ import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../../axios-instance';
 import stripe from 'tipsi-stripe'
-import {AsyncStorage} from 'react-native';
+import {AsyncStorage, Alert} from 'react-native';
 import {
     popToRoot,
     setOrderStatus
@@ -52,7 +52,7 @@ export function* submitOrderSaga(action) {
     try {
         let requestBody = {
             query: `
-                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID!) {
+                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID) {
                     createOrder(orderInput: {
                         drinks: $drinks
                         collectionPoint: $collectionPoint
@@ -101,6 +101,7 @@ export function* submitOrderSaga(action) {
         });
         if (response.data.errors) {
             yield put(actions.submitOrderFail(response.data.errors[0].message));
+            Alert.alert('Unsuccessful Order : ', response.data.errors[0].message);
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
@@ -171,7 +172,7 @@ export function* orderHistorySaga(action) {
         }
     } catch (err) {
         console.log(err);
-        errorNotification('Retrieving Order History Failed', 'Please try again')
+        errorNotification('Retrieving Order History Failed', 'Please try again');
         yield put(actions.orderHistoryFailure());
     }
 }
@@ -216,7 +217,6 @@ export function* orderStatusSaga(action){
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-        // console.log("response",response)
         yield put(actions.orderStatusSuccess(response.data.data.findOrderById))
         }
     } catch (err) {
