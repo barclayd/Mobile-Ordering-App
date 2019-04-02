@@ -37,7 +37,6 @@ const getOrdersByCollectionPointFailure = (state, action) => {
 const updateOrderStart = (state, action) => {
     return updateObject(state, {
         updatingOrderLoading: true,
-
     });
 };
 const updateOrderSuccess = (state, action) => {

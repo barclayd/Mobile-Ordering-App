@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import ordersReducer from './store/reducers/order'
+import collectionPointsReducer from './store/reducers/collectionPoint'
 import barReducer from './store/reducers/bar'
 import {watchOrders, watchBar} from './store/sagas/index';
 import { ApolloProvider} from 'react-apollo';
@@ -19,6 +20,7 @@ import {InMemoryCache} from "apollo-cache-inmemory";
 
 const rootReducer = combineReducers({
     orders: ordersReducer,
+    collectionPoints: collectionPointsReducer,
     bar: barReducer
 });
 
