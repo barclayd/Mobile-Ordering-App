@@ -1,0 +1,48 @@
+.header-color {
+    background: #833ab4;
+    background: -webkit-linear-gradient(#451f5e, #451f5e);
+}
+
+.landing-grid {
+    background: -webkit-linear-gradient(#451f5e, #833ab4);text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.projects-grid {
+    display: flex;
+}
+
+.avatar-img {
+    height: 200px;
+    padding-top: 5em;
+}
+
+.main {
+    background-color: rgba(0, 0, 0, 0.46);
+    opacity: .9;
+    width: 75%;
+    margin: auto;
+    border-radius: 10px;
+}
+
+.main h1 {
+    font-size: 66px;
+    font-weight: bold;
+    color: white;
+}
+
+.main h2 {
+    font-size: 46px;
+    color: white;
+}
+
+.main p {
+    color: white;
+    font-size: 20px;
+    padding: 1em;
+}
+
