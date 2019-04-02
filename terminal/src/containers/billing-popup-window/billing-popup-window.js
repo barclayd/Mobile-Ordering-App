@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import {OrderStatuses} from '../../helpers/schemaHelper';
+import {penniesToPriceString} from '../../helpers/FunctionLib'
 
 // SETTINGS:
 const HideStockManagementForAwaitingCollection = false; // Should hide out of stock button for orders awaiting collection?
@@ -51,14 +52,14 @@ class BillingPopupWindow extends Component {
                                 <li key={counter}>
                                     <span className="quantity">{itemData.quantity}x</span>
                                     <span className="item">{itemData.name}</span>
-                                    <span className="price">£{itemData.price}</span>
+                                    <span className="price">{penniesToPriceString(itemData.price)}</span>
                                 </li>
                             )
                         })}
                     </ul>
                     <div className="billingTotal">
                         <span className="totalText">Total:</span>
-                        <span className="totalAmount">£{this.calcTotal(this.props.order)}</span>
+                        <span className="totalAmount">{penniesToPriceString(this.calcTotal(this.props.order))}</span>
                     </div>
                 </div>
             </React.Fragment>
