@@ -3,11 +3,12 @@
     background: -webkit-linear-gradient(#451f5e, #451f5e);
 }
 
+.main {
+    padding-top: 2em;
+}
 .main-grid {
     background: -webkit-linear-gradient(#451f5e, #833ab4);text-align: center;
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
 }
