@@ -38,7 +38,7 @@ app.use('/graphql', graphqlHttp({
 app.use('/hello-world', (req, res, next) => {
     res.status(200).json({
         hello: 'Hello World'
-    })
+    });
 });
 
 const server = createServer(app);
@@ -49,7 +49,7 @@ mongoose.set('useCreateIndex',true);
 mongoose.connect(`mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PW}@drinksapp-otvvz.mongodb.net/${process.env.DB_NAME}?retryWrites=true`, {useNewUrlParser: true})
     .then(() => {
         // app.listen(process.env.PORT);
-        server.listen(process.env.PORT, () => {
+        server.listen(process.env.PORT || 3000, () => {
             new SubscriptionServer({
                     execute,
                     subscribe,
