@@ -43,7 +43,6 @@ export default class statistics extends Component {
 
   render() {
     return (
-
       <div id="chart-viewer">
         {this.state.msg}
       </div>
@@ -63,7 +62,7 @@ function generateChartConfig(data,chartAttr,chartType){
     "chart": chartAttr,
     "data": chartData
   };
-  var revenueChartConfigs = {
+  const revenueChartConfigs = {
     type: chartType,
     width:800,
     height: 400,

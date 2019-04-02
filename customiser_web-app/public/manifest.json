@@ -1,0 +1,16 @@
+{
+  "name": "DrinKing Customiser",
+  "short_name": "DrinKing",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#f4f7f7",
+  "theme_color": "#f4f7f7"
+}
