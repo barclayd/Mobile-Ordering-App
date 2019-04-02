@@ -17,6 +17,9 @@ potential future devs picking up the project.
 
 
 
+<br/>
+<br/>
+<br/>
 
 # GraphQL server
 ## Tech/framework used
@@ -39,6 +42,9 @@ potential future devs picking up the project.
 
 
 
+<br/>
+<br/>
+<br/>
 
 # Customer iOS & Android app
 ## Supported Accessibility
@@ -56,7 +62,9 @@ potential future devs picking up the project.
 
 
 
-
+<br/>
+<br/>
+<br/>
 
 # Bartender terminal
 ## Supported Accessibility
@@ -80,6 +88,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 
 
+<br/>
+<br/>
+<br/>
 
 # Managerial website
 ## Supported Accessibility
@@ -98,6 +109,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 
 
+<br/>
+<br/>
+<br/>
 
 # Conclusion
 Sample text
