@@ -24,16 +24,7 @@ class BillingPopupWindow extends Component {
         this.state.showOutOfStock();
     };
 
-    calcTotal = (order) => {
-        if (order) {
-            return order.drinks.reduce((accumulator, item) => {
-                return accumulator + parseFloat(item.price);
-            },0)
-        } else {
-            return 0;
-        }
-    };
-
+    
     buildTitle = (order) => {
         if (order) return "#" + order.collectionId + " options"; else return "";
     };
@@ -48,28 +39,42 @@ class BillingPopupWindow extends Component {
     };
 
     buildChildren = (order) => {
-        if (order) return (
-            <React.Fragment>
-                <h1>DRINKS:</h1>
-                <div className="indentedContent">
-                    <ul className="orderList">
-                        { order.drinks.map((itemData, counter) => {
-                            return (
-                                <li key={counter}>
-                                    <span className="quantity">{itemData.quantity}x</span>
-                                    <span className="item">{itemData.name}</span>
-                                    <span className="price">£{itemData.price}</span>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                    <div className="billingTotal">
-                        <span className="totalText">Total:</span>
-                        <span className="totalAmount">£{this.calcTotal(this.props.order)}</span>
+        if (order) {
+            let FeesJSX;
+            if (order.stripeFee) {
+                FeesJSX = (
+                    <li>
+                        <span className="quantity">- </span>
+                        <span className="item">DrinKing fee(s)</span>
+                        <span className="price">£{order.stripeFee}</span>
+                    </li>
+                );
+            }
+
+            return (
+                <React.Fragment>
+                    <h1>DRINKS:</h1>
+                    <div className="indentedContent">
+                        <ul className="orderList">
+                            { order.drinks.map((itemData, counter) => {
+                                return (
+                                    <li key={counter}>
+                                        <span className="quantity">{itemData.quantity}x</span>
+                                        <span className="item">{itemData.name}</span>
+                                        <span className="price">£{itemData.price}</span>
+                                    </li>
+                                )
+                            })}
+                            { FeesJSX }
+                        </ul>
+                        <div className="billingTotal">
+                            <span className="totalText">Total:</span>
+                            <span className="totalAmount">£{order.price}</span>
+                        </div>
                     </div>
-                </div>
-            </React.Fragment>
-        ); else return "";
+                </React.Fragment>
+            );
+        } else return "";
     };
 
     // Function to hide stock button if the order is awaiting collection (if user setting permits)
