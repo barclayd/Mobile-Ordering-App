@@ -59,7 +59,6 @@ class ViewDrinks extends Component {
   };
 
   render() {
-    console.log(this.state.drinks);
     return (
         <Checkout componentId={this.props.componentId}>
           <View style={styles.background}>

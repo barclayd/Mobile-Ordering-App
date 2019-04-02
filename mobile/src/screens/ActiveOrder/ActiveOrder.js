@@ -211,7 +211,7 @@ class ActiveOrder extends Component {
 
               <View style={styles.receipt}>
                 <Text style={styles.orderText}>Sub Total</Text>
-                <Text style={styles.orderText}>£{parseFloat(orderPrice).toFixed(2)}</Text>
+                <Text style={styles.orderText}>£{parseFloat(orderPrice/100).toFixed(2)}</Text>
               </View>
 
               <View style={styles.button}>

@@ -44,14 +44,14 @@ class AddDrinks extends Component {
 
     const nextValue = Number(value.toFixed(2));
     let initialPrice = Number(this.props.drinkDetails.price) * nextValue;
-    let price = parseFloat(Math.round(initialPrice * 100) / 100).toFixed(2);
+    let price = ((initialPrice) / 100).toFixed(2);
       this.setState({
       value: nextValue,
       price: price
     });
   };
 
-  onPressAddDrinks = (drink, price, quantity) => {
+  onPressAddDrinks = (drink, quantity) => {
     let drinksObj = {
       ...drink,
       quantity
@@ -114,12 +114,12 @@ class AddDrinks extends Component {
 
                 <TouchableOpacity
                   style={styles.buttonStyle}
-                  onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.price ? this.state.price : this.props.drinkDetails.price, this.state.value)}
+                  onPress={() => this.onPressAddDrinks(this.props.drinkDetails, this.state.value)}
                 >
                 {this.props.basketAction ?
-                <Text style={styles.textStyle}>Update £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>
+                <Text style={styles.textStyle}>Update £{this.state.price ? this.state.price : (this.props.drinkDetails.price / 100)}</Text>
                 :
-                <Text style={styles.textStyle}>Add £{this.state.price ? this.state.price : this.props.drinkDetails.price}</Text>}
+                <Text style={styles.textStyle}>Add £{this.state.price ? this.state.price : (this.props.drinkDetails.price /100)}</Text>}
                 </TouchableOpacity>
 
 
