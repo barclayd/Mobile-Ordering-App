@@ -86,11 +86,6 @@ class MobilePayments extends Component {
     return await AsyncStorage.getItem('name');
   };
 
-
-  componentDidUpdate(){
-    console.log("this.state",this.state)
-  }
-
   render() {
     const placeholder = {
       label: "Select Collection Point",
@@ -159,7 +154,7 @@ class MobilePayments extends Component {
 
           <View style={styles.picker}>
             <View>
-              <Text style={styles.collectionPoint}>COLLECTION POINT</Text>
+              <Text style={styles.collectionPoint}>Collection Point</Text>
             </View>
             <View style={styles.pad}>
               <RNPickerSelect
@@ -279,6 +274,7 @@ const styles = StyleSheet.create({
   collectionPoint: {
     fontSize: 14,
     color: "white",
+    fontWeight: '600'
   },
   pad: {
     marginTop: 5
