@@ -43,6 +43,13 @@
 
 ## Plans for expanding the project
 
+Implementation of further features 
+- Login by barIngredients, including stock management and queuing by ingredients
+- API protection
+- Customer ratings
+- Loyalty Schemes 
+- Possible Gamification features to promote loyalty and rewards 
+
 ## References
 
 ##### Links
