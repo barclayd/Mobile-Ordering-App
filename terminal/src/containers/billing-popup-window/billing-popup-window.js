@@ -13,6 +13,13 @@ const HideStockManagementForAwaitingCollection = false; // Should hide out of st
 
 class BillingPopupWindow extends Component {
 
+    state = {}
+
+    updateOrder = (orderID, status) => {
+        this.setState({closePopup: true}, ()=>this.setState({closePopup: null}));
+        this.props.updateOrderFunc(orderID, status);
+    };
+
     showOutOfStock = () => {
         this.state.showOutOfStock();
     };
@@ -85,14 +92,14 @@ class BillingPopupWindow extends Component {
     buildButtons = (order) => {
         return (
             <div className="popupButtonsContainer">
-                <button className="orderButton">
+                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.REFUNDED)}} className="orderButton">
                     <span className="icon refund"></span>
                     <span className="title">Refund</span>
                     <br />
                     <span className="subtitle">Mark as un-ready</span>
                 </button>
                 {this.renderOutOfStockButton(order)}
-                <button className="orderButton">
+                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.CANCELLED)}} className="orderButton">
                     <span className="icon delete"><FontAwesomeIcon icon={faTrashAlt} /></span>
                     <span className="title">Delete</span>
                     <br />
@@ -112,6 +119,7 @@ class BillingPopupWindow extends Component {
                     showFunc={this.props.showFunc}
                     dismissedHandler={this.props.dismissedHandler}
                     buttons={this.buildButtons(this.props.order)}
+                    closePopup={this.state.closePopup}
             >
                 { this.buildChildren(this.props.order) }
             </PopupWindow>
@@ -123,6 +131,7 @@ BillingPopupWindow.propTypes = {
     order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
     showOutOfStock: PropTypes.func.isRequired, // Function to show out of stock window
+    updateOrderFunc: PropTypes.func.isRequired // Func to post updated order status
 };
 
 export default BillingPopupWindow;

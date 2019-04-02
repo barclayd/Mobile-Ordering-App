@@ -242,9 +242,10 @@ class App extends Component {
     // Pull orders from server by selected collection point
     this.props.loadOrders(collectionPointID);
 
-
     // Load webcam for iOS
-    this.getUserMedia();
+    if (navigator.mediaDevices.getUserMedia) {       
+      navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}})
+    }
   }
 
   // Map redux-recieved data that needs to be manipulated to react state from props
@@ -364,6 +365,11 @@ class App extends Component {
       this.props.updateOrder(ordersToTake[i], "IN_PROGRESS", this.state.selectedStaffMemberID)
     }
   };
+
+  UpdateOrderStatus = (orderID, newStatus) => {
+    this.props.updateOrder(orderID, newStatus, localStorage.getItem("selectedStaffMemberID"));
+    this.addNotification("success", "Order status updated", "Order is now " + newStatus);
+  }
 
   ToggleAwaitingCollapse = (event) => {
     let newStyle = "collapsed";
@@ -607,7 +613,7 @@ class App extends Component {
 
             {/* Build popup windows, assigning their show functions to the App.js state so they're callable */}
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} />
-            <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} updateOrderFunc={this.props.updateOrder}/>
+            <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} updateOrderFunc={this.UpdateOrderStatus}/>
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
             <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.props.barStaff} activeUser={this.state.selectedStaffMemberID} moreAccountsFunc={this.moreAccounts} addStaffByIDToHotbarFunc={this.addStaffByIDToHotbar} />
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderRelaxed} />
