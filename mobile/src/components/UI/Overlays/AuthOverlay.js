@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, Dimensions, AsyncStorage, TextInput, KeyboardAvoidingView} from 'react-native';
-import {Card, Overlay} from 'react-native-elements';
-import { CreditCardInput } from "react-native-credit-card-input";
+import {Text, StyleSheet, View, Dimensions, TextInput, KeyboardAvoidingView} from 'react-native';
+import {Overlay} from 'react-native-elements';
 import ButtonBackground from '../Buttons/ButtonWithBackground';
-import RNPickerSelect from 'react-native-picker-select';
 import * as colours from '../../../styles/colourScheme';
-import Icon from "react-native-vector-icons/FontAwesome";
 import {DismissKeyboard} from '../../../components/Utilities/DismissKeyboard';
 import validate from '../../../utility/validation';
 
@@ -13,9 +10,6 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 class AuthOverlay extends Component {
-    constructor(props) {
-        super(props);
-      }    
 
     state = {
         text: null,
@@ -81,7 +75,6 @@ class AuthOverlay extends Component {
     };
 
     updateInputHandler = (key, value) => {
-        console.log("input handler",key, value)
         this.setState(prevState => {
             return {
                 ...prevState.controls,
@@ -91,7 +84,7 @@ class AuthOverlay extends Component {
                     valid: validate(value, prevState.controls[key]),
                     touched: true
                 },}
-            });  
+            });
     };
 
     render() {
@@ -111,25 +104,9 @@ class AuthOverlay extends Component {
                     <Text style={styles.header}>
                         Login
                     </Text>
-                    {/* <Card
-                        containerStyle={{backgroundColor: colours.midnightBlack, marginTop: 25}}>
-                        <View style={styles.summary}>
-                            <Text style={styles.barOrderDetails1}>
-                                blahh
-                            </Text>
-                            <Text style={{color: colours.midGrey, fontSize: 30}}>
-                                |
-                            </Text>
-                            <Text style={styles.barOrderDetails2}>
-                                bleeeee
-                            </Text>
-                        </View>
-                    </Card> */}
-
 
                     <View style={styles.container}>
-                    {/* <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}> */}
-                    
+
                     <TextInput
                         style={[styles.input]}
                         placeholder='Email'
@@ -142,8 +119,7 @@ class AuthOverlay extends Component {
                         autoCapitalize='none'
                         value={this.state.controls.email.value}
                         onChangeText={(val) => this.updateInputHandler('email', val)}/>
-                    
-                    {/* </View> */}
+
                     </View>
 
                     <View style={[{height: screenHeight / 4}, styles.buttons]}>
@@ -165,7 +141,7 @@ class AuthOverlay extends Component {
                             </ButtonBackground>
                         </View>
                     </View>
-                    
+
                 </View>
             </Overlay>
             </KeyboardAvoidingView>

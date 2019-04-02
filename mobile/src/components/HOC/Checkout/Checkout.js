@@ -13,8 +13,6 @@ import Payment from '../../UI/Overlays/Payment';
 import AuthOverlay from '../../UI/Overlays/AuthOverlay';
 import {showLoginOnNotificationPress} from "../../../utility/navigation";
 import {RNNotificationBanner} from "react-native-notification-banner";
-import { Navigation } from "react-native-navigation";
-import NotificationService from '../../../notifications/NotificationService';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -98,7 +96,7 @@ class Checkout extends Component {
     }
     showNotification() {
         let icon = <Icon name="user" size={24} color="#FFFFFF" family={"FontAwesome"} />;
-        RNNotificationBanner.Normal({duration: 8, onClick: () => this.handleNotificationPress(),  title: `You have not signed in.`, subTitle: `Please sign in or enter email address below.`, withIcon: true, icon: icon});
+        RNNotificationBanner.Normal({duration: 8, onClick: () => this.handleNotificationPress(),  title: `You Are Not Signed In to DrinKing`, subTitle: `Tap here to sign in or alternatively enter your email below.`, withIcon: true, icon: icon});
     }
 
     handleNotificationPress = async () =>  {
@@ -110,7 +108,7 @@ class Checkout extends Component {
           ]).then(sources => {
               showLoginOnNotificationPress(this.getBarId(), sources[0]);
           })
-    }
+    };
     addValue = () => {
     };
 
@@ -157,7 +155,7 @@ class Checkout extends Component {
         this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, basketPrice);
         this.setState({
             showPaymentOverlay: false
-        })
+        });
     };
 
     renderContent = (section, _, isActive) => {
@@ -231,12 +229,11 @@ class Checkout extends Component {
 
     togglePaymentOverlay = async () => {
             this.getAccountName().then((value) => {
-                console.log("userId", value)
                 this.setState({
                     userId: value
-                })
-                if (value == null && this.state.notificationSent === false && this.state.showPaymentOverlay == true){
-                    this.showNotification()
+                });
+                if (value == null && !this.state.notificationSent && this.state.showPaymentOverlay){
+                    this.showNotification();
                 }
             });
         this.setState(prevState => {
@@ -254,7 +251,7 @@ class Checkout extends Component {
             showAuthOverlay: !prevState.showAuthOverlay
             }
         })
-    }
+    };
 
     renderHeader = (section, _, isActive) => {
         return (
