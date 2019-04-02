@@ -14,20 +14,18 @@ const HideStockManagementForAwaitingCollection = false; // Should hide out of st
 
 class BillingPopupWindow extends Component {
 
+    state = {}
+
+    updateOrder = (orderID, status) => {
+        this.setState({closePopup: true}, ()=>this.setState({closePopup: null}));
+        this.props.updateOrderFunc(orderID, status);
+    };
+
     showOutOfStock = () => {
         this.state.showOutOfStock();
     };
 
-    calcTotal = (order) => {
-        if (order) {
-            return order.drinks.reduce((accumulator, item) => {
-                return accumulator + parseFloat(item.price);
-            },0)
-        } else {
-            return 0;
-        }
-    };
-
+    
     buildTitle = (order) => {
         if (order) return "#" + order.collectionId + " options"; else return "";
     };
@@ -42,28 +40,42 @@ class BillingPopupWindow extends Component {
     };
 
     buildChildren = (order) => {
-        if (order) return (
-            <React.Fragment>
-                <h1>DRINKS:</h1>
-                <div className="indentedContent">
-                    <ul className="orderList">
-                        { order.drinks.map((itemData, counter) => {
-                            return (
-                                <li key={counter}>
-                                    <span className="quantity">{itemData.quantity}x</span>
-                                    <span className="item">{itemData.name}</span>
-                                    <span className="price">{penniesToPriceString(itemData.price)}</span>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                    <div className="billingTotal">
-                        <span className="totalText">Total:</span>
-                        <span className="totalAmount">{penniesToPriceString(this.calcTotal(this.props.order))}</span>
+        if (order) {
+            let FeesJSX;
+            if (order.stripeFee) {
+                FeesJSX = (
+                    <li>
+                        <span className="quantity">- </span>
+                        <span className="item">DrinKing fee(s)</span>
+                        <span className="price">{penniesToPriceString(order.stripeFee)}</span>
+                    </li>
+                );
+            }
+
+            return (
+                <React.Fragment>
+                    <h1>DRINKS:</h1>
+                    <div className="indentedContent">
+                        <ul className="orderList">
+                            { order.drinks.map((itemData, counter) => {
+                                return (
+                                    <li key={counter}>
+                                        <span className="quantity">{itemData.quantity}x</span>
+                                        <span className="item">{itemData.name}</span>
+                                        <span className="price">{penniesToPriceString(itemData.price)}</span>
+                                    </li>
+                                )
+                            })}
+                            { FeesJSX }
+                        </ul>
+                        <div className="billingTotal">
+                            <span className="totalText">Total:</span>
+                            <span className="totalAmount">{penniesToPriceString(this.calcTotal(this.props.order))}</span>
+                        </div>
                     </div>
-                </div>
-            </React.Fragment>
-        ); else return "";
+                </React.Fragment>
+            );
+        } else return "";
     };
 
     // Function to hide stock button if the order is awaiting collection (if user setting permits)
@@ -86,14 +98,14 @@ class BillingPopupWindow extends Component {
     buildButtons = (order) => {
         return (
             <div className="popupButtonsContainer">
-                <button className="orderButton">
+                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.REFUNDED)}} className="orderButton">
                     <span className="icon refund"></span>
                     <span className="title">Refund</span>
                     <br />
                     <span className="subtitle">Mark as un-ready</span>
                 </button>
                 {this.renderOutOfStockButton(order)}
-                <button className="orderButton">
+                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.CANCELLED)}} className="orderButton">
                     <span className="icon delete"><FontAwesomeIcon icon={faTrashAlt} /></span>
                     <span className="title">Delete</span>
                     <br />
@@ -113,6 +125,7 @@ class BillingPopupWindow extends Component {
                     showFunc={this.props.showFunc}
                     dismissedHandler={this.props.dismissedHandler}
                     buttons={this.buildButtons(this.props.order)}
+                    closePopup={this.state.closePopup}
             >
                 { this.buildChildren(this.props.order) }
             </PopupWindow>
@@ -124,6 +137,7 @@ BillingPopupWindow.propTypes = {
     order: PropTypes.object,
     showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
     showOutOfStock: PropTypes.func.isRequired, // Function to show out of stock window
+    updateOrderFunc: PropTypes.func.isRequired // Func to post updated order status
 };
 
 export default BillingPopupWindow;

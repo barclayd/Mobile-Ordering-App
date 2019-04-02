@@ -25,6 +25,8 @@ export function* getOrdersByCollectionPointSaga(action) {
                         }
                         status
                         date
+                        price
+                        stripeFee
                         transactionId
                         userInfo {
                             email
@@ -81,6 +83,7 @@ export function* updateOrderSaga(action) {
                             _id
                             name
                             price
+                            stripeFee
                             category
                             }
                             collectionPoint {
@@ -123,6 +126,7 @@ export function* updateOrderSaga(action) {
                             _id
                             name
                             price
+                            stripeFee
                             category
                             }
                             collectionPoint {
