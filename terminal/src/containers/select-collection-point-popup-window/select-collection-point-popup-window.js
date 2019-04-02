@@ -34,7 +34,7 @@ class SelectCollectionPointPopUpWindow extends Component {
                                     <img alt="Pic of collection point" src="https://lefooding.com/media/W1siZiIsIjIwMTYvMDcvMTgvMTRfMzJfMjZfNTk0X2Jhcl9oYXJyeXNfbmV3X3lvcmtfYmFyX3BhcmlzLmpwZyJdLFsicCIsInRodW1iIiwiNjcyeDYwMCJdXQ/bar-harrys-new-york-bar-paris.jpg?sha=3a132a68"/>
                                     <span className="title">{collectionPointData.name}</span>
                                     <br/>
-                                    <span className="description">{collectionPointData.description}</span>
+                                    <span className="description">{collectionPointData.description || "No description."}</span>
                                 </div>
                             )
                         })
@@ -46,8 +46,8 @@ class SelectCollectionPointPopUpWindow extends Component {
 };
 
 SelectCollectionPointPopUpWindow.propTypes = {
-    collectionPoints: PropTypes.array,
     showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()
+    collectionPoints: PropTypes.array.isRequired,
     changeColletionPointFunc: PropTypes.func.isRequired // Func to change the collection point to pull appropriate orders
 };
 
