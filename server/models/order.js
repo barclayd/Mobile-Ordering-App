@@ -36,6 +36,9 @@ const orderSchema = mongoose.Schema({
     },
     stripeFee: {
         type: Number
+    },
+    completionTime: {
+        type: Date
     }
 });
 

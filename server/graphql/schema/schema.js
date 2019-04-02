@@ -158,6 +158,7 @@ type User {
         orderId: ID!
         status: String!
         barStaffId: ID
+        completionTime: String
     }
     
     type Query {
