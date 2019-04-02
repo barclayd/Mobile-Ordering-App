@@ -301,7 +301,6 @@ const resolvers = {
                 if (!userPayment) {
                     throw new Error ('Attempt to process user payment failed.');
                 }
-                console.log(args.orderInput);
                 const createdOrder = new Order({
                     drinks: foundDrinks,
                     collectionPoint: collectionPoint,
@@ -343,6 +342,9 @@ const resolvers = {
             } catch (err) {
                 throw err;
             }
+        },
+        deleteAllOrders:  async (parent, args) => {
+              await Order.find().remove();
         },
         createCollectionPoint: async (parent, args) => {
             try {

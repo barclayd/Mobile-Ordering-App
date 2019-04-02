@@ -158,7 +158,7 @@ class ActiveOrder extends Component {
   render() {
     let qrCode;
     if (this.props.collectionId) {
-      qrCode = <QRCode value={this.props.collectionId} size={300} />;
+      qrCode = <QRCode value={this.props.collectionId.toString()} size={300} />;
     }
     const  drinkNames = [];
     const finalList = [];
@@ -186,7 +186,7 @@ class ActiveOrder extends Component {
             <View style={styles.header}>
               <Text style={styles.status}>Order Successful!</Text>
               <Text style={styles.success}>
-                Thank you for your order{this.state.accountName ? `,${this.state.accountName}`: null}
+                Thank you for your order{this.state.accountName ? `, ${this.state.accountName}`: null}
               </Text>
               <View style={styles.progressCircle}>
                 <OrderStatus orderId={this.props.orderNumber ? this.props.orderNumber : this.state.orderNumber} barName={this.state.barName} showQRCode={() => this.showQRCode()}/>
@@ -199,7 +199,7 @@ class ActiveOrder extends Component {
                   <View key={i} style={styles.receipt}>
                     <View>
                       <Text style={styles.orderSubtitle}>
-                        {drinks.quantity} x {drinks.drinkName}
+                        x{drinks.quantity} {drinks.drinkName}
                       </Text>
                     </View>
                     <View>
@@ -210,8 +210,8 @@ class ActiveOrder extends Component {
               })}
 
               <View style={styles.receipt}>
-                <Text style={styles.orderText}>Sub Total</Text>
-                <Text style={styles.orderText}>£{parseFloat(orderPrice/100).toFixed(2)}</Text>
+                <Text style={styles.orderText}>Order Total</Text>
+                <Text style={styles.orderText}>£{(parseFloat(this.props.orderStatus.price)/100).toFixed(2)}</Text>
               </View>
 
               <View style={styles.button}>
@@ -241,7 +241,7 @@ class ActiveOrder extends Component {
               >
                 <View style={styles.modal}>
                   <Text style={styles.header}>
-                    Order
+                    Order {""}
                     <Text style={{ color: colours.orange }}>
                       #{this.state.orderStatus.collectionId ? this.state.orderStatus.collectionId : this.props.collectionId}
                     </Text>
@@ -254,13 +254,13 @@ class ActiveOrder extends Component {
                     }}
                   >
                     <Text style={styles.infoText}>
-                      Collection:
+                      Collection: {""}
                       <Text style={{ color: colours.orange }}>
                         {this.props.orderStatus.collectionPoint.name}
                       </Text>
                     </Text>
                     <Text style={styles.infoText}>
-                      Order Time:
+                      Order Time: {""}
                       <Text style={{ color: colours.orange }}>
                         {new Date(parseInt(this.props.orderStatus.date)).toTimeString().slice(0, 5)}
                       </Text>
