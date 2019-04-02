@@ -31,12 +31,12 @@ export function* submitOrderSaga(action) {
     };
 
     const token = yield stripe.createTokenWithCard(payment);
-    const orderPrice = parseFloat(action.basketPrice) * 100;
-
+    const orderPrice = parseInt(action.totalPrice);
     const date = new Date().toISOString();
     const userToken = yield AsyncStorage.getItem('token');
     const user = yield AsyncStorage.getItem('userId');
     const collectionId = action.paymentInfo.collectionPoint.id;
+    const stripeFee = parseInt(action.stripeFee);
 
     yield put(actions.submitOrderStart());
     let drinksList = [];
@@ -52,7 +52,7 @@ export function* submitOrderSaga(action) {
     try {
         let requestBody = {
             query: `
-                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID, $stripeFee: Int) {
+                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Int!, $status: String!, $date: String!, $userInfo: ID, $stripeFee: Int) {
                     createOrder(orderInput: {
                         drinks: $drinks
                         collectionPoint: $collectionPoint
@@ -91,7 +91,7 @@ export function* submitOrderSaga(action) {
                 date: date,
                 userInfo: user,
                 price: orderPrice,
-                stripeFee: action.stripeFee
+                stripeFee: stripeFee
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody), {
