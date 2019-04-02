@@ -2,14 +2,13 @@ import React, {component} from "react";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { connect } from "react-redux";
 import Table from "./table";
-import TabbedCategories from "../../../../mobile/src/screens/ViewDrinks/ViewDrinks";
-import * as actions from "../../../../mobile/src/store/actions";
+import * as actions from "../../store/actions";
 
 class Menu extends React.Component {
-    state = {
-      drinks: [],
-      drinksApi: false,
-    };
+  state = {
+    drinks: [],
+    drinksApi: false,
+  };
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
@@ -69,6 +68,46 @@ class Menu extends React.Component {
   };
 
   render() {
+    const tableData = this.state.categories.map((category, index) => {
+      return (<MuiThemeProvider tabLabel={category} key={index}>
+        <div className="Menu">
+          <Table
+            handleRemove={this.handleRemove}
+            startEditing={this.startEditing}
+            editIdx={this.state.editIdx}
+            stopEditing={this.stopEditing}
+            handleSave={this.handleSave}
+            data={this.props.drinks}
+
+            header={[
+              {
+                name: "Name",
+                prop: "name"
+              },
+              {
+                name: "Category",
+                prop: "category"
+              },
+              {
+                name: "Nutrition Info",
+                prop: "nutritionInfo"
+              },
+              {
+                name: "Price",
+                prop: "price"
+              }
+            ]}
+
+          />
+        </div>
+      </MuiThemeProvider>)
+    })
+
+    return (
+     <div>{ this.state.categories.length > 0 ? tableData : <React.Fragment/> }</div>
+    )
+
+
     // <MuiThemeProvider tabLabel={category} key={index}>
     //  <TabbedCategories
     //   key={category}
@@ -76,46 +115,12 @@ class Menu extends React.Component {
     //   drinks={this.getDrinksByCategory(index)}
     // />
     //</MuiThemeProvider>
-    {
-      this.state.categories.length > 0 ? this.state.categories.map((category, index) => {
-          return (
-            <MuiThemeProvider tabLabel={category} key={index}>
-              <div className="Menu">
-                <Table
-                  handleRemove={this.handleRemove}
-                  startEditing={this.startEditing}
-                  editIdx={this.state.editIdx}
-                  stopEditing={this.stopEditing}
-                  handleSave={this.handleSave}
-                  data={this.props.drinks}
 
-                  header={[
-                    {
-                      name: "Name",
-                      prop: "name"
-                    },
-                    {
-                      name: "Category",
-                      prop: "category"
-                    },
-                    {
-                      name: "Nutrition Info",
-                      prop: "nutritionInfo"
-                    },
-                    {
-                      name: "Price",
-                      prop: "price"
-                    }
-                  ]}
-                />
-              </div>
-            </MuiThemeProvider>
-          )
-
-        }
-      ) : null
-    }
-  };
+    //         return ({
+    //   {this.state.categories.length > 0 ?
+    //           }) : <React.Fragment/>;
+    // };
+  }
 }
 
 const mapStateToProps = state => {
