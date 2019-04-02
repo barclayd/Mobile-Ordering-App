@@ -1,6 +1,8 @@
 import React from "react";
-import { Table } from "material-ui/Table";
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
 import Editable from "./editable";
+import EditIcon from "material-ui/svg-icons/image/edit";
+import TrashIcon from "material-ui/svg-icons/action/delete";
 
 //code adapted from : https://github.com/benawad/basic-react-form/blob/8_cancel_edit/src/Table.js
 
@@ -16,8 +18,8 @@ const row = (
 ) => {
   const currentlyEditing = editIdx === i;
   return currentlyEditing ? (
-    <TableRow key={`inline-form-${i}`} selectable={false}>
-      <InlineForm
+    <TableRow key={`editable-${i}`} selectable={false}>
+      <Editable
         handleSave={handleSave}
         header={header}
         x={x}

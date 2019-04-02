@@ -1,9 +1,8 @@
 import React, {component} from "react";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Table from "./table";
-import { Header } from "react-mdl";
 
-class Menu extends Component {
+class Menu extends React.Component {
   state = { //hardcoded for now
     data: [
       {
@@ -57,7 +56,23 @@ class Menu extends Component {
                stopEditing={this.stopEditing}
                handleSave={this.handleSave}
                data={this.state.data}
-             Header = {[]}
+             Header = {[{
+               name: "Name",
+               prop: "name"
+             },
+               {
+                 name: "Category",
+                 prop: "category"
+               },
+               {
+                 name: "Nutrition Info",
+                 prop: "nutritionInfo"
+               },
+               {
+                 name: "Price",
+                 prop: "price"
+               }
+               ]}
              />
         </div>
       </MuiThemeProvider>
