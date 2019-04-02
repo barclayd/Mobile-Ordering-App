@@ -38,7 +38,6 @@ class Editable extends React.Component {
             name={y.prop}
             onChange={this.change}
             value={this.state.values[y.prop]}
-            errorText={this.state.errors[y.prop]}
           />
         </TableRowColumn>
       )),
