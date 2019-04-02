@@ -1,5 +1,6 @@
 import React from 'react';
 import TextField from "material-ui/TextField";
+import CheckIcon from "material-ui/svg-icons/navigation/check";
 import CancelIcon from "material-ui/svg-icons/navigation/cancel";
 import { TableRow, TableRowColumn } from "material-ui/Table";
 
@@ -12,6 +13,21 @@ class Editable extends React.Component {
       }
     }
   }
+
+  change = e => {
+    const { name, value } = e.target;
+    this.setState(state => ({
+      values: {
+        ...state.values,
+        [name]: value
+      }
+    }));
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+    this.props.handleSave(this.props.i, this.state.values);
+  };
 
   render() {
     const { header, x, i } = this.props;
@@ -27,6 +43,7 @@ class Editable extends React.Component {
         </TableRowColumn>
       )),
       <TableRowColumn key="icon-row-column">
+        <CheckIcon onClick={this.onSubmit} />
         <CancelIcon onClick={this.props.stopEditing} />
       </TableRowColumn>
     ];
