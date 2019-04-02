@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import './setUp.scss'
 
 export default class SetUp extends React.Component {
   constructor(props) {
@@ -54,7 +55,7 @@ export default class SetUp extends React.Component {
 function ChoiceButton(props) {
   return(
     <div>
-      <button onClick={() => props.handleClick(props.choice)}>{props.answer}</button>
+      <button className="cool-button" onClick={() => props.handleClick(props.choice)}>{props.answer}</button>
     </div>
   )
 }
@@ -80,7 +81,7 @@ function List(props) {
     choices.push(<ChoiceButton choice={i} handleClick={props.handleClick} answer={props.data.multiChoice[i]} />)
   }
   return(
-    <div>
+    <div className="txt">
       {choices}
     </div>
   )

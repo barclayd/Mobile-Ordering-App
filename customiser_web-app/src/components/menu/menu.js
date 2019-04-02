@@ -45,7 +45,7 @@ class Menu extends React.Component {
     }));
     this.stopEditing();
   };
-  
+
   render() {
     return (
       <MuiThemeProvider>
