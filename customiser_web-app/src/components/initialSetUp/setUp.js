@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './setUp.scss'
-import { Cell, Grid } from "react-mdl";
 
 export default class SetUp extends React.Component {
   constructor(props) {

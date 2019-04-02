@@ -10,8 +10,6 @@ export default class main_page extends Component {
       <div style={{ width: '100%', margin: 'auto' }}>
         <Grid className="main-grid">
           <Cell col={12}>
-
-
             <div className="main">
               <img src={logo} width="10%" height="10%"/>;
               <h1>DrinKing Customiser Application</h1>
