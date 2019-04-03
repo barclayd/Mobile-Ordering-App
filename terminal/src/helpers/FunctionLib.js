@@ -23,7 +23,6 @@ export const rebuildDateAndDrinksForOrderWithQuantities = (ordersArray) => {
         order.drinks = rebuildDrinksWithQuantities(order.drinks)
     });
 
-
     return newOrdersArray;
 };
 
