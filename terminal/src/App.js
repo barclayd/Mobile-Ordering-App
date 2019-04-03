@@ -430,7 +430,7 @@ class App extends Component {
     if (!this.state.serverOrders) {
       return this.buildLoadingScreen("Loading orders...");
     } else if (!this.props.collectionPoints || this.props.collectionPoints.length === 0) { // Terminal requires at least 1 collection point
-      return this.buildLoadingScreen("Loading collection points...");
+      return this.buildLoadingScreen("Loading collection points..." + window.location.href);
     } else if (!this.props.barStaff || this.props.barStaff.length === 0) { // Terminal requires at least 1 staff to load
       return this.buildLoadingScreen("Loading bar staff...");
 
