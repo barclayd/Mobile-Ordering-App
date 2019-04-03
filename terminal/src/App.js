@@ -362,8 +362,8 @@ class App extends Component {
     }
   };
 
-  UpdateOrderStatus = (orderID, newStatus) => {
-    this.props.updateOrder(orderID, newStatus, localStorage.getItem("selectedStaffMemberID"));
+  UpdateOrderStatus = (orderID, newStatus, barStaffId) => {
+    this.props.updateOrder(orderID, newStatus, localStorage.getItem("selectedStaffMemberID") || barStaffId);
     this.addNotification("success", "Order status updated", "Order is now " + newStatus);
   };
 
@@ -611,7 +611,7 @@ class App extends Component {
 
             {/* Build popup windows, assigning their show functions to the App.js state so they're callable */}
             <BillingPopupWindow showFunc={callable => this.setState({showBilling: callable})} showOutOfStock={this.showOutOfStock} order={this.state.orderForPopup} updateOrderFunc={this.UpdateOrderStatus}/>
-            <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} updateOrderFunc={this.UpdateOrderStatus}/>
+            <PickupPopupWindow showFunc={callable => this.setState({showPickup: callable})} showOutOfStock={this.showOutOfStock} dismissedHandler={this.pickupPopupDismissed} order={this.state.orderForPopup} updateOrderFunc={this.UpdateOrderStatus} selectedStaffMemberID={this.state.selectedStaffMemberID}/>
             <NotesPopupWindow showFunc={callable => this.setState({showNotes: callable})} order={this.state.orderForPopup} />
             <MoreAccountsPopupWindow showFunc={callable => this.setState({showMoreAccounts: callable})} barStaff={this.props.barStaff} activeUser={this.state.selectedStaffMemberID} moreAccountsFunc={this.moreAccounts} addStaffByIDToHotbarFunc={this.addStaffByIDToHotbar} />
             <ManualPickupPopupWindow showFunc={callable => this.setState({showManualPickup: callable})} pickupOrderFunc={this.pickupOrderRelaxed} />

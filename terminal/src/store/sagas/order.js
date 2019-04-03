@@ -130,7 +130,6 @@ export function* updateOrderSaga(action) {
                             _id
                             name
                             price
-                            stripeFee
                             category
                             }
                             collectionPoint {
@@ -150,6 +149,7 @@ export function* updateOrderSaga(action) {
                                 lastName
                             }
                             price
+                            stripeFee
                         }
                     }
                 `,
