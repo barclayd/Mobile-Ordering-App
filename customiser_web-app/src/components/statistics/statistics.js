@@ -1,96 +1,61 @@
-  import React, { Component } from 'react';
-  import {takeLatest} from 'redux-saga/effects';
-  import ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import FusionCharts from 'fusioncharts';
+import Charts from 'fusioncharts/fusioncharts.charts';
+import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+import ReactFC from 'react-fusioncharts';
+ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
 
-  import fusioncharts from 'fusioncharts';
-  import charts from 'fusioncharts/fusioncharts.charts';
-  import ReactFC from 'react-fusioncharts';
-  import theme from 'fusioncharts/themes/fusioncharts.theme.fint';
-  import * as actionTypes from '../../store/actions/actionTypes';
-  import { getOrdersByCollectionPointSaga } from "../../store/sagas/order";
-  import * as actions from "../../store/actions";
-  import axios from "../../store/axios-instance";
-  import { connect } from "react-redux";
 
-  //passing these as dependencies
-  charts(fusioncharts);
-  theme(fusioncharts);
+// export default class statistics extends React.Component {
 
-  export default class statistics extends Component {
-    state = {
-      order: [],
-      orderApi: false,
-    };
-    constructor(props) {
-      super(props);
-      this.state = {
-        msg: "Loading data"
-      };
-    }
-
-    componentWillReceiveProps(nextProps) {
-      if (!nextProps.loading) {
-        this.props.orders.map()
-          const ChartConfig = generateChartConfig(data, {
-            "caption": "Number of orders in WHSmith",
-            "captionfontsize": "20",
-            "theme": "fint",
-            "yaxisminvalue": "0"
-          },
-          "column2d");
-      })
-    .catch((err) => {
-        console.log(err);
-        this.setState({
-          msg: String(err)
-        });
-      });
-      }
-    }
-
-    render() {
-      return (
-        <div id="chart-viewer">
-          {this.state.msg}
-        </div>
-      );
-    }
-  }
-  function generateChartConfig(data,chartAttr,chartType){
-    const numberOfOrders = ["WHSmith", "otherCollectionPoint"
-    ];
-    const chartData = data.map((d, i) => {
-      return {
-        label: numberOfOrders[i],
-        value: "null"
-      };
-    });
-    const dataSource = {
-      "chart": chartAttr,
-      "data": chartData
-    };
-    const revenueChartConfigs = {
-      type: chartType,
-      width:800,
-      height: 400,
-      dataFormat: 'json',
-      dataSource: dataSource
-
-    };
-    return revenueChartConfigs;
-  }
-
-  const mapStateToProps = state => {
-    return {
-      orders: state.orders.orders,
-      loading:state.orders.loading
-    };
+  const dataSource = {
+    chart: {
+      caption: 'Countries With Most Oil Reserves [2017-18]',
+      subCaption: 'In MMbbl = One Million barrels',
+      xAxisName: 'Country',
+      yAxisName: 'Reserves (MMbbl)',
+      numberSuffix: 'K',
+      theme: 'fusion'
+    },
+    data: [
+      { label: 'Venezuela', value: '290' },
+      { label: 'Saudi', value: '260' },
+      { label: 'Canada', value: '180' },
+      { label: 'Iran', value: '140' },
+      { label: 'Russia', value: '115' },
+      { label: 'UAE', value: '100' },
+      { label: 'US', value: '30' },
+      { label: 'China', value: '30' }
+    ]
   };
+//}
 
-  const mapDispatchToProps = dispatch => {
-    return {
-      FindOrdersByCollectionPoint: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint)),
-    };
+  const chartConfigs = {
+    type: 'column2d',
+    width: 600,
+    height: 400,
+    dataFormat: 'json',
+    dataSource: dataSource
   };
+export default class statistics extends React.Component {
+  render () {
+    return <ReactFC {...chartConfigs} />;
+  }
+}
+const mapStateToProps = state => {
+  return {
+    orders: state.orders.orders,
+    loading: state.orders.loading
+  };
+};
 
-  export default connect(mapStateToProps, mapDispatchToProps)(statistics);
+const mapDispatchToProps = dispatch => {
+  return {
+    FindOrdersByCollectionPoint: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(statistics);
+
+ReactDOM.render(<ReactFC {...chartConfigs} />, document.getElementById('root'));
