@@ -41,6 +41,12 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 
 * App Deployment
 * Server Deployment
+* Ingredients schema support
+* API protection
+* Customer ratings
+* Loyalty Schemes 
+* Possible Gamification features to promote loyalty and rewards 
+
 ---
 #### References
 
