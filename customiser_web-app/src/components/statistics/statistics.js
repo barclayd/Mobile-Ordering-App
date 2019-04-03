@@ -18,7 +18,7 @@ const WHSmithData = {
     subCaption: 'In WHSMiths',
     xAxisName: 'Order Point',
     yAxisName: 'Number of orders',
-    numberSuffix: 'K',
+    numberSuffix: '',
     theme: 'fusion'
   },
   data: [
