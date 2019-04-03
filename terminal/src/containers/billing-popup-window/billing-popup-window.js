@@ -70,7 +70,7 @@ class BillingPopupWindow extends Component {
                         </ul>
                         <div className="billingTotal">
                             <span className="totalText">Total:</span>
-                            <span className="totalAmount">{penniesToPriceString(this.calcTotal(this.props.order))}</span>
+                            <span className="totalAmount">{penniesToPriceString(order.price)}</span>
                         </div>
                     </div>
                 </React.Fragment>

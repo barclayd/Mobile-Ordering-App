@@ -81,16 +81,16 @@ export function* updateOrderSaga(action) {
                             _id
                             collectionId
                             drinks {
-                            _id
-                            name
-                            price
-                            stripeFee
-                            category
+                                _id
+                                name
+                                price
+                                category
                             }
                             collectionPoint {
-                            _id
-                            collectionPointId
+                                _id
+                                collectionPointId
                             }
+                            stripeFee
                             status
                             date
                             transactionId
