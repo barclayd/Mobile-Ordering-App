@@ -6,6 +6,8 @@ Opportunity as our development team is located in Cardiff with a wealth of stude
 Problem is identified and backed by each member, therefore, we support the decision to commit
 Ourselves to develop our drinking solution.
 
+## Code style
+  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 ## System Architecture  
 
