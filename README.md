@@ -32,10 +32,10 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 
 ### Limitations of Current Solution
 
-Cashless
-Bar equipment is expensive.
-Payment gateway - Stripe - vendor lock in. unprofitable with small charges and no additional fees.
-No user cases yet.
+- Cashless
+- Bar equipment is expensive.
+- Payment gateway - Stripe - vendor lock in. unprofitable with small charges and no additional fees.
+- No use cases / success stories.
 
 ### Future plans for expansion
 
