@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import * as actions from '../../store/actions/index';
+import * as actions from '../../store/actions';
 import * as colours from '../../styles/colourScheme';
 import {Dimensions, StyleSheet, View, Text, AsyncStorage} from 'react-native';
 import MapView, {Marker, Callout} from 'react-native-maps';
-import {Card} from 'react-native-elements';
-import ButtonWithBackground from '../UI/Buttons/ButtonWithBackground';
+import {Card} from 'react-native-elements/src/index';
+import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import {distanceCalculator} from '../../utility/maps';
 import Icon from "react-native-vector-icons/FontAwesome";
 import {RNNotificationBanner} from "react-native-notification-banner";

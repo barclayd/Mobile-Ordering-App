@@ -6,8 +6,8 @@ import CollectionPointStockImage from '../../assets/collectionPointStockImage.jp
 
 
 class SelectCollectionPointPopUpWindow extends Component {
-    state = { closePopup: null }
-    
+    state = { closePopup: null };
+
     render () {
         return (
             <PopupWindow
@@ -23,13 +23,13 @@ class SelectCollectionPointPopUpWindow extends Component {
                         this.props.collectionPoints.map((collectionPointData, counter) => {
                             return (
                                 <div
-                                        key={counter} 
+                                        key={counter}
                                         onClick={()=>{
                                             this.setState({closePopup: true}, () => {
                                                 this.setState({closePopup: null});
                                                 this.props.changeColletionPointFunc(collectionPointData._id);
                                             });
-                                        }} 
+                                        }}
                                         className="button collectionPointButton">
 
                                     <img alt="Pic of collection point" src={CollectionPointStockImage}/>
@@ -44,7 +44,7 @@ class SelectCollectionPointPopUpWindow extends Component {
             </PopupWindow>
         )
     }
-};
+}
 
 SelectCollectionPointPopUpWindow.propTypes = {
     showFunc: PropTypes.func, // Callback function held in parent that calls popup window instance's ShowPopup()

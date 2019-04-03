@@ -17,7 +17,7 @@ import * as actions from '../../store/actions/index';
 import { Navigation } from "react-native-navigation";
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Checkout from "../../components/HOC/Checkout/Checkout";
+import Checkout from "../../containers/Checkout/Checkout";
 
 class ViewMenus extends Component {
   state = {

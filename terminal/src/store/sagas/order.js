@@ -72,11 +72,12 @@ export function* updateOrderSaga(action) {
         if (action.barStaffId) {
             requestBody = {
                 query: `
-                    mutation UpdateOrder($orderId: ID!, $status: String!, $barStaffId: ID!) {
+                    mutation UpdateOrder($orderId: ID!, $status: String!, $barStaffId: ID! $completionTime: String) {
                         updateOrder(orderStatusInput: {
                             orderId: $orderId
                             status: $status
                             barStaffId: $barStaffId
+                            completionTime: $completionTime
                         }) {
                             _id
                             collectionId
@@ -109,17 +110,19 @@ export function* updateOrderSaga(action) {
                 variables: {
                     orderId: action.orderId,
                     status: action.status,
-                    barStaffId: action.barStaffId
+                    barStaffId: action.barStaffId,
+                    completionTime: action.completionTime
                 }
             };
         } else {
             requestBody = {
                 query: `
-                    mutation UpdateOrder($orderId: ID!, $status: String!, $barStaffId: ID!) {
+                    mutation UpdateOrder($orderId: ID!, $status: String!, $completionTime: String) {
                         updateOrder(orderStatusInput: {
                             orderId: $orderId
                             status: $status
                             barStaffId: $barStaffId
+                            completionTime: $completionTime
                         }) {
                             _id
                             collectionId
@@ -153,7 +156,7 @@ export function* updateOrderSaga(action) {
                 variables: {
                     orderId: action.orderId,
                     status: action.status,
-                    barStaffId: action.barStaffId
+                    completionTime: action.completionTime
                 }
             };
         }
