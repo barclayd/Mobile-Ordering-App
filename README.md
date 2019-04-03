@@ -6,7 +6,7 @@ Problem is identified and backed by each member, therefore, we support the decis
 Ourselves to develop our drinking solution.
 
 ## Code style
-We used React & React Native's baked-in ESLint scripts to ensure all teammates
+Throughout all projects, we used React & React Native's baked-in ESLint scripts to ensure all teammates
 wrote code following a specific syntax and style.
 
 This kept code consistent and readable for all team members and will help new 
@@ -20,10 +20,6 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 ![51801019_289983681694391_8594841858423652352_n](/uploads/642f2bacf40070ed1c766db3285233df/51801019_289983681694391_8594841858423652352_n.png)
 
 
-<br/>
-<br/>
-<br/>
-
 # GraphQL server
 ## Tech/framework used
 * Frontend library - ReactNative
@@ -34,7 +30,8 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 <img width="800" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
 
 ## Features
-- [x] Sample feature
+- [x] Bar Staff terminal app can listen to changes such as new orders.
+- [x] Mobile App updates order status when Terminal app changes the status or order such as “IN_PROGRESS” TO “AWAITING_COLLECTION”
 
 ## Available Scripts
 ## Tests and Test Strategy
@@ -58,13 +55,18 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 ## Design and Usability Decisions
 
 As a team, we opted for an unencrypted QR code. Following on from large entities such as KFC and McDonalds.
-The decision was taken to allow our users to scan their codes faster and more reliably with an unencrypted QR code.
+The decision was taken to allow our users to scan their codes faster and more reliably than a complicated encrypted QR code.
 The information which can be seen from scanning another user’s QR code is simply what would be shown on a physical receipt, that being their order number. 
-Our response to this is warning the user as to not share their QR codes with other users.
+Our response to this is warning the user to not share their QR codes with other users.
 
 Our mobile App uses react-navigation-v2. (https://github.com/wix/react-native-navigation/tree/v2)
 This decision was taken to provide our users with ergonomic screen layouts and navigation links such as our intuitive side drawer and centre stack screen which screens can be pushed on top of.
 
+Our customer mobile app has been inspired by black mirror prototype apps which use a linear gradient and background image together which creates a translucent effect. 
+
+![51874735_414641755952587_1458543474650382336_n](/uploads/d492c80272616dfab7a9d22667bafc36/51874735_414641755952587_1458543474650382336_n.png)
+
+![nosedive-kit-preview-](/uploads/cced6c49a4b0b11f5a570c4829e3306b/nosedive-kit-preview-.jpg)
 
 ## Features
 - [x] Create account
