@@ -25,7 +25,7 @@ export const rebuildDateAndDrinksForOrderWithQuantities = (ordersArray) => {
 
 
     return newOrdersArray;
-}
+};
 
 
 // Strips duplicate drinks from drinks array, adding a .quantity field to them

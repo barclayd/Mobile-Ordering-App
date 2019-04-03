@@ -21,7 +21,7 @@ import Modal from "react-native-modal";
 import ButtonBackground from "../../components/UI/Buttons/ButtonWithBackground";
 import NotificationService from '../../../src/notifications/NotificationService';
 import appConfig from '../../../app.json';
-import OrderStatus from './OrderStatus';
+import OrderStatus from '../../containers/OrderStatus/OrderStatus';
 
 class ActiveOrder extends Component {
   constructor(props) {

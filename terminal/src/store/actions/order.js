@@ -28,12 +28,13 @@ export const getOrdersByCollectionPointFail = error => {
 };
 
 
-export const updateOrder = (orderId, status, barStaffId) => {
+export const updateOrder = (orderId, status, barStaffId, completionTime) => {
     return {
         type: actionTypes.UPDATE_ORDER,
         orderId,
         status,
-        barStaffId
+        barStaffId,
+        completionTime
     };
 };
 export const updateOrderStart = () => {

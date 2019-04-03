@@ -3,15 +3,15 @@ import {View, Text, StyleSheet, Dimensions, Animated, PanResponder, ScrollView, 
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome";
 import Accordion from 'react-native-collapsible/Accordion';
-import {ListItem, Card, withBadge} from 'react-native-elements';
-import * as colours from '../../../styles/colourScheme';
+import {ListItem, Card, withBadge} from 'react-native-elements/src/index';
+import * as colours from '../../styles/colourScheme';
 import {connect} from 'react-redux';
-import * as actions from "../../../store/actions/index"
-import ApplePay from '../../../assets/apple-pay.svg';
-import ButtonBackground from '../../UI/Buttons/ButtonWithBackground';
-import Payment from '../../UI/Overlays/Payment';
-import AuthOverlay from '../../UI/Overlays/AuthOverlay';
-import {showLoginOnNotificationPress} from "../../../utility/navigation";
+import * as actions from "../../store/actions"
+import ApplePay from '../../assets/apple-pay.svg';
+import ButtonBackground from '../../components/UI/Buttons/ButtonWithBackground';
+import Payment from '../Overlays/Payment/Payment';
+import AuthOverlay from '../Overlays/Auth/AuthOverlay';
+import {showLoginOnNotificationPress} from "../../utility/navigation";
 import {RNNotificationBanner} from "react-native-notification-banner";
 
 const screenHeight = Dimensions.get('window').height;
@@ -93,11 +93,12 @@ class Checkout extends Component {
 
     getBarId = async () => {
         return await AsyncStorage.getItem("barId");
-    }
+    };
+
     showNotification() {
         let icon = <Icon name="user" size={24} color="#FFFFFF" family={"FontAwesome"} />;
         RNNotificationBanner.Normal({duration: 8, onClick: () => this.handleNotificationPress(),  title: `You Are Not Signed In to DrinKing`, subTitle: `Tap here to sign in or alternatively enter your email below.`, withIcon: true, icon: icon});
-    }
+    };
 
     handleNotificationPress = async () =>  {
         Promise.all([
@@ -138,21 +139,21 @@ class Checkout extends Component {
         let totalPrice = 0;
         if (this.props.basket) {
             this.props.basket.map(drink => {
-                totalPrice += (drink.price /100 * drink.quantity);
+                totalPrice += (drink.price * drink.quantity);
             });
         }
-        return (totalPrice).toFixed(2);
+        return (totalPrice);
     };
 
     totalPrice = () => {
         const basketPrice = this.basketPrice();
-        let totalCost = parseFloat(basketPrice);
+        let totalCost = parseInt(basketPrice);
         let stripeFee = 0;
-        if (basketPrice < 5) {
-            stripeFee = parseFloat((basketPrice * 0.014) + 0.2);
+        if (basketPrice < 500) {
+            stripeFee = parseInt((basketPrice * 0.014) + 20);
         }
-        totalCost += parseFloat(stripeFee);
-        return totalCost.toFixed(2);
+        totalCost += parseInt(stripeFee);
+        return totalCost;
     };
 
     onEditPress = () => {
@@ -162,8 +163,8 @@ class Checkout extends Component {
     };
 
     onSubmitOrder = (paymentInfo) => {
-        const basketPrice = this.basketPrice()*100;
-        const totalPrice = this.totalPrice()*100;
+        const basketPrice = this.basketPrice();
+        const totalPrice = this.totalPrice();
         const stripeFee = totalPrice - basketPrice;
         this.props.submitOrder(this.props.basket, this.props.componentId, paymentInfo, totalPrice, stripeFee);
         this.setState({
@@ -368,13 +369,13 @@ class Checkout extends Component {
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Animated.View style={{ height: animatedImageHeight, width: animatedImageHeight, marginLeft: animatedImageMarginLeft }}>
                                     <Image style={{ flex: 1, width: null, height: null }}
-                                           source={require('../../../assets/Logo.png')} />
+                                           source={require('../../assets/Logo.png')} />
                                 </Animated.View>
 
                             <Animated.View style={{ opacity: animatedTextOpacity, }}>
                                 <Animated.Text style={{ opacity: animatedTextOpacity, fontSize: 18, paddingLeft: 10 }}>
                                     <Text style={styles.barOrderDetails1}>Drinks: {this.basketItems()}        </Text>
-                                    <Text style={styles.barOrderDetails2}>    £{this.basketPrice()} </Text>
+                                    <Text style={styles.barOrderDetails2}>    £{(this.basketPrice()/100).toFixed(2)} </Text>
                                 </Animated.Text>
                             </Animated.View>
                             <Animated.View style={{ opacity: animatedTextOpacity, marginRight: 40 }}>
@@ -405,7 +406,7 @@ class Checkout extends Component {
                                                 |
                                             </Text>
                                         <Text style={styles.barOrderDetails2}>
-                                            Total Price: £{this.basketPrice()}
+                                            Total Price: £{(this.basketPrice()/100).toFixed(2)}
                                         </Text>
                                         </View>
                                     </Card>
