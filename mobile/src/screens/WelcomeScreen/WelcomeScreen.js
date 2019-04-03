@@ -13,7 +13,7 @@ import {
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import validate from '../../utility/validation';
-import MapDisplay from '../../components/MapDisplay/MapDisplay';
+import MapDisplay from '../../containers/MapDisplay/MapDisplay';
 import {setLoginSettings, setLoginScreen} from '../../utility/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Swiper from 'react-native-swiper';

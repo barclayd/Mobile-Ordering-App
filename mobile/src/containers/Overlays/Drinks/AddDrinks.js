@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
-import { Overlay } from "react-native-elements";
+import { Overlay } from "react-native-elements/src/index";
 import { SimpleStepper } from "react-native-simple-stepper";
 import * as colours from "../../../styles/colourScheme";
 import * as actions from "../../../store/actions";

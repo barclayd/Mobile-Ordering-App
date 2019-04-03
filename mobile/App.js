@@ -13,7 +13,7 @@ import SwitchBar from './src/screens/SwitchBar/SwitchBar';
 import {setWelcomePageRoot, setDefaultSettings} from './src/utility/navigation';
 import * as screens from './src/utility/screens';
 import ViewMenus from './src/screens/Menus/Menus';
-import ViewCheckout from './src/components/HOC/Checkout/Checkout';
+import ViewCheckout from './src/containers/Checkout/Checkout';
 import { ApolloProvider} from 'react-apollo';
 import {WebSocketLink} from "apollo-link-ws";
 import { getMainDefinition } from 'apollo-utilities';
