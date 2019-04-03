@@ -116,6 +116,7 @@ class App extends Component {
 
   changeCollectionPoint = (collectionPointID) => {
     console.log("Changed collection point", collectionPointID)
+    this.addNotification("info", "Collection point changed", "Loading new orders...")
 
     // Update localstorage so same collection point shows after page reload
     localStorage.setItem("selectedcollectionPointID", collectionPointID)
