@@ -250,12 +250,11 @@ class App extends Component {
 
   // Map redux-recieved data that needs to be manipulated to react state from props
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.serverOrders.length === 0) return;
     let newServerOrders = rebuildDateAndDrinksForOrderWithQuantities(this.props.serverOrders);
     let areArraysEqual = JSON.stringify(newServerOrders) === JSON.stringify(prevState.serverOrders);
-
+    
     // only update chart if the data has changed
-    if (!this.props.loading && !areArraysEqual) {
+    if (!this.props.loading && (prevState.serverOrders == null || !areArraysEqual)) {
       this.loadOrdersIntoStateIndexArrays(newServerOrders); // Load orders into arrays
 
       this.setState({
@@ -431,11 +430,14 @@ class App extends Component {
   };
 
   render() {
-    if (!this.state.serverOrders || this.state.serverOrders.length === 0) {
+    if (!this.state.serverOrders) {
       return this.buildLoadingScreen("Loading orders...")
     
-    } else if (!this.props.collectionPoints || this.props.collectionPoints.length === 0) {
+    } else if (!this.props.collectionPoints || this.props.collectionPoints.length === 0) { // Terminal requires at least 1 collection point
       return this.buildLoadingScreen("Loading collection points...")
+
+    } else if (!this.props.barStaff || this.props.barStaff.length === 0) { // Terminal requires at least 1 staff to load
+      return this.buildLoadingScreen("Loading bar staff...")
 
     } else {
       return (
@@ -447,6 +449,7 @@ class App extends Component {
                 // Build staff buttons from recently switched-into accounts
                 this.state.staffHotBarOrder.map((staffHotBarData) => {
                   let staffData = this.props.barStaff.find(entry => entry._id === staffHotBarData.id);
+                  if (!staffData) return null; // Don't attempt to add button if the staff member referenced in localstorage has been deleted
                   return this.buildHotbarButton(staffData)
                 })
               }
