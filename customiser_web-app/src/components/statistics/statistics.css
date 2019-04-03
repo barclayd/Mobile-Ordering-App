@@ -1,0 +1,78 @@
+.header-color {
+    background: #833ab4;
+    background: -webkit-linear-gradient(#451f5e, #451f5e);
+}
+
+.main {
+    padding-top: 2em;
+}
+.main-grid {
+    background: -webkit-linear-gradient(#451f5e, #833ab4);
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-flow: row wrap;
+
+}
+
+.whsmith {
+    text-align: center;
+    float: left;
+    width: 50%;
+}
+.whsmith p {
+    text-align: center;
+}
+
+.whsmith p {
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    padding: 1em;
+}
+
+.topfloor {
+    text-align: center;
+}
+.topfloor h2 {
+    padding-top: 25px;
+}
+
+.topfloor p {
+    text-align: center;
+}
+
+.projects-grid {
+    display: flex;
+}
+
+.avatar-img {
+    height: 200px;
+    padding-top: 5em;
+}
+
+.main {
+    background-color: rgba(0, 0, 0, 0.46);
+    opacity: .9;
+    width: 75%;
+    margin: auto;
+    border-radius: 10px;
+}
+
+.main h1 {
+    font-size: 66px;
+    font-weight: bold;
+    color: white;
+}
+
+.main h2 {
+    font-size: 46px;
+    color: white;
+}
+
+
+
+
+
