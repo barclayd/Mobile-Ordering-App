@@ -23,12 +23,46 @@ Ourselves to develop our drinking solution.
 * Payment handler/Stripe client: Tipsi-stripe
 * Testing: Jest
 
-## Design and Usability Decisions
-### Schema visual
-<img width="800" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
 
 ## Features
-- [x] Sample feature
+- [x] Create account
+- [x] Sign in to account
+- [x] Auto login
+- [x] Find bar by 4 letter code
+- [x] Find bar by maps view
+- [x] Find closest drinking enabled bar.
+- [x] Switch bar.
+- [x] View and select menu
+- [x] Add drinks to virtual basket.
+- [x] Update quantity of drinks selected.
+- [x] Delete basket
+- [x] Create an order
+- [x] Pay for order using card
+- [x] Pay for an order without user authentication.
+- [x] See active order information.
+- [x] See past orders
+- [x] Filter past orders by date and orderId
+
+
+## Design, Usability and Styling Decisions
+
+As a team, we opted for an unencrypted QR code. Following on from large entities such as KFC and McDonalds.
+The decision was taken to allow our users to scan their codes faster and more reliably than a complicated encrypted QR code.
+The information which can be seen from scanning another user’s QR code is simply what would be shown on a physical receipt, that being their order number. 
+Our response to this is warning the user to not share their QR codes with other users.
+
+Our mobile App uses react-navigation-v2. (https://github.com/wix/react-native-navigation/tree/v2)
+This decision was taken to provide our users with ergonomic screen layouts and navigation links such as our intuitive side drawer and centre stack screen which screens can be pushed on top of.
+
+Our customer mobile app has been inspired by black mirror prototype apps which use a linear gradient and background image together which creates a translucent effect. 
+
+![51874735_414641755952587_1458543474650382336_n](/uploads/d492c80272616dfab7a9d22667bafc36/51874735_414641755952587_1458543474650382336_n.png)
+
+![nosedive-kit-preview-](/uploads/cced6c49a4b0b11f5a570c4829e3306b/nosedive-kit-preview-.jpg)
+
+
+### Schema visual
+<img width="800" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
 
 ## Available Scripts
 ## Tests and Test Strategy
