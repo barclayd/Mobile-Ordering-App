@@ -53,7 +53,7 @@ The Terminal web-app allows bar staff to view and manage orders. Terminals opera
 - [x] Stock management UI, allowing individual ingredients and drinks to be marked out of stock
 - [ ] Stock management backend - **BLOCKED:** *No schema table for ingredients*
 - [x] Staff management & easy staff account switching
-- [x] Intelligent queuing algorithm that studies upcoming orders to match and pull similar orders together to help bar staff efficiently complete multiple orders at once
+- [x] Intelligent queuing algorithm
 - [x] Hotbar to switch staff members, dynamically showing as many as possible on-screen in one line
 - [x] Hotbar of staff members is sorted by most recent login from switch accounts window to avoid the need to manually configure staff shifts
 - [x] Staff can mark orders as awaiting pickup, cancelled, refunded or complete (upon pickup)
@@ -82,10 +82,49 @@ Switching accounts via the more accounts window also bumps the staff member to t
 <br>
 Staff may favouritise a single terminal of many operating under the same collection point. For this reason, we did not want the prioritised hotbar order syncing with the DB across terminals, since it’d cause constant jumps when staff have to re-assign their position on the bar. Instead, the hotbar order is stored locally on each terminal they login to.
 
-### Queuing alogirthm
+### Intelligent queuing algorithm
+When a bartender taps to take new orders, our intelligent queuing algorithm analyses upcoming orders before assigning any. The first order will always be taken, to ensure that no matter what you order, you will never have to wait too long to be served. The algorithm then studies each drink in the next 4 orders after, counting matches and differences. If an order is found to meet the threshold for a match (not too many differences and enough matches, as a percentage) then the orders are pulled into the bartender’s feed together. This enables bar staff to efficiently work on multiple orders at once.
+<br>
+At present, a maximum of 3 orders can be taken at once. This prevents bar staff from being overloaded. Only the top 4 orders are studied to ensure that the queue mostly operates under a fair first-in first-out style.
+<br>
+Matching and assigning similar orders drastically improves production time, since bartenders can make all identical drinks at once, reducing trips back and forth to the bar.
+
+### Stock management system
 
 
+### QR encryption
+After many debates with the team, we decided on having QR codes encoded in plain text. QR codes simply hold the human-readable convientiant 4 character order code.
+<br>
+This data, if scanned, is not at all sensitive to the user. Additionally, it already has to be displayed on-screen beside the QR on the receipt in case of automatic scan fails.
+<br>
+Following the trend of big-brands including KFC, Slim Chickens & many more and opting to not encrypt the QR meant that the QR was very simple and could be hugely enlarged. This not only reduces scan time, but it also drastically improves scan range and reliability.
+It could be argued that “scannable” QR codes are easier to forge. However, had we encrypted them, customers could similarly just duplicate existing encrypted codes to make fraudulent receipts scan.
+<br>
+To counter this, we ensured notifications show to alert staff about invalid order codes, expired codes, codes used for orders not yet ready for collection and QR codes that aren’t following the legitimate DrinKing format.
+<br>
+We also implemented a cooldown feature to prevent rapid-QR readings. This means that if a customer developed an app to brute-force guess order codes, they’d only be able to retry 1 failed attempt every 3 seconds.
+<br>
+The probability of a malicious user ever being able to guess a 4 character existing order code for an order sent to that bar, to that collection point and have it awaiting collection is near impossible.
 
+
+### Creating custom popups
+Popups are created using our custom `popup-window` component. This window automatically implements a click-able shadow overlay, close hotkeys, a formatted title, subtitle and body and some other CSS stylings for common HTML elements such as H1, H2 and P blocks.
+<br>
+To configure your popup window, you must pass in parameters called “props”. Required props must always be passed in. Popups contain the following options:
+```javascript
+className: PropTypes.string.isRequired, // Auto-assigned CSS class to popup’s children container, enabling easy styling without affecting the rest of the app
+showCloseButton: PropTypes.bool.isRequired, // Bool to enable or disable close buttons & hotkeys
+showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup() to display the popup
+title: PropTypes.string.isRequired, // String to be loaded as the popup’s title
+subtitle: PropTypes.object.isRequired, // JSX object used for the subtitle, supporting custom elements such as styled spans
+children: PropTypes.node.isRequired, // JSX object holding the body of the popup
+dismissedHandler: PropTypes.func, // A callback function, fired automatically when the popup is closed
+closePopup: PropTypes.bool, // Variable used to close the window. If set to true, the popup will instantly close
+buttons: PropTypes.object // JSX object containing any buttons to show at the bottom of the popup
+```
+<br>
+For an example on a closeable popup with buttons, a dismiss handler see [pickup-popup-window.js](https://gitlab.cs.cf.ac.uk/c1673342/drinks-app/blob/master/terminal/src/containers/pickup-popup-window/pickup-popup-window.js)
+For an example on a popup that cannot be dismissed without selecting an option first, see [select-collection-point-popup-window.js](https://gitlab.cs.cf.ac.uk/c1673342/drinks-app/blob/master/terminal/src/containers/select-collection-point-popup-window/select-collection-point-popup-window.js)
 
 ## How to run
 ### Installing dependencies
