@@ -1,8 +1,13 @@
-# Bartender terminal
+# Drin*King* - Bartender terminal :computer:
 The Terminal web-app allows bar staff to view and manage orders. Terminals operate for set collection points in an establishment. Multiple terminals can be setup for single collection points. Staff members can work from any terminal, with the option to share terminals with colleagues.
 
 ## Supported Accessibility
-Josh
+Hotkeys
+Colour scheme
+Tap outside popups to dismiss
+Tap to dismiss notifications early
+Tap to compact UI
+
 ## Tech/framework used
 - NodeJS
 - React
@@ -32,6 +37,7 @@ Josh
 - [x] Detailed loading screen showing API loading stage
 - [x] Placeholder UI for when no orders are active to explain each area of the Terminal
 Josh pls add features
+
 ## Design and Usability Decisions
 ### Pop Ups
 In an effort to keep all main features one tap away, the terminal never reloads or redirects to other pages. All sub-menus and options are compacted cleanly away behind our highly-configurable modal component we refer to as “popups”.
