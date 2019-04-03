@@ -6,8 +6,7 @@ The mobile app serves as the client facing application to provide users with a w
 
 ## Code style
 
-#standard logo - nothing else needed here
-
+  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 ## Demos and Screenshots
 
