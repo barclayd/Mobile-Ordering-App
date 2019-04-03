@@ -10,21 +10,18 @@ Ourselves to develop our drinking solution.
 
 ## Tech/framework used
 <b>Built with</b>
-* IoT framework - johnny-five
-* Backend - Node.js server
-* Frontend - React.js client
-* State Management – Redux, Redux Saga, Redux Thunk
-* Routing - react-router
-* Charting libraries - EON.js, Chart.js
+* Native mobile app framework (iOS and Android) - React Native
+* State Management – Redux and Redux Saga
+* Routing - React Native Navigation
+* GraphQL client - Apollo Client
 * HTTP Client - axios
 * Authentication - Firebase Auth API
 * Hosting: Firebase
-* Real-time data transfer - websockets
-* Email framework – nodemailer
+* Real-time data transfer - GraphQL subscriptions
 * Styling: Ant.d, node-sass, normalize.css
-* Development: Redux Chrome Tools, Nodemon
-* Accessibility: jsx-a11y
-* Testing: Enzyme
+* Development: React Native Debugger
+* Payment handler/Stripe client: Tipsi-stripe
+* Testing: Jest
 
 ## Design and Usability Decisions
 ### Schema visual
@@ -46,7 +43,6 @@ Ourselves to develop our drinking solution.
 <br/>
 <br/>
 
-# Customer iOS & Android app
 ## Supported Accessibility
 ## Tech/framework used
 ## Design and Usability Decisions
@@ -58,22 +54,6 @@ Ourselves to develop our drinking solution.
 ## Tests and Test Strategy
 ## Organisation of Code
 
-
-
-<br/>
-<br/>
-<br/>
-
-
-
-The Terminal web-app allows bar staff to view and manage orders. Terminals operate for set collection points in an establishment. Multiple terminals can be setup for single collection points. Staff members can work from any terminal, with the option to share terminals with colleagues.
-
-## Tech/framework used
-- NodeJS
-- React
-- Redux
-- FontAwesome
-- TimeAgo & Luxon
 
 ## Features
 - [x] All features one tap away. Using ajax communication, the page is never redirected or reloaded.
@@ -96,19 +76,11 @@ The Terminal web-app allows bar staff to view and manage orders. Terminals opera
 - [x] Animated notifications with styles for errors, info, success and warnings for new orders, marking orders as complete, scan fails, collection point switching and more
 - [x] Detailed loading screen showing API loading stage
 - [x] Placeholder UI for when no orders are active to explain each area of the Terminal
-Josh pls add features
-## Design and Usability Decisions
-Bar Staff Terminal Key Design Decisions
-Account Switching (uses a sorting logic via an intelligent algorithm, pushes new member to the front)
-Pop Ups
-Icons
-Notifications
 
-Usability Bar Staff Terminal
-Everything in one view
-Perform tasks in the least possible taps
-Ensure the colour scheme of the terminal is align with the company logo
-Freddie
+## Design and Usability Decisions
+
+The mobile application design implements a simple yet clean design to display information clearly to the user with a nested doll approach combined with the use of side-menus. The mobile app runs natively on device to reflect the traditional styles of both iOS and android. Steps have been taken to reduce user input and taps as much as possible to make an order. The design principles of reducing scrolling, expand for more and the use of loading indicators in prevelant thoroughout the app. Orientation is also restricted to portrait only.
+
 ## Styling Decisions
 ESLint
 
