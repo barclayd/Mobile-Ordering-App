@@ -14,6 +14,14 @@ class Menu extends React.Component {
     this.props.onFetchDrinkCategories();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.loading) {
+      this.setState({
+        drinks: nextProps.drinks
+      });
+    }
+  }
+
   getDrinksByCategory = (id) => {
     const categoryName = this.state.categories[id];
     return this.state.drinks.filter(drink => drink.category === categoryName);
@@ -21,7 +29,7 @@ class Menu extends React.Component {
 
   handleRemove = i => {
     this.setState(state => ({
-      data: state.data.filter((row, j) => j !== i)
+      data: this.drinks.state.data.filter((row, j) => j !== i)
     }));
   };
 
@@ -35,7 +43,7 @@ class Menu extends React.Component {
 
   handleSave = (i, x) => {
     this.setState(state => ({
-      data: state.data.map((row, j) => (j === i ? x : row))
+      data: this.drinks.state.data.map((row, j) => (j === i ? x : row))
     }));
     this.stopEditing();
   };
@@ -72,7 +80,6 @@ class Menu extends React.Component {
                   prop: "price"
                 }
               ]}
-
             />
           </div>
         </MuiThemeProvider>)
@@ -88,6 +95,7 @@ const mapStateToProps = state => {
   return {
     drinkCategories: state.drinks.categories,
     drinks: state.drinks.drinks,
+    loading:state.drinks.loading
   };
 };
 

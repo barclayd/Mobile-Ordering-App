@@ -10,7 +10,26 @@
     background: -webkit-linear-gradient(#451f5e, #833ab4);text-align: center;
     position: fixed;
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
+    height: auto;
+    display: flex;
+    flex-flow: row wrap;
+
+}
+
+.menu {
+    text-align: center;
+    margin-left: 30px;
+    float: left;
+    width: 50%;
+}
+
+.stats {
+    text-align: center;
+}
+
+.text {
+
 }
 
 .projects-grid {
@@ -41,9 +60,22 @@
     color: white;
 }
 
+.stats h2 {
+    padding-top: 25px;
+}
+
+.stats p {
+    text-align: center;
+}
+
+.menu p {
+    text-align: center;
+}
+
 .main p {
+    text-align: center;
     color: white;
-    font-size: 20px;
+    font-size: 16px;
     padding: 1em;
 }
 
