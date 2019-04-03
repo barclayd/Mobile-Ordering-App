@@ -15,9 +15,9 @@ class PickupPopupWindow extends Component {
       closePopup: false
     };
 
-    updateOrder = (orderID, status) => {
+    updateOrder = (orderID, status, barStaffId) => {
         this.setState({closePopup: true}, ()=>this.setState({closePopup: null}));
-        this.props.updateOrderFunc(orderID, status);
+        this.props.updateOrderFunc(orderID, status, barStaffId);
     };
 
     showOutOfStock = () => {
@@ -27,7 +27,7 @@ class PickupPopupWindow extends Component {
     buildButtons = (order) => {
         return (
             <div className="popupButtonsContainer">
-                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.COMPLETED)}} className="orderButton">
+                <button onClick={()=> {this.updateOrder(order._id, OrderStatuses.COMPLETED, this.props.selectedStaffMemberID,)}} className="orderButton">
                     <span className="icon complete"><FontAwesomeIcon icon={faGlassCheers} /></span>
                     <span className="title">Completed</span>
                     <br />
