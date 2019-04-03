@@ -131,15 +131,15 @@ class PopupWindow extends Component {
 }
 
 PopupWindow.propTypes = {
-  className: PropTypes.string.isRequired,
-  showCloseButton: PropTypes.bool.isRequired,
-  showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.object.isRequired, // JSX object
-  children: PropTypes.node.isRequired,
-  dismissedHandler: PropTypes.func,
-  closePopup: PropTypes.bool, // If set to true the window will close
-  buttons: PropTypes.object // JSX buttons to show at bottom
+  className: PropTypes.string.isRequired, // Auto-assigned CSS class to popup’s children container, enabling easy styling without affecting the rest of the app
+  showCloseButton: PropTypes.bool.isRequired, // Bool to enable or disable close buttons & hotkeys
+  showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup() to display the popup
+  title: PropTypes.string.isRequired, // String to be loaded as the popup’s title
+  subtitle: PropTypes.object.isRequired, // JSX object used for the subtitle, supporting custom elements such as styled spans
+  children: PropTypes.node.isRequired, // JSX object holding the body of the popup
+  dismissedHandler: PropTypes.func, // A callback function, fired automatically when the popup is closed
+  closePopup: PropTypes.bool, // Variable used to close the window. If set to true, the popup will instantly close
+  buttons: PropTypes.object // JSX object containing any buttons to show at the bottom of the popup
 };
 
 export default PopupWindow;
