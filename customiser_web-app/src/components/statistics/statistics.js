@@ -1,32 +1,55 @@
-import React, { Component } from 'react';
-import { Link } from "react-router-dom";
-import { Grid, Cell } from 'react-mdl';
-import logo from '../../assets/Logo.png';
-import menu from '../../assets/menu.png';
-import stats from '../../assets/stats.png';
-import './statistics.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import FusionCharts from 'fusioncharts';
+import Charts from 'fusioncharts/fusioncharts.charts';
+import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+import ReactFC from 'react-fusioncharts';
+ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
 
-export default class statistics extends Component {
-  render() {
-    return (
-      <div style={{ width: '100%', margin: 'auto' }}>
-        <Grid className="main-grid">
-          <Cell col={12}>
-            <div className="main">
-              <img src={logo} width="10%" height="10%"/>;
-              <h1>View Statistics</h1>
-              <div className='whsmith'>
-                <h2>Number of Orders in WHSmith</h2>
-                <p><Link to="/whsmith">View stats</Link></p>
-              </div>
-              <div className='topfloor'>
-                <h2>Number of Orders on the top floor</h2>
-                <p><Link to="/topfloor">View stats</Link></p>
-              </div>
-            </div>
-          </Cell>
-        </Grid>
-      </div>
-    )
+export default class WHSmith extends React.Component {
+  render () {
+    return <ReactFC className="chart" {...chartConfigs} />;
   }
 }
+
+const WHSmithData = {
+  chart: {
+    caption: 'Number of orders',
+    subCaption: 'In WHSMiths',
+    xAxisName: 'Order Point',
+    yAxisName: 'Number of orders',
+    numberSuffix: 'K',
+    theme: 'fusion'
+  },
+  data: [
+    { label: 'WHSmith', value: '260' },
+    { label: 'Top Floor', value: '180' },
+
+  ]
+};
+//}
+
+const chartConfigs = {
+  type: 'column2d',
+  width: 600,
+  height: 400,
+  dataFormat: 'json',
+  dataSource: WHSmithData
+};
+//
+// const mapStateToProps = state => {
+//   return {
+//     orders: state.orders.orders,
+//     loading: state.orders.loading
+//   };
+// };
+//
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     FindOrdersByCollectionPoint: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint)),
+//   };
+// };
+//
+// export default connect(mapStateToProps, mapDispatchToProps)(statistics);
+
+ReactDOM.render(<ReactFC {...chartConfigs} />, document.getElementById('root'));
