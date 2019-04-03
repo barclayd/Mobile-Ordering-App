@@ -18,8 +18,6 @@ We are using a Mongo database defined and queried using GraphQL.
 
 Dans system architechture imame insert here.
 
-![51801019_289983681694391_8594841858423652352_n](/uploads/642f2bacf40070ed1c766db3285233df/51801019_289983681694391_8594841858423652352_n.png)
-
 
 From this 
 
