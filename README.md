@@ -22,7 +22,7 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 ![51801019_289983681694391_8594841858423652352_n](/uploads/642f2bacf40070ed1c766db3285233df/51801019_289983681694391_8594841858423652352_n.png)
 
 
-##Schema visual
+## Schema visual
 <img width="800" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
 </br>
 
