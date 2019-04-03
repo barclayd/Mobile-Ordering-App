@@ -65,6 +65,13 @@ Our customer mobile app has been inspired by black mirror prototype apps which u
 <img width="800" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
 
 ## Available Scripts
+### `npm install`
+Installs dependencies needed to run the app
+### `npm start`
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.<br>
+*NOTE:* You must have an instance of the GraphQL server running, connected to a DB containing at least a bar, collection point and bartender setup to use the terminal.
+
 ## Tests and Test Strategy
 ## Organisation of Code
 
