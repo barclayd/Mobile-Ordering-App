@@ -11,7 +11,9 @@ import {OrderStatuses} from '../../helpers/schemaHelper';
 
 class PickupPopupWindow extends Component {
 
-    state = {}
+    state = {
+      closePopup: false
+    };
 
     updateOrder = (orderID, status) => {
         this.setState({closePopup: true}, ()=>this.setState({closePopup: null}));

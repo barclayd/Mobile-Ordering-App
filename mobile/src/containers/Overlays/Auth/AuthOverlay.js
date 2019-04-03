@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View, Dimensions, TextInput, KeyboardAvoidingView} from 'react-native';
-import {Overlay} from 'react-native-elements';
-import ButtonBackground from '../Buttons/ButtonWithBackground';
+import {Overlay} from 'react-native-elements/src/index';
+import ButtonBackground from '../../../components/UI/Buttons/ButtonWithBackground';
 import * as colours from '../../../styles/colourScheme';
 import {DismissKeyboard} from '../../../components/Utilities/DismissKeyboard';
 import validate from '../../../utility/validation';

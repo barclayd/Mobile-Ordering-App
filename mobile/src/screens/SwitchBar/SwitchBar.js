@@ -13,7 +13,7 @@ import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as colours from '../../styles/colourScheme';
 import validate from "../../utility/validation";
-import MapDisplay from '../../components/MapDisplay/MapDisplay';
+import MapDisplay from '../../containers/MapDisplay/MapDisplay';
 import * as actions from "../../store/actions";
 
 let submittedCode;

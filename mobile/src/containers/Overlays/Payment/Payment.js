@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Text, StyleSheet, View, Dimensions, AsyncStorage, TextInput } from "react-native";
-import { Card, Overlay } from "react-native-elements";
+import { Card, Overlay } from "react-native-elements/src/index";
 import { CreditCardInput } from "react-native-credit-card-input";
-import ButtonBackground from "../Buttons/ButtonWithBackground";
+import ButtonBackground from "../../../components/UI/Buttons/ButtonWithBackground";
 import RNPickerSelect from "react-native-picker-select";
 import * as colours from "../../../styles/colourScheme";
 import { connect } from "react-redux";
@@ -195,13 +195,13 @@ class MobilePayments extends Component {
               </Text>
               <Text style={{ color: colours.midGrey, fontSize: 30 }}>|</Text>
               <Text style={styles.barOrderDetails2}>
-                Price: £{this.props.totalPrice}
+                Price: £{(this.props.totalPrice/100).toFixed(2)}
               </Text>
             </View>
 
-            {this.props.basketPrice < 5 ? <View style={styles.summary}>
+            {this.props.basketPrice < 500 ? <View style={styles.summary}>
               <Text style={styles.barOrderDetails1}>
-                DrinKing Fee: £{(this.props.totalPrice-this.props.basketPrice).toFixed(2)}
+                DrinKing Fee: £{((this.props.totalPrice-this.props.basketPrice)/100).toFixed(2)}
               </Text>
             </View> : null}
 

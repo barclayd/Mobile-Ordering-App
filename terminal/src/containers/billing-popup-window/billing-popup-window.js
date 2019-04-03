@@ -14,7 +14,7 @@ const HideStockManagementForAwaitingCollection = false; // Should hide out of st
 
 class BillingPopupWindow extends Component {
 
-    state = {}
+    state = {};
 
     updateOrder = (orderID, status) => {
         this.setState({closePopup: true}, ()=>this.setState({closePopup: null}));
@@ -25,7 +25,7 @@ class BillingPopupWindow extends Component {
         this.state.showOutOfStock();
     };
 
-    
+
     buildTitle = (order) => {
         if (order) return "#" + order.collectionId + " options"; else return "";
     };

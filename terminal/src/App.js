@@ -75,7 +75,7 @@ class App extends Component {
       awaitingOrdersIndexes: awaitingOrdersIndexes,
       inProgressOrdersIndexes: inProgressOrdersIndexes,
       pendingOrders: pendingOrders.reverse()
-    })
+    });
   };
 
   addNotification = (iconClassName, title, description) => {
@@ -98,8 +98,8 @@ class App extends Component {
         return {
           notifications: [...prevState.notifications, newNotification]
         }
-      })
-    })
+      });
+    });
   };
 
   getStaffMemberFullName = (userInfoObj) => {
@@ -115,11 +115,9 @@ class App extends Component {
   };
 
   changeCollectionPoint = (collectionPointID) => {
-    console.log("Changed collection point", collectionPointID)
-    this.addNotification("info", "Collection point changed", "Loading new orders...")
-
+    this.addNotification("info", "Collection point changed", "Loading new orders...");
     // Update localstorage so same collection point shows after page reload
-    localStorage.setItem("selectedcollectionPointID", collectionPointID)
+    localStorage.setItem("selectedcollectionPointID", collectionPointID);
 
     // Pull orders from server by selected collection point
     this.props.loadOrders(collectionPointID);
@@ -218,25 +216,25 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const Hardcoded_barID = "5c6ab350180f855c65fce6ef" // Hardcoded SU bar ID until we add a login screen
-    const Hardcoded_barStaffID = "5c97adae8cab340a0995dd25"
-    const Hardcoded_collectionPointID = "5c925636bc63a912ed715316"
+    const Hardcoded_barID = "5c6ab350180f855c65fce6ef"; // Hardcoded SU bar ID until we add a login screen
+    const Hardcoded_barStaffID = "5c97adae8cab340a0995dd25";
+    const Hardcoded_collectionPointID = "5c925636bc63a912ed715316";
 
     // Pull bartenders from server
     this.props.findBarStaff(Hardcoded_barID);
 
-    
+
     // Load bartender hotbar order from localstorage (or use empty array)
     this.setState({staffHotBarOrder: JSON.parse(localStorage.getItem("staffHotBarOrder")) || []});
-    
+
     // Load selected bartender account from localstorage, or select the first if none exists
     this.setState({selectedStaffMemberID: localStorage.getItem("selectedStaffMemberID") || Hardcoded_barStaffID});
-    
+
 
     // Pull collection points from server
     this.props.findCollectionPoints(Hardcoded_barID);
 
-    
+
     // Load selected collection point from localstorage, or select the first if none exists
     const collectionPointID = localStorage.getItem("selectedcollectionPointID") || Hardcoded_collectionPointID;
 
@@ -251,7 +249,7 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     let newServerOrders = rebuildDateAndDrinksForOrderWithQuantities(this.props.serverOrders);
     let areArraysEqual = JSON.stringify(newServerOrders) === JSON.stringify(prevState.serverOrders);
-    
+
     // only update chart if the data has changed
     if (!this.props.loading && (prevState.serverOrders == null || !areArraysEqual)) {
       this.loadOrdersIntoStateIndexArrays(newServerOrders); // Load orders into arrays
@@ -367,7 +365,7 @@ class App extends Component {
   UpdateOrderStatus = (orderID, newStatus) => {
     this.props.updateOrder(orderID, newStatus, localStorage.getItem("selectedStaffMemberID"));
     this.addNotification("success", "Order status updated", "Order is now " + newStatus);
-  }
+  };
 
   ToggleAwaitingCollapse = (event) => {
     let newStyle = "collapsed";
@@ -430,13 +428,11 @@ class App extends Component {
 
   render() {
     if (!this.state.serverOrders) {
-      return this.buildLoadingScreen("Loading orders...")
-    
+      return this.buildLoadingScreen("Loading orders...");
     } else if (!this.props.collectionPoints || this.props.collectionPoints.length === 0) { // Terminal requires at least 1 collection point
-      return this.buildLoadingScreen("Loading collection points...")
-
+      return this.buildLoadingScreen("Loading collection points...");
     } else if (!this.props.barStaff || this.props.barStaff.length === 0) { // Terminal requires at least 1 staff to load
-      return this.buildLoadingScreen("Loading bar staff...")
+      return this.buildLoadingScreen("Loading bar staff...");
 
     } else {
       return (
@@ -565,7 +561,7 @@ class App extends Component {
                         { this.renderCustomerNotes(orderIndex, orderData.notes) }
 
                         <div className="orderButtonsContainer">
-                          <button className="orderButton" onClick={() => this.props.updateOrder(orderData._id, "AWAITING_COLLECTION", this.state.selectedStaffMemberID)}>
+                          <button className="orderButton" onClick={() => this.props.updateOrder(orderData._id, "AWAITING_COLLECTION", this.state.selectedStaffMemberID, new Date().toISOString())}>
                             <span className="icon ready"><FontAwesomeIcon icon={faCheck} /></span>
                             <span className="title">Ready</span>
                             <br />
@@ -680,20 +676,20 @@ class App extends Component {
 
 const mapReduxStateToProps = state => {
   return {
-    serverOrders:     state.orders.orders,
-    updatedOrder:     state.orders.updatedOrder,
-    ordersLoading:    state.orders.loading,
-    barStaff:         state.bar.barStaff,
+    serverOrders: state.orders.orders,
+    updatedOrder: state.orders.updatedOrder,
+    ordersLoading: state.orders.loading,
+    barStaff: state.bar.barStaff,
     collectionPoints: state.collectionPoints.collectionPoints
   }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadOrders: (collectionPoint) =>              dispatch(actions.getOrdersByCollectionPoint(collectionPoint)),
-    updateOrder: (orderId, status, barStaffId) => dispatch(actions.updateOrder(orderId, status, barStaffId)),
-    findBarStaff: (barId) =>                      dispatch(actions.findBarStaff(barId)),
-    findCollectionPoints: (barId) =>              dispatch(actions.findCollectionPoints(barId))
+    loadOrders: (collectionPoint) => dispatch(actions.getOrdersByCollectionPoint(collectionPoint)),
+    updateOrder: (orderId, status, barStaffId, completionTime) => dispatch(actions.updateOrder(orderId, status, barStaffId, completionTime)),
+    findBarStaff: (barId) => dispatch(actions.findBarStaff(barId)),
+    findCollectionPoints: (barId) => dispatch(actions.findCollectionPoints(barId))
   }
 };
 
