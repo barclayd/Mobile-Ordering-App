@@ -13,16 +13,11 @@ This kept code consistent and readable for all team members and will help new
 potential future devs picking up the project.
 
 ## System Architecture
-Dan
-We are using a Mongo database defined and queried using GraphQL.
 
-Dans system architechture imame insert here.
+We are using a Mongo database defined and queried using GraphQL. Our customer react-native Android / iOS App communicates to our database through a Node Js server. We are receiving live data changes by use of GraphQL subscriptions, enabled using an Apollo client.
 
 
-From this 
-
-
-
+![51801019_289983681694391_8594841858423652352_n](/uploads/642f2bacf40070ed1c766db3285233df/51801019_289983681694391_8594841858423652352_n.png)
 
 
 <br/>
@@ -31,11 +26,11 @@ From this
 
 # GraphQL server
 ## Tech/framework used
-<b>Built with</b>
 * Frontend library - ReactNative
 
 ## Design and Usability Decisions
-### Schema visual
+
+##Schema visual
 <img width="800" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
 
 ## Features
@@ -43,6 +38,7 @@ From this
 
 ## Available Scripts
 ## Tests and Test Strategy
+
 ## Organisation of Code
 
 
@@ -56,17 +52,43 @@ From this
 
 # Customer iOS & Android app
 ## Supported Accessibility
+
 ## Tech/framework used
+
 ## Design and Usability Decisions
+
+As a team, we opted for an unencrypted QR code. Following on from large entities such as KFC and McDonalds.
+The decision was taken to allow our users to scan their codes faster and more reliably with an unencrypted QR code.
+The information which can be seen from scanning another user’s QR code is simply what would be shown on a physical receipt, that being their order number. 
+Our response to this is warning the user as to not share their QR codes with other users.
+
+Our mobile App uses react-navigation-v2. (https://github.com/wix/react-native-navigation/tree/v2)
+This decision was taken to provide our users with ergonomic screen layouts and navigation links such as our intuitive side drawer and centre stack screen which screens can be pushed on top of.
+
+
 ## Features
-- [x] Sample feature
+- [x] Create account
+- [x] Sign in to account
+- [x] Auto login
+- [x] Find bar by 4 letter code
+- [x] Find bar by maps view
+- [x] Find closest drinking enabled bar.
+- [x] Switch bar.
+- [x] View and select menu
+- [x] Add drinks to virtual basket.
+- [x] Update quantity of drinks selected.
+- [x] Delete basket
+- [x] Create an order
+- [x] Pay for order using card
+- [x] Pay for an order without user authentication.
+- [x] See active order information.
+- [x] See past orders
+- [x] Filter past orders by date and orderId
 
 ## Styling Decisions
 ## Available Scripts
 ## Tests and Test Strategy
 ## Organisation of Code
-
-
 
 <br/>
 <br/>
