@@ -26,6 +26,25 @@ export default class SetUp extends React.Component {
         ],
       },
       {
+        line: "What is the rough age range of your customers?",
+        multiChoice: [
+          "Students",
+          "30s - 40s",
+          "40s - 50s",
+          "60 +"
+        ],
+      },
+      {
+        line: "Select some keywords that describe your bar the best",
+        multiChoice: [
+          "Fun",
+          "Different",
+          "Exquisite",
+          "Deals",
+          "Traditional",
+        ],
+      },
+      {
         line: "Thank you very much for your answers." ,
         multiChoice: [] //that's it.
       },
@@ -37,7 +56,7 @@ export default class SetUp extends React.Component {
   } // end constructor
 
   handleClick() {
-    if (this.state.current === 2) {
+    if (this.state.current === 4) {
     } else {
       this.setState({current: this.state.current + 1})
     }
@@ -64,11 +83,7 @@ function ChoiceButton(props) {
 
 function Question(props) {
   return (
-
-
     <p className="question">{props.data.line}</p>
-
-
   )
 }
 
