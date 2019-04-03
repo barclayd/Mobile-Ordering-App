@@ -29,7 +29,7 @@ class Menu extends React.Component {
 
   handleRemove = i => {
     this.setState(state => ({
-      data: this.drinks.state.data.filter((row, j) => j !== i)
+      data: this.state.drinks.filter((row, j) => j !== i)
     }));
   };
 
@@ -43,7 +43,7 @@ class Menu extends React.Component {
 
   handleSave = (i, x) => {
     this.setState(state => ({
-      data: this.drinks.state.data.map((row, j) => (j === i ? x : row))
+      data: this.state.drinks.map((row, j) => (j === i ? x : row))
     }));
     this.stopEditing();
   };
