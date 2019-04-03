@@ -1,4 +1,4 @@
-# DrinKing - The drinks ordering app :beers:
+# Drin*King* - The drinks ordering app :beers:
 ## Motivation
 Age old problem of lengthy and unfair queues at bars or other establishments. 
 Opportunity as our development team is located in Cardiff with a wealth of students and bars.
@@ -91,7 +91,7 @@ Josh
 ## Features
 - [x] All features one tap away. Using ajax communication, the page is never redirected or reloaded.
 - [x] Stock management UI, allowing individual ingredients and drinks to be marked out of stock
-- [  ] Stock management backend - *BLOCKED:* No schema table for ingredients
+- [ ] Stock management backend - *BLOCKED:* No schema table for ingredients
 - [x] Staff management & easy staff account switching
 - [x] Intelligent queuing algorithm that studies upcoming orders to match and pull similar orders together to help bar staff efficiently complete multiple orders at once
 - [x] Hotbar to switch staff members, dynamically showing as many as possible on-screen in one line
