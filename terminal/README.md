@@ -2,12 +2,12 @@
 The Terminal web-app allows bar staff to view and manage orders. Terminals operate for set collection points in an establishment. Multiple terminals can be setup for single collection points. Staff members can work from any terminal, with the option to share terminals with colleagues.
 
 ## Supported Accessibility
-* Hotkeys - Escape key can be pressed at any time to dismiss the top-most popup window
-* Colour scheme - The Terminal colour scheme reflects the company logo. The dark also scheme increases visibility for dark bar environments with extended viewing time
-* Colourblind support - All UI colours have been tailored to reduce common difficulties for colourblind users. Additionally, all buttons, icons and popups have names and descriptions to prevent any confusion for bartenders with site problems.
-* Tapping outside any active popup dismisses them
-* Tap to dismiss notifications early
-* Tap to compact UI - if too many awaiting orders are on screen, bartenders can tap to collapse them into one iOS styled group.
+* **Hotkeys** - Escape key can be pressed at any time to dismiss the top-most popup window
+* **Colour scheme** - The Terminal colour scheme reflects the company logo. The dark also scheme increases visibility for dark bar environments with extended viewing time
+* **Colourblind support** - All UI colours have been tailored to reduce common difficulties for colourblind users. Additionally, all buttons, icons and popups have names and descriptions to prevent any confusion for bartenders with site problems.
+* **Tap to close popups** - Tapping outside any active popup dismisses them
+* **Tap to dismiss notifications** - Notifications either automatically timeout or can be forcefully dismissed early with a single tap
+* **Tap to compact UI** - if too many awaiting orders are on screen, bartenders can tap to collapse them into one iOS styled group.
 
 ## Tech/framework used
 - NodeJS
@@ -16,35 +16,34 @@ The Terminal web-app allows bar staff to view and manage orders. Terminals opera
 - FontAwesome
 - TimeAgo & Luxon
 
-<details>
-<summary>
 ## Installed packages
-* @fortawesome/fontawesome-svg-core
-* @fortawesome/free-regular-svg-icons
-* @fortawesome/free-solid-svg-icons
-* @fortawesome/react-fontawesome
-* apollo-cache-inmemory
-* apollo-client
-* apollo-link
-* apollo-link-http
-* apollo-link-ws
-* apollo-utilities
-* axios
-* graphql
-* graphql-tag
-* immutability-helper
-* luxon
-* prop-types
+* `@fortawesome/fontawesome-svg-core`
+* `@fortawesome/free-regular-svg-icons`
+* `@fortawesome/free-solid-svg-icons`
+* `@fortawesome/react-fontawesome`
+* `apollo-cache-inmemory`
+* `apollo-client`
+* `apollo-link`
+* `apollo-link-http`
+* `apollo-link-ws`
+* `apollo-utilities`
+* `axios`
+* `graphql`
+* `graphql-tag`
+* `immutability-helper`
+* `luxon`
+* `prop-types`
 * `react`
-* react-apollo
-* react-dom
-* react-qr-reader
-* react-redux
-* react-scripts
-* redux
-* redux-saga
-* subscriptions-transport-ws
-* timeago.js
+* `react-apollo`
+* `react-dom`
+* `react-qr-reader`
+* `react-redux`
+* `react-scripts`
+* `redux`
+* `redux-saga`
+* `subscriptions-transport-ws`
+* `timeago.js`
+
 
 
 
@@ -92,7 +91,7 @@ Installs dependencies needed to run the app
 ### `npm start`
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.<br>
-*NOTE:* You must have an instance of the GraphQL server running, connected to a DB containing at least a bar, collection point and bartender setup to use the terminal.
+**NOTE:** You must have an instance of the GraphQL server running, connected to a DB containing at least a bar, collection point and bartender setup to use the terminal.
 ## Tests and Test Strategy
 ## Organisation of Code
 #**Josh (pls ask Dan)**
