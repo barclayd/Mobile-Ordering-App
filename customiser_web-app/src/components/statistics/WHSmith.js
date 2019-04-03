@@ -21,41 +21,13 @@ const WHSmithData = {
     numberSuffix: 'K',
     theme: 'fusion'
   },
-  //this.props.orders
   data: [
-    { label: 'Venezuela', value: '290' },
-    { label: 'Saudi', value: '260' },
-    { label: 'Canada', value: '180' },
-    { label: 'Iran', value: '140' },
-    { label: 'Russia', value: '115' },
-    { label: 'UAE', value: '100' },
-    { label: 'US', value: '30' },
-    { label: 'China', value: '30' }
+    { label: 'WHSmith', value: '260' },
+    { label: 'Top Floor', value: '180' },
+
   ]
 };
 //}
-
-const TopFloorData = {
-  chart: {
-    caption: 'Number of orders',
-    subCaption: 'In WHSMiths',
-    xAxisName: 'Order Point',
-    yAxisName: 'Number of orders',
-    numberSuffix: 'K',
-    theme: 'fusion'
-  },
-  //this.props.orders
-  data: [
-    { label: 'Venezuela', value: '290' },
-    { label: 'Saudi', value: '260' },
-    { label: 'Canada', value: '180' },
-    { label: 'Iran', value: '140' },
-    { label: 'Russia', value: '115' },
-    { label: 'UAE', value: '100' },
-    { label: 'US', value: '30' },
-    { label: 'China', value: '30' }
-  ]
-};
 
 const chartConfigs = {
   type: 'column2d',
@@ -63,14 +35,6 @@ const chartConfigs = {
   height: 400,
   dataFormat: 'json',
   dataSource: WHSmithData
-};
-
-const chartConfigsTop = {
-  type: 'column2d',
-  width: 600,
-  height: 400,
-  dataFormat: 'json',
-  dataSource: TopFloorData
 };
 //
 // const mapStateToProps = state => {
