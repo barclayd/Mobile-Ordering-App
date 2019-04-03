@@ -2,18 +2,49 @@
 The Terminal web-app allows bar staff to view and manage orders. Terminals operate for set collection points in an establishment. Multiple terminals can be setup for single collection points. Staff members can work from any terminal, with the option to share terminals with colleagues.
 
 ## Supported Accessibility
-Hotkeys
-Colour scheme
-Tap outside popups to dismiss
-Tap to dismiss notifications early
-Tap to compact UI
+* Hotkeys - Escape key can be pressed at any time to dismiss the top-most popup window
+* Colour scheme - The Terminal colour scheme reflects the company logo. The dark also scheme increases visibility for dark bar environments with extended viewing time
+* Colourblind support - All UI colours have been tailored to reduce common difficulties for colourblind users. Additionally, all buttons, icons and popups have names and descriptions to prevent any confusion for bartenders with site problems.
+* Tapping outside any active popup dismisses them
+* Tap to dismiss notifications early
+* Tap to compact UI - if too many awaiting orders are on screen, bartenders can tap to collapse them into one iOS styled group.
 
 ## Tech/framework used
 - NodeJS
-- React
+- React (create-react-app)
 - Redux
 - FontAwesome
 - TimeAgo & Luxon
+
+## Installed packages
+* @fortawesome/fontawesome-svg-core
+* @fortawesome/free-regular-svg-icons
+* @fortawesome/free-solid-svg-icons
+* @fortawesome/react-fontawesome
+* apollo-cache-inmemory
+* apollo-client
+* apollo-link
+* apollo-link-http
+* apollo-link-ws
+* apollo-utilities
+* axios
+* graphql
+* graphql-tag
+* immutability-helper
+* luxon
+* prop-types
+* react
+* react-apollo
+* react-dom
+* react-qr-reader
+* react-redux
+* react-scripts
+* redux
+* redux-saga
+* subscriptions-transport-ws
+* timeago.js
+
+
 
 ## Features
 - [x] All features one tap away. Using ajax communication, the page is never redirected or reloaded.
@@ -36,7 +67,7 @@ Tap to compact UI
 - [x] Animated notifications with styles for errors, info, success and warnings for new orders, marking orders as complete, scan fails, collection point switching and more
 - [x] Detailed loading screen showing API loading stage
 - [x] Placeholder UI for when no orders are active to explain each area of the Terminal
-Josh pls add features
+#**Josh pls add features**
 
 ## Design and Usability Decisions
 ### Pop Ups
@@ -45,13 +76,13 @@ In an effort to keep all main features one tap away, the terminal never reloads 
 ### Account Switching
 To avoid managers having to constantly re-assign shifts to get staff to display on-screen for the correct hours, we opted to always display all staff members! Bartenders can instantly switch between their cached active orders via our hotbar at the top of the terminal. This hotbar shows as many staff members that fit on screen width-ways as possible (on an iPads, this is usually 5-10 depending on orientation). If a bartender is not on-screen, they can access their account from the ‘More accounts’ button/popup. Switching accounts via the more accounts window also bumps the staff member to the front of the hotbar for the given terminal. This means the hotbar quickly self-manages active staff, and so long as the bar provides enough terminals (at least 1 for every 5 staff), all staff will fit on-screen.
 
-- Icons
-- Notifications
+* Icons
+* Notifications
 
 ### Usability decisions
-- Everything in one view
-- Perform tasks in the least possible taps
-- Ensure the colour scheme of the terminal is align with the company logo
+* Everything in one view
+* Perform tasks in the least possible taps
+* Ensure the colour scheme of the terminal is align with the company logo
 
 ## Available scripts
 ### `npm install`
@@ -62,4 +93,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.<b
 *NOTE:* You must have an instance of the GraphQL server running, connected to a DB containing at least a bar, collection point and bartender setup to use the terminal.
 ## Tests and Test Strategy
 ## Organisation of Code
-Josh (pls ask Dan)
+#**Josh (pls ask Dan)**
