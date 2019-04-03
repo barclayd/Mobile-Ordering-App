@@ -244,9 +244,7 @@ class App extends Component {
     this.props.loadOrders(collectionPointID);
 
     // Load webcam for iOS
-    if (navigator.mediaDevices.getUserMedia) {       
-      navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}})
-    }
+    this.getUserMedia()
   }
 
   // Map redux-recieved data that needs to be manipulated to react state from props
