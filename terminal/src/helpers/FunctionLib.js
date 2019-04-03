@@ -11,7 +11,7 @@ export const rangeScaling = (value, xMin, xMax, yMin, yMax) => {
 
 // Func to convert int pennies into a human-readable price string (ie: 157 to £1.57)
 export const penniesToPriceString = (pennies) => {
-    return (pennies / 100).toLocaleString("en-UK", {style:"currency", currency:"GBP"});
+    return (parseInt(pennies) / 100).toLocaleString("en-UK", {style:"currency", currency:"GBP"});
 };
 
 
