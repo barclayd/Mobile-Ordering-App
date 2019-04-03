@@ -16,6 +16,8 @@ The Terminal web-app allows bar staff to view and manage orders. Terminals opera
 - FontAwesome
 - TimeAgo & Luxon
 
+<details>
+<summary>
 ## Installed packages
 * @fortawesome/fontawesome-svg-core
 * @fortawesome/free-regular-svg-icons
@@ -33,7 +35,7 @@ The Terminal web-app allows bar staff to view and manage orders. Terminals opera
 * immutability-helper
 * luxon
 * prop-types
-* react
+* `react`
 * react-apollo
 * react-dom
 * react-qr-reader
