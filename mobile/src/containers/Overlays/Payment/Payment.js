@@ -106,7 +106,7 @@ class MobilePayments extends Component {
     }
 
     const userInfo =
-      this.props.auth === null ? (
+      this.props.auth.userId === null ? (
         <View style={styles.userInfo}>
         <View>
             <TextInput
@@ -225,7 +225,7 @@ class MobilePayments extends Component {
                   !this.state.number.valid ||
                   !this.state.expiration.valid ||
                   !this.state.collectionPoint.valid ||
-                  (!this.props.auth && !this.state.input.email.valid)
+                  (!this.props.auth.userId && !this.state.input.email.valid)
                 }
                 textColor={colours.orange}
                 onPress={() => this.props.submitOrder(this.state)}
@@ -313,7 +313,7 @@ invalid: {
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth.userId
+    auth: state.auth
   };
 };
 

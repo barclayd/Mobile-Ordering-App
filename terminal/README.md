@@ -1,84 +1,13 @@
-# Drin*King* - The drinks ordering app :beers:
-## Motivation
-Age old problem of lengthy and unfair queues at bars or other establishments. 
-Opportunity as our development team is located in Cardiff with a wealth of students and bars.
-Problem is identified and backed by each member, therefore, we support the decision to commit
-Ourselves to develop our drinking solution.
-
-## Code style
-We used React & React Native's baked-in ESLint scripts to ensure all teammates
-wrote code following a specific syntax and style.
-
-This kept code consistent and readable for all team members and will help new 
-potential future devs picking up the project.
-
-## System Architecture
-Dan
-We are using a Mongo database defined and queried using GraphQL.
-
-Dans system architechture imame insert here.
-
-
-From this 
-
-
-
-
-
-<br/>
-<br/>
-<br/>
-
-# GraphQL server
-## Tech/framework used
-<b>Built with</b>
-* Frontend library - ReactNative
-
-## Design and Usability Decisions
-### Schema visual
-<img width="800" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
-
-## Features
-- [x] Sample feature
-
-## Available Scripts
-## Tests and Test Strategy
-## Organisation of Code
-
-
-
-
-
-
-<br/>
-<br/>
-<br/>
-
-# Customer iOS & Android app
-## Supported Accessibility
-## Tech/framework used
-## Design and Usability Decisions
-## Features
-- [x] Sample feature
-
-## Styling Decisions
-## Available Scripts
-## Tests and Test Strategy
-## Organisation of Code
-
-
-
-<br/>
-<br/>
-<br/>
-
-
-
-# Bartender terminal
+# Drin*King* - Bartender terminal :computer:
 The Terminal web-app allows bar staff to view and manage orders. Terminals operate for set collection points in an establishment. Multiple terminals can be setup for single collection points. Staff members can work from any terminal, with the option to share terminals with colleagues.
 
 ## Supported Accessibility
-Josh
+Hotkeys
+Colour scheme
+Tap outside popups to dismiss
+Tap to dismiss notifications early
+Tap to compact UI
+
 ## Tech/framework used
 - NodeJS
 - React
@@ -89,7 +18,7 @@ Josh
 ## Features
 - [x] All features one tap away. Using ajax communication, the page is never redirected or reloaded.
 - [x] Stock management UI, allowing individual ingredients and drinks to be marked out of stock
-- [ ] Stock management backend - *BLOCKED:* No schema table for ingredients
+- [ ] Stock management backend - **BLOCKED:** *No schema table for ingredients*
 - [x] Staff management & easy staff account switching
 - [x] Intelligent queuing algorithm that studies upcoming orders to match and pull similar orders together to help bar staff efficiently complete multiple orders at once
 - [x] Hotbar to switch staff members, dynamically showing as many as possible on-screen in one line
@@ -108,22 +37,23 @@ Josh
 - [x] Detailed loading screen showing API loading stage
 - [x] Placeholder UI for when no orders are active to explain each area of the Terminal
 Josh pls add features
+
 ## Design and Usability Decisions
-Bar Staff Terminal Key Design Decisions
-Account Switching (uses a sorting logic via an intelligent algorithm, pushes new member to the front)
-Pop Ups
-Icons
-Notifications
+### Pop Ups
+In an effort to keep all main features one tap away, the terminal never reloads or redirects to other pages. All sub-menus and options are compacted cleanly away behind our highly-configurable modal component we refer to as “popups”.
 
-Usability Bar Staff Terminal
-Everything in one view
-Perform tasks in the least possible taps
-Ensure the colour scheme of the terminal is align with the company logo
-Freddie
-## Styling Decisions
-ESLint
+### Account Switching
+To avoid managers having to constantly re-assign shifts to get staff to display on-screen for the correct hours, we opted to always display all staff members! Bartenders can instantly switch between their cached active orders via our hotbar at the top of the terminal. This hotbar shows as many staff members that fit on screen width-ways as possible (on an iPads, this is usually 5-10 depending on orientation). If a bartender is not on-screen, they can access their account from the ‘More accounts’ button/popup. Switching accounts via the more accounts window also bumps the staff member to the front of the hotbar for the given terminal. This means the hotbar quickly self-manages active staff, and so long as the bar provides enough terminals (at least 1 for every 5 staff), all staff will fit on-screen.
 
-## Available Scripts
+- Icons
+- Notifications
+
+### Usability decisions
+- Everything in one view
+- Perform tasks in the least possible taps
+- Ensure the colour scheme of the terminal is align with the company logo
+
+## Available scripts
 ### `npm install`
 Installs dependencies needed to run the app
 ### `npm start`
@@ -133,57 +63,3 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.<b
 ## Tests and Test Strategy
 ## Organisation of Code
 Josh (pls ask Dan)
-
-
-
-
-<br/>
-<br/>
-<br/>
-
-# Managerial website
-## Supported Accessibility
-## Tech/framework used
-## Design and Usability Decisions
-## Features
-- [x] Sample feature
-
-## Styling Decisions
-## Available Scripts
-## Tests and Test Strategy
-## Organisation of Code
-
-
-
-
-
-
-<br/>
-<br/>
-<br/>
-
-# Conclusion
-Sample text
-Guy
-
-## Plans for expanding the project
-- Login by bar
-- Ingredients, including stock management and queuing by ingredients
-- API protection
-- Customer ratings
-- Loyalty Schemes 
-- Possible Gamification features to promote loyalty and rewards 
-
-## Licensing restrictions
-- Apple Pay
-- AppStore deployment
-- Apple remote notifications
-- Stripe customer support
-
-## Links
-- [Taiga](https://taiga.cs.cf.ac.uk/project/c1632962-drinks-ordering-app)
-- [Mongo Alias](https://cloud.mongodb.com/v2/5c5996d8ff7a25e136324f18#clusters/detail/DrinksApp)
-
-## References
-- [Noble ordering app](https://getnoble.co)
-- [React](https://reactjs.org/)
