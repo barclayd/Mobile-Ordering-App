@@ -30,14 +30,18 @@ class AddDrinks extends Component {
                 this.setState({
                   value: drink.quantity
                 });
-              }
+              } 
+            })
+          } else {
+            this.setState({
+              value: 1
             })
           }
         }
       }
     }
 
-  valueChanged = value => {
+  valueChanged = value => {   
     if (value === 0) {
       return;
     }
