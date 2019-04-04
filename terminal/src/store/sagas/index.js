@@ -14,3 +14,7 @@ export function* watchBar() {
     yield takeLatest(actionTypes.FIND_BAR_STAFF, findBarStaffSaga);
     yield takeLatest(actionTypes.FIND_COLLECTION_POINTS, findCollectionPointsSaga);
 }
+
+export function* watchDrinks() {
+    yield takeLatest(actionTypes.FIND_DRINKS, getOrdersByCollectionPointSaga);
+}
