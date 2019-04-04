@@ -44,6 +44,26 @@ This starts the server in production mode.
 - [x] Bar Staff terminal app can listen to changes such as new orders.
 - [x] Mobile App updates order status when Terminal app changes the status or order such as “IN_PROGRESS” TO “AWAITING_COLLECTION”
 
+## Installed Package
+
+* `apollo-server-express`
+* `bcrypt`
+* `body-parser`
+* `dataloader`
+* `dotenv`
+* `express`
+* `express-graphql`
+* `graphql`
+* `graphql-subscriptions`
+* `graphql-tools`
+* `jsonwebtoken`
+* `mongoose`
+* `randomstring`
+* `stripe`
+* `subscriptions-transport-ws`
+* `uuid`
+* `nodemon`
+
 ### Future plans for expansion
 
 * Server Deployment
