@@ -85,12 +85,16 @@ The terminal communicates with the DrinKing mobile-app through use of the Node.j
 
 
 ## Major Design and Usability Decisions
+![terminal](https://user-images.githubusercontent.com/49290024/55584282-c6a5d100-571b-11e9-837c-1c3735576218.png)
 ### Account Switching
+![Capture2](https://user-images.githubusercontent.com/49290024/55584327-d9200a80-571b-11e9-8026-35bcccf5f4f0.PNG)
+
 To avoid managers having to constantly re-assign shifts to get staff to display on-screen for the correct hours, we opted to always display all staff members! Bartenders can instantly switch between their cached active orders via our hotbar at the top of the terminal. This hotbar shows as many staff members that fit on screen width-ways as possible (on an iPads, this is usually 5-10 depending on orientation). If a bartender is not on-screen, they can access their account from the ‘More accounts’ button/popup.
 <br>
 Switching accounts via the more accounts window also bumps the staff member to the front of the hotbar for the given terminal. This means the hotbar quickly self-manages active staff, and so long as the bar provides enough terminals (at least 1 for every 5 staff), all staff will fit on-screen.
 <br>
 Staff may favouritise a single terminal of many operating under the same collection point. For this reason, we did not want the prioritised hotbar order syncing with the DB across terminals, since it’d cause constant jumps when staff have to re-assign their position on the bar. Instead, the hotbar order is stored locally on each terminal they login to.
+![Capture](https://user-images.githubusercontent.com/49290024/55584346-e63cf980-571b-11e9-98b9-7b7067f98045.PNG)
 
 ### Intelligent queuing algorithm
 When a bartender taps to take new orders, our intelligent queuing algorithm analyses upcoming orders before assigning any. The first order will always be taken, to ensure that no matter what you order, you will never have to wait too long to be served. The algorithm then studies each drink in the next 4 orders after, counting matches and differences. The selection of orders with matches are then sorted by number of matches (most to least) and then by number of differences (least to most). If an order is found to meet the threshold for matches (as a percentage) then the orders are pulled into the bartender’s feed together. This enables bar staff to efficiently work on multiple orders at once.
