@@ -1,4 +1,4 @@
-# DrinKing: Mobile Drinks App Ordering Solution 🤴🏽🍺
+# Drin*King*: Mobile Drinks App Ordering Solution 👑🍺
 
 ## Motivation
 Age old problem of lengthy and unfair queues at bars or other establishments. 
