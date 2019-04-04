@@ -1,10 +1,9 @@
-# Drin*King* - Bartender terminal :computer:
+# Drin*King* - Bartender terminal :computer:  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 The Terminal web-app allows bar staff to view and manage orders. Terminals operate for set collection points in an establishment. Multiple terminals can be setup for single collection points. Staff members can work from any terminal, with the option to share terminals with colleagues.
-
-## Code style
-
-  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
-
+<br>
+We opted to use web-app architecture since all the appropriate hardware (webcams, touch-input etc) is still accessible with simple Javascript. Using web development meant the terminal has cross-platform support, doesn’t require app certificates and is easy to load onto any modern device.
+<br>
+The terminal communicates with the DrinKing mobile-app through use of the Node.js server via HTTP requests for data requests and websockets for real time data.
 
 ## Supported Accessibility
 * **Hotkeys** - Escape key can be pressed at any time to dismiss the top-most popup window
@@ -16,11 +15,17 @@ The Terminal web-app allows bar staff to view and manage orders. Terminals opera
 * **No redirecting** - In an effort to keep every main feature just a tap away, the terminal never reloads or redirects to other pages. All sub-menus, options and features are compacted cleanly behind our highly-configurable modal component we refer to as “popups”. This reduces time to complete actions and user frustration as all on-screen data is always up to date. The UI is both functional and minimal.
 
 ## Tech/framework used
-- NodeJS
-- React (create-react-app)
-- Redux
-- FontAwesome
-- TimeAgo & Luxon
+* Website framework - Create-Reac-App
+* State Management – Redux and Redux Saga
+* Caching user-settings - React LocalStorage
+* GraphQL client - Apollo Client
+* HTTP Client - axios
+* Real-time data transfer - GraphQL subscriptions
+* Development: React Debugger
+* Payment handler/Stripe client: Tipsi-stripe
+* Testing: Jest
+* SVG icons - FontAwesome
+* Clean date formatting - TimeAgo.js & Luxon
 
 ## Installed packages
 * `@fortawesome/fontawesome-svg-core`
@@ -77,7 +82,7 @@ The Terminal web-app allows bar staff to view and manage orders. Terminals opera
 - [x] Last staff and collection point used is automatically saved on the terminal client so page reloads don’t effect which orders are shown
 - [x] All active orders are cached on each terminal; when staff switch accounts, they don’t have to wait for orders to pull down from the server. Additionally, the intelligent queuing algorithm can run responsively client-side, reducing server CPU load and increasing responsiveness of taking on new orders.
 - [x] New orders are instantly added to the terminal’s state, notifying the staff
-#**Josh pls add features**
+
 
 ## Major Design and Usability Decisions
 ### Account Switching
@@ -88,14 +93,19 @@ Switching accounts via the more accounts window also bumps the staff member to t
 Staff may favouritise a single terminal of many operating under the same collection point. For this reason, we did not want the prioritised hotbar order syncing with the DB across terminals, since it’d cause constant jumps when staff have to re-assign their position on the bar. Instead, the hotbar order is stored locally on each terminal they login to.
 
 ### Intelligent queuing algorithm
-When a bartender taps to take new orders, our intelligent queuing algorithm analyses upcoming orders before assigning any. The first order will always be taken, to ensure that no matter what you order, you will never have to wait too long to be served. The algorithm then studies each drink in the next 4 orders after, counting matches and differences. If an order is found to meet the threshold for a match (not too many differences and enough matches, as a percentage) then the orders are pulled into the bartender’s feed together. This enables bar staff to efficiently work on multiple orders at once.
+When a bartender taps to take new orders, our intelligent queuing algorithm analyses upcoming orders before assigning any. The first order will always be taken, to ensure that no matter what you order, you will never have to wait too long to be served. The algorithm then studies each drink in the next 4 orders after, counting matches and differences. The selection of orders with matches are then sorted by number of matches (most to least) and then by number of differences (least to most). If an order is found to meet the threshold for matches (as a percentage) then the orders are pulled into the bartender’s feed together. This enables bar staff to efficiently work on multiple orders at once.
 <br>
 At present, a maximum of 3 orders can be taken at once. This prevents bar staff from being overloaded. Only the top 4 orders are studied to ensure that the queue mostly operates under a fair first-in first-out style.
 <br>
 Matching and assigning similar orders drastically improves production time, since bartenders can make all identical drinks at once, reducing trips back and forth to the bar.
 
 ### Stock management system
-
+One requirement for DrinKing was the ability to mark drinks & ingredients out of stock, to prevent further orders of unavaliable items. After investigating many bars and questioning bartenders, we often found bars never manage stock on-the-go. Stock is pre-purchased, estimating 
+consumption from past events. Bartenders do not have the time to manage stock live.
+<br>
+When considering a live stock management system via DrinKing, we also discussed the limitation that not all orders will be managed through our terminal - most customers will still use the bar. This means sales aren’t a reliable method of automating stock management.
+<br>
+We decided on adding a stock manager button to each in-progress and awaiting collection order. This can be used on-the-fly to mark single ingredients and drinks out of stock for live orders. This would then alert the buyer, and all customers with the same items in their pending orders to either edit or cancel their order. This also enables the client-app to disable future purchasing of the item, until marked as in-stock.
 
 ### QR encryption
 After many debates with the team, we decided on having QR codes encoded in plain text. QR codes simply hold the human-readable convientiant 4 character order code.
@@ -113,7 +123,7 @@ The probability of a malicious user ever being able to guess a 4 character exist
 
 
 ### Creating custom popups
-Popups are created using our custom `popup-window` component. This window automatically implements a click-able shadow overlay, close hotkeys, a formatted title, subtitle and body and some other CSS stylings for common HTML elements such as H1, H2 and P blocks.
+Popups are created using our custom `popup-window.js` component. This window automatically implements a click-able shadow overlay, close hotkeys, a formatted title, subtitle and body and some other CSS stylings for common HTML elements such as H1, H2 and P blocks.
 <br>
 To configure your popup window, you must pass in parameters called “props”. Required props must always be passed in. Popups contain the following options:
 ```javascript
@@ -127,9 +137,9 @@ dismissedHandler: PropTypes.func, // A callback function, fired automatically wh
 closePopup: PropTypes.bool, // Variable used to close the window. If set to true, the popup will instantly close
 buttons: PropTypes.object // JSX object containing any buttons to show at the bottom of the popup
 ```
+For an example on a closeable popup with buttons, a dismiss handler see [pickup-popup-window.js](https://gitlab.cs.cf.ac.uk/c1673342/drinks-app/blob/master/terminal/src/containers/pickup-popup-window/pickup-popup-window.js).
 <br>
-For an example on a closeable popup with buttons, a dismiss handler see [pickup-popup-window.js](https://gitlab.cs.cf.ac.uk/c1673342/drinks-app/blob/master/terminal/src/containers/pickup-popup-window/pickup-popup-window.js)
-For an example on a popup that cannot be dismissed without selecting an option first, see [select-collection-point-popup-window.js](https://gitlab.cs.cf.ac.uk/c1673342/drinks-app/blob/master/terminal/src/containers/select-collection-point-popup-window/select-collection-point-popup-window.js)
+For an example on a popup that cannot be dismissed without selecting an option first, see [select-collection-point-popup-window.js](https://gitlab.cs.cf.ac.uk/c1673342/drinks-app/blob/master/terminal/src/containers/select-collection-point-popup-window/select-collection-point-popup-window.js).
 
 ## How to run
 ### Installing dependencies
@@ -146,7 +156,17 @@ For an example on a popup that cannot be dismissed without selecting an option f
 * Connect to **\<your-computer-IP\>**:3006 to view the terminal on other devices on the LAN
 
 
+# Plans for expanding the project
+* Secure login by bar
+* Welsh language support
+
+
+# Current limitations of Solution
+* Enabling stock management and queue-sorting by ingredients to match similarly made drinks; blocked by lack of schema ingredients support
+
+
 ## Tests and Test Strategy
+Our range of automated tests can be ran using `npm test`. It is highly recommended to perform this check after making any changes to the terminal to validate code quality.
 
 
 ## Organisation of Code
