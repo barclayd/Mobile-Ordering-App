@@ -24,15 +24,6 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 
 ![51801019_289983681694391_8594841858423652352_n](/uploads/642f2bacf40070ed1c766db3285233df/51801019_289983681694391_8594841858423652352_n.png)
 
-
-## Schema visual
-<img width="800" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
-</br>
-
-## Features
-- [x] Bar Staff terminal app can listen to changes such as new orders.
-- [x] Mobile App updates order status when Terminal app changes the status or order such as “IN_PROGRESS” TO “AWAITING_COLLECTION”
-
 ### Limitations of Current Solution
 
 - Cashless
@@ -48,7 +39,9 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 * API protection
 * Customer ratings
 * Loyalty Schemes 
-* Possible Gamification features to promote loyalty and rewards 
+* Possible Gamification features to promote loyalty and rewards
+* Functionality to allow users to cancel orders or potentially change orders after placing them
+* Out of stock functionality
 
 ---
 #### References
