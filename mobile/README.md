@@ -1,4 +1,4 @@
-# DrinKing - Mobile App 📱
+# Drin*King* - Mobile App 📱
 
 ## Motivation
 
