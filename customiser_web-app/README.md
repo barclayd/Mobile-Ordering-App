@@ -1,68 +1,54 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# DrinKing - Bar Managerial Application:
+The Managerial application allows Bar Managers/Owners to view/edit menus, view statistics from orders and answer questionnaires about their bar.
 
-## Available Scripts
+## Supported Accessibility
+* **Hierarchy** - Clearly visible elements with sufficient contrast and size.
+* **Focus Order** - Most important information is shown clearly and largely. Background colour isn't as important as with the terminal application; colour is kept in for app consistency.
+* **Colourblind support** - All UI colours have been tailored to reduce common difficulties for colourblind users.
+* **Contrast ratios** - For buttons, contrast ratios were considered, having a slight grey on light blue for the set up questions seemed to work.
+* **Icons** - Icons are clear, and are imported from google's material UI design. These are going to be familiar to users. The spacing is also suitable.
+* **Typography** - Fonts are large and clear, using Roboto it is familiar and readable.
 
-In the project directory, you can run:
+## Tech/framework used
+- NodeJS
+- React (create-react-app)
+- Redux
+- React Router
+- FusionCharts
 
-### `npm start`
+## Installed packages
+* `@axios`
+* `@fusioncharts`
+* `@luxon`
+* `@material-ui`
+* `@node-sass`
+* `@prop-types`
+* `@react`
+* `@react-dom`
+* `@react-fusioncharts`
+* `@react-mdl`
+* `@react-redux`
+* `@react-router-dom`
+* `@react-scripts`
+* `@react-timeago`
+* `@redux`
+* `@redux-saga`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Features
+- [x] Show main page describing features on managerial website
+- [x] Set Up option.
+- [x] Logic to handle setting up the account.
+- [x] Questions for the user.
+- [x] View a list of drinks as a JSON.
+- [x] Format the drinks as a table using material UI.
+- [x] Be able to get drinks from the server.
+- [x] Be able to edit drinks locally.
+- [ ] Be able to edit drinks using server. **BLOCKED:** *No code in server to handle edit.*
+- [x] Be able to handleDelete locally.
+- [ ] Be able to delete drinks using api call. **BLOCKED:** *No code in server to handle delete.*
+- [x] Integrate FusionCharts into the application.
+- [x] Get a bar chart to show mock data for two collection points.
+- [x] Get order from the server to show real data on the bar chart.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## Major Design and Usability Decisions
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
