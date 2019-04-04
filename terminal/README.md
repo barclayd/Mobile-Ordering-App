@@ -1,4 +1,4 @@
-# Drin*King* - Bartender terminal :computer:  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
+# Drin*King* - Bartender terminal  🖥   [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 The Terminal web-app allows bar staff to view and manage orders. Terminals operate for set collection points in an establishment. Multiple terminals can be setup for single collection points. Staff members can work from any terminal, with the option to share terminals with colleagues.
 <br>
 We opted to use web-app architecture since all the appropriate hardware (webcams, touch-input etc) is still accessible with simple Javascript. Using web development meant the terminal has cross-platform support, doesn’t require app certificates and is easy to load onto any modern device.
