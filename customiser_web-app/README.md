@@ -52,3 +52,30 @@ The Managerial application allows Bar Managers/Owners to view/edit menus, view s
 
 ## Major Design and Usability Decisions
 
+### Set Up Page
+Uses JS buttons that load data from a hardcoded source, if required in future to get data from the server
+it wouldn't require much work. Clear and clean interface that is familiar for many managers who would be 
+using the application.
+
+### Menu edit Page
+Uses the material design. Improves accessibility, and is a clear interface that is familiar to users. 
+
+### Statistics Page
+Uses FusionCharts which has a very attractive interface, and very accessible.
+
+## How to run
+### Installing dependencies
+* Ensure [npm](https://www.npmjs.com/get-npm) and [git bash](https://gitforwindows.org/) are installed on your computer.
+* Ensure the GraphQL server is setup and running (checkout our install guide [here](https://gitlab.cs.cf.ac.uk/c1673342/drinks-app/blob/master/server/README.md)).
+**NOTE:** The database MUST contain at least one bar, collection point and bartender to use with the managerial app, especially if you want to view the data.
+* `git clone` or download and unzip this repository to your computer
+* Open a Git bash window inside the managerial folder and install dependencies using `npm install`
+
+### Running and using the app
+* Open a terminal (CMD or git bash) window inside the manager (customiser) folder
+* Run `npm start` command to run an instance of the project
+* Connect to [localhost:3000](http://localhost:3026) in a web browser to view the app on a webpage.
+
+
+
+
