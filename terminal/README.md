@@ -156,12 +156,12 @@ For an example on a popup that cannot be dismissed without selecting an option f
 * Connect to **\<your-computer-IP\>**:3006 to view the terminal on other devices on the LAN
 
 
-# Plans for expanding the project
+## Plans for expanding the project
 * Secure login by bar
 * Welsh language support
 
 
-# Current limitations of Solution
+## Current limitations of Solution
 * Enabling stock management and queue-sorting by ingredients to match similarly made drinks; blocked by lack of schema ingredients support
 
 
