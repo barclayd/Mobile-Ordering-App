@@ -15,10 +15,10 @@ To learn more about our solution, please use the table below.
 
 | Application | Purpose | Demo |
 | :-------------: |:-------------:|:-----:|
-| [**Mobile App**](mobile/) | Customer app for iOS and  Android | GIF here |
-| [**Managerial App**](managerial-app/) | Bar Staff Terminal | GIF here |
+| [**Mobile App**](mobile/) | Customer app, built for iOS and  Android | GIF here |
+| [**Managerial App**](managerial-app/) | Bar manager's interface to customise DrinKing implementation in their bar | GIF here |
 | [**Server**](server/) | Server | GIF here |
-| [**Terminal**](terminal/) | Bar Staff Terminal | GIF here |
+| [**Terminal**](terminal/) | Bar Staff Terminal web app | GIF here |
 
 We are using a Mongo database defined and queried using GraphQL. Our customer react-native Android / iOS App communicates to our database through a Node Js server. We are receiving live data changes by use of GraphQL subscriptions, enabled using an Apollo client.
 
@@ -38,10 +38,13 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 * Ingredients schema support
 * API protection
 * Customer ratings
+* Group baskets and payment splitting
 * Loyalty Schemes 
-* Possible Gamification features to promote loyalty and rewards
+* Possible gamification features to promote loyalty and rewards
 * Functionality to allow users to cancel orders or potentially change orders after placing them
-* Out of stock functionality
+* Out of stock functionality on terminal to alter users who have purchased orders with that particular out of stock ingredient
 
 ---
 #### References
+- [MongoDB Atlas](https://cloud.mongodb.com/v2/5c5996d8ff7a25e136324f18#metrics/replicaSet/5c59979ca6f2399950722825/explorer/drinks-app/drinks)
+- [Taiga](https://taiga.cs.cf.ac.uk/project/c1632962-drinks-ordering-app/)

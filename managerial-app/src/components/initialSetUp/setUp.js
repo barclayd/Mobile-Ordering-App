@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './setUp.scss'
 
-export default class SetUp extends React.Component {
+export default class SetUp extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     const questionsForUser = [
       {
@@ -50,7 +50,7 @@ export default class SetUp extends React.Component {
       },
     ];
 
-    this.state = {current:0, data:questionsForUser}
+    this.state = {current:0, data:questionsForUser};
     this.handleClick = this.handleClick.bind(this)
 
   } // end constructor
@@ -113,4 +113,4 @@ function List(props) {
 ReactDOM.render(
   <SetUp />,
   document.getElementById("root")
-)
+);

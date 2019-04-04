@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import * as actions from "../../store/actions";
 import { connect } from "react-redux";
 import FusionCharts from 'fusioncharts';
