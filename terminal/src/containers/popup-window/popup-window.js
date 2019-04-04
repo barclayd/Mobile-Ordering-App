@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class PopupWindow extends Component {
   constructor(props) {
@@ -16,7 +18,11 @@ class PopupWindow extends Component {
 
   componentDidMount () {
     this.props.showFunc(this.showPopup); // Run func from prop binding this.ShowPopup from this instance to allow parent to call ShowPopup() from state
-    document.addEventListener("keydown", this.keyPressed, false);
+    
+    // Only allow close hotkey when close button is visible
+    if (this.props.showCloseButton) {
+      document.addEventListener("keydown", this.keyPressed, false);
+    }
   }
 
   componentWillUnmount () {
@@ -81,14 +87,16 @@ class PopupWindow extends Component {
   renderCloseButton = (shouldShow) => {
     if (shouldShow) {
         return (
-            <div className="popup-close-button" onClick={this.dismissPopup} >🗙</div>
+            <div className="popup-close-button" onClick={this.dismissPopup} >
+              <FontAwesomeIcon icon={faTimes} />
+            </div>
         )
     }
   };
 
   overlayClick = (event) => {
-    // Check that the click event has not been triggered on a child element
-    if (event.target === event.currentTarget) {
+    // Check that the click event has not been triggered on a child element and that close button is allowed
+    if (this.props.showCloseButton && event.target === event.currentTarget) {
       this.dismissPopup()
     }
   };
@@ -123,15 +131,15 @@ class PopupWindow extends Component {
 }
 
 PopupWindow.propTypes = {
-  className: PropTypes.string.isRequired,
-  showCloseButton: PropTypes.bool.isRequired,
-  showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup()
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.object.isRequired, // JSX object
-  children: PropTypes.node.isRequired,
-  dismissedHandler: PropTypes.func,
-  closePopup: PropTypes.bool, // If set to true the window will close
-  buttons: PropTypes.object // JSX buttons to show at bottom
+  className: PropTypes.string.isRequired, // Auto-assigned CSS class to popup’s children container, enabling easy styling without affecting the rest of the app
+  showCloseButton: PropTypes.bool.isRequired, // Bool to enable or disable close buttons & hotkeys
+  showFunc: PropTypes.func.isRequired, // Callback function held in parent that calls popup window instance's ShowPopup() to display the popup
+  title: PropTypes.string.isRequired, // String to be loaded as the popup’s title
+  subtitle: PropTypes.object.isRequired, // JSX object used for the subtitle, supporting custom elements such as styled spans
+  children: PropTypes.node.isRequired, // JSX object holding the body of the popup
+  dismissedHandler: PropTypes.func, // A callback function, fired automatically when the popup is closed
+  closePopup: PropTypes.bool, // Variable used to close the window. If set to true, the popup will instantly close
+  buttons: PropTypes.object // JSX object containing any buttons to show at the bottom of the popup
 };
 
 export default PopupWindow;

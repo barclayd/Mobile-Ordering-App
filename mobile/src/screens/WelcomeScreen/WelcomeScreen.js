@@ -8,12 +8,12 @@ import {
     StyleSheet,
     Dimensions,
     TouchableOpacity,
-    KeyboardAvoidingView
+    KeyboardAvoidingView, AsyncStorage
 } from 'react-native';
 import WelcomeBackground from '../../components/UI/Backgrounds/WelcomeBackground/WelcomeBackground';
 import ButtonWithBackground from '../../components/UI/Buttons/ButtonWithBackground';
 import validate from '../../utility/validation';
-import MapDisplay from '../../components/MapDisplay/MapDisplay';
+import MapDisplay from '../../containers/MapDisplay/MapDisplay';
 import {setLoginSettings, setLoginScreen} from '../../utility/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Swiper from 'react-native-swiper';
@@ -25,12 +25,17 @@ let submittedCode;
 class WelcomeScreen extends Component {
 
     async componentDidMount() {
+        Navigation.events().bindComponent(this);
         this.props.onTryAutoSignIn(this.props.componentId);
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
                 visible: false
             }
         });
+        const userName = await this.getUserName();
+        this.setState({
+            userName: userName
+        })
     }
 
     state = {
@@ -42,7 +47,9 @@ class WelcomeScreen extends Component {
                     minLength: 4
                 }
             }
-        }
+        },
+        coordinates: {},
+        notificationSent: false
     };
 
     onSubmitCodeHandler = () => {
@@ -50,6 +57,30 @@ class WelcomeScreen extends Component {
             this.props.findBar(this.state.controls.barCode.value, this.props.componentId);
             submittedCode = this.state.controls.barCode.value;
         }
+    };
+
+    componentDidAppear() {
+        navigator.geolocation.requestAuthorization();
+        navigator.geolocation.getCurrentPosition(pos => {
+            const foundCoordinates = {
+                        latitude: pos.coords.latitude,
+                        longitude: pos.coords.longitude
+            };
+            this.setState({
+                coordinates: foundCoordinates
+            });
+        });
+    }
+
+    componentDidDisappear() {
+        this.setState({
+            notificationSent: true
+        });
+        navigator.geolocation.stopObserving();
+    }
+
+    getUserName = async () => {
+        return await AsyncStorage.getItem('name');
     };
 
     inputUpdateHandler = (key, value) => {
@@ -74,6 +105,12 @@ class WelcomeScreen extends Component {
         setLoginScreen(this.props.componentId, authType);
     };
 
+    handleNotificationSent = (sent) => {
+        this.setState({
+            notificationSent: sent
+        })
+    };
+
     render() {
 
         const drinKing =
@@ -93,11 +130,13 @@ class WelcomeScreen extends Component {
                     <WelcomeBackground colour1={colours.orange}>
                         {drinKing}
                         <Swiper
+                            autoplay={true}
                             dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
                             activeDot={<View style={{backgroundColor: colours.pureWhite, width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
                             paginationStyle={{
                                 bottom: 40
                             }}
+                            autoplayTimeout={3}
                             loop={false}>
                             <View style={styles.columnContainer}>
                                 <View style={styles.rowContainer}>
@@ -128,11 +167,13 @@ class WelcomeScreen extends Component {
                                             <ButtonWithBackground color={colours.cream} textColor={colours.darkOrange}  onPress={() => this.onLoginButtonHandler('login')}>Login</ButtonWithBackground>
                                             <ButtonWithBackground color={colours.darkOrange} textColor={colours.cream} onPress={() => this.onLoginButtonHandler('signup')}>Sign Up</ButtonWithBackground>
                                         </>
-                                    ) : <Text style={styles.h4}>Welcome back, <Text style={{color: colours.orange}}>{this.props.name}</Text></Text>}
+                                    ) : this.state.userName || this.props.name ? <Text style={styles.h4}>Hello, <Text style={{color: colours.orange}}>{this.state.userName ? this.state.userName : this.props.name}</Text></Text> :
+                                        <Text style={styles.h4}>Thank you for using Drin<Text style={{color: colours.orange}}>King</Text></Text>
+                                    }
                                 </View>
                             </View>
                             <View style={{top: (Dimensions.get('window').height / 6 * 1.5)}}>
-                                <MapDisplay componentId={this.props.componentId}/>
+                                <MapDisplay componentId={this.props.componentId} userCoordinates={this.state.coordinates} notificationStatus={this.state.notificationSent} sentNotification={this.handleNotificationSent} parentScreen='WelcomeScreen'/>
                             </View>
                         </Swiper>
                     </WelcomeBackground>
@@ -244,7 +285,8 @@ const mapStateToProps = state => {
         barLoading: state.bar.loading,
         barError: state.bar.error,
         userId: state.auth.userId,
-        name: state.auth.name
+        name: state.auth.name,
+        bars: state.bar.bars
     }
 };
 

@@ -1,12 +1,13 @@
 import * as actionTypes from "./actionTypes";
 
-export const submitOrder = (basket, componentId, paymentInfo, basketPrice) => {
+export const submitOrder = (basket, componentId, paymentInfo, totalPrice, stripeFee) => {
     return {
         type: actionTypes.SUBMIT_ORDER,
         order: basket,
         componentId: componentId,
         paymentInfo,
-        basketPrice
+        totalPrice,
+        stripeFee
     };
 };
 
@@ -82,3 +83,21 @@ export const orderStatusFailure = error => {
         error: error
     };
 };
+
+export const orderUpdatedSuccess = (order) => {
+    return {
+        type: actionTypes.UPDATE_ORDER_SUCCESS,
+        order
+    };
+};
+
+export const orderUpdatedFailure = error => {
+    console.log(error);
+    return {
+        type: actionTypes.UPDATE_ORDER_FAIL,
+        error
+    };
+};
+
+
+

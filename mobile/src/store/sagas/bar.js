@@ -3,9 +3,9 @@ import {AsyncStorage, Platform} from 'react-native';
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import {setMainApp, setMainAppSettings, popToRoot} from "../../utility/navigation";
 import {emptyBasket} from '../utility';
-
 import axios from '../../axios-instance';
 import * as actions from '../actions/index';
+import {errorNotification} from "../../notifications/ErrorHandling";
 
 export function* findBarSaga(action) {
     yield put(actions.findBarStart());
@@ -109,6 +109,7 @@ export function* updateLastVisitedBarSaga(action) {
                         lastVisitedBar {
                             _id
                             name
+                            barCode
                         }
                     }
                 }
@@ -126,6 +127,7 @@ export function* updateLastVisitedBarSaga(action) {
         if (response.status === 200 && response.status !== 201) {
             yield AsyncStorage.setItem("barId", action.barId);
             yield AsyncStorage.setItem("barName", response.data.data.updateLastVisitedBar.lastVisitedBar.name);
+            yield AsyncStorage.setItem("barCode", response.data.data.updateLastVisitedBar.lastVisitedBar.barCode);
             yield put(actions.updateLastVisitedBarSuccess(response.data.data.updateLastVisitedBar.lastVisitedBar.name, response.data.data.updateLastVisitedBar.lastVisitedBar._id));
         }
     } catch (err) {
@@ -157,6 +159,7 @@ export function* findAllBarsSaga(action) {
         const response = yield axios.post('/', JSON.stringify(requestBody));
         if (response.data.errors) {
             yield put(actions.findAllBarsFail(response.data.errors[0].message));
+            errorNotification('No internet connection', 'Tap this banner to try again', 10);
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
@@ -170,6 +173,7 @@ export function* findAllBarsSaga(action) {
         }
     } catch (err) {
         console.log(err);
+        errorNotification('No internet connection detected', 'Tap this banner to try again', 10);
         yield put(actions.findAllBarsFail(err));
     }
 }

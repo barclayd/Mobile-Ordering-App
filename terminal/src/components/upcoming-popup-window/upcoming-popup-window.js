@@ -20,13 +20,12 @@ const UpcomingPopupWindow = (props) => {
         >
             <div className="ordersContainer">
                 {
-                    props.pendingOrders.map((orderData) => {
+                    props.pendingOrders.map((orderData, counter) => {
                         return (
-                            <div key={orderData.id} className="orderContainer in-progress">
+                            <div key={counter} className="orderContainer in-progress">
 
-                                <MultiColumnItemList orderItems={orderData.items} />
-
-                                <h3>#{orderData.id} - <TimeAgo date={orderData.orderDate}/></h3>
+                                <MultiColumnItemList orderItems={orderData.drinks} />
+                                <h3>#{orderData.collectionId} - <TimeAgo date={orderData.date}/></h3>
 
                                 {/*
                                     { this.renderCustomerNotes(orderData.notes) }

@@ -2,12 +2,13 @@ import {put} from 'redux-saga/effects';
 import * as actions from '../actions/index';
 import axios from '../../axios-instance';
 import stripe from 'tipsi-stripe'
-import {AsyncStorage} from 'react-native';
+import {AsyncStorage, Alert} from 'react-native';
 import {
     popToRoot,
     setOrderStatus
 } from "../../utility/navigation";
 import {emptyBasket} from '../utility';
+import {errorNotification} from "../../notifications/ErrorHandling";
 
 const orderRedirect = async (collectionId, userId, collectionPoint, date, orderId) => {
     await popToRoot('ViewMenus');
@@ -30,11 +31,12 @@ export function* submitOrderSaga(action) {
     };
 
     const token = yield stripe.createTokenWithCard(payment);
-    const orderPrice = parseFloat(action.basketPrice) * 100;
-
+    const orderPrice = parseInt(action.totalPrice);
     const date = new Date().toISOString();
+    const userToken = yield AsyncStorage.getItem('token');
     const user = yield AsyncStorage.getItem('userId');
     const collectionId = action.paymentInfo.collectionPoint.id;
+    const stripeFee = parseInt(action.stripeFee);
 
     yield put(actions.submitOrderStart());
     let drinksList = [];
@@ -50,7 +52,7 @@ export function* submitOrderSaga(action) {
     try {
         let requestBody = {
             query: `
-                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Float!, $status: String!, $date: String!, $userInfo: ID!) {
+                mutation CreateOrder($drinks: [ID!], $collectionPoint: ID!, $price: Int!, $status: String!, $date: String!, $userInfo: ID, $stripeFee: Int) {
                     createOrder(orderInput: {
                         drinks: $drinks
                         collectionPoint: $collectionPoint
@@ -58,6 +60,7 @@ export function* submitOrderSaga(action) {
                         date: $date
                         userInfo: $userInfo
                         price: $price
+                        stripeFee: $stripeFee
                     }) {
                         _id
                         drinks {
@@ -87,17 +90,20 @@ export function* submitOrderSaga(action) {
                 status: "PENDING",
                 date: date,
                 userInfo: user,
-                price: orderPrice
+                price: orderPrice,
+                stripeFee: stripeFee
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody), {
             headers: {
+                'Authorization': `Bearer ${userToken}`,
                 'Payment': token.tokenId,
                 'Checkout': orderPrice
             }
         });
         if (response.data.errors) {
             yield put(actions.submitOrderFail(response.data.errors[0].message));
+            Alert.alert('Unsuccessful Order : ', response.data.errors[0].message);
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
@@ -136,6 +142,9 @@ export function* orderHistorySaga(action) {
                         collectionPoint {
                             name
                             collectionPointId
+                            bar {
+                                name
+                            }
                         }
                         status
                         collectionId
@@ -165,6 +174,7 @@ export function* orderHistorySaga(action) {
         }
     } catch (err) {
         console.log(err);
+        errorNotification('Retrieving Order History Failed', 'Please try again');
         yield put(actions.orderHistoryFailure());
     }
 }
@@ -200,7 +210,7 @@ export function* orderStatusSaga(action){
                 }
             `,
             variables: {
-                id: id ? id : '5c9680a7e76095a316b3687b'
+                id: id
             }
         };
         const response = yield axios.post('/', JSON.stringify(requestBody));
@@ -209,7 +219,6 @@ export function* orderStatusSaga(action){
             throw Error(response.data.errors[0].message);
         }
         if (response.status === 200 && response.status !== 201) {
-        // console.log("response",response)
         yield put(actions.orderStatusSuccess(response.data.data.findOrderById))
         }
     } catch (err) {

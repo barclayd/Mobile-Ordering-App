@@ -1,11 +1,15 @@
 import * as actionTypes from '../actions/actionTypes';
 import {updateObject} from "../utility";
+import update from 'immutability-helper';
 
 const initialState = {
     loading: null,
     error: null,
     orders: [],
-    updatingOrder: null
+    updatingOrderLoading: null,
+    updatedOrder: null,
+    newOrderLoading: null,
+    newOrderError: false
 };
 
 const getOrdersByCollectionPointStart = (state, action) => {
@@ -32,23 +36,37 @@ const getOrdersByCollectionPointFailure = (state, action) => {
 
 const updateOrderStart = (state, action) => {
     return updateObject(state, {
-        updatingOrder: true,
+        updatingOrderLoading: true,
     });
 };
-
 const updateOrderSuccess = (state, action) => {
-    return updateObject(state, {
-        updatedOrder: action.updatedOrder,
-    });
-};
+    const index = state.orders.map(order => order._id).indexOf(action.orderId);
 
+    return update(state, {orders: {[index]: {$set: action.updatedOrder}}});
+};
 const updateOrderFailure = (state, action) => {
     return updateObject(state, {
-        updatingOrder: false,
+        updatingOrderLoading: false,
         error: action.error
     });
 };
 
+const newOrderStart = (state, action) => {
+    return updateObject(state, {
+        newOrderLoading: true,
+    });
+};
+const newOrderSuccess = (state, action) => {
+    return updateObject(state, {
+        orders: state.orders.concat(action.order)
+    });
+};
+const newOrderFailure = (state, action) => {
+    return updateObject(state, {
+        newOrderLoading: false,
+        newOrderError: action.error
+    });
+};
 
 
 const reducer = (state = initialState, action) => {
@@ -59,10 +77,11 @@ const reducer = (state = initialState, action) => {
         case actionTypes.UPDATE_ORDER_START: return updateOrderStart(state, action);
         case actionTypes.UPDATE_ORDER_SUCCESS: return updateOrderSuccess(state, action);
         case actionTypes.UPDATE_ORDER_FAIL: return updateOrderFailure(state, action);
+        case actionTypes.NEW_ORDER_START: return newOrderStart(state, action);
+        case actionTypes.NEW_ORDER_SUCCESS: return newOrderSuccess(state, action);
+        case actionTypes.NEW_ORDER_FAIL: return newOrderFailure(state, action);
         default: return state;
     }
 };
 
 export default reducer;
-
-

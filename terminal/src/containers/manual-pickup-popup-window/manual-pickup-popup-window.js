@@ -14,6 +14,14 @@ class ManualPickupPopupWindow extends Component {
         this.setState({orderID: event.target.value.toUpperCase()})
     };
 
+
+    onKeyDown(event) {
+        if(event.which === 32) {
+            event.preventDefault();
+          }
+    }
+
+
     render () {
         return (
             <PopupWindow
@@ -35,7 +43,7 @@ class ManualPickupPopupWindow extends Component {
                     });
                     e.preventDefault();
                 }}>
-                    <input autoFocus={true} className="manualCode" type="text" placeholder="enter code..." onChange={this.handleChange}/>
+                    <input onKeyDown = {this.onKeyDown} autoFocus={true} className="manualCode" type="text" placeholder="enter code..." onChange={this.handleChange}/>
                     <br />
                     <button type="submit">Show collection screen</button>
                     <img id="ticketPicture" alt="Ticket preview" src={TicketMockup}/>

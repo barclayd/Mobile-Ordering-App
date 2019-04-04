@@ -17,7 +17,7 @@ import * as actions from '../../store/actions/index';
 import { Navigation } from "react-native-navigation";
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Checkout from "../../components/HOC/Checkout/Checkout";
+import Checkout from "../../containers/Checkout/Checkout";
 
 class ViewMenus extends Component {
   state = {
@@ -27,7 +27,7 @@ class ViewMenus extends Component {
 
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+    Navigation.events().bindComponent(this);
   }
 
   componentDidMount() {
@@ -100,7 +100,6 @@ class ViewMenus extends Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <Checkout componentId={this.props.componentId}>
       <View style={styles.background}>
@@ -108,13 +107,13 @@ class ViewMenus extends Component {
         <View style={styles.logoHeader}>
           {this.props.currentBar.logo ? <Image style={styles.logo} resizeMode={"contain"} source={{uri: this.props.currentBar.logo}}/> : null}
         </View>
+          <View style={{paddingVertical:20}}/>
           <View style={styles.view}>
             <FlatList
               horizontal
-              ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+              ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
               data={this.props.menus}
               renderItem={({ item: rowData }) => {
-                console.log(rowData);
                 return (
                   <TouchableOpacity
                     key={rowData}
@@ -122,8 +121,8 @@ class ViewMenus extends Component {
                   >
                       <Image
                         style={styles.image}
-                        source={{uri: rowData.image}}
-                      />
+                        source={{uri: rowData.image}}/>
+
                       <Text style={styles.menuName}>{rowData.name}</Text>
                       <Text style={styles.menuDescription}>{rowData.description}</Text>
                   </TouchableOpacity>
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: fontWeight.bold,
     color: colours.midnightBlack,
-    fontSize: 32
+    fontSize: 26
   },
   menuDescription: {
     textAlign: "center",
@@ -186,8 +185,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 'auto',
-    height: Dimensions.get("window").height / 4,
-    marginTop: 20,
+    height: Dimensions.get("window").height / 3.2,
   },
   card: {
     height: Dimensions.get("window").height / 2.5,

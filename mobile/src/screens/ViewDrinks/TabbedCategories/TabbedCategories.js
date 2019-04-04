@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Card} from "react-native-elements";
-import OverlayComponent from "../../../components/UI/Overlays/AddDrinks";
+import OverlayComponent from "../../../containers/Overlays/Drinks/AddDrinks";
 import * as colours from "../../../styles/colourScheme";
 import {connect} from "react-redux";
 import * as actions from "../../../store/actions/index";
@@ -60,7 +60,7 @@ class TabbedCategories extends Component {
   };
 
   priceValidation = price => {
-    return parseFloat(Math.round(price * 100) / 100).toFixed(2)
+    return ((price) / 100).toFixed(2)
   };
 
 
