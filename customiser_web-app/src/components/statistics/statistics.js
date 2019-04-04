@@ -27,7 +27,6 @@ const WHSmithData = {
 
   ]
 };
-//}
 
 const chartConfigs = {
   type: 'column2d',
