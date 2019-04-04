@@ -45,6 +45,6 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 * Out of stock functionality on terminal to alter users who have purchased orders with that particular out of stock ingredient
 
 ---
-#### References
+#### Links
 - [MongoDB Atlas](https://cloud.mongodb.com/v2/5c5996d8ff7a25e136324f18#metrics/replicaSet/5c59979ca6f2399950722825/explorer/drinks-app/drinks)
 - [Taiga](https://taiga.cs.cf.ac.uk/project/c1632962-drinks-ordering-app/)
