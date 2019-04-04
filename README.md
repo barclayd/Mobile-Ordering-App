@@ -17,6 +17,7 @@ To learn more about our solution, please use the table below.
 | :-------------: |:-------------:|:-----:|
 | [**Mobile App**](mobile/) | Customer app for iOS and  Android | GIF here |
 | [**Managerial App**](managerial-app/) | Bar Staff Terminal | GIF here |
+| [**Server**](server/) | Server | GIF here |
 | [**Terminal**](terminal/) | Bar Staff Terminal | GIF here |
 
 We are using a Mongo database defined and queried using GraphQL. Our customer react-native Android / iOS App communicates to our database through a Node Js server. We are receiving live data changes by use of GraphQL subscriptions, enabled using an Apollo client.
