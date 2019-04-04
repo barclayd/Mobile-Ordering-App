@@ -41,9 +41,9 @@ A key functional requirement was for users to easily to purchase orders. Our sol
 
 ## Features
 
-- [x]   Create account
+- [x] Create account
 - [x] Sign in to account
-- [x]  Auto login
+- [x] Auto login
 - [x] Find bar by 4 letter code
 - [x] Find bar by maps view
 - [x] Find closest DrinKing supported bar.
@@ -51,7 +51,7 @@ A key functional requirement was for users to easily to purchase orders. Our sol
 - [x] Dynamically loaded menus and drinks list per bar
 - [x] View and select menu
 - [x] Add drinks to virtual basket
-- [x]  Update quantity of drinks selected
+- [x] Update quantity of drinks selected
 - [x] Delete basket
 - [x] Create an order
 - [x] Select a collection point at checkout
