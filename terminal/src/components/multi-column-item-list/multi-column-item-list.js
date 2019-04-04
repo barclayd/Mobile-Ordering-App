@@ -9,9 +9,9 @@ const itemsPerOrderListColumn = 4; // How many order items show per column
 
 const MultiColumnItemList = (props) => {
     const renderListItems = (items) => {
-        return items.map((itemData) => {
+        return items.map((itemData, counter) => {
             return (
-                <li key={itemData.id}><span className="quantity">{itemData.quantity}x</span>{itemData.name}</li>
+                <li key={counter}><span className="quantity">{itemData.quantity}x</span>{itemData.name}</li>
             );
         })
     };

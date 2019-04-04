@@ -1,24 +1,6 @@
-export {
-    auth, logout, setAuthRedirectPath, authCheckState, logoutSucceed, authStart, authSuccess, authFail, checkAuthTimeout, checkAuthRole, authStoreToken, authAutoSignIn
-} from './auth'
-
-
-export {
-    findBarStart, findBarSuccess, findBarFail, removeBar, removeBarFail, findBar, removeBarStart, removeBarSuccess, updateLastVisitedBar, updateLastVisitedBarStart, updateLastVisitedBarFail, updateLastVisitedBarSuccess, findAllBars, findAllBarsFail, findAllBarsStart, findAllBarsSuccess
-} from './bar'
-
-export {
-    findDrinksStart, findDrinks, findDrinksSuccess, findDrinksFail, findDrinkCategories, findDrinkCategoriesFail, findDrinkCategoriesStart, findDrinkCategoriesSuccess
-} from './drinks'
-
-export {
-    submitOrder, submitOrderSuccess, submitOrderStart, submitOrderFail, orderHistory, orderHistoryFailure, orderHistoryStart, orderHistorySuccess, orderStatus, orderStatusFailure, orderStatusSuccess, orderStatusStart
-} from './order'
-
-export {
-    updateBasketStart, updateBasket, updateBasketSuccess, emptyBasketSuccess, emptyBasketStart, emptyBasket, retrieveBasket, retrieveBasketStart, retrieveBasketSuccess, retrieveBasketFail
-} from './basket'
-
-export {
-    findCollectionPoints, findCollectionPointsFail, findCollectionPointsStart, findCollectionPointsSuccess
-} from './collectionPoint'
+export * from './auth';
+export * from './bar';
+export * from './drinks';
+export * from './order';
+export * from './basket'
+export * from './collectionPoint';

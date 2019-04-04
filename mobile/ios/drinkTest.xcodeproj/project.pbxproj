@@ -13,6 +13,7 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* drinkTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* drinkTestTests.m */; };
+		11468D6CB49944A583782D3F /* libRNNotificationBanner.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20DA6A1B03F444F08566B19A /* libRNNotificationBanner.a */; };
 		11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		138D37F4D78348A9A4420BD1 /* libReactNativePayments.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECF530EF73174F86A49048B9 /* libReactNativePayments.a */; };
@@ -57,6 +58,9 @@
 		584897332213548000C0D11C /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 584897242213548000C0D11C /* MaterialIcons.ttf */; };
 		654138CE224ADECB0002404D /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6541389C224ADEBB0002404D /* libAirMaps.a */; };
 		654B47E722139E66007DE312 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 654B47BB22139E66007DE312 /* Ionicons.ttf */; };
+		65A04445224E873B00FE3571 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65A04421224E870A00FE3571 /* libRCTPushNotification.a */; };
+		65A0451A224EBB4200FE3571 /* BRYXBanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65A04511224EBA7500FE3571 /* BRYXBanner.framework */; };
+		65A0451B224EBB4200FE3571 /* BRYXBanner.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 65A04511224EBA7500FE3571 /* BRYXBanner.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		65F3B23E2213760300431FDF /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 65F3B2142213760300431FDF /* FontAwesome.ttf */; };
 		65F3B2482213765C00431FDF /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65F3B2452213764100431FDF /* libRNVectorIcons.a */; };
 		7084DEAF80204A35AE28276B /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D10D751A6454CCEB1B565D8 /* libRNSVG-tvOS.a */; };
@@ -378,6 +382,55 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = ReactNativePayments;
 		};
+		65A04420224E870A00FE3571 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 65A0440A224E870A00FE3571 /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTPushNotification;
+		};
+		65A04422224E870A00FE3571 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 65A0440A224E870A00FE3571 /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D05745F1DE6004600184BB4;
+			remoteInfo = "RCTPushNotification-tvOS";
+		};
+		65A04507224EB74B00FE3571 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3D8E05AA3744AABA6138D0C /* RNNotificationBanner.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNNotificationBanner;
+		};
+		65A04510224EBA7500FE3571 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 65A0450B224EBA7500FE3571 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0B8B7460F76F20CB828F13A1D55CDDA4;
+			remoteInfo = BRYXBanner;
+		};
+		65A04512224EBA7500FE3571 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 65A0450B224EBA7500FE3571 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E60CDB0A88599A0C41F908221AF21316;
+			remoteInfo = "Pods-RNNotificationBanner";
+		};
+		65A04518224EBA8700FE3571 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 65A04514224EBA8700FE3571 /* RNNotificationBanner.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNNotificationBanner;
+		};
+		65A0451C224EBB4200FE3571 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 65A0450B224EBA7500FE3571 /* Pods.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F7B9BA720524B18FAEE6488742E932E9;
+			remoteInfo = BRYXBanner;
+		};
 		65B93AA1223C638600BF94E0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 903C9D8834D44C33BF5BF458 /* RNSVG.xcodeproj */;
@@ -436,6 +489,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		65A0451E224EBB4300FE3571 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				65A0451B224EBB4200FE3571 /* BRYXBanner.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		004E789ADFB34E5380C49FC5 /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -457,6 +524,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = drinkTest/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = drinkTest/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		20DA6A1B03F444F08566B19A /* libRNNotificationBanner.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNNotificationBanner.a; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* drinkTest-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkTest-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* drinkTest-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkTest-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -483,6 +551,9 @@
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		65413897224ADEBA0002404D /* AirMaps.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 		654B47BB22139E66007DE312 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		65A0440A224E870A00FE3571 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
+		65A0450B224EBA7500FE3571 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = "../../node_modules/react-native-notification-banner/ios/Pods/Pods.xcodeproj"; sourceTree = "<group>"; };
+		65A04514224EBA8700FE3571 /* RNNotificationBanner.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNNotificationBanner.xcodeproj; path = "../../node_modules/react-native-notification-banner/ios/RNNotificationBanner.xcodeproj"; sourceTree = "<group>"; };
 		65E168C42239DDC800A18933 /* drinkTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = drinkTest.entitlements; path = drinkTest/drinkTest.entitlements; sourceTree = "<group>"; };
 		65F3B2142213760300431FDF /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		65F3B23F2213764100431FDF /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -491,6 +562,7 @@
 		903C9D8834D44C33BF5BF458 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B86794A5B2C542E18C3A1861 /* ReactNativePayments.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativePayments.xcodeproj; path = "../node_modules/react-native-payments/lib/ios/ReactNativePayments.xcodeproj"; sourceTree = "<group>"; };
+		C3D8E05AA3744AABA6138D0C /* RNNotificationBanner.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNNotificationBanner.xcodeproj; path = "../node_modules/react-native-notification-banner/ios/RNNotificationBanner.xcodeproj"; sourceTree = "<group>"; };
 		CDFD411FEDAD4786B01A62BB /* libTPSStripe.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libTPSStripe.a; sourceTree = "<group>"; };
 		CFF9006E6E84A3C253B71843 /* Pods-drinkTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-drinkTest.debug.xcconfig"; path = "Target Support Files/Pods-drinkTest/Pods-drinkTest.debug.xcconfig"; sourceTree = "<group>"; };
 		ECF530EF73174F86A49048B9 /* libReactNativePayments.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativePayments.a; sourceTree = "<group>"; };
@@ -513,6 +585,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65A04445224E873B00FE3571 /* libRCTPushNotification.a in Frameworks */,
+				65A0451A224EBB4200FE3571 /* BRYXBanner.framework in Frameworks */,
 				654138CE224ADECB0002404D /* libAirMaps.a in Frameworks */,
 				58348993223AB72C00F29D57 /* libART.a in Frameworks */,
 				65F3B2482213765C00431FDF /* libRNVectorIcons.a in Frameworks */,
@@ -535,6 +609,7 @@
 				A9B9BD622A0E4E32931B5747 /* libRNSVG.a in Frameworks */,
 				F44A266678BF466AA3933DF4 /* libTPSStripe.a in Frameworks */,
 				EC1FEA306478989943646BFE /* libPods-drinkTest.a in Frameworks */,
+				11468D6CB49944A583782D3F /* libRNNotificationBanner.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -777,6 +852,7 @@
 				004E789ADFB34E5380C49FC5 /* libRNSVG.a */,
 				CDFD411FEDAD4786B01A62BB /* libTPSStripe.a */,
 				5D10D751A6454CCEB1B565D8 /* libRNSVG-tvOS.a */,
+				20DA6A1B03F444F08566B19A /* libRNNotificationBanner.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -785,6 +861,49 @@
 			isa = PBXGroup;
 			children = (
 				65687418223AE4C200CCC235 /* libReactNativePayments.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		65A0440B224E870A00FE3571 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				65A04421224E870A00FE3571 /* libRCTPushNotification.a */,
+				65A04423224E870A00FE3571 /* libRCTPushNotification-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		65A04504224EB74B00FE3571 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				65A04508224EB74B00FE3571 /* libRNNotificationBanner.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		65A04509224EB79500FE3571 /* RNNotificationBanner */ = {
+			isa = PBXGroup;
+			children = (
+				65A04514224EBA8700FE3571 /* RNNotificationBanner.xcodeproj */,
+				65A0450B224EBA7500FE3571 /* Pods.xcodeproj */,
+			);
+			path = RNNotificationBanner;
+			sourceTree = "<group>";
+		};
+		65A0450C224EBA7500FE3571 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				65A04511224EBA7500FE3571 /* BRYXBanner.framework */,
+				65A04513224EBA7500FE3571 /* Pods_RNNotificationBanner.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		65A04515224EBA8700FE3571 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				65A04519224EBA8700FE3571 /* libRNNotificationBanner.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -827,6 +946,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				65A04509224EB79500FE3571 /* RNNotificationBanner */,
+				65A0440A224E870A00FE3571 /* RCTPushNotification.xcodeproj */,
 				65413897224ADEBA0002404D /* AirMaps.xcodeproj */,
 				5834895F223AB6F200F29D57 /* ART.xcodeproj */,
 				65F3B23F2213764100431FDF /* RNVectorIcons.xcodeproj */,
@@ -847,6 +968,7 @@
 				B86794A5B2C542E18C3A1861 /* ReactNativePayments.xcodeproj */,
 				903C9D8834D44C33BF5BF458 /* RNSVG.xcodeproj */,
 				FB5DC2E528DA4E07A006C835 /* TPSStripe.xcodeproj */,
+				C3D8E05AA3744AABA6138D0C /* RNNotificationBanner.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -930,10 +1052,12 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				045DAC70B13CDFDF19A343C5 /* [CP] Copy Pods Resources */,
+				65A0451E224EBB4300FE3571 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				65A0451D224EBB4200FE3571 /* PBXTargetDependency */,
 			);
 			name = drinkTest;
 			productName = "Hello World";
@@ -1034,6 +1158,10 @@
 					ProjectRef = 584896672213184900C0D11C /* BVLinearGradient.xcodeproj */;
 				},
 				{
+					ProductGroup = 65A0450C224EBA7500FE3571 /* Products */;
+					ProjectRef = 65A0450B224EBA7500FE3571 /* Pods.xcodeproj */;
+				},
+				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
 				},
@@ -1062,6 +1190,10 @@
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
 				},
 				{
+					ProductGroup = 65A0440B224E870A00FE3571 /* Products */;
+					ProjectRef = 65A0440A224E870A00FE3571 /* RCTPushNotification.xcodeproj */;
+				},
+				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
 					ProjectRef = 139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */;
 				},
@@ -1088,6 +1220,14 @@
 				{
 					ProductGroup = 65687414223AE4C200CCC235 /* Products */;
 					ProjectRef = B86794A5B2C542E18C3A1861 /* ReactNativePayments.xcodeproj */;
+				},
+				{
+					ProductGroup = 65A04515224EBA8700FE3571 /* Products */;
+					ProjectRef = 65A04514224EBA8700FE3571 /* RNNotificationBanner.xcodeproj */;
+				},
+				{
+					ProductGroup = 65A04504224EB74B00FE3571 /* Products */;
+					ProjectRef = C3D8E05AA3744AABA6138D0C /* RNNotificationBanner.xcodeproj */;
 				},
 				{
 					ProductGroup = 65B93A9B223C638600BF94E0 /* Products */;
@@ -1407,6 +1547,48 @@
 			remoteRef = 65687417223AE4C200CCC235 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		65A04421224E870A00FE3571 /* libRCTPushNotification.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTPushNotification.a;
+			remoteRef = 65A04420224E870A00FE3571 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		65A04423224E870A00FE3571 /* libRCTPushNotification-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRCTPushNotification-tvOS.a";
+			remoteRef = 65A04422224E870A00FE3571 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		65A04508224EB74B00FE3571 /* libRNNotificationBanner.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNNotificationBanner.a;
+			remoteRef = 65A04507224EB74B00FE3571 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		65A04511224EBA7500FE3571 /* BRYXBanner.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = BRYXBanner.framework;
+			remoteRef = 65A04510224EBA7500FE3571 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		65A04513224EBA7500FE3571 /* Pods_RNNotificationBanner.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_RNNotificationBanner.framework;
+			remoteRef = 65A04512224EBA7500FE3571 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		65A04519224EBA8700FE3571 /* libRNNotificationBanner.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNNotificationBanner.a;
+			remoteRef = 65A04518224EBA8700FE3571 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		65B93AA2223C638600BF94E0 /* libRNSVG.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1639,6 +1821,11 @@
 			target = 2D02E47A1E0B4A5D006451C7 /* drinkTest-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
+		65A0451D224EBB4200FE3571 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = BRYXBanner;
+			targetProxy = 65A0451C224EBB4200FE3571 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1667,12 +1854,14 @@
 					"$(SRCROOT)/../node_modules/react-native-payments/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/tipsi-stripe/ios/TPSStripe",
+					"$(SRCROOT)/../node_modules/react-native-notification-banner/ios",
 				);
 				INFOPLIST_FILE = drinkTestTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1698,12 +1887,14 @@
 					"$(SRCROOT)/../node_modules/react-native-payments/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/tipsi-stripe/ios/TPSStripe",
+					"$(SRCROOT)/../node_modules/react-native-notification-banner/ios",
 				);
 				INFOPLIST_FILE = drinkTestTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1723,6 +1914,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CFF9006E6E84A3C253B71843 /* Pods-drinkTest.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = drinkTest/drinkTest.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1730,6 +1922,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = R2GGK3VN2C;
+				FRAMEWORK_SEARCH_PATHS = "${BUILT_PRODUCTS_DIR}/BRYXBanner";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-payments/lib/ios/**",
@@ -1737,6 +1930,7 @@
 					"$(SRCROOT)/../node_modules/tipsi-stripe/ios/TPSStripe",
 					"${SRCROOT}/../../../ios/Pods/Headers/Public",
 					"$(SRCROOT)/../../react-native/React",
+					"$(SRCROOT)/../node_modules/react-native-notification-banner/ios",
 				);
 				INFOPLIST_FILE = drinkTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1756,12 +1950,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F382CF46346AC12523B32340 /* Pods-drinkTest.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = drinkTest/drinkTest.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R2GGK3VN2C;
+				FRAMEWORK_SEARCH_PATHS = "${BUILT_PRODUCTS_DIR}/BRYXBanner";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-payments/lib/ios/**",
@@ -1769,6 +1965,7 @@
 					"$(SRCROOT)/../node_modules/tipsi-stripe/ios/TPSStripe",
 					"${SRCROOT}/../../../ios/Pods/Headers/Public",
 					"$(SRCROOT)/../../react-native/React",
+					"$(SRCROOT)/../node_modules/react-native-notification-banner/ios",
 				);
 				INFOPLIST_FILE = drinkTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1801,11 +1998,13 @@
 					"$(SRCROOT)/../node_modules/react-native-payments/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/tipsi-stripe/ios/TPSStripe",
+					"$(SRCROOT)/../node_modules/react-native-notification-banner/ios",
 				);
 				INFOPLIST_FILE = "drinkTest-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1840,11 +2039,13 @@
 					"$(SRCROOT)/../node_modules/react-native-payments/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/tipsi-stripe/ios/TPSStripe",
+					"$(SRCROOT)/../node_modules/react-native-notification-banner/ios",
 				);
 				INFOPLIST_FILE = "drinkTest-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1878,11 +2079,13 @@
 					"$(SRCROOT)/../node_modules/react-native-payments/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/tipsi-stripe/ios/TPSStripe",
+					"$(SRCROOT)/../node_modules/react-native-notification-banner/ios",
 				);
 				INFOPLIST_FILE = "drinkTest-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1916,11 +2119,13 @@
 					"$(SRCROOT)/../node_modules/react-native-payments/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 					"$(SRCROOT)/../node_modules/tipsi-stripe/ios/TPSStripe",
+					"$(SRCROOT)/../node_modules/react-native-notification-banner/ios",
 				);
 				INFOPLIST_FILE = "drinkTest-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

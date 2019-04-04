@@ -1,0 +1,38 @@
+.collectionPointButton  {
+  height: 350px;
+  width: 360px;
+  margin: 10px 15px;
+  font-size: 25px;
+  font-weight: normal;
+  float: left;
+  border-radius: 12px;
+  text-align: left;
+  background: #4B3451;
+  cursor: pointer;
+  
+  padding: 20px 20px 10px 20px;
+}
+
+.collectionPointButton:hover{
+  background-color: #694972; 
+}
+
+
+.collectionPointContainer {
+  padding-left: 20px;
+}
+
+.collectionPointButton .title {
+  font-weight: bold;
+}
+
+.collectionPointButton .description {
+  font-weight: normal;
+  text-align: left;
+}
+
+.collectionPointButton img {
+  width: 100%;
+  height: auto;
+  border-radius: 7px;
+}

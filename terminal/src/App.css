@@ -1,15 +1,36 @@
 .App, body, html {
+  color: white;
   background: #211624;
 }
 
 .App {
-  color: white;
   min-height: 100vh;
 }
 
 .App-header {
   padding: 12px 35px;
 }
+
+.loadingScreen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+  width: 200px;
+  height: 100px;
+  text-align: center;
+}
+.loadingScreen img {
+  width: 100px;
+}
+.loadingScreen .loadingMessage {
+  white-space: nowrap;
+  font-size: 20px;
+  color: #bbb;
+  text-transform: lowercase;
+}
+
 
 /* Heading styling: */
 h1, h2 { text-transform: uppercase; }
@@ -62,10 +83,11 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
 .App-header { padding-top: 45px; } /* Add space for fixed top bar */
 
 #accountsHotbar {
+  max-height: 36px;
+
   /* Only show buttons that can fit onscreen: */
   overflow: hidden;
-  max-height: 36px;
-  margin-right: 600px;
+  margin-right: 770px;
 }
 #accountsHotbar button { margin-right: 15px } /* Space account quick-switch buttons */
 
@@ -234,6 +256,29 @@ button > .icon > svg { filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); } /
   min-height: 150px;
 }
 
+.orderContainer.tip-prompt {
+  background: #261a29; /* Slightly tint the background colour */
+  border: 5px dashed #5b3f63;
+
+  min-height: 165px;
+  opacity: 0.9;
+
+  padding-top: 45px; /* Vertically center the text in the div */
+  text-align: center;
+
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  line-height: 29px;
+}
+.orderContainer.tip-prompt .title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #888;
+}
+.orderContainer.tip-prompt .message {
+  font-size: 20px;
+  color: #888;
+}
+
 .orderButtonsContainer {
   position: absolute;
   bottom: 0;
@@ -383,6 +428,17 @@ button.orderButton .subtitle {
 .pendingOrderButton .icon.history {
   font-size: 54px;
   background: #FFCC66;
+}
+
+/* Show big red X when buttons are disabled */
+.pendingOrderButton:disabled:after {
+  content: "X";
+  position: absolute;
+  top: 20px;
+  color: #922;
+  left: 0;
+  font-size: 180px;
+  width: 100%;
 }
 
 

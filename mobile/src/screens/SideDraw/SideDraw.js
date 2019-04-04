@@ -12,6 +12,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import IconFa from "react-native-vector-icons/FontAwesome";
 import { Avatar } from "react-native-elements";
 import * as colours from "../../styles/colourScheme";
+import IonicIcon from "react-native-vector-icons/Ionicons";
 import {
   setDefaultSettings,
   setWelcomePageRoot,
@@ -19,7 +20,8 @@ import {
   setViewPastOrdersSettings,
   setOrderStatus,
     setSwitchBars,
-  popToRoot
+  popToRoot,
+  showLoginOnNotificationPress
 } from "../../utility/navigation";
 import * as actions from "../../store/actions/index";
 import { Navigation } from "react-native-navigation";
@@ -51,7 +53,16 @@ class SideDrawer extends Component {
         });
     }
 
-  logoutHandler = async () => {
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.userName) {
+          this.setState({
+              accountName: nextProps.userName,
+              userId: nextProps.userId
+          })
+      }
+    }
+
+    logoutHandler = async () => {
     this.props.onLogout();
     setDefaultSettings();
     await setWelcomePageRoot();
@@ -62,9 +73,13 @@ class SideDrawer extends Component {
   };
 
   previousOrders = async () => {
-    setViewPastOrdersSettings();
+    Promise.all([
+      IonicIcon.getImageSource((Platform.OS === 'android' ? "md-person" : "ios-arrow-down"), 30)
+  ]).then(sources => {
+    setViewPastOrdersSettings(sources[0]);
     setViewPastOrders(this.props.componentId, "ViewMenus");
-  };
+});
+}
 
   orderStatus = async () => {
     await setOrderStatus(null, 124);
@@ -78,6 +93,10 @@ class SideDrawer extends Component {
       return await AsyncStorage.getItem("name");
   };
 
+  getBarId = async () => {
+    return await AsyncStorage.getItem("barId");
+  }
+
   getUserId = async () => {
     return await AsyncStorage.getItem("userId");
   };
@@ -85,6 +104,17 @@ class SideDrawer extends Component {
   getOrderId = async () => {
     return await AsyncStorage.getItem("orderId");
   };
+
+  signInLogic = async () =>  {
+    Promise.all([
+        IconFa.getImageSource(
+            Platform.OS === "android" ? "remove" : "remove",
+            30
+        )
+      ]).then(sources => {
+          showLoginOnNotificationPress(this.getBarId(), sources[0]);
+      })
+}
 
   render() {
     let menuOptions =
@@ -172,7 +202,7 @@ class SideDrawer extends Component {
           </TouchableOpacity>
         </>;
 
-    if (!this.getUserId()) {
+    if (!this.state.userId) {
       menuOptions =
           <>
             <View style={[styles.drawItem, styles.header]}>
@@ -185,6 +215,18 @@ class SideDrawer extends Component {
               />
               <Text style={styles.text}>Create an Account</Text>
             </View>
+            <TouchableOpacity onPress={() => this.signInLogic()}>
+              <View style={styles.drawItem}>
+                <Icon
+                    size={30}
+                    color="#fff"
+                    name={Platform.OS === "android" ? "md-person" : "ios-person"}
+                    style={styles.drawItemIcon}
+                />
+                <Text style={[styles.text]}>Sign in </Text>
+              </View>
+            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => this.logoutHandler()}>
               <View style={styles.drawItem}>
                 <Icon
@@ -193,7 +235,7 @@ class SideDrawer extends Component {
                     name={Platform.OS === "android" ? "md-log-out" : "ios-log-in"}
                     style={styles.drawItemIcon}
                 />
-                <Text style={[styles.text]}>Sign in </Text>
+                <Text style={[styles.text]}>Welcome Screen</Text>
               </View>
             </TouchableOpacity>
 
@@ -287,10 +329,17 @@ const styles = StyleSheet.create({
   }
 });
 
+const mapStateToProps = state => {
+    return {
+        userName: state.auth.name,
+        userId: state.auth.userId
+    }
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     onLogout: () => dispatch(actions.logout())
   };
 };
 
-export default connect(null, mapDispatchToProps)(SideDrawer);
+export default connect(mapStateToProps, mapDispatchToProps)(SideDrawer);

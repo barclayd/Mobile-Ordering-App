@@ -13,7 +13,7 @@ import ScrollableTabView, {
 import * as actions from "../../store/actions/index";
 import * as colours from "../../styles/colourScheme"
 import TabbedCategories from "./TabbedCategories/TabbedCategories";
-import Checkout from '../../components/HOC/Checkout/Checkout';
+import Checkout from '../../containers/Checkout/Checkout';
 import {Navigation} from "react-native-navigation";
 import {setViewBasket} from "../../utility/navigation";
 
@@ -59,7 +59,6 @@ class ViewDrinks extends Component {
   };
 
   render() {
-    console.log(this.state.drinks);
     return (
         <Checkout componentId={this.props.componentId}>
           <View style={styles.background}>

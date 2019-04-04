@@ -28,31 +28,81 @@ export const getOrdersByCollectionPointFail = error => {
 };
 
 
-export const updateOrder = (orderId, status, barStaffId) => {
+export const updateOrder = (orderId, status, barStaffId, completionTime) => {
     return {
         type: actionTypes.UPDATE_ORDER,
         orderId,
         status,
-        barStaffId
+        barStaffId,
+        completionTime
     };
 };
-
 export const updateOrderStart = () => {
     return {
         type: actionTypes.UPDATE_ORDER_START
     };
 };
-
-export const updateOrderSuccess = (updatedOrder) => {
+export const updateOrderSuccess = (updatedOrder, orderId) => {
     return {
         type: actionTypes.UPDATE_ORDER_SUCCESS,
-        updatedOrder
+        updatedOrder,
+        orderId
     };
 };
-
 export const updateOrderFail = error => {
     return {
         type: actionTypes.UPDATE_ORDER_FAIL,
+        error: error
+    };
+};
+
+
+
+
+export const findBarStaff  = (barId) => {
+    return {
+        type: actionTypes.FIND_BAR_STAFF,
+        barId
+    };
+};
+export const findBarStaffStart = () => {
+    return {
+        type: actionTypes.FIND_BAR_STAFF_START
+    };
+};
+export const findBarStaffSuccess = (barStaff) => {
+    return {
+        type: actionTypes.FIND_BAR_STAFF_SUCCESS,
+        barStaff
+    };
+};
+export const findBarStaffFail = error => {
+    return {
+        type: actionTypes.FIND_BAR_STAFF_FAIL,
+        error: error
+    };
+};
+
+export const newOrder = (order) => {
+    return {
+        type: actionTypes.NEW_ORDER,
+        order
+    };
+};
+export const newOrderStart = () => {
+    return {
+        type: actionTypes.NEW_ORDER_START
+    };
+};
+export const newOrderSuccess = (order) => {
+    return {
+        type: actionTypes.NEW_ORDER_SUCCESS,
+        order
+    };
+};
+export const newOrderFail = error => {
+    return {
+        type: actionTypes.NEW_ORDER_FAIL,
         error: error
     };
 };

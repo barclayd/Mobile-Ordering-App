@@ -5,7 +5,7 @@ import {Alert} from 'react-native';
 import * as actions from '../actions/index';
 import IonicIcon from "react-native-vector-icons/Ionicons";
 import {Platform} from "react-native";
-import {setMainApp, setMainAppSettings, pop} from "../../utility/navigation";
+import {setMainApp, setMainAppSettings, pop, closeLoginModal} from "../../utility/navigation";
 import {emptyBasket} from '../utility';
 
 const authRedirect = (action, barName, barCode) => {
@@ -19,6 +19,10 @@ const authRedirect = (action, barName, barCode) => {
         });
 };
 
+const authDropModal = (componentId) => {
+    closeLoginModal(componentId);
+};
+
 export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("token");
     yield AsyncStorage.removeItem("userId");
@@ -28,6 +32,7 @@ export function* logoutSaga(action) {
     yield AsyncStorage.removeItem("barCode");
     yield AsyncStorage.removeItem("lastOrder");
     yield AsyncStorage.removeItem("orderId");
+    yield AsyncStorage.removeItem("uuid");
     yield put(actions.emptyBasketStart());
     yield emptyBasket();
     yield put(actions.emptyBasketSuccess());
@@ -36,7 +41,6 @@ export function* logoutSaga(action) {
 
 export function* authUserSaga(action) {
     yield put(actions.authStart());
-
     if (action.isSignUp) {
         try {
             let requestBody = {
@@ -139,11 +143,9 @@ export function* authUserSaga(action) {
 
             const response = yield axios.post('/', JSON.stringify(requestBody));
             if (response.status === 200 && response.status !== 201) {
-                console.log(response.data.data.login);
                 yield AsyncStorage.setItem("name", response.data.data.login.name);
                 yield AsyncStorage.setItem("token", response.data.data.login.token);
                 yield AsyncStorage.setItem("userId", response.data.data.login.userId);
-                console.log(response.data.data.login.lastVisitedBar);
                 if (response.data.data.login.lastVisitedBar) {
                     yield AsyncStorage.setItem("barName", response.data.data.login.lastVisitedBar.name);
                     yield AsyncStorage.setItem("barId", response.data.data.login.lastVisitedBar._id);
@@ -151,7 +153,11 @@ export function* authUserSaga(action) {
                 }
                 yield put(actions.authSuccess(response.data.data.login.token, response.data.data.login.userId, response.data.data.login.tokenExpiration, response.data.data.login.name));
                 if (response.data.data.login.lastVisitedBar) {
+                    if (action.modal === true){
+                        yield authDropModal(action.componentId);
+                    } else {
                     yield authRedirect(action, response.data.data.login.lastVisitedBar.name, response.data.data.login.lastVisitedBar.barCode);
+                    }
                 } else {
                     // return back to previous page
                     yield pop(action.componentId);
@@ -172,12 +178,16 @@ export function* authCheckStateSaga(action) {
     const token = yield AsyncStorage.getItem("token");
     const barName = yield AsyncStorage.getItem("barName");
     const barCode = yield AsyncStorage.getItem("barCode");
+    const userId = yield AsyncStorage.getItem("userId");
     // if (!token) {
     //     yield put(actions.logout());
     // } else {
     //     authRedirect(action, barName, barCode);
     // }
     if (token) {
+        // populate redux
+        yield put(actions.authStart());
+        yield put(actions.authSuccess(token, userId, null, null));
         authRedirect(action, barName, barCode);
     }
     yield put(actions.retrieveBasketStart());
