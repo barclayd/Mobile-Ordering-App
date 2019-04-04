@@ -92,6 +92,7 @@ Runs the suite of tests
   $ git clone https://gitlab.cs.cf.ac.uk/c1673342/drinks-app.git
   $ cd Drinks-App
   $ cd mobile
+  $ npm i
   $ npm android
   ```
 Please note that an instance of the server should also be started.
@@ -102,6 +103,7 @@ Alternatively to npm android, the project can be opened in Android Studio from t
   $ git clone https://gitlab.cs.cf.ac.uk/c1673342/drinks-app.git
   $ cd Drinks-App
   $ cd mobile
+  $ npm i
   $ npm ios
   ```
 Please note that an instance of the server should also be started.
