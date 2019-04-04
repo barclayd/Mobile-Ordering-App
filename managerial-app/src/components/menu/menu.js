@@ -1,10 +1,10 @@
-import React, {component} from "react";
+import React, {Component} from "react";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { connect } from "react-redux";
 import Table from "./table";
 import * as actions from "../../store/actions";
 
-class Menu extends React.Component {
+class Menu extends Component {
   state = {
     drinks: [],
     drinksApi: false,
