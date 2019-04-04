@@ -11,9 +11,34 @@ We are using a Mongo database with APIs defined and queried using GraphQL. Our c
 
 ![51801019_289983681694391_8594841858423652352_n](/uploads/642f2bacf40070ed1c766db3285233df/51801019_289983681694391_8594841858423652352_n.png)
 
-## Schema visual
+## Database Schmea
 <img width="800" alt="Database Models and Schema" src="https://user-images.githubusercontent.com/39765499/53703777-babdab00-3e0d-11e9-8f45-136b54e106a8.png">
 </br>
+
+## Code structure
+
+The backend server follows loosely the traditional Model View Controller (MVC) pattern. Models are for MongoDB collections are defined under 'models', the schema of operations (queries, mutations and subscriptions) defined as permissible by GraphQL is defined and the business logic for this (controllers) is handled in 'resolvers'.
+
+## Testing
+
+To test APIs defined by the server, run the server and navigate to: localhost:3000/graphql where the GraphiQL interface will be accessible to test queries, mutations and subscriptions.
+
+## Available Scripts
+
+### `npm start`
+This starts the server in development mode using Nodemon, which auto-restarts after changes to the server code base.
+### `npm run prod`
+This starts the server in production mode.
+
+## How to Run
+
+  ```
+  $ git clone https://gitlab.cs.cf.ac.uk/c1673342/drinks-app.git
+  $ cd Drinks-App
+  $ cd server
+  $ npm i
+  $ npm run start
+  ```
 
 ## Features
 - [x] Bar Staff terminal app can listen to changes such as new orders.
