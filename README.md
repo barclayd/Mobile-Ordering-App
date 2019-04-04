@@ -52,9 +52,3 @@ We are using a Mongo database defined and queried using GraphQL. Our customer re
 
 ---
 #### References
-
-## Links
-
-### MOBILE README: https://gitlab.cs.cf.ac.uk/c1673342/drinks-app/blob/master/mobile/README.md
-### TERMINAL README: https://gitlab.cs.cf.ac.uk/c1673342/drinks-app/tree/master/terminal
-
