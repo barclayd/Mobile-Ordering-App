@@ -7,7 +7,7 @@ require('dotenv').config();
 const {execute, subscribe} = require('graphql');
 const {SubscriptionServer} = require('subscriptions-transport-ws');
 const checkAuth = require('./middleware/check-auth');
-const subscriptionsEndpoint = `ws://localhost:${process.env.PORT}/subscriptions`;
+const subscriptionsEndpoint = `/subscriptions`;
 
 const apolloSchema = require('./graphql/schema/schema');
 const apolloResolvers = require('./graphql/resolvers/resolvers');
@@ -40,6 +40,8 @@ app.use('/hello-world', (req, res, next) => {
         hello: 'Hello World'
     });
 });
+
+app.use(express.static('public'));
 
 const server = createServer(app);
 
