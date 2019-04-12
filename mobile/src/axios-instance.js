@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: `http://localhost:3000/graphql`,
+    baseURL: `https://powerful-stream-57309.herokuapp.com/graphql`,
     headers: {
             'Content-Type': 'application/json'
     }
